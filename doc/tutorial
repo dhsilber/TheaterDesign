@@ -1,0 +1,85 @@
+Plot renders a theatrical lighting plot into a Scalable Vector Graphic (SVG)
+drawing.
+
+The lighting plot is described in an XML file.
+
+The base element is called "plot" and currently has no attributes.
+
+In creating a specific plot, it makes sense to start with the venue in general,
+and in particular to build our plot around the stage. (This approach needs to
+be modified when the stage is a temporary structure, but we'll get back to that
+later.)
+
+Here is a simple stage, 22 feet wide and 11 feet deep.
+I'm specifying sizes in inches because it simplifies other processing.
+
+<plot>
+  <stage depth="132" width="264" />
+</plot>
+
+By default, the coordinate system of the venue has its origin at the front
+center of the stage, with measurements along the X-axis increasing as one goes
+towards stage left and measurements along the Y-axis increasing in the
+direction of upstage. Vertical measurements start at the stage surface, so in
+venues with stadium seating that starts below the stage level, the audience (at
+least the front part) is at a negative value for Z.
+
+
+A boom with a single vertical pipe can be specified like so:
+
+<plot>
+  <stage depth="132" width="264" />
+  <boom>
+    <base id="a76" x="-240" y="-240" z="-24" />
+      <pipe id="v1" length="144" >
+    </pipe>
+  </boom>
+</plot>
+
+The base is placed at specified coordinates. I'm presuming a standard 50-pound
+cast iron base, or at least something of that approximate dimension, threaded
+in the center for a pipe. The pipe contained within a base description is
+attached to that base.
+
+
+TODO:
+  - I shouldn't need to put an ID into a base, but it will require generating
+    IDs internally for bases that do not have an ID.
+  - I shouldn't need to put an ID into a pipe, but it will require generating
+    IDs internally for pipes that do not have an ID. (And then such pipes will
+    not be able to be referenced.)
+
+
+
+The functionality so far exposed in this tutorial is only a small part of the
+what Plot is capable of. Most of that functionality requires the use of an
+arcane specification language that is being replaced with XML. One could likely
+figure out how to use that by digging into the source code but understand that
+it is entirely unsupported and deprecated and will be removed as soon as
+possible.
+
+I would love to hear from people who try to use Plot. Hearing what missing
+features are roadblocks for others will help me prioritize what to work on
+next.
+
+
+
+
+
+  <boom id="bl">
+    <base id="b2" x="240" y="-240" z="-24" />
+    <pipe id="v2" base="b2" length="144" >
+      <luminaire model="Source Four" lens="50" location="72" spin="135" />
+    </pipe>
+  </boom>
+
+For a proscenium stage, 
+
+<plot>
+  <stage depth="322" width="780" >
+    <proscenium width="483" height="212" depth="13" />
+    <apron width="624" depth="144" />
+  <stage/>
+</plot>
+
+

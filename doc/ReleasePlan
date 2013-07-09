@@ -1,0 +1,11 @@
+
+Run Plot.
+Run all tests.
+Build Javadoc and read through it for corrections.
+Clean project. (Right-click in project browser)
+Clean and build project
+Build javadoc
+rename dist directory to Plot-<version>
+Copy in the current tutorial.xml file to Plot-<version>/sample.xml
+tar cvzf Plot-<version>.tar.gz Plot-<version>
+scp Plot-<version>.tar.gz dhs@davidsilber.name:~/javaPlot/

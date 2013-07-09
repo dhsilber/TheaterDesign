@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="jmockit">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../Libraries/jmockit" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../../Libraries/jmockit/www/javadoc" />
+    </JAVADOC>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../Libraries/jmockit" recursive="false" />
+  </library>
+</component>
