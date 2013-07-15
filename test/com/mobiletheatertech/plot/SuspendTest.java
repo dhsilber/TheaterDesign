@@ -1,18 +1,15 @@
 package com.mobiletheatertech.plot;
 
+import org.testng.annotations.*;
+import org.w3c.dom.Element;
+
+import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import javax.imageio.metadata.IIOMetadataNode;
 
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import org.w3c.dom.Element;
 
 
 /**
@@ -25,21 +22,18 @@ public class SuspendTest {
     HangPoint hanger1 = null;
     Truss truss = null;
 
-    public SuspendTest()
-    {
+    public SuspendTest() {
     }
 
     @Test
-    public void isMinder() throws Exception
-    {
+    public void isMinder() throws Exception {
         Suspend suspend = new Suspend( element );
 
         assert Minder.class.isInstance( suspend );
     }
 
     @Test
-    public void storesAttributes() throws Exception
-    {
+    public void storesAttributes() throws Exception {
         Suspend suspend = new Suspend( element );
 
         assertEquals( TestHelpers.accessString( suspend, "refId" ), "jim" );
@@ -77,7 +71,7 @@ public class SuspendTest {
 
     @Test
     public void findNull() throws Exception {
-        Suspend suspend = new Suspend( element );
+        new Suspend( element );
 
         Suspend found = Suspend.Find( null );
 
@@ -97,38 +91,33 @@ public class SuspendTest {
      * This is to ensure that no exception is thrown if data is OK.
      */
     @Test
-    public void justFine() throws Exception
-    {
-        Suspend suspend = new Suspend( element );
+    public void justFine() throws Exception {
+        new Suspend( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Suspend is missing required 'ref' attribute" )
-    public void noRef() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Suspend is missing required 'ref' attribute.")
+    public void noRef() throws Exception {
         element.removeAttribute( "ref" );
-        Suspend suspend = new Suspend( element );
+        new Suspend( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Suspend is missing required 'distance' attribute" )
-    public void noDistance() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Suspend is missing required 'distance' attribute.")
+    public void noDistance() throws Exception {
         element.removeAttribute( "distance" );
-        Suspend suspend = new Suspend( element );
+        new Suspend( element );
     }
 
-    @Test( expectedExceptions = ReferenceException.class,
-           expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302." )
-    public void missingRefTarget() throws Exception
-    {
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302.")
+    public void missingRefTarget() throws Exception {
         element.setAttribute( "ref", "302" );
-        Suspend suspend = new Suspend( element );
+        new Suspend( element );
     }
 
     @Test
-    public void referencesHangPoint() throws Exception
-    {
+    public void referencesHangPoint() throws Exception {
         Suspend suspend = new Suspend( element );
         Field hangPointField = TestHelpers.accessField( suspend, "ref" );
         HangPoint hangPoint = (HangPoint) hangPointField.get( suspend );
@@ -153,8 +142,7 @@ public class SuspendTest {
 */
 
     @Test
-    public void parse() throws Exception
-    {
+    public void parse() throws Exception {
         String xml = "<plot>" +
                 "<hangpoint id=\"victoria\" x=\"20\" y=\"30\" />" +
                 "<hangpoint id=\"albert\" x=\"25\" y=\"35\" />" +
@@ -209,29 +197,25 @@ public class SuspendTest {
     }
 
     @Test
-    public void drawUnused()   throws Exception
-    {
+    public void drawUnused() throws Exception {
         Suspend suspend = new Suspend( element );
 
         suspend.drawPlan( null );
     }
 
     @Test
-    public void domUnused()   throws Exception
-    {
+    public void domUnused() throws Exception {
         Suspend suspend = new Suspend( element );
 
         suspend.dom( null );
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
-    {
+    public static void setUpClass() throws Exception {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
-    {
+    public static void tearDownClass() throws Exception {
     }
 
 //    @Mocked
@@ -239,8 +223,7 @@ public class SuspendTest {
 
 
     @BeforeMethod
-    public void setUpMethod() throws Exception
-    {
+    public void setUpMethod() throws Exception {
         System.err.println( "Starting SuspendTest method." );
 
         TestHelpers.MinderReset();
@@ -277,7 +260,6 @@ public class SuspendTest {
     }
 
     @AfterMethod
-    public void tearDownMethod() throws Exception
-    {
+    public void tearDownMethod() throws Exception {
     }
 }

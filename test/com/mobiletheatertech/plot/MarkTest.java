@@ -2,12 +2,12 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 
-
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
 
 /**
- * Created with IntelliJ IDEA. User: dhs Date: 6/16/13 Time: 3:24 PM To change this template use File | Settings | File
- * Templates.
+ * Created with IntelliJ IDEA. User: dhs Date: 6/16/13 Time: 3:24 PM To change this template use
+ * File | Settings | File Templates.
  *
  * @since 0.0.5
  */

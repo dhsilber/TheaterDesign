@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:01 PM To change this template use File | Settings | File
- * Templates.
- * 
+ * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:01 PM To change this template use
+ * File | Settings | File Templates.
+ *
  * @since 0.0.5
  */
 public class BaseTest {
@@ -21,21 +21,18 @@ public class BaseTest {
     Element element = null;
     Truss truss = null;
 
-    public BaseTest()
-    {
+    public BaseTest() {
     }
 
     @Test
-    public void isMinder() throws Exception
-    {
+    public void isMinder() throws Exception {
         Base base = new Base( element );
 
         assert Minder.class.isInstance( base );
     }
 
     @Test
-    public void storesAttributes() throws Exception
-    {
+    public void storesAttributes() throws Exception {
         Base base = new Base( element );
 
         assertEquals( TestHelpers.accessInteger( base, "x" ), 12 );
@@ -60,30 +57,26 @@ public class BaseTest {
      * This is to ensure that no exception is thrown if data is OK.
      */
     @Test
-    public void justFine() throws Exception
-    {
+    public void justFine() throws Exception {
         new Base( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Base is missing required 'x' attribute" )
-    public void noX() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Base is missing required 'x' attribute.")
+    public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Base( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Base is missing required 'y' attribute" )
-    public void noY() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Base is missing required 'y' attribute.")
+    public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Base( element );
     }
 
     @Test
-    public void parse() throws Exception
-    {
+    public void parse() throws Exception {
         String xml = "<plot>" +
                 "<truss size=\"12\" length=\"10\" >" +
                 "<base x=\"4\" y=\"1\" />" +
@@ -116,29 +109,25 @@ public class BaseTest {
     }
 
     @Test
-    public void drawUnused()   throws Exception
-    {
+    public void drawUnused() throws Exception {
         new Base( element );
 
 //        base.drawPlan( null );
     }
 
     @Test
-    public void domUnused()   throws Exception
-    {
+    public void domUnused() throws Exception {
         Base base = new Base( element );
 
         base.dom( null );
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
-    {
+    public static void setUpClass() throws Exception {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
-    {
+    public static void tearDownClass() throws Exception {
     }
 
 //    @Mocked
@@ -146,8 +135,7 @@ public class BaseTest {
 
 
     @BeforeMethod
-    public void setUpMethod() throws Exception
-    {
+    public void setUpMethod() throws Exception {
         System.err.println( "Starting BaseTest method." );
 
         TestHelpers.MinderReset();
@@ -178,7 +166,6 @@ public class BaseTest {
     }
 
     @AfterMethod
-    public void tearDownMethod() throws Exception
-    {
+    public void tearDownMethod() throws Exception {
     }
 }

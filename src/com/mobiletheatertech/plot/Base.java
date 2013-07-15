@@ -7,8 +7,11 @@ import org.w3c.dom.NodeList;
 import java.awt.*;
 
 /**
- * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:05 PM To change this template use File | Settings | File
- * Templates.
+ * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:05 PM To change this template use
+ * File | Settings | File Templates.
+ *
+ * @author dhs
+ * @since 0.0.5
  */
 public class Base extends Minder {
 
@@ -17,54 +20,46 @@ public class Base extends Minder {
 
 
     // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list ) throws Exception
-    {
+    public static void ParseXML( NodeList list ) throws AttributeMissingException {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
             Node node = list.item( index );
 
             if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (null != element) {
-                    new Base( element );
-                }
+                new Base( element );
             }
         }
     }
 
-    public Base ( Element element ) throws AttributeMissingException {
-
+    public Base( Element element ) throws AttributeMissingException {
         x = getIntegerAttribute( element, "x" );
         y = getIntegerAttribute( element, "y" );
     }
 
     public Point locate() {
-        return new Point( x,y,0 );
+        return new Point( x, y, 0 );
     }
 
     @Override
-    public void drawPlan( Graphics2D canvas )
-    {
+    public void drawPlan( Graphics2D canvas ) {
         canvas.setPaint( Color.BLUE );
-        canvas.draw( new Rectangle( x-18, y-18, 36, 36 ) );
+        canvas.draw( new Rectangle( x - 18, y - 18, 36, 36 ) );
     }
 
     @Override
-    public void drawSection( Graphics2D canvas )
-    {
+    public void drawSection( Graphics2D canvas ) {
         canvas.setPaint( Color.BLUE );
-        canvas.draw( new Rectangle( x-18, y-18, 36, 36 ) );
+        canvas.draw( new Rectangle( x - 18, y - 18, 36, 36 ) );
     }
 
     @Override
-    public void drawFront( Graphics2D canvas )
-    {
+    public void drawFront( Graphics2D canvas ) {
         canvas.setPaint( Color.BLUE );
-        canvas.draw( new Rectangle( x-18, y-18, 36, 36 ) );
+        canvas.draw( new Rectangle( x - 18, y - 18, 36, 36 ) );
     }
 
     @Override
-    public void dom ( Draw draw ) {
-
+    public void dom( Draw draw ) {
     }
 }

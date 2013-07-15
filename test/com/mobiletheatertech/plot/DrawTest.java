@@ -3,26 +3,24 @@ package com.mobiletheatertech.plot;
 import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.batik.svggen.SVGGraphics2D;
-import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.w3c.dom.Document;
 
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.fail;
+
 /**
- *
  * @author dhs
  * @since 0.0.1
  */
 public class DrawTest {
-    
+
     public DrawTest() {
     }
-     
-    @Mocked SVGGraphics2D mockGraphics;
-    
+
+    @Mocked
+    SVGGraphics2D mockGraphics;
+
     @Test
     public void draw() {
         new Expectations() {
@@ -32,18 +30,18 @@ public class DrawTest {
         };
         new Draw();
     }
-    
+
     @Test
     public void canvas() {
         Draw draw = new Draw();
         assertSame( draw.canvas(), mockGraphics );
     }
-    
+
     @Test
     public void transform() {
-        fail("Test that transform shifts coordinates approprately");
+        fail( "Test that transform shifts coordinates appropriately" );
     }
-    
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {

@@ -9,14 +9,13 @@ package com.mobiletheatertech.plot;
 public class AttributeMissingException extends Exception {
 
     /**
-     * Constructs an instance of
-     * <code>AttributeMissingException</code> with a message
-     * built with the details provided.
+     * Constructs an instance of <code>AttributeMissingException</code> with a message built with
+     * the details provided.
      *
-     * @param tag Element type which is missing the attribute
+     * @param tag       Element type which is missing the attribute
      * @param attribute Name of missing attribute
      */
     public AttributeMissingException( String tag, String attribute ) {
-        super( tag + " is missing required '" + attribute + "' attribute" );
+        super( tag + " is missing required '" + attribute + "' attribute." );
     }
 }

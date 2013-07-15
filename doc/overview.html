@@ -1,84 +1,129 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Plot Overview</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
+<head>
+    <title>Plot Overview</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
 
 
-        Plot draws a theatrical lighting plot in SVG from an XML description.
-        
-        Version 0.0.1 opens a file named as
-        {$user.home}/Plot/plotfiles/{@code filename.xml,
-        and writes out an SVG drawing as {$user.home}/Plot/out/{@code filename}.svg .
-        In this version, no actual data is manipulated, but a hard-coded box is drawn
-        and a title is inserted into the generated DOM to make sure I can do these
-        things.
+Plot draws a theatrical lighting plot in SVG from an XML description.
 
-        <h2>Software Debt</h2>
-        No software is perfect. In the interest of taking a finite amount of time to
-        complete each release I have incurred a bit of debt. I hope to address these
-        issues shortly:
-        <ul>
-            <li>Not enough tests are written - mostly because they require facilities of
-            <code>testng</code> or <code>jmockit</code> that I do not yet understand.
-            (0.0.1)</li>
-            <li>I need to upgrade to Java 7. (0.0.1)</li>
-            <li>Locations of input and output files are hard-coded into the program.
-            There should be a facility for specifying these locations either on the
-            command line or in a configuration file, or perhaps both. (0.0.1)</li>
-            <li>Attempting to skip a test shows the test as skipped in the command line
-            output but hangs in the NetBeans "Test Results" panel. Perhaps this will
-            resolve itself when I upgrade to Java 7? (0.0.3)</li>
-            <li>Made NetBeans Javadoc generator find the overview.html file by giving it
-            a full pathname. How do I give it a relative pathname? (0.0.3)</li>
-            <li>Uche Ogbuji suggests in
-            <a href="http://www.ibm.com/developerworks/xml/library/x-eleatt/index.html">
-                Principles of XML design: When to use elements versus attributes</a>
-            considerations that lead me to think that 'name' should not be an attribute
-            of the {@code venue} tag, but should instead be a child of it. (0.0.5)</li>
-        </ul>
 
-        <h2>Outstanding Issues</h2>
-        <ul>
-            <li>MobileTheaterTech web site is not yet configured. (0.0.1)</li>
-            <li>Firefox 20.0 (on Mac OS X 10.8.2) fails to draw a the bottom part
-            of a 1296 X 1320 rectangle. Opera 12.15 & Safari 6.0.2 display this just
-            fine. (0.0.2)</li>
-        </ul>
+<h2>Software Debt</h2>
+No software is perfect. In the interest of taking a finite amount of time to
+complete each release I have incurred a bit of debt. I hope to address these
+issues shortly:
+<ul>
+    <li>Not enough tests are written - mostly because they require facilities of
+        <code>testng</code> or <code>jmockit</code> that I do not yet understand.
+        (0.0.1)
+    </li>
+    <li>Locations of input and output files are hard-coded into the program.
+        There should be a facility for specifying these locations either on the
+        command line or in a configuration file, or perhaps both. (0.0.1)
+    </li>
+    <li>Uche Ogbuji suggests in
+        <a href="http://www.ibm.com/developerworks/xml/library/x-eleatt/index.html">
+            Principles of XML design: When to use elements versus attributes</a>
+        considerations that lead me to think that 'name' should not be an attribute
+        of the {@code venue} tag, but should instead be a child of it. (0.0.5)
+    </li>
+</ul>
 
-        <h2>Business Logic Debt</h2>
-        Likewise, not every feature I could want is present in the software.
-        <ul>
-            <li>Of the Venue elements, only the outer perimeter of the room is supported.
-            (0.0.2)</li>
-            <li>Of the Plot elements, only {@code Stage} is supported. (0.0.3)</li>
-            <li>It would be really nice if a bit of SVG animation showed the name (and
-            other values?) of any given plot item. (0.0.5)</li>
-            <li>The {@link com.mobiletheatertech.plot.Truss} representation is wrong.
-            If I am representing
-            individual pieces of gear, the length needs to be limited. If I am
-            representing assemblies of truss segments, I should implement some means of
-            breaking out the individual parts.</li>
-        </ul>
+<h2>Outstanding Issues</h2>
+<ul>
+    <li>MobileTheaterTech web site is not yet configured. (0.0.1)</li>
+    <li>Firefox 20.0 (on Mac OS X 10.8.2) fails to draw a the bottom part
+        of a 1296 X 1320 rectangle. Opera 12.15 & Safari 6.0.2 display this just
+        fine. (0.0.2)
+    </li>
+</ul>
 
-                General flow is to Read in XML description of plot, then write out
-                SVG drawing.
+<h2>Business Logic Debt</h2>
+Likewise, not every feature I could want is present in the software.
+<ul>
+    <li>Of the Venue elements, only the outer perimeter of the room is supported.
+        (0.0.2)
+    </li>
+    <li>Of the Plot elements, only {@code Stage} is supported. (0.0.3)</li>
+    <li>It would be really nice if a bit of SVG animation showed the name (and
+        other values?) of any given plot item. (0.0.5)
+    </li>
+    <li>The {@link com.mobiletheatertech.plot.Truss} representation is wrong.
+        If I am representing
+        individual pieces of gear, the length needs to be limited. If I am
+        representing assemblies of truss segments, I should implement some means of
+        breaking out the individual parts.
+    </li>
+</ul>
 
-                The Read stage involves parsing the XML plot description, then
-                running {@code verify()} on each {@code Minder} object. These are
-                separate steps because it is possible that a given plot element needs
-                information from other elements to be completely formed. E.g. a Truss
-                needs information from a pair of {@code Suspend}s to locate itself in
-                space.
+General flow is to Read in XML description of plot, then write out
+SVG drawing.
 
-                A solution that has the Truss constructor searching attempting
-                to ferret out subordinate elements is too clunky and complex and
-                requires that...
+The Read stage involves parsing the XML plot description, then
+running {@code verify()} on each {@code Minder} object. These are
+separate steps because it is possible that a given plot element needs
+information from other elements to be completely formed. E.g. a Truss
+needs information from a pair of {@code Suspend}s to locate itself in
+space.
 
-                It is easier to find one's single parent and perform some task
-                depending on what is found than it is to search out some set of
-                data from an arbitrary number of potential children.
-    </body>
+A solution that has the Truss constructor searching attempting
+to ferret out subordinate elements is too clunky and complex and
+requires that...
+
+It is easier to find one's single parent and perform some task
+depending on what is found than it is to search out some set of
+data from an arbitrary number of potential children.
+
+<h2>Versions</h2>
+
+<h3>0.0.6</h3>
+
+<p>
+    Make a generic <code>Pipe</code> thingy. As a standalone thingy, it extends
+    from a specified point straight towards stage left. Not very flexible, but
+    I can do a lot with just that. The intent is that <code>Pipe</code> will become
+    incorporated in things like <code>Truss</code> (which needs a lot of
+    work) and <code>LineSet</code>
+    (which doesn't actually exist yet) to provide the functionality of being able
+    to attach things.
+
+    <code>Point</code> gains a proper equality test. This is primarily for use
+    in testing.
+
+    <code>SizeException</code> added to complain about negative dimensions.
+
+    <code>Box</code> created for specifying a volume of space.
+
+    <code>Venue</code> gains a static <code>Contains( Box )</code> method to check that
+    the <code>Box</code> is contained entirely within the <code>Venue</code>.
+</p>
+
+<h3>0.0.5</h3>
+
+<p>
+    Intended to add <code>Truss</code> and associated things like
+    <code>Suspend</code>, this turned into a bit of a hodgepodge as
+    I rushed to finish it so that I could use Plot to generate a useful
+    drawing.
+</p>
+
+<h3>0.0.4</h3>
+
+<h3>0.0.3</h3>
+
+<h3>0.0.2</h3>
+
+<h3>0.0.1</h3>
+
+<p>
+    Version 0.0.1 opens a file named as
+    {$user.home}/Plot/plotfiles/{@code filename.xml},
+    and writes out an SVG drawing as {$user.home}/Plot/out/{@code filename}.svg .
+    In this version, no actual data is manipulated, but a hard-coded box is drawn
+    and a title is inserted into the generated DOM to make sure I can do these
+    things.
+</p>
+</body>
 </html>

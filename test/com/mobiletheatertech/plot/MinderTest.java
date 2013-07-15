@@ -1,50 +1,56 @@
 package com.mobiletheatertech.plot;
 
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import javax.imageio.metadata.IIOMetadataNode;
 import mockit.Expectations;
-
-import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
+import javax.imageio.metadata.IIOMetadataNode;
+import java.awt.*;
+import java.util.ArrayList;
+
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
 /**
+ * Test {@code Minder}
  *
  * @author dhs
  * @since 0.0.2
  */
 public class MinderTest {
-    
+
+    /**
+     * Extended {@code Minder} so that there is a concrete class to test with.
+     */
     private class Minded extends Minder {
 
         @Override
         public void drawPlan( Graphics2D draw ) {
-            throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
         public void drawSection( Graphics2D draw ) {
-            throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
         public void drawFront( Graphics2D draw ) {
-            throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
         public void dom( Draw draw ) {
-            throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException(
+                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
     }
-    
+
     private static Draw draw = null;
-    
+
     public MinderTest() {
     }
 
@@ -56,27 +62,27 @@ public class MinderTest {
 
         assert thing.contains( foo );
     }
-    
+
     @Test
     public void drawAllList() {
-        fail( "Test that drawAll finds all of the plot items and invokes their drawPlan() method.");
+        fail( "Test that drawAll finds all of the plot items and invokes their drawPlan() method." );
     }
 
     @Test
     public void drawAllTransform() {
-        fail( "Test that before drawing anything, drawAll invokes transform with appropriate settings from point.");
-    }        
+        fail( "Test that before drawing anything, drawAll invokes transform with appropriate settings from point." );
+    }
 
     @Test
     public void drawAll() throws AttributeMissingException {
-        fail("Test passes falsely");
-        
+        fail( "Test passes falsely" );
+
         final Graphics2D canvas = draw.canvas();
         Element element = new IIOMetadataNode();
-        element.setAttribute( "name", "Phooy");
-        element.setAttribute( "width", "30");
-        element.setAttribute( "depth", "14");
-        element.setAttribute( "height", "4");
+        element.setAttribute( "name", "Phooy" );
+        element.setAttribute( "width", "30" );
+        element.setAttribute( "depth", "14" );
+        element.setAttribute( "height", "4" );
         final Venue venue = new Venue( element );
 //        final Minded foo = new Minded();
 
@@ -92,7 +98,7 @@ public class MinderTest {
 
     @Test
     public void drawProvidedWithCanvas() {
-        fail( "Must create test");
+        fail( "Must create test" );
     }
 
     @BeforeClass

@@ -1,25 +1,19 @@
 package com.mobiletheatertech.plot;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.awt.*;
+
 /**
- * <p>
  * The space in which theater is to be done.
- * </p><p>
- * All aspects of the lighting plot which are descriptions of the venue are
- * encapsulated here.
- * </p><p>
- * XML tag is 'venue'.
- * Exactly one venue must be defined.
- * Children may be any number of 'hangpoint' tags.
- * Required attributes are 'name', 'width', 'depth', and 'height'.
- * (I expect to move the 'name' attribute into its own tag at some point.)
- * </p>
+ * <p/>
+ * All aspects of the lighting plot which are descriptions of the venue are encapsulated here.
+ * <p/>
+ * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'hangpoint'
+ * tags. Required attributes are 'name', 'width', 'depth', and 'height'. (I expect to move the
+ * 'name' attribute into its own tag at some point.)
  *
  * @author dhs
  * @since 0.0.2
@@ -35,30 +29,29 @@ public class Venue extends Minder {
     /**
      * Extract the venue description element from a list of XML nodes.
      *
-     * @param list
-     * @throws AttributeMissingException
+     * @param list List of XML nodes
+     * @throws AttributeMissingException If a required attribute is missing.
      */
     public static void ParseXML( NodeList list )
-        throws AttributeMissingException {
+            throws AttributeMissingException
+    {
 
         Node node = list.item( 0 );
-        if ( null != node && node.getNodeType() == Node.ELEMENT_NODE ) {
+        if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            if ( null != element ) {
-                new Venue( element );
-            }
+            new Venue( element );
         }
     }
 
     /**
-     * Construct a {@code StaticVenue} from an XML Element.
+     * Construct a {@code Venue} from an XML Element.
      *
      * @param element DOM Element defining a venue.
      * @throws AttributeMissingException if any attribute is missing.
      */
     public Venue( Element element ) throws AttributeMissingException {
         name = element.getAttribute( "name" );
-        if ( name.isEmpty() ) {
+        if (name.isEmpty()) {
             throw new AttributeMissingException( "Venue", "name" );
         }
         width = getIntegerAttribute( element, "width" );
@@ -72,10 +65,22 @@ public class Venue extends Minder {
     }
 
     /**
+     * Determine if the provided {@code Box} fits entirely within the {@code Venue}.
+     *
+     * @param box (Hopefully) inner {@code Box}.
+     * @return true if inner {@code Box} fits entirely within the Venue.
+     * @since 0.0.6
+     */
+    public static boolean Contains( Box box ) {
+        Box room = new Box( new Point( 0, 0, 0 ), StaticVenue.width, StaticVenue.depth,
+                            StaticVenue.height );
+        return room.contains( box );
+    }
+
+    /**
      * Confirm that a specified rectangle fits into this venue.
      *
      * @param rectangle area to check
-     *
      * @return true if specified rectangle fits into this {@code StaticVenue}.
      */
     public static boolean Contains2D( Rectangle rectangle ) {
@@ -86,17 +91,15 @@ public class Venue extends Minder {
     }
 
     /**
-     * Confirm that a specified set of x, y coordinates is located within this
-     * venue.
+     * Confirm that a specified set of x, y coordinates is located within this venue.
      *
      * @param x coordinate to check
      * @param y coordinate to check
-     *
      * @return outcode {@link Rectangle result of outcode call}
      */
     public static int Contains2D( int x, int y ) {
 
-         Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
+        Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
 
         return area.outcode( x, y );
     }
@@ -106,8 +109,29 @@ public class Venue extends Minder {
      *
      * @return height of the venue
      */
+    public static int Width() {
+        System.err.println( "StaticVenue (" + StaticVenue.name + ").width: " + StaticVenue.width );
+        return StaticVenue.width;
+    }
+
+    /**
+     * Provides the height of the venue.
+     *
+     * @return height of the venue
+     */
+    public static int Depth() {
+        System.err.println( "StaticVenue (" + StaticVenue.name + ").depth: " + StaticVenue.depth );
+        return StaticVenue.depth;
+    }
+
+    /**
+     * Provides the height of the venue.
+     *
+     * @return height of the venue
+     */
     public static int Height() {
-        System.err.println( "StaticVenue ("+ StaticVenue.name+").height: " + StaticVenue.height  );
+        System.err.println(
+                "StaticVenue (" + StaticVenue.name + ").height: " + StaticVenue.height );
         return StaticVenue.height;
     }
 
@@ -147,7 +171,7 @@ public class Venue extends Minder {
     /**
      * Make the venue's name into the title of the drawing.
      *
-     * @param draw
+     * @param draw Provide access to the generated DOM.
      */
     @Override
     public void dom( Draw draw ) {

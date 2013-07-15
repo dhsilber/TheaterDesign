@@ -1,30 +1,28 @@
 package com.mobiletheatertech.plot;
 
 import mockit.Expectations;
-import mockit.Mocked;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author dhs
  * @since 0.0.1
  */
 public class MainTest {
-    
+
     public MainTest() {
     }
-    
-    @Test( expectedExceptions=ArgumentException.class,
-        expectedExceptionsMessageRegExp = "Not enough arguments")
+
+    @Test(expectedExceptions = ArgumentException.class,
+          expectedExceptionsMessageRegExp = "Not enough arguments")
     public void noArgument() throws Exception {
-        String[] args=new String[0];
+        String[] args = new String[0];
         Main.main( args );
     }
-    
-    @Test( expectedExceptions=ArgumentException.class,
-        expectedExceptionsMessageRegExp = "Too many arguments")
+
+    @Test(expectedExceptions = ArgumentException.class,
+          expectedExceptionsMessageRegExp = "Too many arguments")
     public void tooManyArguments() throws Exception {
-        String[] args=new String[]{ "Fiddle", "Faddle"};
+        String[] args = new String[]{ "Fiddle", "Faddle" };
         Main.main( args );
     }
 
@@ -36,7 +34,7 @@ public class MainTest {
                 new Write( "Fiddle-Faddle" );
             }
         };
-        String[] args = new String[]{"Fiddle-Faddle"};
+        String[] args = new String[]{ "Fiddle-Faddle" };
         Main.main( args );
     }
 

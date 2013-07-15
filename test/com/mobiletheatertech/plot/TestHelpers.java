@@ -16,14 +16,13 @@ public class TestHelpers {
 
     /**
      * Reset {@link Point} to its initial state.
-     *
+     * <p/>
      * Zeros out each of the extreme values maintained by {@link Point}.
      *
-     * @throws NoSuchFieldException if one of the fields isn't there.
+     * @throws NoSuchFieldException   if one of the fields isn't there.
      * @throws IllegalAccessException if one of the fields cannot be accessed.
      */
-    public static void PointReset() throws NoSuchFieldException, IllegalAccessException
-    {
+    public static void PointReset() throws NoSuchFieldException, IllegalAccessException {
         TestHelpers.ZeroInt( Point.class, "SmallX" );
         TestHelpers.ZeroInt( Point.class, "SmallY" );
         TestHelpers.ZeroInt( Point.class, "SmallZ" );
@@ -35,9 +34,9 @@ public class TestHelpers {
     /**
      * Reach into the specified class and zero out the specified static int.
      *
-     * @param clazz {@link Class} whose static field should be cleared.
+     * @param clazz     {@link Class} whose static field should be cleared.
      * @param fieldName name of static field to clear.
-     * @throws NoSuchFieldException if the specified field isn't there.
+     * @throws NoSuchFieldException   if the specified field isn't there.
      * @throws IllegalAccessException if the specified field cannot be accessed.
      */
     private static void ZeroInt( Class clazz, String fieldName )
@@ -51,34 +50,35 @@ public class TestHelpers {
     /**
      * Reset the LIST maintained by {@link Minder} to its initial empty state.
      *
-     * @throws NoSuchFieldException if the {@code LIST} field isn't there.
+     * @throws NoSuchFieldException   if the {@code LIST} field isn't there.
      * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
      */
-    public static void MinderReset() throws NoSuchFieldException, IllegalAccessException
-    {
+    public static void MinderReset() throws NoSuchFieldException, IllegalAccessException {
         Field field = Minder.class.getDeclaredField( "LIST" );
         field.setAccessible( true );
         ArrayList<Minder> list = (ArrayList<Minder>) field.get( Minder.class );
         list.clear();
     }
 
-    protected static Field accessField( Object thingy, String name ) throws Exception
-    {
+    protected static Field accessField( Object thingy, String name ) throws Exception {
         Field field = thingy.getClass().getDeclaredField( name );
         field.setAccessible( true );
 
         return field;
     }
 
-    public static int accessInteger( Object thingy, String name ) throws Exception
-    {
+    public static int accessInteger( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
         return (Integer) field.get( thingy );
     }
 
-    public static String accessString( Object thingy, String name ) throws Exception
-    {
+    public static String accessString( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
         return (String) field.get( thingy );
+    }
+
+    public static Point accessPoint( Object thingy, String name ) throws Exception {
+        Field field = accessField( thingy, name );
+        return (Point) field.get( thingy );
     }
 }

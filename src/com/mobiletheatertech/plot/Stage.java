@@ -1,21 +1,18 @@
 package com.mobiletheatertech.plot;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.awt.*;
+import java.awt.geom.Line2D;
+
 /**
  * Defines a stage.
- * 
- * XML tag is 'stage'.
- * There are no children.
- * Required attributes are 'width', 'depth', which define the dimensions of the
- * stage, and 'x', 'y', and 'z', which define its location relative to the venue.
+ * <p/>
+ * XML tag is 'stage'. There are no children. Required attributes are 'width', 'depth', which define
+ * the dimensions of the stage, and 'x', 'y', and 'z', which define its location relative to the
+ * venue.
  *
  * @author dhs
  * @since 0.0.3
@@ -30,13 +27,16 @@ public class Stage extends Minder {
 
     /**
      * Extract the stage description element from a list of XML nodes.
-     * 
-     * @param list
-     * @throws AttributeMissingException 
+     *
+     * @param list List of XML nodes
+     * @throws AttributeMissingException If a required attribute is missing.
+     * @throws LocationException         If the stage is outside the {@code Venue}.
+     * @throws SizeException             If a length attribute is too short.
      */
 
     // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list ) throws Exception
+    public static void ParseXML( NodeList list )
+            throws AttributeMissingException, LocationException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -44,9 +44,7 @@ public class Stage extends Minder {
 
             if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (null != element) {
-                    new Stage( element );
-                }
+                new Stage( element );
             }
         }
     }
@@ -54,32 +52,37 @@ public class Stage extends Minder {
 
     /**
      * Creates a {@code Stage}.
-     * 
+     * <p/>
      * It must fit into the {@link Venue}.
-     * 
+     *
      * @param element describes this {@code Stage}.
      * @throws AttributeMissingException
      * @throws LocationException
      */
     public Stage( Element element )
-            throws AttributeMissingException, LocationException {
+            throws AttributeMissingException, LocationException, SizeException
+    {
         width = getIntegerAttribute( element, "width" );
-        depth = getIntegerAttribute( element, "depth");
-        x = getIntegerAttribute( element, "x");
-        y = getIntegerAttribute( element, "y");
-        z = getIntegerAttribute( element, "z");
-        
-        if( ! Venue.Contains2D( new Rectangle( x, y, width, depth ) ) ) {
+        depth = getIntegerAttribute( element, "depth" );
+        x = getIntegerAttribute( element, "x" );
+        y = getIntegerAttribute( element, "y" );
+        z = getIntegerAttribute( element, "z" );
+
+        if (0 >= width) throw new SizeException( "Stage", "width" );
+        if (0 >= depth) throw new SizeException( "Stage", "depth" );
+
+
+        if (!Venue.Contains2D( new Rectangle( x, y, width, depth ) )) {
             throw new LocationException(
-                "Stage should not extend beyond the boundaries of the venue" );
+                    "Stage should not extend beyond the boundaries of the venue." );
         }
-        if( 0 > z ) {
+        if (0 > z) {
             throw new LocationException(
-                "Stage should not extend beyond the boundaries of the venue" );
+                    "Stage should not extend beyond the boundaries of the venue." );
         }
-        if( z > Venue.Height() ) {
+        if (z > Venue.Height()) {
             throw new LocationException(
-                "Stage should not extend beyond the boundaries of the venue" );
+                    "Stage should not extend beyond the boundaries of the venue." );
         }
     }
 

@@ -3,20 +3,18 @@ package com.mobiletheatertech.plot;
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 6/27/13 Time: 4:46 PM To change this template use File | Settings | File
  * Templates.
- */ 
+ */
 
+import org.testng.annotations.*;
+import org.w3c.dom.Element;
+
+import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import javax.imageio.metadata.IIOMetadataNode;
+
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import org.w3c.dom.Element;
 
 
 /**
@@ -29,21 +27,18 @@ public class SupportTest {
     HangPoint hanger1 = null;
     Truss truss = null;
 
-    public SupportTest()
-    {
+    public SupportTest() {
     }
 
     @Test
-    public void isMinder() throws Exception
-    {
+    public void isMinder() throws Exception {
         Support support = new Support( element );
 
         assert Minder.class.isInstance( support );
     }
 
     @Test
-    public void storesAttributes() throws Exception
-    {
+    public void storesAttributes() throws Exception {
         Support support = new Support( element );
 
         assertEquals( TestHelpers.accessString( support, "refId" ), "jim" );
@@ -101,38 +96,33 @@ public class SupportTest {
      * This is to ensure that no exception is thrown if data is OK.
      */
     @Test
-    public void justFine() throws Exception
-    {
+    public void justFine() throws Exception {
         new Support( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Support is missing required 'ref' attribute" )
-    public void noRef() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Support is missing required 'ref' attribute")
+    public void noRef() throws Exception {
         element.removeAttribute( "ref" );
         new Support( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Support is missing required 'distance' attribute" )
-    public void noDistance() throws Exception
-    {
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Support is missing required 'distance' attribute")
+    public void noDistance() throws Exception {
         element.removeAttribute( "distance" );
         new Support( element );
     }
 
-    @Test( expectedExceptions = ReferenceException.class,
-           expectedExceptionsMessageRegExp = "Cannot support from unknown hangpoint ref 302." )
-    public void missingRefTarget() throws Exception
-    {
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Cannot support from unknown hangpoint ref 302.")
+    public void missingRefTarget() throws Exception {
         element.setAttribute( "ref", "302" );
         new Support( element );
     }
 
     @Test
-    public void referencesHangPoint() throws Exception
-    {
+    public void referencesHangPoint() throws Exception {
         Support support = new Support( element );
         Field hangPointField = TestHelpers.accessField( support, "ref" );
         HangPoint hangPoint = (HangPoint) hangPointField.get( support );
@@ -157,8 +147,7 @@ public class SupportTest {
 */
 
     @Test
-    public void parse() throws Exception
-    {
+    public void parse() throws Exception {
         String xml = "<plot>" +
                 "<hangpoint id=\"victoria\" x=\"20\" y=\"30\" />" +
                 "<hangpoint id=\"albert\" x=\"25\" y=\"35\" />" +
@@ -213,29 +202,25 @@ public class SupportTest {
     }
 
     @Test
-    public void drawUnused()   throws Exception
-    {
+    public void drawUnused() throws Exception {
         Support support = new Support( element );
 
         support.draw( null );
     }
 
     @Test
-    public void domUnused()   throws Exception
-    {
+    public void domUnused() throws Exception {
         Support support = new Support( element );
 
         support.dom( null );
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
-    {
+    public static void setUpClass() throws Exception {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
-    {
+    public static void tearDownClass() throws Exception {
     }
 
 //    @Mocked
@@ -243,8 +228,7 @@ public class SupportTest {
 
 
     @BeforeMethod
-    public void setUpMethod() throws Exception
-    {
+    public void setUpMethod() throws Exception {
         System.err.println( "Starting SupportTest method." );
 
         TestHelpers.MinderReset();
@@ -281,7 +265,6 @@ public class SupportTest {
     }
 
     @AfterMethod
-    public void tearDownMethod() throws Exception
-    {
+    public void tearDownMethod() throws Exception {
     }
 }

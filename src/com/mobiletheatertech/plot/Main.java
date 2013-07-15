@@ -1,10 +1,8 @@
 package com.mobiletheatertech.plot;
 
-import java.io.FileNotFoundException;
-
 /**
  * Main for Plot.
- * 
+ * <p/>
  * Intentionally minimal. All the real work is done elsewhere.
  *
  * @author dhs
@@ -14,23 +12,25 @@ public class Main {
 
     /**
      * Kick off a run of Plot.
-     * 
-     * Expects only one argument which names the description file without any
-     * extension. This same name is used for the output file.
-     * 
+     * <p/>
+     * Expects only one argument which names the description file without any extension. This same
+     * name is used for the output file.
+     * <p/>
      * {@link Read Reads} the Plot description.
-     * 
+     * <p/>
      * {@link Write Writes} the generated output.
-     * 
+     *
      * @param args the command line arguments
+     * @throws ArgumentException If there is not exactly one argument
      */
     public static void main( String[] args )
-        throws ArgumentException, FileNotFoundException {
+            throws ArgumentException
+    {
 
-        if ( args.length < 1 ) {
+        if (args.length < 1) {
             throw new ArgumentException( "Not enough arguments" );
         }
-        if ( args.length > 1 ) {
+        if (args.length > 1) {
             throw new ArgumentException( "Too many arguments" );
         }
 
