@@ -1,0 +1,45 @@
+<plot>
+    <venue name="Baltimore Marriot Waterfront Hotel, Grand Ballroom V &amp; VI" width="1320"
+           depth="1320" height="239">
+        <hangpoint id="1" x="1114" y="907"/>
+        <hangpoint id="2" x="874" y="907"/>
+        <hangpoint id="3" x="445" y="907"/>
+        <hangpoint id="4" x="202" y="907"/>
+        <hangpoint id="5" x="1114" y="660"/>
+        <hangpoint id="6" x="874" y="660"/>
+        <hangpoint id="7" x="445" y="660"/>
+        <hangpoint id="8" x="202" y="660"/>
+        <hangpoint id="9" x="1114" y="421"/>
+        <hangpoint id="10" x="874" y="421"/>
+        <hangpoint id="11" x="602" y="421"/>
+        <hangpoint id="12" x="445" y="421"/>
+        <hangpoint id="13" x="202" y="421"/>
+        <hangpoint id="14" x="1204" y="289"/>
+        <hangpoint id="15" x="990" y="289"/>
+        <hangpoint id="16" x="755" y="289"/>
+        <hangpoint id="17" x="602" y="289"/>
+        <hangpoint id="18" x="330" y="289"/>
+        <hangpoint id="19" x="82" y="289"/>
+        <hangpoint id="20" x="1114" y="173"/>
+        <hangpoint id="21" x="874" y="173"/>
+        <hangpoint id="22" x="755" y="173"/>
+        <hangpoint id="23" x="602" y="173"/>
+        <hangpoint id="24" x="445" y="173"/>
+        <hangpoint id="25" x="202" y="173"/>
+        <hangpoint id="26" x="1204" y="66"/>
+        <hangpoint id="27" x="990" y="66"/>
+        <hangpoint id="28" x="755" y="66"/>
+        <hangpoint id="29" x="602" y="66"/>
+        <hangpoint id="30" x="330" y="66"/>
+        <hangpoint id="31" x="82" y="66"/>
+    </venue>
+    <stage width="288" depth="192" x="516" y="68" z="24"/>
+    <stage width="96" depth="72" x="420" y="68" z="24"/>
+    <stage width="96" depth="72" x="804" y="68" z="24"/>
+    <stage width="96" depth="72" x="804" y="188" z="24"/>
+    <pipe length="120" x="600" y="300" z="220"/>
+    <truss size="12" length="420">
+        <suspend ref="11" distance="13"/>
+        <suspend ref="10" distance="13"/>
+    </truss>
+</plot>
