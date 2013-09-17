@@ -4,12 +4,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dhs
- * Date: 5/26/13
- * Time: 6:30 PM
- * To change this template use File | Settings | File Templates.
+ * Keep track of all of the drawable plot objects.
+ * <p/>
+ * Provides access to the list of all plot items defined by inheritors of the abstract
+ * <code>Minder</code> class.
  *
+ * @author dhs
  * @since 0.0.5
  */
 public class Drawable extends Minder {
@@ -20,27 +20,31 @@ public class Drawable extends Minder {
      * @return list of plot items
      */
     public static ArrayList<Minder> List() {
-        System.out.println( "Drawable.List: " + LIST.size() );
         return LIST;
     }
 
     @Override
+    public void verify() {
+        throw new UnsupportedOperationException( "Never should be invoked." );
+    }
+
+    @Override
     public void drawPlan( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException( "Never should be invoked." );
     }
 
     @Override
     public void drawSection( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException( "Never should be invoked." );
     }
 
     @Override
     public void drawFront( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException( "Never should be invoked." );
     }
 
     @Override
-    public void dom(Draw draw) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void dom( Draw draw, View mode ) {
+        throw new UnsupportedOperationException( "Never should be invoked." );
     }
 }

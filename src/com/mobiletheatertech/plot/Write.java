@@ -23,7 +23,7 @@ public class Write {
      *
      * @param basename basename of the file to be written.
      */
-    public Write( String basename ) {
+    public Write( String basename ) throws MountingException {
         home = System.getProperty( "user.home" );
         if (null == home) {
             // throw exception
@@ -34,26 +34,29 @@ public class Write {
         writeFront( basename );
     }
 
-    private void writePlan( String basename ) {
+    private void writePlan( String basename ) throws MountingException {
         Draw draw = new Draw();
 
         Minder.DrawAllPlan( draw.canvas() );
 
-//        Hack.Draw( drawPlan.canvas() );
+        Hack.Draw( draw.canvas() );
 
         draw.getRoot();
+
+        Legend.Startup( draw );
 
         Minder.DomAllPlan( draw );
 
         Hack.Dom( draw );
 
+        Legend.Callback();
 
         String pathname = home + "/Plot/out/" + basename + "_plan.svg";
 
         draw.create( pathname );
     }
 
-    private void writeSection( String basename ) {
+    private void writeSection( String basename ) throws MountingException {
         Draw draw = new Draw();
 
         Minder.DrawAllSection( draw.canvas() );
@@ -71,7 +74,7 @@ public class Write {
         draw.create( pathname );
     }
 
-    private void writeFront( String basename ) {
+    private void writeFront( String basename ) throws MountingException {
         Draw draw = new Draw();
 
         Minder.DrawAllFront( draw.canvas() );

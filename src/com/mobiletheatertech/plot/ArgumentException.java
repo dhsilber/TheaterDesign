@@ -9,8 +9,7 @@ package com.mobiletheatertech.plot;
 public class ArgumentException extends Exception {
 
     /**
-     * Constructs an instance of
-     * <code>ArgumentException</code> with the specified detail message.
+     * Constructs an instance of <code>ArgumentException</code> with the specified detail message.
      *
      * @param message the detail message.
      */

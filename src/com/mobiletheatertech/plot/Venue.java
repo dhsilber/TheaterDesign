@@ -3,6 +3,7 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import java.awt.*;
 
@@ -18,7 +19,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.2
  */
-public class Venue extends Minder {
+public class Venue extends Minder implements Legendable {
 
     private static Venue StaticVenue = null;
     private String name = null;
@@ -52,7 +53,7 @@ public class Venue extends Minder {
     public Venue( Element element ) throws AttributeMissingException {
         name = element.getAttribute( "name" );
         if (name.isEmpty()) {
-            throw new AttributeMissingException( "Venue", "name" );
+            throw new AttributeMissingException( "Venue", null, "name" );
         }
         width = getIntegerAttribute( element, "width" );
         depth = getIntegerAttribute( element, "depth" );
@@ -62,6 +63,8 @@ public class Venue extends Minder {
         new Point( width, depth, height );
 
         StaticVenue = this;
+
+        Legend.Register( this, 30, 12 );
     }
 
     /**
@@ -130,9 +133,12 @@ public class Venue extends Minder {
      * @return height of the venue
      */
     public static int Height() {
-        System.err.println(
-                "StaticVenue (" + StaticVenue.name + ").height: " + StaticVenue.height );
         return StaticVenue.height;
+    }
+
+    @Override
+    public void verify() throws InvalidXMLException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -174,7 +180,40 @@ public class Venue extends Minder {
      * @param draw Provide access to the generated DOM.
      */
     @Override
-    public void dom( Draw draw ) {
-        draw.setDocumentTitle( name );
+    public void dom( Draw draw, View mode ) {
+
+        StringBuilder title = new StringBuilder( name + " - " );
+
+        switch (mode) {
+            case PLAN:
+                title.append( "Plan view" );
+                break;
+            case SECTION:
+                title.append( "Section view" );
+                break;
+            case FRONT:
+                title.append( "Front view" );
+                break;
+
+        }
+        draw.setDocumentTitle( title.toString() );
+    }
+
+    @Override
+    public PagePoint domLegendItem( Draw draw, PagePoint start ) {
+        Element text = draw.element( "text" );
+        Integer x = start.x() + 10;
+        text.setAttribute( "x", x.toString() );
+        text.setAttribute( "y", start.y().toString() );
+        text.setAttribute( "fill", "black" );
+        text.setAttribute( "font-family", "serif" );
+        text.setAttribute( "font-size", "10" );
+
+        draw.appendRootChild( text );
+
+        Text foo = draw.document().createTextNode( name );
+        text.appendChild( foo );
+
+        return new PagePoint( start.x(), start.y() + 12 );
     }
 }

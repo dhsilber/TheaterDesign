@@ -25,6 +25,11 @@ public class MinderTest {
     private class Minded extends Minder {
 
         @Override
+        public void verify() throws InvalidXMLException {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
         public void drawPlan( Graphics2D draw ) {
             throw new UnsupportedOperationException(
                     "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -43,7 +48,7 @@ public class MinderTest {
         }
 
         @Override
-        public void dom( Draw draw ) {
+        public void dom( Draw draw, View mode ) {
             throw new UnsupportedOperationException(
                     "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
@@ -52,6 +57,13 @@ public class MinderTest {
     private static Draw draw = null;
 
     public MinderTest() {
+    }
+
+    @Test
+    public void isElemental() throws Exception {
+        Minded foo = new Minded();
+
+        assert Elemental.class.isInstance( foo );
     }
 
     @Test
@@ -74,7 +86,7 @@ public class MinderTest {
     }
 
     @Test
-    public void drawAll() throws AttributeMissingException {
+    public void drawAll() throws Exception {
         fail( "Test passes falsely" );
 
         final Graphics2D canvas = draw.canvas();

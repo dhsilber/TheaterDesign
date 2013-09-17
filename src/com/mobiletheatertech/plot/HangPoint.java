@@ -18,7 +18,6 @@ import java.awt.geom.Line2D;
  */
 public class HangPoint extends Minder {
 
-    private String id = null;
     private Integer x = null;
     private Integer y = null;
 
@@ -56,9 +55,7 @@ public class HangPoint extends Minder {
      *                                   Venue}.
      */
     HangPoint( Element element ) throws AttributeMissingException, LocationException {
-        id = element.getAttribute( "id" );
-        System.out.println( "New Hangpoint: " + id );
-        System.out.println( "New Hangpoint: " + this );
+        id = getOptionalStringAttribute( element, "id" );
         x = getIntegerAttribute( element, "x" );
         y = getIntegerAttribute( element, "y" );
 
@@ -77,6 +74,8 @@ public class HangPoint extends Minder {
     }
 
     /**
+     * Find a specific {@code HangPoint} in the set of plot objects.
+     *
      * @param id Name of {@code HangPoint} to find
      * @return {@code HangPoint} which matches specified {@code id}.
      */
@@ -94,16 +93,26 @@ public class HangPoint extends Minder {
         return null;
     }
 
+    /**
+     * Provide the location of this {@code HangPoint}.
+     *
+     * @return coordinate of this {@code HangPoint}'s location
+     */
     public Point locate() {
-        System.out.println( "Hangpoint (" + id + ") locate(): " + Venue.Height() );
+//        System.out.println( "Hangpoint (" + id + ") locate(): " + Venue.Height() );
         return new Point( x, y, Venue.Height() );
 
+    }
+
+    @Override
+    public void verify() throws InvalidXMLException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
      * Draw a {@code HangPoint} onto the provided plan canvas.
      *
-     * @param canvas drawing space.
+     * @param canvas drawing media.
      */
     @Override
     public void drawPlan( Graphics2D canvas ) {
@@ -112,26 +121,16 @@ public class HangPoint extends Minder {
         canvas.draw( new Line2D.Float( x + 2, y - 2, x - 2, y + 2 ) );
     }
 
-    /**
-     * Draw a {@code HangPoint} onto the provided section canvas.
-     *
-     * @param canvas drawing space.
-     */
     @Override
     public void drawSection( Graphics2D canvas ) {
     }
 
-    /**
-     * Draw a {@code HangPoint} onto the provided front canvas.
-     *
-     * @param canvas drawing space.
-     */
     @Override
     public void drawFront( Graphics2D canvas ) {
     }
 
     @Override
-    public void dom( Draw draw ) {
+    public void dom( Draw draw, View mode ) {
     }
 
 }

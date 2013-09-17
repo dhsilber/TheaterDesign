@@ -22,7 +22,7 @@ public class TrussTest {
     HangPoint hanger2 = null;
     Element suspendElement1 = null;
     Element suspendElement2 = null;
-    Element baseElement = null;
+//    Element baseElement = null;
 
     public TrussTest() {
     }
@@ -40,6 +40,14 @@ public class TrussTest {
 
         assertEquals( TestHelpers.accessInteger( truss, "size" ), 12 );
         assertEquals( TestHelpers.accessInteger( truss, "length" ), 320 );
+    }
+
+    // Until such time as I properly implement this class' use of id.
+    @Test
+    public void idUnused() throws Exception {
+        Truss truss = new Truss( element );
+
+        assertNull( TestHelpers.accessString( truss, "id" ) );
     }
 
     @Test
@@ -143,25 +151,25 @@ public class TrussTest {
         truss.verify();
     }
 
-    @Test
-    public void verifyBase() throws Exception {
-        element.removeChild( suspendElement1 );
-        element.removeChild( suspendElement2 );
-        element.appendChild( baseElement );
-        Truss truss = new Truss( element );
-
-        truss.verify();
-
-        Field suspendField1 = TestHelpers.accessField( truss, "suspend1" );
-        Field suspendField2 = TestHelpers.accessField( truss, "suspend2" );
-
-        assertNull( suspendField1 );
-        assertNull( suspendField2 );
-
-        Field baseField = TestHelpers.accessField( truss, "base" );
-
-        assertNotNull( baseField );
-    }
+//    @Test
+//    public void verifyBase() throws Exception {
+//        element.removeChild( suspendElement1 );
+//        element.removeChild( suspendElement2 );
+//        element.appendChild( baseElement );
+//        Truss truss = new Truss( element );
+//
+//        truss.verify();
+//
+//        Field suspendField1 = TestHelpers.accessField( truss, "suspend1" );
+//        Field suspendField2 = TestHelpers.accessField( truss, "suspend2" );
+//
+//        assertNull( suspendField1 );
+//        assertNull( suspendField2 );
+//
+//        Field baseField = TestHelpers.accessField( truss, "base" );
+//
+//        assertNotNull( baseField );
+//    }
 
     /*
      * This is to ensure that no exception is thrown if data is OK.
@@ -181,14 +189,14 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Truss is missing required 'size' attribute.")
+          expectedExceptionsMessageRegExp = "Truss instance is missing required 'size' attribute.")
     public void noSize() throws Exception {
         element.removeAttribute( "size" );
         new Truss( element );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Truss is missing required 'length' attribute.")
+          expectedExceptionsMessageRegExp = "Truss instance is missing required 'length' attribute.")
     public void noLength() throws Exception {
         element.removeAttribute( "length" );
         new Truss( element );
@@ -240,22 +248,22 @@ public class TrussTest {
         assertEquals( list.size(), 5 );
     }
 
-    @Test
-    public void parseWithBase() throws Exception {
-        String xml = "<plot>" +
-                "<truss size=\"12\" length=\"1\" >" +
-                "<base x=\"55\" y=\"27\" />" +
-                "</truss>" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-
-        TestHelpers.MinderReset();
-
-        new Parse( stream );
-
-        ArrayList<Minder> list = Drawable.List();
-        assertEquals( list.size(), 2 );
-    }
+//    @Test
+//    public void parseWithBase() throws Exception {
+//        String xml = "<plot>" +
+//                "<truss size=\"12\" length=\"1\" >" +
+//                "<base x=\"55\" y=\"27\" />" +
+//                "</truss>" +
+//                "</plot>";
+//        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+//
+//        TestHelpers.MinderReset();
+//
+//        new Parse( stream );
+//
+//        ArrayList<Minder> list = Drawable.List();
+//        assertEquals( list.size(), 2 );
+//    }
 
     @Test
     public void parseMultiple() throws Exception {
@@ -285,7 +293,7 @@ public class TrussTest {
     public void domUnused() throws Exception {
         Truss truss = new Truss( element );
 
-        truss.dom( null );
+        truss.dom( null, View.PLAN );
     }
 
     @BeforeClass
@@ -325,9 +333,9 @@ public class TrussTest {
         suspendElement2.setAttribute( "ref", "joan" );
         suspendElement2.setAttribute( "distance", "2" );
 
-        baseElement = new IIOMetadataNode( "base" );
-        baseElement.setAttribute( "x", "1" );
-        baseElement.setAttribute( "y", "2" );
+//        baseElement = new IIOMetadataNode( "base" );
+//        baseElement.setAttribute( "x", "1" );
+//        baseElement.setAttribute( "y", "2" );
 
         element = new IIOMetadataNode();
         element.setAttribute( "size", "12" );

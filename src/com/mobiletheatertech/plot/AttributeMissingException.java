@@ -13,9 +13,16 @@ public class AttributeMissingException extends Exception {
      * the details provided.
      *
      * @param tag       Element type which is missing the attribute
+     * @param id        Identification of the specific XML element which is missing the attribute -
+     *                  may be <code>null</code>
      * @param attribute Name of missing attribute
      */
-    public AttributeMissingException( String tag, String attribute ) {
-        super( tag + " is missing required '" + attribute + "' attribute." );
+    public AttributeMissingException( String tag, String id, String attribute ) {
+        super(
+                tag + " "
+                        + (null == id || id.isEmpty()
+                           ? "instance"
+                           : "(" + id + ")")
+                        + " is missing required '" + attribute + "' attribute." );
     }
 }

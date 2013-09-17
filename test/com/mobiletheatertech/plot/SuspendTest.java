@@ -39,6 +39,15 @@ public class SuspendTest {
         assertEquals( TestHelpers.accessString( suspend, "refId" ), "jim" );
         assertEquals( TestHelpers.accessInteger( suspend, "distance" ), 32 );
     }
+
+    // Until such time as I properly implement this class' use of id.
+    @Test
+    public void idUnused() throws Exception {
+        Suspend suspend = new Suspend( element );
+
+        assertNull( TestHelpers.accessString( suspend, "id" ) );
+    }
+
 /*
 
     @Test
@@ -96,17 +105,24 @@ public class SuspendTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Suspend is missing required 'ref' attribute.")
+          expectedExceptionsMessageRegExp =
+                  "Suspend instance is missing required 'ref' attribute.")
     public void noRef() throws Exception {
         element.removeAttribute( "ref" );
         new Suspend( element );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Suspend is missing required 'distance' attribute.")
-    public void noDistance() throws Exception {
+          expectedExceptionsMessageRegExp =
+                  "Suspend instance is missing required 'distance' attribute.")
+    public void noDistanceWithoutID() throws Exception {
         element.removeAttribute( "distance" );
         new Suspend( element );
+    }
+
+    @Test
+    public void noDistance() {
+        fail( "Missing distance attribute exception message should mention id of referenced HangPoint." );
     }
 
     @Test(expectedExceptions = ReferenceException.class,
@@ -191,8 +207,8 @@ public class SuspendTest {
 
         Point location = suspend.locate();
 
-        assertEquals( location.x(), 100 );
-        assertEquals( location.y(), 200 );
+        assertEquals( location.x(), (Integer) 100 );
+        assertEquals( location.y(), (Integer) 200 );
         assertEquals( location.z(), 208 );
     }
 
@@ -207,7 +223,7 @@ public class SuspendTest {
     public void domUnused() throws Exception {
         Suspend suspend = new Suspend( element );
 
-        suspend.dom( null );
+        suspend.dom( null, View.PLAN );
     }
 
     @BeforeClass

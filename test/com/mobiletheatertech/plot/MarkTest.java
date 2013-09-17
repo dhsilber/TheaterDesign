@@ -2,8 +2,7 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.*;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 6/16/13 Time: 3:24 PM To change this template use
@@ -17,18 +16,37 @@ public class MarkTest {
     }
 
     @Test
-    public void notNull() throws Exception {
+    public void notNull() {
         String markOne = Mark.Generate();
 
         assertNotNull( markOne );
     }
 
     @Test
-    public void differentNumbers() throws Exception {
+    public void differentNumbers() {
         String markOne = Mark.Generate();
         String markTwo = Mark.Generate();
 
         assertNotEquals( markOne, markTwo );
+    }
+
+    @Test
+    public void increments() throws Exception {
+        Object inititialObject =
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Mark", "NUMBER" );
+        assertNotNull( inititialObject );
+        Integer initial = (Integer) inititialObject;
+
+        Mark.Generate();
+
+        Object incrementedObject =
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Mark", "NUMBER" );
+        assertNotNull( incrementedObject );
+        Integer incremented = (Integer) incrementedObject;
+
+        initial++;
+        assertEquals( incremented, initial );
+
     }
 
     @BeforeClass

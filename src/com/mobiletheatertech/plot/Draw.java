@@ -22,6 +22,7 @@ public class Draw {
     private Document document = null;
     private SVGGraphics2D svgGenerator = null;
     private Element root = null;
+    private String namespace;
 
     /**
      * Create a Document and an SVGGraphics2D canvas on which to draw.
@@ -33,8 +34,8 @@ public class Draw {
                 GenericDOMImplementation.getDOMImplementation();
 
         // create an instance of org.w3c.dom.Document.
-        String svgNS = "http://www.w3.org/2000/svg";
-        document = domImpl.createDocument( svgNS, "svg", null );
+        namespace = "http://www.w3.org/2000/svg";
+        document = domImpl.createDocument( namespace, "svg", null );
 
         // create an instance of the SVG Generator.
         svgGenerator = new SVGGraphics2D( document );
@@ -47,6 +48,34 @@ public class Draw {
      */
     public Graphics2D canvas() {
         return svgGenerator;
+    }
+
+    /**
+     * Provide the document to be worked with.
+     *
+     * @return document
+     */
+    public Document document() {
+        return document;
+    }
+
+    /**
+     * Provide the root of the document.
+     *
+     * @return document root
+     */
+    public Element root() {
+        return root;
+    }
+
+    /**
+     * Create a new element in this document.
+     *
+     * @param type Type of element to be created
+     * @return created element
+     */
+    public Element element( String type ) {
+        return document.createElementNS( namespace, type );
     }
 
     /**
@@ -88,13 +117,32 @@ public class Draw {
     /**
      * Set the document title to the specified string.
      *
-     * @param title New document title.
+     * @param title New document title
      */
     void setDocumentTitle( String title ) {
         Node first = root.getFirstChild();
         Element titleElement = document.createElement( "title" );
         titleElement.appendChild( document.createTextNode( title ) );
         root.insertBefore( titleElement, first );
+    }
+
+    /**
+     * Insert an element just after the first one under the document root.
+     *
+     * @param element Element to be inserted
+     */
+    void insertRootChild( Element element ) {
+        Node second = root.getFirstChild().getNextSibling();
+        root.insertBefore( element, second );
+    }
+
+    /**
+     * Add an element directly under the document root.
+     *
+     * @param element Element to be added
+     */
+    void appendRootChild( Element element ) {
+        root.appendChild( element );
     }
 
 }

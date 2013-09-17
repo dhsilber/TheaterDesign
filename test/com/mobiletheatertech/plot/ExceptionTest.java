@@ -16,22 +16,46 @@ public class ExceptionTest {
     /**
      * For problems in command-line arguments.
      */
-    @Test( expectedExceptions = ArgumentException.class,
-           expectedExceptionsMessageRegExp = "Message here" )
+    @Test(expectedExceptions = ArgumentException.class,
+          expectedExceptionsMessageRegExp = "Message here")
     public void argumentException() throws Exception {
         throw new ArgumentException( "Message here" );
     }
 
     /**
-     * For when a required attribute is missing.
+     * For when a required attribute is missing and an ID is set.
      *
      * @since 0.0.2
      */
     @Test(expectedExceptions = AttributeMissingException.class,
           expectedExceptionsMessageRegExp =
-                  "Foo is missing required 'thingy' attribute.")
-    public void attributeMissingException() throws Exception {
-        throw new AttributeMissingException( "Foo", "thingy" );
+                  "Foo \\(sam\\) is missing required 'thingy' attribute.")
+    public void attributeMissingExceptionWithID() throws Exception {
+        throw new AttributeMissingException( "Foo", "sam", "thingy" );
+    }
+
+    /**
+     * For when a required attribute is missing and no ID is known.
+     *
+     * @since 0.0.2
+     */
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp =
+                  "Foo instance is missing required 'thingy' attribute.")
+    public void attributeMissingExceptionWithoutID() throws Exception {
+        throw new AttributeMissingException( "Foo", "", "thingy" );
+    }
+
+    /**
+     * For when a required attribute is missing and ID is not set.
+     *
+     * @since 0.0.2
+     */
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp =
+                  "Foo instance is missing required 'thingy' attribute.")
+    public void attributeMissingExceptionNullID() throws Exception {
+        throw new AttributeMissingException( "Foo", null, "thingy" );
     }
 
     /**
@@ -87,6 +111,17 @@ public class ExceptionTest {
           expectedExceptionsMessageRegExp = "Foo message.")
     public void ReferenceException() throws Exception {
         throw new ReferenceException( "Foo message." );
+    }
+
+    /**
+     * For bad references to plot items
+     *
+     * @since 0.0.7
+     */
+    @Test(expectedExceptions = MountingException.class,
+          expectedExceptionsMessageRegExp = "Foo message.")
+    public void MountingException() throws Exception {
+        throw new MountingException( "Foo message." );
     }
 
     @BeforeClass

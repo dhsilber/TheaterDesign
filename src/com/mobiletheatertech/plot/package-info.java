@@ -1,13 +1,13 @@
 /**
  * Plot draws a theatrical lighting plot in SVG from an XML description.
- * 
+ *
  * Version 0.0.1 opens a file named as
  * {$user.home}/Plot/plotfiles/{@code <filename>}.xml,
  * and writes out an SVG drawing as {$user.home}/Plot/out/{@code <filename>}.svg .
  * In this version, no actual data is manipulated, but a hard-coded box is drawn
  * and a title is inserted into the generated DOM to make sure I can do these
  * things.
- * 
+ *
  * <h2>Software Debt</h2>
  * No software is perfect. In the interest of taking a finite amount of time to 
  * complete this release I have incurred a bit of debt. I hope to address these
@@ -31,7 +31,7 @@
  * considerations that lead me to think that 'name' should not be an attribute
  * of the {@code venue} tag, but should instead be a child of it. (0.0.5)</li>
  * </ul>
- * 
+ *
  * <h2>Outstanding Issues</h2>
  * <ul>
  * <li>MobileTheaterTech web site is not yet configured. (0.0.1)</li>
@@ -43,7 +43,7 @@
  * it knows where to drawPlan itself, but I'm not sure the other direction is needed.
  * (0.0.5)</li>
  * </ul>
- * 
+ *
  * <h2>Business Logic Debt</h2>
  * Likewise, not every feature I could want is present in the software.
  * <ul>
@@ -57,7 +57,7 @@
  * representing assemblies of truss segments, I should implement some means of
  * breaking out the individual parts.</li>
  * </ul>
- * 
+ *
  * @since 0.0.1
  */
 package com.mobiletheatertech.plot;

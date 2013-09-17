@@ -60,7 +60,7 @@ public class Point {
      *
      * @return X-coordinate
      */
-    public int x() {
+    public Integer x() {
         return x;
     }
 
@@ -69,7 +69,7 @@ public class Point {
      *
      * @return Y-coordinate
      */
-    public int y() {
+    public Integer y() {
         return y;
     }
 
@@ -170,4 +170,12 @@ public class Point {
         return (x == point.x() && y == point.y() && z == point.z());
     }
 
+    @Override
+    public String toString() {
+        return "Point {" +
+                " x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                " }";
+    }
 }

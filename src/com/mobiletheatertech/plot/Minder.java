@@ -1,7 +1,5 @@
 package com.mobiletheatertech.plot;
 
-import org.w3c.dom.Element;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -14,62 +12,59 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.2
  */
-public abstract class Minder {
+public abstract class Minder extends Elemental {
 
+    /**
+     *
+     */
     public static ArrayList<Minder> LIST = new ArrayList<>();
 
+    /**
+     *
+     */
     public Minder() {
         LIST.add( this );
     }
 
     /**
+     * @throws InvalidXMLException
+     * @throws LocationException
+     */
+    public static void VerifyAll() throws InvalidXMLException, LocationException {
+        for (Minder item : LIST) {
+            item.verify();
+        }
+    }
+
+    /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing area.
+     * @param canvas Drawing media
      */
-    /*
-     * Draw each object to the graphics canvas.
-     * 
-     * Apply Transform as needed to move drawing onto display area.
-     * 
-     */
-    public static void DrawAllPlan( Graphics2D canvas ) {
+    public static void DrawAllPlan( Graphics2D canvas ) throws MountingException {
         for (Minder item : LIST) {
             item.drawPlan( canvas );
         }
     }
 
-
     /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing area.
+     * @param canvas Drawing media
      */
-    /*
-     * Draw each object to the graphics canvas.
-     *
-     * Apply Transform as needed to move drawing onto display area.
-     *
-     */
-    public static void DrawAllSection( Graphics2D canvas ) {
+    public static void DrawAllSection( Graphics2D canvas ) throws MountingException {
         for (Minder item : LIST) {
             item.drawSection( canvas );
         }
     }
 
-
     /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing area.
+     * @param canvas Drawing media
+     * @throws MountingException
      */
-    /*
-     * Draw each object to the graphics canvas.
-     *
-     * Apply Transform as needed to move drawing onto display area.
-     *
-     */
-    public static void DrawAllFront( Graphics2D canvas ) {
+    public static void DrawAllFront( Graphics2D canvas ) throws MountingException {
         for (Minder item : LIST) {
             item.drawFront( canvas );
         }
@@ -80,9 +75,9 @@ public abstract class Minder {
      *
      * @param draw Graphics manager.
      */
-    public static void DomAllPlan( Draw draw ) {
+    public static void DomAllPlan( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
-            item.dom( draw );
+            item.dom( draw, View.PLAN );
         }
     }
 
@@ -91,9 +86,9 @@ public abstract class Minder {
      *
      * @param draw Graphics manager.
      */
-    public static void DomAllSection( Draw draw ) {
+    public static void DomAllSection( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
-            item.dom( draw );
+            item.dom( draw, View.SECTION );
         }
     }
 
@@ -102,83 +97,61 @@ public abstract class Minder {
      *
      * @param draw Graphics manager.
      */
-    public static void DomAllFront( Draw draw ) {
+    public static void DomAllFront( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
-            item.dom( draw );
+            item.dom( draw, View.FRONT );
         }
     }
 
     /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and convert it to an
-     * {@code Integer}.
+     * Hook to allow each {@code Minder}-derived instance to perform sanity checks after all XML has
+     * been parsed.
+     * <p/>
+     * Items that make use of this functionality will replace this comment with specifics.
      *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute
-     * @throws AttributeMissingException
+     * @throws InvalidXMLException if an invalid combination of XML specifications is found
+     * @throws LocationException   if certain plot items don't fit in available physical space
      */
-    protected Integer getIntegerAttribute( Element element, String name )
-            throws AttributeMissingException
-    {
-
-        String value = element.getAttribute( name );
-        if (value.isEmpty()) {
-            throw new AttributeMissingException(
-                    this.getClass().getSimpleName(), name );
-        }
-
-        return new Integer( value );
-    }
+    public abstract void verify() throws InvalidXMLException, LocationException;
 
     /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and convert it to a
-     * {@code String}.
-     *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute
-     * @throws AttributeMissingException
-     */
-    protected String getStringAttribute( Element element, String name )
-            throws AttributeMissingException
-    {
-
-        String value = element.getAttribute( name );
-        if (value.isEmpty()) {
-            throw new AttributeMissingException(
-                    this.getClass().getSimpleName(), name );
-        }
-
-        return value;
-    }
-
-    /**
-     * All plot item classes need to implement a method to draw the plan view of that item.
+     * Hook to allow each {@code Minder}-derived instance to draw the plan view of that item.
+     * <p/>
+     * Items that make use of this functionality will replace this comment with specifics.
      *
      * @param canvas Drawing media.
+     * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawPlan( Graphics2D canvas );
+    public abstract void drawPlan( Graphics2D canvas ) throws MountingException;
 
     /**
-     * All plot item classes need to implement a method to draw the section view of that item.
+     * Hook to allow each {@code Minder}-derived instance to draw the section view of that item.
+     * <p/>
+     * Items that make use of this functionality will replace this comment with specifics.
      *
      * @param canvas Drawing media.
+     * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawSection( Graphics2D canvas );
+    public abstract void drawSection( Graphics2D canvas ) throws MountingException;
 
     /**
-     * All plot item classes need to implement a method to draw the front view of that item.
+     * Hook to allow each {@code Minder}-derived instance to draw the front view of that item.
+     * <p/>
+     * Items that make use of this functionality will replace this comment with specifics.
      *
      * @param canvas Drawing media.
+     * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawFront( Graphics2D canvas );
+    public abstract void drawFront( Graphics2D canvas ) throws MountingException;
 
     /**
-     * This is called for each Plot item to give it a chance to update the DOM for the generated
-     * SVG. Items that make use of this functionality will replace this comment with specifics.
+     * Hook to allow each {@code Minder}-derived instance to update the DOM for the generated SVG.
+     * <p/>
+     * Items that make use of this functionality will replace this comment with specifics.
      *
      * @param draw Canvas/DOM manager.
+     * @throws MountingException if mounting location cannot be established
      */
-    public abstract void dom( Draw draw );
+    public abstract void dom( Draw draw, View mode ) throws MountingException;
 
 }

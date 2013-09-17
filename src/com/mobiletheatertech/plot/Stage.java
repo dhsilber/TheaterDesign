@@ -46,9 +46,9 @@ public class Stage extends Minder {
                 Element element = (Element) node;
                 new Stage( element );
             }
+
         }
     }
-
 
     /**
      * Creates a {@code Stage}.
@@ -84,6 +84,11 @@ public class Stage extends Minder {
             throw new LocationException(
                     "Stage should not extend beyond the boundaries of the venue." );
         }
+    }
+
+    @Override
+    public void verify() throws InvalidXMLException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -126,6 +131,6 @@ public class Stage extends Minder {
     }
 
     @Override
-    public void dom( Draw draw ) {
+    public void dom( Draw draw, View mode ) {
     }
 }

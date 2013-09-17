@@ -9,6 +9,28 @@
 
 Plot draws a theatrical lighting plot in SVG from an XML description.
 
+A <code>Venue</code> can be described, with a <code>Stage</code> or <code>Proscenium</code>.
+<code>Truss</code> and <code>Pipe</code> can be <code>suspend</code>ed from <code>HangPoint</code>s
+or set on <code>Base</code>s.
+And <code>Luminaire</code>s can be hung on a <code>Pipe</code> or <code>Truss</code>
+
+
+When a <code>Proscenium</code> has been defined, it creates an inner coordinate system whose origin
+is the center of the proscenium arch at the stage level.
+
+<code>Venue</code>, <code>Proscenium</code>, <code>Stage</code>, and <code>HangPoint</code> use the
+main coordinate system.
+
+<code>Pipe</code>, <code>Truss</code>, and <code>base</code> use the inner coordinate system if one
+has been defined.
+
+<code>Suspend</code> and <code>Luminaire</code> are relative to what they are attached to.
+
+
+Because I don't know if any particular XML element will be parsed before or after a
+<code>Proscenium</code> definition activates the inner coordinate system, certain sanity checks are
+postponed until after all XML is parsed.
+
 
 <h2>Software Debt</h2>
 No software is perfect. In the interest of taking a finite amount of time to
@@ -78,6 +100,28 @@ data from an arbitrary number of potential children.
 
 <h2>Versions</h2>
 
+<h3>0.0.7</h3>
+
+<p>
+    Put a <code>Luminaire</code> on a <code>Pipe</code>.
+</p>
+
+<p>
+    Created <code>LuminaireDefinition</code> which includes a name and the SVG to draw the lighting
+    instrument.
+</p>
+
+<p>
+    Created <code>Luminaire</code> which is a sub-element of a <code>Pipe</code> and includes the
+    name of a <code>LuminaireDefinition</code> to draw, and a location along the <code>Pipe</code>.
+</p>
+
+<p>
+    Split XML parsing methods out of <code>Minder</code> into <code>Elemental</code>. Of course
+    <code>Minder</code> now extends <code>Elemental</code> so that everything that extends
+    <code>Minder</code> continues to have those methods.
+</p>
+
 <h3>0.0.6</h3>
 
 <p>
@@ -88,14 +132,22 @@ data from an arbitrary number of potential children.
     work) and <code>LineSet</code>
     (which doesn't actually exist yet) to provide the functionality of being able
     to attach things.
+</p>
 
+<p>
     <code>Point</code> gains a proper equality test. This is primarily for use
     in testing.
+</p>
 
+<p>
     <code>SizeException</code> added to complain about negative dimensions.
+</p>
 
+<p>
     <code>Box</code> created for specifying a volume of space.
+</p>
 
+<p>
     <code>Venue</code> gains a static <code>Contains( Box )</code> method to check that
     the <code>Box</code> is contained entirely within the <code>Venue</code>.
 </p>

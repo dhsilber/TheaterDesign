@@ -9,8 +9,7 @@ package com.mobiletheatertech.plot;
 public class InvalidXMLException extends Exception {
 
     /**
-     * Constructs an instance of
-     * <code>InvalidXMLException</code> with the message specified.
+     * Constructs an instance of <code>InvalidXMLException</code> with the message specified.
      *
      * @param message Message to display for this exception
      */

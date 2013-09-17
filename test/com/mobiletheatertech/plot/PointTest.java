@@ -20,8 +20,8 @@ public class PointTest {
     public void storesCoordinates() {
         Point point = new Point( 1, 2, 3 );
 
-        assertEquals( point.x(), 1 );
-        assertEquals( point.y(), 2 );
+        assertEquals( point.x(), (Integer) 1 );
+        assertEquals( point.y(), (Integer) 2 );
         assertEquals( point.z(), 3 );
     }
 
@@ -30,12 +30,12 @@ public class PointTest {
         Point point1 = new Point( 1, 2, 3 );
         Point point2 = new Point( 4, 5, 6 );
 
-        assertEquals( point1.x(), 1 );
-        assertEquals( point1.y(), 2 );
+        assertEquals( point1.x(), (Integer) 1 );
+        assertEquals( point1.y(), (Integer) 2 );
         assertEquals( point1.z(), 3 );
 
-        assertEquals( point2.x(), 4 );
-        assertEquals( point2.y(), 5 );
+        assertEquals( point2.x(), (Integer) 4 );
+        assertEquals( point2.y(), (Integer) 5 );
         assertEquals( point2.z(), 6 );
     }
 

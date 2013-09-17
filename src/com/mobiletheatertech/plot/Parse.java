@@ -39,7 +39,8 @@ public class Parse {
      *                                   sense (e.g. a {@code Pipe} with a length of zero).
      */
     public Parse( InputStream stream )
-            throws AttributeMissingException, InvalidXMLException, KindException, LocationException,
+            throws AttributeMissingException, InvalidXMLException,
+            KindException, LocationException,
             ReferenceException, SizeException
     {
         DocumentBuilderFactory builderFactory =
@@ -67,8 +68,14 @@ public class Parse {
             throw new InvalidXMLException( "Top level element must be 'plot'." );
         }
 
+        NodeList luminaireDefinition = root.getElementsByTagName( "luminaire-definition" );
+        LuminaireDefinition.ParseXML( luminaireDefinition );
+
         NodeList venue = root.getElementsByTagName( "venue" );
         Venue.ParseXML( venue );
+
+        NodeList proscenium = root.getElementsByTagName( "proscenium" );
+        Proscenium.ParseXML( proscenium );
 
         NodeList stage = root.getElementsByTagName( "stage" );
         Stage.ParseXML( stage );
@@ -82,11 +89,14 @@ public class Parse {
         NodeList suspend = root.getElementsByTagName( "suspend" );
         Suspend.ParseXML( suspend );
 
-        NodeList base = root.getElementsByTagName( "base" );
-        Base.ParseXML( base );
+//        NodeList base = root.getElementsByTagName( "base" );
+//        Base.ParseXML( base );
 
         NodeList pipe = root.getElementsByTagName( "pipe" );
         Pipe.ParseXML( pipe );
+
+        NodeList luminaire = root.getElementsByTagName( "luminaire" );
+        Luminaire.ParseXML( luminaire );
 
         Truss.VerifyAll();
 

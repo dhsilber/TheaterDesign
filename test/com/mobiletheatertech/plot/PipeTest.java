@@ -6,8 +6,7 @@ import org.w3c.dom.Element;
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Test {@code Pipe}.
@@ -18,6 +17,7 @@ import static org.testng.Assert.assertTrue;
 public class PipeTest {
 
     Element element = null;
+    Element prosceniumElement = null;
 
     public PipeTest() {
 
@@ -31,12 +31,47 @@ public class PipeTest {
     }
 
     @Test
+    public void stores() throws Exception {
+        TestHelpers.PipeReset();
+
+        ArrayList<Pipe> list1 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertEquals( list1.size(), 0 );
+
+        Pipe pipe = new Pipe( element );
+
+        ArrayList<Pipe> list2 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assert list2.contains( pipe );
+    }
+
+    @Test
+    public void recallsNull() {
+        assertNull( Pipe.Select( "bogus" ) );
+    }
+
+    @Test
+    public void recalls() throws Exception {
+        element.setAttribute( "id", "friendly" );
+        Pipe pipe = new Pipe( element );
+        assertSame( Pipe.Select( "friendly" ), pipe );
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         Pipe pipe = new Pipe( element );
 
         assertEquals( TestHelpers.accessInteger( pipe, "length" ), 120 );
-        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "origin" ) ) );
-        assertEquals( TestHelpers.accessPoint( pipe, "origin" ), new Point( 12, 23, 34 ) );
+        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "start" ) ) );
+        assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( 12, 23, 34 ) );
+        assertEquals( TestHelpers.accessString( pipe, "id" ), "" );
+    }
+
+    @Test
+    public void storesIdAttribute() throws Exception {
+        element.setAttribute( "id", "Pipe name" );
+        Pipe pipe = new Pipe( element );
+        assertEquals( TestHelpers.accessString( pipe, "id" ), "Pipe name" );
     }
 
     @Test
@@ -56,30 +91,76 @@ public class PipeTest {
         new Pipe( element );
     }
 
+    @Test
+    public void yesId() throws Exception {
+        element.setAttribute( "id", "lineset 4" );
+
+        Pipe unfound = Pipe.Select( "lineset 4" );
+        assertNull( unfound );
+
+        Pipe created = new Pipe( element );
+
+        Pipe found = Pipe.Select( "lineset 4" );
+        assertNotNull( found );
+        assertSame( found, created );
+    }
+
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Pipe is missing required 'length' attribute." )
+           expectedExceptionsMessageRegExp = "Pipe instance is missing required 'length' attribute." )
     public void noLength() throws Exception {
         element.removeAttribute( "length" );
         new Pipe( element );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Pipe is missing required 'x' attribute." )
+           expectedExceptionsMessageRegExp = "Pipe \\(pipe name\\) is missing required 'length' attribute." )
+    public void noLengthWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.removeAttribute( "length" );
+        new Pipe( element );
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Pipe instance is missing required 'x' attribute." )
     public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Pipe( element );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Pipe is missing required 'y' attribute." )
+           expectedExceptionsMessageRegExp = "Pipe \\(pipe name\\) is missing required 'x' attribute." )
+    public void noXWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.removeAttribute( "x" );
+        new Pipe( element );
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Pipe instance is missing required 'y' attribute." )
     public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Pipe( element );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Pipe is missing required 'z' attribute." )
+           expectedExceptionsMessageRegExp = "Pipe \\(pipe name\\) is missing required 'y' attribute." )
+    public void noYWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.removeAttribute( "y" );
+        new Pipe( element );
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Pipe instance is missing required 'z' attribute." )
     public void noZ() throws Exception {
+        element.removeAttribute( "z" );
+        new Pipe( element );
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Pipe \\(pipe name\\) is missing required 'z' attribute." )
+    public void noZWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
         element.removeAttribute( "z" );
         new Pipe( element );
     }
@@ -105,23 +186,37 @@ public class PipeTest {
                    "Pipe should not extend beyond the boundaries of the venue." )
     public void tooLargeLength() throws Exception {
         element.setAttribute( "length", "339" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
                    "Pipe should not extend beyond the boundaries of the venue." )
+    public void tooLargeLengthProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        element.setAttribute( "length", "339" );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Pipe (*) should not extend beyond the boundaries of the venue." )
     public void tooSmallX() throws Exception {
         element.setAttribute( "x", "-1" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe (.*) should not extend beyond the boundaries of the venue." )
     public void tooLargeX() throws Exception {
         element.setAttribute( "x", "351" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
@@ -129,7 +224,8 @@ public class PipeTest {
                    "Pipe should not extend beyond the boundaries of the venue." )
     public void tooSmallY() throws Exception {
         element.setAttribute( "y", "-1" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
@@ -137,7 +233,8 @@ public class PipeTest {
                    "Pipe should not extend beyond the boundaries of the venue." )
     public void tooLargeY() throws Exception {
         element.setAttribute( "y", "401" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
@@ -145,7 +242,8 @@ public class PipeTest {
                    "Pipe should not extend beyond the boundaries of the venue." )
     public void tooSmallZ() throws Exception {
         element.setAttribute( "z", "-1" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
     }
 
     @Test( expectedExceptions = LocationException.class,
@@ -153,7 +251,16 @@ public class PipeTest {
                    "Pipe should not extend beyond the boundaries of the venue." )
     public void tooLargeZ() throws Exception {
         element.setAttribute( "z", "241" );
-        new Pipe( element );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test
+    public void location() throws Exception {
+        Pipe pipe = new Pipe( element );
+
+        Point place = pipe.location( 15 );
+        assert place.equals( new Point( 27, 23, 34 ) );
     }
 
     @BeforeClass
@@ -166,12 +273,22 @@ public class PipeTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestHelpers.ProsceniumReset();
+
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
+
+        prosceniumElement = new IIOMetadataNode( "proscenium" );
+        prosceniumElement.setAttribute( "width", "260" );
+        prosceniumElement.setAttribute( "height", "200" );
+        prosceniumElement.setAttribute( "depth", "22" );
+        prosceniumElement.setAttribute( "x", "200" );
+        prosceniumElement.setAttribute( "y", "144" );
+        prosceniumElement.setAttribute( "z", "12" );
 
         element = new IIOMetadataNode();
         element.setAttribute( "length", "120" );  // 10' pipe.
