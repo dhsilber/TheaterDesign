@@ -77,6 +77,9 @@ public class Parse {
         NodeList proscenium = root.getElementsByTagName( "proscenium" );
         Proscenium.ParseXML( proscenium );
 
+        NodeList airwall = root.getElementsByTagName( "airwall" );
+        Airwall.ParseXML( airwall );
+
         NodeList stage = root.getElementsByTagName( "stage" );
         Stage.ParseXML( stage );
 
