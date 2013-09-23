@@ -32,7 +32,7 @@ public class PipeTest {
 
     @Test
     public void stores() throws Exception {
-        TestHelpers.PipeReset();
+        TestResets.PipeReset();
 
         ArrayList<Pipe> list1 = (ArrayList<Pipe>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
@@ -43,6 +43,73 @@ public class PipeTest {
         ArrayList<Pipe> list2 = (ArrayList<Pipe>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
         assert list2.contains( pipe );
+    }
+
+    @Test
+    public void storesOnlyWhenGood() throws Exception {
+        TestResets.PipeReset();
+
+        ArrayList<Pipe> list1 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertEquals( list1.size(), 0 );
+
+        element.setAttribute( "length", "0" );
+        try {
+            new Pipe( element );
+        }
+        catch ( Exception e ) {
+        }
+
+        ArrayList<Pipe> list2 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertEquals( list2.size(), 0 );
+    }
+
+    @Test
+    public void UnstoresWhenBad() throws Exception {
+        TestResets.PipeReset();
+
+        ArrayList<Pipe> list1 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertEquals( list1.size(), 0 );
+
+        element.setAttribute( "length", "339" );
+        Pipe pipe = new Pipe( element );
+        assert list1.contains( pipe );
+
+        try {
+            pipe.verify();
+        }
+        catch ( Exception e ) {
+        }
+
+        ArrayList<Pipe> list2 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertFalse( list2.contains( pipe ) );
+    }
+
+    @Test
+    public void UnstoresWhenBadWithProscenium() throws Exception {
+        TestResets.PipeReset();
+
+        ArrayList<Pipe> list1 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertEquals( list1.size(), 0 );
+
+        new Proscenium( prosceniumElement );
+        element.setAttribute( "length", "339" );
+        Pipe pipe = new Pipe( element );
+        assert list1.contains( pipe );
+
+        try {
+            pipe.verify();
+        }
+        catch ( Exception e ) {
+        }
+
+        ArrayList<Pipe> list2 = (ArrayList<Pipe>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
+        assertFalse( list2.contains( pipe ) );
     }
 
     @Test
@@ -167,7 +234,7 @@ public class PipeTest {
 
     @Test( expectedExceptions = SizeException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should have a positive length." )
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=0 \\} should have a positive length." )
     public void tooSmallLengthZero() throws Exception {
         element.setAttribute( "length", "0" );
         new Pipe( element );
@@ -175,7 +242,7 @@ public class PipeTest {
 
     @Test( expectedExceptions = SizeException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should have a positive length." )
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=-1 \\} should have a positive length." )
     public void tooSmallLength() throws Exception {
         element.setAttribute( "length", "-1" );
         new Pipe( element );
@@ -183,7 +250,7 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=339 \\} should not extend beyond the boundaries of the venue." )
     public void tooLargeLength() throws Exception {
         element.setAttribute( "length", "339" );
         Pipe pipe = new Pipe( element );
@@ -192,7 +259,17 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\(pipe name\\) should not extend beyond the boundaries of the venue." )
+    public void tooLargeLengthWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.setAttribute( "length", "339" );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=339 \\} should not extend beyond the boundaries of the venue." )
     public void tooLargeLengthProscenium() throws Exception {
         new Proscenium( prosceniumElement );
 
@@ -203,8 +280,18 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe (*) should not extend beyond the boundaries of the venue." )
+                   "Pipe \\{ origin=Point \\{ x=-1, y=23, z=34 \\}, length=120 \\} should not extend beyond the boundaries of the venue." )
     public void tooSmallX() throws Exception {
+        element.setAttribute( "x", "-1" );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Pipe \\(pipe name\\) should not extend beyond the boundaries of the venue." )
+    public void tooSmallXWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
         element.setAttribute( "x", "-1" );
         Pipe pipe = new Pipe( element );
         pipe.verify();
@@ -221,7 +308,7 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\{ origin=Point \\{ x=12, y=-1, z=34 \\}, length=120 \\} should not extend beyond the boundaries of the venue." )
     public void tooSmallY() throws Exception {
         element.setAttribute( "y", "-1" );
         Pipe pipe = new Pipe( element );
@@ -230,7 +317,17 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\(pipe name\\) should not extend beyond the boundaries of the venue." )
+    public void tooSmallYWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.setAttribute( "y", "-1" );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Pipe \\{ origin=Point \\{ x=12, y=401, z=34 \\}, length=120 \\} should not extend beyond the boundaries of the venue." )
     public void tooLargeY() throws Exception {
         element.setAttribute( "y", "401" );
         Pipe pipe = new Pipe( element );
@@ -239,7 +336,7 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=-1 \\}, length=120 \\} should not extend beyond the boundaries of the venue." )
     public void tooSmallZ() throws Exception {
         element.setAttribute( "z", "-1" );
         Pipe pipe = new Pipe( element );
@@ -248,7 +345,17 @@ public class PipeTest {
 
     @Test( expectedExceptions = LocationException.class,
            expectedExceptionsMessageRegExp =
-                   "Pipe should not extend beyond the boundaries of the venue." )
+                   "Pipe \\(pipe name\\) should not extend beyond the boundaries of the venue." )
+    public void tooSmallZWithID() throws Exception {
+        element.setAttribute( "id", "pipe name" );
+        element.setAttribute( "z", "-1" );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+    }
+
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Pipe \\{ origin=Point \\{ x=12, y=23, z=241 \\}, length=120 \\} should not extend beyond the boundaries of the venue." )
     public void tooLargeZ() throws Exception {
         element.setAttribute( "z", "241" );
         Pipe pipe = new Pipe( element );
@@ -273,7 +380,7 @@ public class PipeTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestHelpers.ProsceniumReset();
+        TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );
@@ -290,7 +397,7 @@ public class PipeTest {
         prosceniumElement.setAttribute( "y", "144" );
         prosceniumElement.setAttribute( "z", "12" );
 
-        element = new IIOMetadataNode();
+        element = new IIOMetadataNode( "pipe" );
         element.setAttribute( "length", "120" );  // 10' pipe.
         element.setAttribute( "x", "12" );
         element.setAttribute( "y", "23" );

@@ -38,7 +38,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire( element );
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
-        assertEquals( TestHelpers.accessString( luminaire, "on" ), "lineset 4" );
+        assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
         assertEquals( TestHelpers.accessInteger( luminaire, "location" ), 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
@@ -58,7 +58,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire( element );
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
-        assertEquals( TestHelpers.accessString( luminaire, "on" ), "lineset 4" );
+        assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
         assertEquals( TestHelpers.accessInteger( luminaire, "location" ), 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "A12" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "19b" );
@@ -92,37 +92,37 @@ public class LuminaireTest {
         new Luminaire( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute." )
     public void noType() throws Exception {
         element.removeAttribute( "type" );
         new Luminaire( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'on' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'on' attribute." )
     public void noOn() throws Exception {
         element.removeAttribute( "on" );
         new Luminaire( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'location' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'location' attribute." )
     public void noLocation() throws Exception {
         element.removeAttribute( "location" );
         new Luminaire( element );
     }
 
-    @Test(expectedExceptions = MountingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire of type '6x9' has unknown mounting.")
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire of type '6x9' has unknown mounting." )
     public void badLocation() throws Exception {
         element.setAttribute( "on", "bloorglew" );
         Luminaire luminaire = new Luminaire( element );
         luminaire.location();
     }
 
-    @Test(expectedExceptions = MountingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting.")
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting." )
     public void badLocationOtherType() throws Exception {
         element.setAttribute( "type", "floob" );
         element.setAttribute( "on", "bloorglew" );
@@ -136,10 +136,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire( element );
         Point actual = luminaire.location();
         Point expected = new Point( 24, 34, 56 );
-        System.out.println(
-                "Testing luminare.location() actual: " + actual + " expected: " + expected );
         assertEquals( actual, expected );
-//        assert luminaire.location().equals( new Point( 24, 34, 56 ) );
     }
 
     @Test
@@ -268,18 +265,16 @@ public class LuminaireTest {
         new Venue( venueElement );
 
         Element pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", "lineset 4" );
+        pipeElement.setAttribute( "id", "luminaireTestPipe" );
         pipeElement.setAttribute( "length", "120" );
         pipeElement.setAttribute( "x", "12" );
         pipeElement.setAttribute( "y", "34" );
         pipeElement.setAttribute( "z", "56" );
         new Pipe( pipeElement );
 
-        Element svg = new IIOMetadataNode();
-
         element = new IIOMetadataNode( "luminaire" );
         element.setAttribute( "type", type );
-        element.setAttribute( "on", "lineset 4" );
+        element.setAttribute( "on", "luminaireTestPipe" );
         element.setAttribute( "location", "12" );
     }
 

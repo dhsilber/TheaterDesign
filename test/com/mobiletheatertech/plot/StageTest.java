@@ -82,116 +82,116 @@ public class StageTest {
         new Stage( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'width' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Stage instance is missing required 'width' attribute." )
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'depth' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Stage instance is missing required 'depth' attribute." )
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'x' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Stage instance is missing required 'x' attribute." )
     public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'y' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Stage instance is missing required 'y' attribute." )
     public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'z' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Stage instance is missing required 'z' attribute." )
     public void noZ() throws Exception {
         element.removeAttribute( "z" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooLargeWidth() throws Exception {
         element.setAttribute( "width", "302" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooLargeDepth() throws Exception {
         element.setAttribute( "depth", "401" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooLargeX() throws Exception {
         element.setAttribute( "x", "207" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooLargeY() throws Exception {
         element.setAttribute( "y", "401" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooLargeZ() throws Exception {
         element.setAttribute( "z", "241" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = SizeException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should have a positive width.")
+    @Test( expectedExceptions = SizeException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should have a positive width." )
     public void tooSmallWidth() throws Exception {
         element.setAttribute( "width", "-1" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = SizeException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should have a positive depth.")
+    @Test( expectedExceptions = SizeException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should have a positive depth." )
     public void tooSmallDepth() throws Exception {
         element.setAttribute( "depth", "-1" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooSmallX() throws Exception {
         element.setAttribute( "x", "-1" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooSmallY() throws Exception {
         element.setAttribute( "y", "-1" );
         new Stage( element );
     }
 
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp =
+                   "Stage should not extend beyond the boundaries of the venue." )
     public void tooSmallZ() throws Exception {
         element.setAttribute( "z", "-1" );
         new Stage( element );
@@ -204,7 +204,7 @@ public class StageTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -220,7 +220,7 @@ public class StageTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 

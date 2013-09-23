@@ -104,17 +104,17 @@ public class SuspendTest {
         new Suspend( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp =
-                  "Suspend instance is missing required 'ref' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp =
+                   "Suspend instance is missing required 'ref' attribute." )
     public void noRef() throws Exception {
         element.removeAttribute( "ref" );
         new Suspend( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp =
-                  "Suspend instance is missing required 'distance' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp =
+                   "Suspend instance is missing required 'distance' attribute." )
     public void noDistanceWithoutID() throws Exception {
         element.removeAttribute( "distance" );
         new Suspend( element );
@@ -125,8 +125,8 @@ public class SuspendTest {
         fail( "Missing distance attribute exception message should mention id of referenced HangPoint." );
     }
 
-    @Test(expectedExceptions = ReferenceException.class,
-          expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302.")
+    @Test( expectedExceptions = ReferenceException.class,
+           expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302." )
     public void missingRefTarget() throws Exception {
         element.setAttribute( "ref", "302" );
         new Suspend( element );
@@ -169,7 +169,7 @@ public class SuspendTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -242,7 +242,7 @@ public class SuspendTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting SuspendTest method." );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "Suspend Venue Name" );

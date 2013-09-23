@@ -5,12 +5,26 @@ import org.w3c.dom.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
+/*
  * Created with IntelliJ IDEA. User: dhs Date: 7/18/13 Time: 1:53 PM To change this template use
  * File | Settings | File Templates.
  */
 
 /**
+ * Definition of type of lighting instrument or part of one that is used as a building block for the
+ * drawing.
+ * <p/>
+ * XML tag is 'luminaire-definition'. Required attribute is 'name', which is used later when an
+ * instance of a given type of luminaire is created.
+ * <p/>
+ * Optional attributes are: <dl> <dt>svg</dt><dd>provides the SVG code to draw an instance of this
+ * type of luminaire</dd> <dt>complete</dt><dd>which differentiates a definition of a building block
+ * from a definition of a complete luminaire</dd> <dt>width</dt><dd>the space the luminaire drawing
+ * needs perpendicular to its beam of light</dd> <dt>length</dt><dd>space the luminaire drawing
+ * needs in the direction of beam of light</dd> </dl>
+ * <p/>
+ * Complete definitions are added to the legend.
+ *
  * @author dhs
  * @since 0.0.7
  */
@@ -28,9 +42,9 @@ public class LuminaireDefinition extends Minder implements Legendable {
      * Extract the stage description element from a list of XML nodes.
      *
      * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the stage is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
+     * @throws AttributeMissingException If a required attribute is missing
+     * @throws LocationException         If the stage is outside the {@code Venue}
+     * @throws SizeException             If a length attribute is too short
      */
 
     // This seems to be generic - refactor it into Minder
@@ -49,6 +63,12 @@ public class LuminaireDefinition extends Minder implements Legendable {
         }
     }
 
+    /**
+     * Find a specific {@code LuminaireDefinition} from all that have been constructed.
+     *
+     * @param id of {@code LuminaireDefinition} to find
+     * @return {@code LuminaireDefinition}, or {@code null} if not found
+     */
     public static LuminaireDefinition Select( String id ) {
         for (LuminaireDefinition selection : LUMINAIRELIST) {
             if (selection.id.equals( id )) {
@@ -58,6 +78,16 @@ public class LuminaireDefinition extends Minder implements Legendable {
         return null;
     }
 
+    /**
+     * Construct a {@code LuminaireDefinition} from an XML element.
+     * <p/>
+     * Keep a list of types of luminaires.
+     * <p/>
+     * Complete definitions are added to the legend.
+     *
+     * @param element DOM Element defining a pipe
+     * @throws AttributeMissingException if any attribute is missing
+     */
     public LuminaireDefinition( Element element ) throws AttributeMissingException {
         id = element.getAttribute( "name" );
         if (id.isEmpty()) {
@@ -80,30 +110,31 @@ public class LuminaireDefinition extends Minder implements Legendable {
                             : width);
         if (complete) {
             Legend.Register( this, 130, legendHeight );
-            System.out.println( "Registering for " + id );
         }
     }
 
     @Override
-    public void verify() throws InvalidXMLException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void verify() {
     }
 
     @Override
     public void drawPlan( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void drawSection( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void drawFront( Graphics2D canvas ) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    /**
+     * Generate SVG DOM for the symbol definition used for each individual luminaire.
+     *
+     * @param draw Canvas/DOM manager
+     * @param mode drawing mode - ignored
+     */
     @Override
     public void dom( Draw draw, View mode ) {
         Document document = draw.document();
@@ -115,17 +146,25 @@ public class LuminaireDefinition extends Minder implements Legendable {
         symbol.setAttribute( "overflow", "visible" );
         defs.appendChild( symbol );
 
-//        symbol.appendChild( svg );
-        Node newNode = document.importNode( svg, true );
-        symbol.appendChild( newNode );
+        Node svgNode = document.importNode( svg, true );
+        symbol.appendChild( svgNode );
 
         draw.insertRootChild( defs );
     }
 
+    /**
+     * Callback used by {@code Legend} to allow this object to generate the information it needs to
+     * put into the legend area.
+     * <p/>
+     * {@code LuminaireDefinition} puts out a 'use' element to draw its icon and the name of the
+     * type of luminaire.
+     *
+     * @param draw  Canvas/DOM manager
+     * @param start position on the canvas for this legend entry
+     * @return start point for next {@code Legend} item
+     */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        System.out.println( "DOM for " + id );
-
         Element use = draw.element( "use" );
         use.setAttribute( "xlink:href", "#" + id );
         use.setAttribute( "x", start.x().toString() );

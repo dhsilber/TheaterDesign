@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public abstract class Minder extends Elemental {
 
     /**
-     *
+     * Every <@code Minder}-derived objedt is referenced from this list.
      */
     public static ArrayList<Minder> LIST = new ArrayList<>();
 

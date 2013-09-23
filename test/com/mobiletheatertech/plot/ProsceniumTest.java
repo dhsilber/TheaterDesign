@@ -70,7 +70,7 @@ public class ProsceniumTest {
 
     @Test
     public void origin() throws Exception {
-        TestHelpers.ProsceniumReset();
+        TestResets.ProsceniumReset();
         assertNull( Proscenium.Origin() );
         new Proscenium( element );
         Point origin = Proscenium.Origin();
@@ -247,7 +247,7 @@ public class ProsceniumTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -265,7 +265,7 @@ public class ProsceniumTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -306,7 +306,7 @@ public class ProsceniumTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestHelpers.ProsceniumReset();
+        TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );

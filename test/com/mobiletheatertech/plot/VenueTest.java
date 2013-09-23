@@ -65,7 +65,7 @@ public class VenueTest {
     @Test
     public void storesExtremePoints() throws Exception {
 
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Venue( element );
 
@@ -77,29 +77,29 @@ public class VenueTest {
         assertEquals( Point.SmallZ(), 0 );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute." )
     public void noName() throws Exception {
         element.removeAttribute( "name" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute." )
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute." )
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute." )
     public void noHeight() throws Exception {
         element.removeAttribute( "height" );
         new Venue( element );

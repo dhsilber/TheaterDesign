@@ -72,8 +72,8 @@ public class LuminaireDefinitionTest {
         new LuminaireDefinition( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire definition instance is missing required 'name' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire definition instance is missing required 'name' attribute." )
     public void noName() throws Exception {
         element.removeAttribute( "name" );
         new LuminaireDefinition( element );
@@ -89,7 +89,7 @@ public class LuminaireDefinitionTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestHelpers.LuminaireDefinitionReset();
+        TestResets.LuminaireDefinitionReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );

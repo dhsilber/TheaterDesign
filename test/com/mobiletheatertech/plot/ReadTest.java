@@ -18,14 +18,14 @@ public class ReadTest {
     public ReadTest() {
     }
 
-    @Test(expectedExceptions = FileNotFoundException.class)
+    @Test( expectedExceptions = FileNotFoundException.class )
     public void noArgument() throws Exception {
         new Read( "bogus file name" );
     }
 
     @Test
     public void reads() throws Exception {
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Read( "tutorial" );
         assertEquals( Drawable.List().size(), 18 );

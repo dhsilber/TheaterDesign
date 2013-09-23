@@ -11,6 +11,18 @@ import java.awt.geom.Line2D;
 /**
  * Represents a theatrical lighting instrument and includes various information about where it is
  * located and how it is connected.
+ * <p/>
+ * XML tag is 'luminaire'.
+ * <p/>
+ * Required attributes are:<dl> <dt>type</dt><dd>references the name of a
+ * 'luminaire-definition'</dd> <dt>on</dt><dd>references the name of a pipe, truss, or other object
+ * on which can support a luminaire</dd> <dt>location</dt><dd>specifies where on the 'on' item, this
+ * is placed</dd> </dl>
+ * <p/>
+ * Optional attributes are:<dl> <dt>circuit</dt><dd>wiring circuit which powers this</dd>
+ * <dt>dimmer</dt><dd>dimmer which powers this circuit</dd> <dt>channel</dt><dd>board channel which
+ * controls this dimmer</dd> <dt>color</dt><dd>gel number</dd> <dt>unit</dt><dd>marker to identify
+ * this within the set of luminaires mounted on a given support item</dd> </dl>
  *
  * @author dhs
  * @since 0.0.7
@@ -26,12 +38,12 @@ public class Luminaire extends Minder {
     private String unit = "5";
 
     /**
-     * Create a Luminaire for each element in a list of XML nodes.
+     * Construct a {@code Luminaire} for each element in a list of XML nodes.
      *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the stage is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
+     * @param list of XML nodes
+     * @throws AttributeMissingException if a required attribute is missing
+     * @throws LocationException         if the stage is outside the {@code Venue}
+     * @throws SizeException             if a length attribute is too short
      */
 
     // This seems to be generic - refactor it into Minder
@@ -51,8 +63,10 @@ public class Luminaire extends Minder {
     }
 
     /**
-     * @param element
-     * @throws AttributeMissingException
+     * Construct a {@code Luminaire} from an XML element.
+     *
+     * @param element DOM Element defining a luminaire
+     * @throws AttributeMissingException if any attribute is missing
      */
     public Luminaire( Element element ) throws AttributeMissingException {
         type = getStringAttribute( element, "type" );
@@ -66,8 +80,10 @@ public class Luminaire extends Minder {
     }
 
     /**
-     * @return
-     * @throws MountingException
+     * Provide the drawing location of this {@code Luminaire}.
+     *
+     * @return drawing location
+     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     protected Point location() throws MountingException {
         Pipe mount = Pipe.Select( on );
@@ -79,12 +95,14 @@ public class Luminaire extends Minder {
 
     @Override
     public void verify() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
-     * @param canvas Drawing media.
-     * @throws MountingException
+     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
+     * the luminaire should be in the plan view.
+     *
+     * @param canvas drawing media
+     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
     public void drawPlan( Graphics2D canvas ) throws MountingException {
@@ -101,8 +119,11 @@ public class Luminaire extends Minder {
     }
 
     /**
-     * @param canvas Drawing media.
-     * @throws MountingException
+     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
+     * the luminaire should be in the section view.
+     *
+     * @param canvas drawing media
+     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
     public void drawSection( Graphics2D canvas ) throws MountingException {
@@ -119,8 +140,11 @@ public class Luminaire extends Minder {
     }
 
     /**
-     * @param canvas Drawing media.
-     * @throws MountingException
+     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
+     * the luminaire should be in the front view.
+     *
+     * @param canvas drawing media
+     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
     public void drawFront( Graphics2D canvas ) throws MountingException {
@@ -137,9 +161,12 @@ public class Luminaire extends Minder {
     }
 
     /**
-     * @param draw Canvas/DOM manager.
-     * @param mode
-     * @throws MountingException
+     * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
+     * unit information.
+     *
+     * @param draw Canvas/DOM manager
+     * @param mode drawing mode
+     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
     public void dom( Draw draw, View mode ) throws MountingException {
@@ -289,13 +316,12 @@ public class Luminaire extends Minder {
 
         Text textColor = draw.document().createTextNode( color );
         colorText.appendChild( textColor );
-
-        System.out.println( "DOM " + this.toString() );
-
     }
 
     /**
-     * @return
+     * Describe this {@code Luminaire}.
+     *
+     * @return textual description
      */
     @Override
     public String toString() {

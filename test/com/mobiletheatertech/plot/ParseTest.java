@@ -26,7 +26,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -91,7 +91,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -117,7 +117,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -143,7 +143,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -170,7 +170,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -202,7 +202,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -229,7 +229,7 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestHelpers.MinderReset();
+        TestResets.MinderReset();
 
         new Parse( stream );
 
@@ -276,8 +276,8 @@ public class ParseTest {
     /**
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Top level element must be 'plot'.")
+    @Test( expectedExceptions = InvalidXMLException.class,
+           expectedExceptionsMessageRegExp = "Top level element must be 'plot'." )
     public void noPlot() throws Exception {
         String xml = "<pot><thingy  /></pot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -285,8 +285,8 @@ public class ParseTest {
         new Parse( stream );
     }
 
-    @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Error in parsing Plot XML description.")
+    @Test( expectedExceptions = InvalidXMLException.class,
+           expectedExceptionsMessageRegExp = "Error in parsing Plot XML description." )
     public void noXML() throws Exception {
         String xml = "";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );

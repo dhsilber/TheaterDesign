@@ -83,6 +83,9 @@ public class Parse {
         NodeList stage = root.getElementsByTagName( "stage" );
         Stage.ParseXML( stage );
 
+        NodeList chairs = root.getElementsByTagName( "chairblock" );
+        ChairBlock.ParseXML( chairs );
+
         NodeList hangpoints = root.getElementsByTagName( "hangpoint" );
         HangPoint.ParseXML( hangpoints );
 

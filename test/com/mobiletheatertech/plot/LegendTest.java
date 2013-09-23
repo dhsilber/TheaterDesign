@@ -65,7 +65,7 @@ public class LegendTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestHelpers.LegendReset();
+        TestResets.LegendReset();
         calledBack = 0;
 
         Element venueElement = new IIOMetadataNode( "venue" );

@@ -41,7 +41,7 @@ public class PointTest {
 
     @Test
     public void extremeValuesDecreasing() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 1, 2, 3 );
         new Point( -1, -2, -3 );
@@ -57,7 +57,7 @@ public class PointTest {
 
     @Test
     public void extremeValuesIncreasing() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( -1, -2, -3 );
         new Point( 1, 2, 3 );
@@ -77,7 +77,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueSmallX() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( -1, 0, 0 );
 
@@ -96,7 +96,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueLargeX() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 1, 0, 0 );
 
@@ -115,7 +115,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueSmallY() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 0, -1, 0 );
 
@@ -134,7 +134,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueLargeY() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 0, 1, 0 );
 
@@ -153,7 +153,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueSmallZ() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 0, 0, -1 );
 
@@ -172,7 +172,7 @@ public class PointTest {
      */
     @Test
     public void extremeValueLargeZ() throws Exception {
-        TestHelpers.PointReset();
+        TestResets.PointReset();
 
         new Point( 0, 0, 1 );
 

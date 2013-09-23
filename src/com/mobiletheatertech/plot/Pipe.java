@@ -48,10 +48,14 @@ public class Pipe extends Minder {
     private static int Diameter = 2;
 
     /**
-     * Extract each Pipe description element from a list of XML nodes.
+     * Construct a {@code Pipe} for each element in a list of XML nodes.
      *
-     * @param list Set of hangpoint nodes
-     * @throws AttributeMissingException This ends up copied to each thing that inherits from
+     * @param list of 'pipe' nodes
+     * @throws AttributeMissingException if any attribute is missing from any {@code Pipe}
+     */
+
+    /*
+    This ends up copied to each thing that inherits from
      *                                   Minder. There needs to be a factory somewhere.
      */
     public static void ParseXML( NodeList list )
@@ -71,6 +75,12 @@ public class Pipe extends Minder {
         }
     }
 
+    /**
+     * Find a specific {@code Pipe} from all that have been constructed.
+     *
+     * @param id of {@code Pipe} to find
+     * @return {@code Pipe}, or {@code null} if not found
+     */
     public static Pipe Select( String id ) {
         for (Pipe selection : PIPELIST) {
             if (selection.id.equals( id )) {
@@ -82,12 +92,12 @@ public class Pipe extends Minder {
 
     /**
      * Construct a {@code Pipe} from an XML Element.
+     * <p/>
+     * Keep a list of defined pipes.
      *
-     * @param element DOM Element defining a pipe.
-     * @throws AttributeMissingException if any attribute is missing.
-     * @throws SizeException             if the length is too short.
-     * @throws LocationException         if any part of the pipe is outside the bounds of the {@code
-     *                                   Venue}.
+     * @param element DOM Element defining a pipe
+     * @throws AttributeMissingException if any attribute is missing
+     * @throws SizeException             if the length is too short
      */
     /*
     A natural origin of a pipe is the center of one end. To position
@@ -96,8 +106,6 @@ public class Pipe extends Minder {
     public Pipe( Element element )
             throws AttributeMissingException, SizeException
     {
-        PIPELIST.add( this );
-
         id = element.getAttribute( "id" );
         length = getIntegerAttribute( element, "length" );
         Integer x = getIntegerAttribute( element, "x" );
@@ -105,9 +113,17 @@ public class Pipe extends Minder {
         Integer z = getIntegerAttribute( element, "z" );
         start = new Point( x, y, z );
 
-        if (0 >= length) throw new SizeException( "Pipe", "length" );
+        if (0 >= length) throw new SizeException( this.toString(), "length" );
+
+        PIPELIST.add( this );
     }
 
+    /**
+     * Provide the drawing location of this {@code Pipe}.
+     *
+     * @param offset in the x dimension
+     * @return drawing location
+     */
     public Point location( Integer offset ) {
         Point point;
         if (Proscenium.Active()) {
@@ -118,13 +134,18 @@ public class Pipe extends Minder {
         else {
             point = new Point( start.x() + offset, start.y(), start.z() );
         }
-        System.out.println(
-                "Pipe.location(): " + point.toString() + " Start: " + start.toString() );
+//        System.out.println(
+//                "Pipe.location(): " + point.toString() + " Start: " + start.toString() );
         return point;
     }
 
+    /**
+     * Confirm that this {@code Pipe}'s specification works with other Plot items.
+     *
+     * @throws LocationException if the pipe would at any point be outside of the venue
+     */
     @Override
-    public void verify() throws InvalidXMLException, LocationException {
+    public void verify() throws LocationException {
         String identity = (id.equals( "" ))
                           ? this.toString()
                           : "Pipe (" + id + ")";
@@ -142,6 +163,7 @@ public class Pipe extends Minder {
             Box box = new Box( boxOrigin, length, Diameter, Diameter );
 
             if (!Venue.Contains( box )) {
+                PIPELIST.remove( this );
                 throw new LocationException(
                         identity +
                                 " should not extend beyond the boundaries of the venue." );
@@ -153,6 +175,7 @@ public class Pipe extends Minder {
             Box box = new Box( boxOrigin, length, Diameter, Diameter );
 
             if (!Venue.Contains( box )) {
+                PIPELIST.remove( this );
                 throw new LocationException(
                         identity +
                                 " should not extend beyond the boundaries of the venue." );
@@ -163,7 +186,7 @@ public class Pipe extends Minder {
     /**
      * Draw this {@code pipe} onto the plan view.
      *
-     * @param canvas Medium on which to draw.
+     * @param canvas medium on which to draw
      */
     @Override
     public void drawPlan( Graphics2D canvas ) {
@@ -175,7 +198,7 @@ public class Pipe extends Minder {
     /**
      * Draw this {@code pipe} onto the section view.
      *
-     * @param canvas Medium on which to draw.
+     * @param canvas medium on which to draw
      */
     @Override
     public void drawSection( Graphics2D canvas ) {
@@ -183,7 +206,6 @@ public class Pipe extends Minder {
 
         canvas.setPaint( Color.BLACK );
 
-        System.out.println( "Pipe section Z: " + start.z() );
         canvas.draw( new Ellipse2D.Float( boxOrigin.y(), bottom - boxOrigin.z(), Diameter,
                                           Diameter ) );
     }
@@ -191,7 +213,7 @@ public class Pipe extends Minder {
     /**
      * Draw this {@code pipe} onto the front view.
      *
-     * @param canvas Medium on which to draw.
+     * @param canvas medium on which to draw
      */
     @Override
     public void drawFront( Graphics2D canvas ) {
@@ -199,7 +221,6 @@ public class Pipe extends Minder {
 
         canvas.setPaint( Color.BLACK );
 
-        System.out.println( "Pipe front Z: " + start.z() );
         canvas.draw( new Rectangle( boxOrigin.x(), bottom - boxOrigin.z(), length, Diameter ) );
     }
 
@@ -207,12 +228,17 @@ public class Pipe extends Minder {
     public void dom( Draw draw, View mode ) {
     }
 
+    /**
+     * Describe this {@code Pipe}.
+     *
+     * @return textual description
+     */
     @Override
     public String toString() {
-        return "Pipe {" +
+        return "Pipe { " +
 //                "id='" + id + '\'' +
-                ", origin=" + start +
+                "origin=" + start +
                 ", length=" + length +
-                '}';
+                " }";
     }
 }
