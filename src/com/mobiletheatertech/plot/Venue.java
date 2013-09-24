@@ -13,8 +13,8 @@ import java.awt.*;
  * All aspects of the lighting plot which are descriptions of the venue are encapsulated here.
  * <p/>
  * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'hangpoint'
- * tags. Required attributes are 'name', 'width', 'depth', and 'height'. (I expect to move the
- * 'name' attribute into its own tag at some point.)
+ * and 'airwall' tags. Required attributes are 'name', 'width', 'depth', and 'height'. (I expect to
+ * move the 'name' attribute into its own tag at some point.)
  *
  * @author dhs
  * @since 0.0.2
@@ -84,7 +84,7 @@ public class Venue extends Minder implements Legendable {
      * Confirm that a specified rectangle fits into this venue.
      *
      * @param rectangle area to check
-     * @return true if specified rectangle fits into this {@code StaticVenue}.
+     * @return true if specified rectangle fits into this {@code Venue}.
      */
     public static boolean Contains2D( Rectangle rectangle ) {
 
@@ -113,7 +113,6 @@ public class Venue extends Minder implements Legendable {
      * @return height of the venue
      */
     public static int Width() {
-        System.err.println( "StaticVenue (" + StaticVenue.name + ").width: " + StaticVenue.width );
         return StaticVenue.width;
     }
 
@@ -123,7 +122,6 @@ public class Venue extends Minder implements Legendable {
      * @return height of the venue
      */
     public static int Depth() {
-        System.err.println( "StaticVenue (" + StaticVenue.name + ").depth: " + StaticVenue.depth );
         return StaticVenue.depth;
     }
 
@@ -137,12 +135,11 @@ public class Venue extends Minder implements Legendable {
     }
 
     @Override
-    public void verify() throws InvalidXMLException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void verify() {
     }
 
     /**
-     * Draw this {@code StaticVenue} to the provided canvas.
+     * Draw a plan view of this {@code Venue} to the provided canvas.
      *
      * @param canvas drawing region.
      */
@@ -153,7 +150,7 @@ public class Venue extends Minder implements Legendable {
     }
 
     /**
-     * Draw this {@code StaticVenue} to the provided canvas.
+     * Draw a section view of this {@code Venue} to the provided canvas.
      *
      * @param canvas drawing region.
      */
@@ -164,7 +161,7 @@ public class Venue extends Minder implements Legendable {
     }
 
     /**
-     * Draw this {@code StaticVenue} to the provided canvas.
+     * Draw a front view of this {@code Venue} to the provided canvas.
      *
      * @param canvas drawing region.
      */
@@ -199,6 +196,16 @@ public class Venue extends Minder implements Legendable {
         draw.setDocumentTitle( title.toString() );
     }
 
+    /**
+     * Callback used by {@code Legend} to allow this object to generate the information it needs to
+     * put into the legend area.
+     * <p/>
+     * {@code Venue} puts out a 'text' element containing the name of the venue.
+     *
+     * @param draw  Canvas/DOM manager
+     * @param start position on the canvas for this legend entry
+     * @return start point for next {@code Legend} item
+     */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
         Element text = draw.element( "text" );

@@ -11,6 +11,21 @@ import java.awt.geom.Line2D;
  * Created with IntelliJ IDEA. User: dhs Date: 7/30/13 Time: 1:59 PM To change this template use
  * File | Settings | File Templates.
  */
+
+/**
+ * Represents a proscenium arch.
+ * <p/>
+ * XML tag is 'proscenium'.
+ * <p/>
+ * Required attributes are:<dl> <dt>x</dt><dd>coordinate of center of proscenium with respect to
+ * venue</dd> <dt>y</dt><dd>coordinate of center of proscenium with respect to venue</dd>
+ * <dt>z</dt><dd>coordinate of floor level of proscenium stage with respect to venue</dd>
+ * <dt>width</dt><dd>width of proscenium opening</dd> <dt>depth</dt><dd>thickness of proscenium
+ * wall</dd> <dt>height</dt><dd>height of proscenium opening</dd>
+ *
+ * @author dhs
+ * @since 0.0.7
+ */
 public class Proscenium extends Minder {
 
     private static boolean ACTIVE = false;
@@ -26,10 +41,10 @@ public class Proscenium extends Minder {
     /**
      * Extract the stage description element from a list of XML nodes.
      *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the stage is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
+     * @param list of XML nodes
+     * @throws AttributeMissingException if a required attribute is missing
+     * @throws LocationException         if the stage is outside the {@code Venue}
+     * @throws SizeException             if a length attribute is too short
      */
 
     // This seems to be generic - refactor it into Minder
@@ -108,9 +123,11 @@ public class Proscenium extends Minder {
 
     @Override
     public void verify() throws InvalidXMLException {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    /**
+     * @param canvas Drawing media.
+     */
     @Override
     public void drawPlan( Graphics2D canvas ) {
         canvas.setPaint( Color.BLACK );
@@ -125,6 +142,9 @@ public class Proscenium extends Minder {
         canvas.setStroke( new BasicStroke( 1 ) );
     }
 
+    /**
+     * @param canvas Drawing media.
+     */
     @Override
     public void drawSection( Graphics2D canvas ) {
         int bottom = Venue.Height();
@@ -132,6 +152,9 @@ public class Proscenium extends Minder {
         canvas.draw( new Rectangle( y, bottom - z - height, depth, height ) );
     }
 
+    /**
+     * @param canvas Drawing media.
+     */
     @Override
     public void drawFront( Graphics2D canvas ) {
         int bottom = Venue.Height();
@@ -149,7 +172,6 @@ public class Proscenium extends Minder {
 
     @Override
     public void dom( Draw draw, View mode ) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
 

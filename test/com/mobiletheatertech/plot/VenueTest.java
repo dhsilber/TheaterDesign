@@ -4,6 +4,8 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.awt.*;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 import static org.testng.Assert.*;
 
 /**
- * Test {@code Venue}
+ * Test {@code Venue}.
  *
  * @author dhs
  * @since 0.0.2
@@ -21,6 +23,7 @@ import static org.testng.Assert.*;
 public class VenueTest {
 
     Element element = null;
+    String title = "Test Name";
 
     public VenueTest() {
     }
@@ -77,29 +80,29 @@ public class VenueTest {
         assertEquals( Point.SmallZ(), 0 );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute.")
     public void noName() throws Exception {
         element.removeAttribute( "name" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute.")
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute.")
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute.")
     public void noHeight() throws Exception {
         element.removeAttribute( "height" );
         new Venue( element );
@@ -311,16 +314,29 @@ public class VenueTest {
         venue.drawFront( mockCanvas );
     }
 
-
     @Test
     public void parseXML() {
-        fail( "Must create test" );
+        // See ParseTest.createsVenue*()
     }
 
     @Test
-    public void domSetsTitle() {
-        fail( "Must create test" );
+    public void domSetsTitle() throws Exception {
+        Draw draw = new Draw();
+        Venue venue = new Venue( element );
+        draw.getRoot();
+
+        venue.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "title" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        String titleActual = element.getTextContent();
+        assertEquals( titleActual, title + " - Plan view" );
+
     }
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -333,7 +349,7 @@ public class VenueTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         element = new IIOMetadataNode();
-        element.setAttribute( "name", "Test Name" );
+        element.setAttribute( "name", title );
         element.setAttribute( "width", "1296" );
         element.setAttribute( "depth", "1320" );
         element.setAttribute( "height", "240" );

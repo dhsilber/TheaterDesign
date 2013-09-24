@@ -155,9 +155,12 @@ public class ParseTest {
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder proscenium = list.get( 1 );
-        assert Minder.class.isInstance( proscenium );
-        assert Proscenium.class.isInstance( proscenium );
+        Minder minderProscenium = list.get( 1 );
+        assert Minder.class.isInstance( minderProscenium );
+        assert Proscenium.class.isInstance( minderProscenium );
+//        Proscenium proscenium = (Proscenium) minderProscenium;
+        assertEquals( Proscenium.Origin(), new Point( 20, 30, 0 ) );
+
     }
 
     @Test
@@ -255,7 +258,7 @@ public class ParseTest {
     @Test
     public void createsLuminaire() throws Exception {
         String xml = "<plot>" +
-                "<luminaire name=\"6x9\" on=\"lineset 4\" location=\"12\" target=\"DSC\" />" +
+                "<luminaire type=\"6x9\" on=\"lineset 4\" location=\"12\" target=\"DSC\" />" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
@@ -276,8 +279,8 @@ public class ParseTest {
     /**
      * @throws Exception
      */
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Top level element must be 'plot'." )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Top level element must be 'plot'.")
     public void noPlot() throws Exception {
         String xml = "<pot><thingy  /></pot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -285,8 +288,8 @@ public class ParseTest {
         new Parse( stream );
     }
 
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Error in parsing Plot XML description." )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Error in parsing Plot XML description.")
     public void noXML() throws Exception {
         String xml = "";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -304,6 +307,9 @@ public class ParseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.MinderReset();
+        TestResets.PipeReset();
+        TestResets.ProsceniumReset();
     }
 
     @AfterMethod

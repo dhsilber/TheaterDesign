@@ -113,6 +113,15 @@ public class TestResets {
         field.set( generated, false );
     }
 
+/*
+    public static void ProsceniumDeactivate() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Proscenium.class.getDeclaredField( "ACTIVE" );
+        field.setAccessible( true );
+        boolean active = field.getBoolean( Proscenium.class );
+        field.set( active, false );
+    }
+*/
+
     /**
      * Reach into the specified class and zero out the specified static int.
      *

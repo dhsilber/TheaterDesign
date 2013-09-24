@@ -25,9 +25,9 @@ public class Write {
      */
     public Write( String basename ) throws MountingException {
         home = System.getProperty( "user.home" );
-        if (null == home) {
-            // throw exception
-        }
+//        if (null == home) {
+//            // throw exception
+//        }
 
         writePlan( basename );
         writeSection( basename );
@@ -42,6 +42,8 @@ public class Write {
         Hack.Draw( draw.canvas() );
 
         draw.getRoot();
+
+        Grid.DOM( draw );
 
         Legend.Startup( draw );
 
