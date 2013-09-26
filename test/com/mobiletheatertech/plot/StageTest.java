@@ -39,22 +39,22 @@ public class StageTest {
     public void storesFlatAttributes() throws Exception {
         Stage stage = new Stage( element );
 
-        assertEquals( TestHelpers.accessInteger( stage, "width" ), 288 );
-        assertEquals( TestHelpers.accessInteger( stage, "depth" ), 144 );
-        assertEquals( TestHelpers.accessInteger( stage, "x" ), 56 );
-        assertEquals( TestHelpers.accessInteger( stage, "y" ), 16 );
-        assertEquals( TestHelpers.accessInteger( stage, "z" ), 12 );
+        assertEquals( TestHelpers.accessInteger( stage, "width" ), (Integer) 288 );
+        assertEquals( TestHelpers.accessInteger( stage, "depth" ), (Integer) 144 );
+        assertEquals( TestHelpers.accessInteger( stage, "x" ), (Integer) 56 );
+        assertEquals( TestHelpers.accessInteger( stage, "y" ), (Integer) 16 );
+        assertEquals( TestHelpers.accessInteger( stage, "z" ), (Integer) 12 );
     }
 
     @Test
     public void storesProsceniumAttributes() throws Exception {
         Stage stage = new Stage( elementP );
 
-        assertEquals( TestHelpers.accessInteger( stage, "prosceniumWidth" ), 288 );
-        assertEquals( TestHelpers.accessInteger( stage, "prosceniumDepth" ), 144 );
-        assertEquals( TestHelpers.accessInteger( stage, "prosceniumHeight" ), 144 );
-        assertEquals( TestHelpers.accessInteger( stage, "apronDepth" ), 56 );
-        assertEquals( TestHelpers.accessInteger( stage, "apronWidth" ), 16 );
+        assertEquals( TestHelpers.accessInteger( stage, "prosceniumWidth" ), (Integer) 288 );
+        assertEquals( TestHelpers.accessInteger( stage, "prosceniumDepth" ), (Integer) 144 );
+        assertEquals( TestHelpers.accessInteger( stage, "prosceniumHeight" ), (Integer) 144 );
+        assertEquals( TestHelpers.accessInteger( stage, "apronDepth" ), (Integer) 56 );
+        assertEquals( TestHelpers.accessInteger( stage, "apronWidth" ), (Integer) 16 );
     }
 
     // Until such time as I properly implement this class' use of id.

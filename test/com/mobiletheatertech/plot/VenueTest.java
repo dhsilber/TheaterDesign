@@ -44,9 +44,9 @@ public class VenueTest {
         String name = (String) nameField.get( venue );
         assert name.equals( "Test Name" );
 
-        assertEquals( TestHelpers.accessInteger( venue, "width" ), 1296 );
-        assertEquals( TestHelpers.accessInteger( venue, "depth" ), 1320 );
-        assertEquals( TestHelpers.accessInteger( venue, "height" ), 240 );
+        assertEquals( TestHelpers.accessInteger( venue, "width" ), (Integer) 1296 );
+        assertEquals( TestHelpers.accessInteger( venue, "depth" ), (Integer) 1320 );
+        assertEquals( TestHelpers.accessInteger( venue, "height" ), (Integer) 240 );
     }
 
     // Until such time as I properly implement this class' use of id.

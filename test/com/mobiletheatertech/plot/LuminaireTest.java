@@ -39,7 +39,7 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
-        assertEquals( TestHelpers.accessInteger( luminaire, "location" ), 12 );
+        assertEquals( TestHelpers.accessInteger( luminaire, "location" ), (Integer) 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "" );
@@ -59,7 +59,7 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
-        assertEquals( TestHelpers.accessInteger( luminaire, "location" ), 12 );
+        assertEquals( TestHelpers.accessInteger( luminaire, "location" ), (Integer) 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "A12" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "19b" );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "97" );

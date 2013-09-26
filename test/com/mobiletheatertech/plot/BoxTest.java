@@ -21,9 +21,9 @@ public class BoxTest {
         Box box = new Box( point, 12, 13, 14 );
 
         assertEquals( TestHelpers.accessPoint( box, "origin" ), point );
-        assertEquals( TestHelpers.accessInteger( box, "width" ), 12 );
-        assertEquals( TestHelpers.accessInteger( box, "depth" ), 13 );
-        assertEquals( TestHelpers.accessInteger( box, "height" ), 14 );
+        assertEquals( TestHelpers.accessInteger( box, "width" ), (Integer) 12 );
+        assertEquals( TestHelpers.accessInteger( box, "depth" ), (Integer) 13 );
+        assertEquals( TestHelpers.accessInteger( box, "height" ), (Integer) 14 );
     }
 
     @Test
@@ -33,16 +33,16 @@ public class BoxTest {
         Box box1 = new Box( point1, 12, 13, 14 );
 
         assertEquals( TestHelpers.accessPoint( box1, "origin" ), point1 );
-        assertEquals( TestHelpers.accessInteger( box1, "width" ), 12 );
-        assertEquals( TestHelpers.accessInteger( box1, "depth" ), 13 );
-        assertEquals( TestHelpers.accessInteger( box1, "height" ), 14 );
+        assertEquals( TestHelpers.accessInteger( box1, "width" ), (Integer) 12 );
+        assertEquals( TestHelpers.accessInteger( box1, "depth" ), (Integer) 13 );
+        assertEquals( TestHelpers.accessInteger( box1, "height" ), (Integer) 14 );
 
         Box box2 = new Box( point2, 22, 23, 24 );
 
         assertEquals( TestHelpers.accessPoint( box2, "origin" ), point2 );
-        assertEquals( TestHelpers.accessInteger( box2, "width" ), 22 );
-        assertEquals( TestHelpers.accessInteger( box2, "depth" ), 23 );
-        assertEquals( TestHelpers.accessInteger( box2, "height" ), 24 );
+        assertEquals( TestHelpers.accessInteger( box2, "width" ), (Integer) 22 );
+        assertEquals( TestHelpers.accessInteger( box2, "depth" ), (Integer) 23 );
+        assertEquals( TestHelpers.accessInteger( box2, "height" ), (Integer) 24 );
     }
 
     @Test

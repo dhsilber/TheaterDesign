@@ -37,10 +37,10 @@ public class ChairBlockTest {
     public void storesAttributes() throws Exception {
         ChairBlock chairBlock = new ChairBlock( element );
 
-        assertEquals( TestHelpers.accessInteger( chairBlock, "x" ), (int) X );
-        assertEquals( TestHelpers.accessInteger( chairBlock, "y" ), (int) Y );
-        assertEquals( TestHelpers.accessInteger( chairBlock, "width" ), (int) WIDTH );
-        assertEquals( TestHelpers.accessInteger( chairBlock, "depth" ), (int) DEPTH );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "x" ), X );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "y" ), Y );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "width" ), WIDTH );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "depth" ), DEPTH );
     }
 
     @Test

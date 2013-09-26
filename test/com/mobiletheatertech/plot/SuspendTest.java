@@ -37,7 +37,7 @@ public class SuspendTest {
         Suspend suspend = new Suspend( element );
 
         assertEquals( TestHelpers.accessString( suspend, "refId" ), "jim" );
-        assertEquals( TestHelpers.accessInteger( suspend, "distance" ), 32 );
+        assertEquals( TestHelpers.accessInteger( suspend, "distance" ), (Integer) 32 );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -104,17 +104,17 @@ public class SuspendTest {
         new Suspend( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp =
-                   "Suspend instance is missing required 'ref' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp =
+                  "Suspend instance is missing required 'ref' attribute.")
     public void noRef() throws Exception {
         element.removeAttribute( "ref" );
         new Suspend( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp =
-                   "Suspend instance is missing required 'distance' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp =
+                  "Suspend instance is missing required 'distance' attribute.")
     public void noDistanceWithoutID() throws Exception {
         element.removeAttribute( "distance" );
         new Suspend( element );
@@ -125,8 +125,8 @@ public class SuspendTest {
         fail( "Missing distance attribute exception message should mention id of referenced HangPoint." );
     }
 
-    @Test( expectedExceptions = ReferenceException.class,
-           expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302." )
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Cannot suspend from unknown hangpoint ref 302.")
     public void missingRefTarget() throws Exception {
         element.setAttribute( "ref", "302" );
         new Suspend( element );

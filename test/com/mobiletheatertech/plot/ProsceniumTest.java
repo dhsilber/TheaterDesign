@@ -1,11 +1,9 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,12 +34,12 @@ public class ProsceniumTest {
     public void storesAttributes() throws Exception {
         Proscenium proscenium = new Proscenium( element );
 
-        assertEquals( TestHelpers.accessInteger( proscenium, "width" ), 330 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "depth" ), 22 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "height" ), 250 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "x" ), 250 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "y" ), 144 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "z" ), 12 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "width" ), (Integer) 330 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "depth" ), (Integer) 22 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "height" ), (Integer) 250 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "x" ), (Integer) 250 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "y" ), (Integer) 144 );
+        assertEquals( TestHelpers.accessInteger( proscenium, "z" ), (Integer) 12 );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -273,8 +271,8 @@ public class ProsceniumTest {
         assertEquals( list.size(), 2 );
     }
 
-    @Mocked
-    Graphics2D mockCanvas;
+//    @Mocked
+//    Graphics2D mockCanvas;
 
 //    @Test
 //    public void draw() throws Exception {

@@ -33,18 +33,18 @@ public class AirwallTest {
     public void storesAttributes() throws Exception {
         Airwall airwall = new Airwall( element );
 
-        assertEquals( TestHelpers.accessInteger( airwall, "depth" ), 77 );
+        assertEquals( TestHelpers.accessInteger( airwall, "depth" ), (Integer) 77 );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp = "Airwall instance is at too small a depth" )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp = "Airwall instance is at too small a depth")
     public void depthTooSmall() throws Exception {
         element.setAttribute( "depth", "0" );
         new Airwall( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp = "Airwall instance is at too large a depth" )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp = "Airwall instance is at too large a depth")
     public void depthTooLarge() throws Exception {
         element.setAttribute( "depth", "400" );
         new Airwall( element );

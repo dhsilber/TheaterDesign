@@ -65,28 +65,28 @@ public class ElementalTest {
     public void getIntegerAttribute() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger( ellie, "fuu" ), 609 );
+        assertEquals( TestHelpers.accessInteger( ellie, "fuu" ), (Integer) 609 );
     }
 
     @Test
     public void getOptionalIntegerAttributeEmpty() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger( ellie, "empty" ), 0 );
+        assertEquals( TestHelpers.accessInteger( ellie, "empty" ), (Integer) 0 );
     }
 
     @Test
     public void getOptionalIntegerAttributeUnset() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger( ellie, "unset" ), 0 );
+        assertEquals( TestHelpers.accessInteger( ellie, "unset" ), (Integer) 0 );
     }
 
     @Test
     public void getOptionalIntegerAttributeUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger( ellie, "used" ), 17 );
+        assertEquals( TestHelpers.accessInteger( ellie, "used" ), (Integer) 17 );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,

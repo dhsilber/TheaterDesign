@@ -38,8 +38,8 @@ public class TrussTest {
     public void storesAttributes() throws Exception {
         Truss truss = new Truss( element );
 
-        assertEquals( TestHelpers.accessInteger( truss, "size" ), 12 );
-        assertEquals( TestHelpers.accessInteger( truss, "length" ), 320 );
+        assertEquals( TestHelpers.accessInteger( truss, "size" ), (Integer) 12 );
+        assertEquals( TestHelpers.accessInteger( truss, "length" ), (Integer) 320 );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -119,8 +119,8 @@ public class TrussTest {
         assertNull( baseField );
     }
 
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children" )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children")
     public void verifyNoSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         element.removeChild( suspendElement2 );
@@ -129,8 +129,8 @@ public class TrussTest {
         truss.verify();
     }
 
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children" )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children")
     public void verifyTooFewSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         Truss truss = new Truss( element );
@@ -138,8 +138,8 @@ public class TrussTest {
         truss.verify();
     }
 
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children" )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Truss must have exactly two suspend children")
     public void verifyTooManySuspends() throws Exception {
         Element suspendElement3 = new IIOMetadataNode( "suspend" );
         suspendElement3.setAttribute( "ref", "joan" );
@@ -188,23 +188,23 @@ public class TrussTest {
         new Truss( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Truss instance is missing required 'size' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Truss instance is missing required 'size' attribute.")
     public void noSize() throws Exception {
         element.removeAttribute( "size" );
         new Truss( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Truss instance is missing required 'length' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Truss instance is missing required 'length' attribute.")
     public void noLength() throws Exception {
         element.removeAttribute( "length" );
         new Truss( element );
     }
 
-    @Test( expectedExceptions = KindException.class,
-           expectedExceptionsMessageRegExp =
-                   "Truss of size 302 not supported. Try 12 or 20." )
+    @Test(expectedExceptions = KindException.class,
+          expectedExceptionsMessageRegExp =
+                  "Truss of size 302 not supported. Try 12 or 20.")
     public void unsupportedSize() throws Exception {
         element.setAttribute( "size", "302" );
         new Truss( element );

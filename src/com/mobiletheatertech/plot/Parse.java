@@ -74,6 +74,9 @@ public class Parse {
         NodeList venue = root.getElementsByTagName( "venue" );
         Venue.ParseXML( venue );
 
+        NodeList wall = root.getElementsByTagName( "wall" );
+        Wall.ParseXML( wall );
+
         NodeList proscenium = root.getElementsByTagName( "proscenium" );
         Proscenium.ParseXML( proscenium );
 

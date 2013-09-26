@@ -49,7 +49,7 @@ public class TestHelpers {
         return field.get( thingy );
     }
 
-    public static int accessInteger( Object thingy, String name ) throws Exception {
+    public static Integer accessInteger( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
         return (Integer) field.get( thingy );
     }
