@@ -28,18 +28,19 @@ public class Parse {
      * Parse the provided XML stream, expecting a description of a lighting plot.
      *
      * @param stream lighting plot XML stream
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws InvalidXMLException       If the XML plot description is not valid.
-     * @throws KindException             If an attribute specifies a flavor of {@literal Plot} item
+     * @throws AttributeMissingException if a required attribute is missing
+     * @throws FeatureException          if some unimplemented feature is invoked
+     * @throws InvalidXMLException       if the XML plot description is not valid
+     * @throws KindException             if an attribute specifies a flavor of {@literal Plot} item
      *                                   that is not supported (e.g. a {@code Truss} with a 'size'
-     *                                   of '1').
-     * @throws LocationException         If any {@literal Plot} item is outside the {@code Venue}.
-     * @throws ReferenceException        If a reference is made to a feature that does not exist.
-     * @throws SizeException             If an attribute specifies a dimension that doesn't make
-     *                                   sense (e.g. a {@code Pipe} with a length of zero).
+     *                                   of '1')
+     * @throws LocationException         if any {@literal Plot} item is outside the {@code Venue}
+     * @throws ReferenceException        if a reference is made to a feature that does not exist
+     * @throws SizeException             if an attribute specifies a dimension that doesn't make
+     *                                   sense (e.g. a {@code Pipe} with a length of zero)
      */
     public Parse( InputStream stream )
-            throws AttributeMissingException, InvalidXMLException,
+            throws AttributeMissingException, FeatureException, InvalidXMLException,
             KindException, LocationException,
             ReferenceException, SizeException
     {

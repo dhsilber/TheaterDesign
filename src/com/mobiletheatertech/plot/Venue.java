@@ -12,9 +12,9 @@ import java.awt.*;
  * <p/>
  * All aspects of the lighting plot which are descriptions of the venue are encapsulated here.
  * <p/>
- * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'hangpoint'
- * and 'airwall' tags. Required attributes are 'name', 'width', 'depth', and 'height'. (I expect to
- * move the 'name' attribute into its own tag at some point.)
+ * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'wall',
+ * 'hangpoint', and/or 'airwall' tags. Required attributes are 'name', 'width', 'depth', and
+ * 'height'. (I expect to move the 'name' attribute into its own tag at some point.)
  *
  * @author dhs
  * @since 0.0.2
@@ -34,7 +34,7 @@ public class Venue extends Minder implements Legendable {
      * @throws AttributeMissingException If a required attribute is missing.
      */
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException
+            throws AttributeMissingException, InvalidXMLException
     {
 
         Node node = list.item( 0 );
@@ -50,7 +50,9 @@ public class Venue extends Minder implements Legendable {
      * @param element DOM Element defining a venue.
      * @throws AttributeMissingException if any attribute is missing.
      */
-    public Venue( Element element ) throws AttributeMissingException {
+    public Venue( Element element ) throws AttributeMissingException, InvalidXMLException {
+        super( element );
+
         name = element.getAttribute( "name" );
         if (name.isEmpty()) {
             throw new AttributeMissingException( "Venue", null, "name" );
@@ -105,6 +107,15 @@ public class Venue extends Minder implements Legendable {
         Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
 
         return area.outcode( x, y );
+    }
+
+    /**
+     * Provides the name of the venue.
+     *
+     * @return name of the venue
+     */
+    public static String Name() {
+        return StaticVenue.name;
     }
 
     /**

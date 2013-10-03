@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot;
 
+import org.w3c.dom.Element;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -22,7 +24,10 @@ public abstract class Minder extends Elemental {
     /**
      *
      */
-    public Minder() {
+    public Minder( Element element ) throws InvalidXMLException {
+        if (null == element) {
+            throw new InvalidXMLException( "Element unexpectedly null!" );
+        }
         LIST.add( this );
     }
 
@@ -30,7 +35,7 @@ public abstract class Minder extends Elemental {
      * @throws InvalidXMLException
      * @throws LocationException
      */
-    public static void VerifyAll() throws InvalidXMLException, LocationException {
+    public static void VerifyAll() throws FeatureException, InvalidXMLException, LocationException {
         for (Minder item : LIST) {
             item.verify();
         }
@@ -112,7 +117,7 @@ public abstract class Minder extends Elemental {
      * @throws InvalidXMLException if an invalid combination of XML specifications is found
      * @throws LocationException   if certain plot items don't fit in available physical space
      */
-    public abstract void verify() throws InvalidXMLException, LocationException;
+    public abstract void verify() throws FeatureException, InvalidXMLException, LocationException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to draw the plan view of that item.

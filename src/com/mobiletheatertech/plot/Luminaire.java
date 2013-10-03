@@ -48,7 +48,7 @@ public class Luminaire extends Minder {
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -68,7 +68,9 @@ public class Luminaire extends Minder {
      * @param element DOM Element defining a luminaire
      * @throws AttributeMissingException if any attribute is missing
      */
-    public Luminaire( Element element ) throws AttributeMissingException {
+    public Luminaire( Element element ) throws AttributeMissingException, InvalidXMLException {
+        super( element );
+
         type = getStringAttribute( element, "type" );
         on = getStringAttribute( element, "on" );
         location = getIntegerAttribute( element, "location" );

@@ -30,7 +30,7 @@ public class Airwall extends Minder {
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -50,7 +50,9 @@ public class Airwall extends Minder {
      * @param element data to create {@code Airwall} from
      * @throws AttributeMissingException
      */
-    public Airwall( Element element ) throws AttributeMissingException, LocationException {
+    public Airwall( Element element ) throws AttributeMissingException, InvalidXMLException, LocationException {
+        super( element );
+
         depth = getIntegerAttribute( element, "depth" );
 
         if (depth <= 0) {

@@ -59,7 +59,7 @@ public class Pipe extends Minder {
      *                                   Minder. There needs to be a factory somewhere.
      */
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -101,11 +101,12 @@ public class Pipe extends Minder {
      */
     /*
     A natural origin of a pipe is the center of one end. To position
-     its drawing box in space, a small offset has to be applied.
+     its drawing box in space, a small start has to be applied.
      */
     public Pipe( Element element )
-            throws AttributeMissingException, SizeException
+            throws AttributeMissingException, InvalidXMLException, SizeException
     {
+        super( element );
         id = element.getAttribute( "id" );
         length = getIntegerAttribute( element, "length" );
         Integer x = getIntegerAttribute( element, "x" );
@@ -127,7 +128,7 @@ public class Pipe extends Minder {
     public Point location( Integer offset ) {
         Point point;
         if (Proscenium.Active()) {
-            point = Proscenium.Locate( new Point( start.x() + offset,
+            point = Proscenium.Locate( new Point( start.x() /*- (length / 2)*/ + offset,
                                                   start.y() - 1,
                                                   start.z() - 1 ) );
         }
@@ -156,7 +157,7 @@ public class Pipe extends Minder {
 //            boxOrigin = new Point( origin.x() + start.x() - length / 2,
 //                                   origin.y() - start.y() - 1,
 //                                   origin.z() + start.z() - 1 );
-            boxOrigin = Proscenium.Locate( new Point( start.x() - length / 2,
+            boxOrigin = Proscenium.Locate( new Point( start.x(),// - length / 2,
                                                       start.y() - 1,
                                                       start.z() - 1 ) );
 

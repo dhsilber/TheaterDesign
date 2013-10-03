@@ -36,7 +36,7 @@ public class ChairBlock extends Minder {
      */
 //   This ends up copied to each thing that inherits from Minder. There needs to be a factory somewhere.
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException
+            throws AttributeMissingException, InvalidXMLException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -58,7 +58,9 @@ public class ChairBlock extends Minder {
      * @param element DOM Element defining a block of chairs
      * @throws AttributeMissingException if any attribute is missing
      */
-    public ChairBlock( Element element ) throws AttributeMissingException {
+    public ChairBlock( Element element ) throws AttributeMissingException, InvalidXMLException {
+        super( element );
+
         x = getIntegerAttribute( element, "x" );
         y = getIntegerAttribute( element, "y" );
         width = getIntegerAttribute( element, "width" );

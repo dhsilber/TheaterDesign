@@ -28,7 +28,7 @@ public class Truss extends Minder {
     private String processedMark = null;
     private Element element = null;
 
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, KindException {
+    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, KindException {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
             Node node = list.item( index );
@@ -51,8 +51,10 @@ public class Truss extends Minder {
      * @throws KindException
      */
     public Truss( Element element )
-            throws AttributeMissingException, KindException
+            throws AttributeMissingException, InvalidXMLException, KindException
     {
+        super( element );
+
         this.element = element;
         size = getIntegerAttribute( element, "size" );
         length = getIntegerAttribute( element, "length" );

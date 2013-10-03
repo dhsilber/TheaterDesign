@@ -29,7 +29,7 @@ public class VenueTest {
     }
 
     @Test
-    public void isMinder() throws AttributeMissingException {
+    public void isMinder() throws Exception {
         Venue venue = new Venue( element );
 
         assert Minder.class.isInstance( venue );
@@ -58,7 +58,7 @@ public class VenueTest {
     }
 
     @Test
-    public void storesSelf() throws AttributeMissingException {
+    public void storesSelf() throws Exception {
         Venue venue = new Venue( element );
         ArrayList<Minder> thing = Drawable.List();
 
@@ -80,36 +80,36 @@ public class VenueTest {
         assertEquals( Point.SmallZ(), 0 );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute." )
     public void noName() throws Exception {
         element.removeAttribute( "name" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute." )
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute." )
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Venue( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute." )
     public void noHeight() throws Exception {
         element.removeAttribute( "height" );
         new Venue( element );
     }
 
     @Test
-    public void containsRectangle() throws AttributeMissingException {
+    public void containsRectangle() throws Exception {
         new Venue( element );
 
         assert Venue.Contains2D( new Rectangle( 0, 0, 1296, 1320 ) );
@@ -118,7 +118,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsCoordinate() throws AttributeMissingException {
+    public void containsCoordinate() throws Exception {
         new Venue( element );
 
         assertEquals( Venue.Contains2D( 1295, 1319 ), 0 );
@@ -131,7 +131,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxFits() throws AttributeMissingException {
+    public void containsBoxFits() throws Exception {
         new Venue( element );
         Point point = new Point( 2, 4, 6 );
         Box box = new Box( point, 33, 55, 11 );
@@ -140,7 +140,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxTooWide() throws AttributeMissingException {
+    public void containsBoxTooWide() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
         Box box = new Box( point, 1296, 55, 11 );
@@ -149,7 +149,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxTooDeep() throws AttributeMissingException {
+    public void containsBoxTooDeep() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
         Box box = new Box( point, 33, 1320, 11 );
@@ -158,7 +158,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxTooTall() throws AttributeMissingException {
+    public void containsBoxTooTall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
         Box box = new Box( point, 33, 55, 240 );
@@ -168,7 +168,7 @@ public class VenueTest {
 
 
     @Test
-    public void containsBoxOriginXTooSmall() throws AttributeMissingException {
+    public void containsBoxOriginXTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( -1, 1, 1 );
         Box box = new Box( point, 1, 1, 1 );
@@ -177,7 +177,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxOriginXTooLarge() throws AttributeMissingException {
+    public void containsBoxOriginXTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1297, 1, 1 );
         Box box = new Box( point, 1, 1, 1 );
@@ -186,7 +186,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxOriginYTooSmall() throws AttributeMissingException {
+    public void containsBoxOriginYTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, -1, 1 );
         Box box = new Box( point, 1, 1, 1 );
@@ -195,7 +195,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxOriginYTooLarge() throws AttributeMissingException {
+    public void containsBoxOriginYTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1321, 1 );
         Box box = new Box( point, 1, 1, 1 );
@@ -204,7 +204,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxOriginZTooSmall() throws AttributeMissingException {
+    public void containsBoxOriginZTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, -1 );
         Box box = new Box( point, 1, 1, 1 );
@@ -213,7 +213,7 @@ public class VenueTest {
     }
 
     @Test
-    public void containsBoxOriginZTooLarge() throws AttributeMissingException {
+    public void containsBoxOriginZTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 241 );
         Box box = new Box( point, 1, 1, 1 );
@@ -222,7 +222,7 @@ public class VenueTest {
     }
 
     @Test
-    public void height() throws AttributeMissingException {
+    public void height() throws Exception {
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "Venue Name" );
         venueElement.setAttribute( "width", "129" );
@@ -239,7 +239,7 @@ public class VenueTest {
     }
 
     @Test
-    public void width() throws AttributeMissingException {
+    public void width() throws Exception {
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "Venue Name" );
         venueElement.setAttribute( "width", "129" );
@@ -256,7 +256,7 @@ public class VenueTest {
     }
 
     @Test
-    public void depth() throws AttributeMissingException {
+    public void depth() throws Exception {
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "Venue Name" );
         venueElement.setAttribute( "width", "129" );
@@ -272,11 +272,28 @@ public class VenueTest {
         assertEquals( Venue.Depth(), 1320 );
     }
 
+    @Test
+    public void name() throws Exception {
+        Element venueElement = new IIOMetadataNode();
+        venueElement.setAttribute( "name", "Venue Name" );
+        venueElement.setAttribute( "width", "129" );
+        venueElement.setAttribute( "depth", "132" );
+        venueElement.setAttribute( "height", "24" );
+
+        new Venue( venueElement );
+
+        assertEquals( Venue.Name(), "Venue Name" );
+
+        new Venue( element );
+
+        assertEquals( Venue.Name(), title );
+    }
+
     @Mocked
     Graphics2D mockCanvas;
 
     @Test
-    public void drawPlan() throws AttributeMissingException {
+    public void drawPlan() throws Exception {
         Venue venue = new Venue( element );
 
         new Expectations() {
@@ -289,7 +306,7 @@ public class VenueTest {
     }
 
     @Test
-    public void drawSection() throws AttributeMissingException {
+    public void drawSection() throws Exception {
         Venue venue = new Venue( element );
 
         new Expectations() {
@@ -302,7 +319,7 @@ public class VenueTest {
     }
 
     @Test
-    public void drawFront() throws AttributeMissingException {
+    public void drawFront() throws Exception {
         Venue venue = new Venue( element );
 
         new Expectations() {

@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * @since 0.0.7
  */
 public class LuminaireDefinition extends Minder implements Legendable {
+
     private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
 
     //    private String id;
@@ -49,7 +50,7 @@ public class LuminaireDefinition extends Minder implements Legendable {
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -88,7 +89,9 @@ public class LuminaireDefinition extends Minder implements Legendable {
      * @param element DOM Element defining a pipe
      * @throws AttributeMissingException if any attribute is missing
      */
-    public LuminaireDefinition( Element element ) throws AttributeMissingException {
+    public LuminaireDefinition( Element element ) throws AttributeMissingException, InvalidXMLException {
+        super( element );
+
         id = element.getAttribute( "name" );
         if (id.isEmpty()) {
             throw new AttributeMissingException( "Luminaire definition", null, "name" );

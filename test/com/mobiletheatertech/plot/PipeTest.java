@@ -129,8 +129,8 @@ public class PipeTest {
         Pipe pipe = new Pipe( element );
 
         assertEquals( TestHelpers.accessInteger( pipe, "length" ), (Integer) 120 );
-        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "start" ) ) );
-        assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( 12, 23, 34 ) );
+        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "offset" ) ) );
+        assertEquals( TestHelpers.accessPoint( pipe, "offset" ), new Point( 12, 23, 34 ) );
         assertEquals( TestHelpers.accessString( pipe, "id" ), "" );
     }
 
@@ -368,6 +368,18 @@ public class PipeTest {
 
         Point place = pipe.location( 15 );
         assert place.equals( new Point( 27, 23, 34 ) );
+    }
+
+    @Test
+    public void locationWithProscenium() throws Exception {
+        Proscenium p = new Proscenium( prosceniumElement );
+
+        Pipe pipe = new Pipe( element );
+
+        Point place = pipe.location( 15 );
+        assertEquals( place.x, 227 );
+        assertEquals( place.y, 122 );
+        assertEquals( place.z, 45 );
     }
 
     @BeforeClass

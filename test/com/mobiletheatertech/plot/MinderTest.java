@@ -24,6 +24,10 @@ public class MinderTest {
      */
     private class Minded extends Minder {
 
+        public Minded( Element element ) throws InvalidXMLException {
+            super( element );
+        }
+
         @Override
         public void verify() throws InvalidXMLException {
             //To change body of implemented methods use File | Settings | File Templates.
@@ -55,24 +59,31 @@ public class MinderTest {
     }
 
     private static Draw draw = null;
+    private Element element = null;
 
     public MinderTest() {
     }
 
     @Test
     public void isElemental() throws Exception {
-        Minded foo = new Minded();
+        Minded foo = new Minded( element );
 
         assert Elemental.class.isInstance( foo );
     }
 
     @Test
-    public void stores() {
-        Minded foo = new Minded();
+    public void stores() throws Exception {
+        Minded foo = new Minded( element );
         ArrayList<Minder> thing = Drawable.List();
         assertNotNull( thing, "List should exist" );
 
         assert thing.contains( foo );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "Element unexpectedly null!")
+    public void NullElement() throws Exception {
+        new Minded( null );
     }
 
     @Test
@@ -124,6 +135,7 @@ public class MinderTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        element = new IIOMetadataNode( "bogus" );
     }
 
     @AfterMethod

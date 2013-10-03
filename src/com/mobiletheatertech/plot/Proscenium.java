@@ -80,6 +80,8 @@ public class Proscenium extends Minder {
     public Proscenium( Element element )
             throws AttributeMissingException, LocationException, SizeException, InvalidXMLException
     {
+        super( element );
+
         if (Active()) {
             throw new InvalidXMLException( "Multiple Prosceniums are not currently supported." );
         }

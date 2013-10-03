@@ -44,7 +44,7 @@ public class HangPointTest {
     }
 
     @Test
-    public void storesSelf() throws AttributeMissingException, LocationException {
+    public void storesSelf() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
         ArrayList<Minder> thing = Drawable.List();

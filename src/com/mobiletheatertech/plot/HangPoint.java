@@ -28,7 +28,7 @@ public class HangPoint extends Minder {
      * @throws AttributeMissingException This ends up copied to each thing that inherits from
      *                                   Minder. There needs to be a factory somewhere.
      */
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, LocationException {
+    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, LocationException {
 
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -54,7 +54,9 @@ public class HangPoint extends Minder {
      * @throws LocationException         if some coordinate is outside the area of the {@link
      *                                   Venue}.
      */
-    HangPoint( Element element ) throws AttributeMissingException, LocationException {
+    HangPoint( Element element ) throws AttributeMissingException, InvalidXMLException, LocationException {
+        super( element );
+
         id = getOptionalStringAttribute( element, "id" );
         x = getIntegerAttribute( element, "x" );
         y = getIntegerAttribute( element, "y" );

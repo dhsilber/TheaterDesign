@@ -22,7 +22,7 @@ public class Suspend extends Minder {
     //    private Truss truss = null;        // Should reference Truss which is suspended by this.
     private String processedMark = null;
 
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, ReferenceException {
+    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, ReferenceException {
 
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -39,8 +39,10 @@ public class Suspend extends Minder {
     }
 
     public Suspend( Element element )
-            throws AttributeMissingException, ReferenceException
+            throws AttributeMissingException, InvalidXMLException, ReferenceException
     {
+        super( element );
+
         refId = getStringAttribute( element, "ref" );
         distance = getIntegerAttribute( element, "distance" );
 

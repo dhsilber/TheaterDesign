@@ -74,6 +74,69 @@ public class WallTest {
     }
 
     @Test
+    public void verifyAngledWall() throws Exception {
+        Wall wall = new Wall( element );
+        wall.verify();
+    }
+
+    @Test( expectedExceptions = FeatureException.class,
+           expectedExceptionsMessageRegExp = "Wall at angle does not yet support openings." )
+    public void verifyAngledWallWithOpening() throws Exception {
+        Element openingElement = new IIOMetadataNode( "opening" );
+        openingElement.setAttribute( "width", "6" );
+        openingElement.setAttribute( "height", "8" );
+        openingElement.setAttribute( "start", "5" );
+        element.appendChild( openingElement );
+
+        Wall wall = new Wall( element );
+        wall.verify();
+    }
+
+    @Test
+    public void findChildOpeningSideWall() throws Exception {
+        element = new IIOMetadataNode( "wall" );
+        element.setAttribute( "x1", "20" );
+        element.setAttribute( "y1", "30" );
+        element.setAttribute( "x2", "20" );
+        element.setAttribute( "y2", "70" );
+
+        Element openingElement = new IIOMetadataNode( "opening" );
+        openingElement.setAttribute( "width", "6" );
+        openingElement.setAttribute( "height", "8" );
+        openingElement.setAttribute( "start", "17" );
+        element.appendChild( openingElement );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        Wall wall = new Wall( element );
+        wall.verify();
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        wall.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+        assertEquals( list.getLength(), 2 );
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "20" );
+        assertEquals( element.getAttribute( "y1" ), "30" );
+        assertEquals( element.getAttribute( "x2" ), "20" );
+        assertEquals( element.getAttribute( "y2" ), "47" );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x2" ), "20" );
+        assertEquals( element.getAttribute( "y1" ), "53" );
+        assertEquals( element.getAttribute( "x2" ), "20" );
+        assertEquals( element.getAttribute( "y2" ), "70" );
+    }
+
+    @Test
     public void domPlan() throws Exception {
         Draw draw = new Draw();
         draw.getRoot();
@@ -115,14 +178,6 @@ public class WallTest {
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
-
-        Element pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", "luminaireTestPipe" );
-        pipeElement.setAttribute( "length", "120" );
-        pipeElement.setAttribute( "x", "12" );
-        pipeElement.setAttribute( "y", "34" );
-        pipeElement.setAttribute( "z", "56" );
-        new Pipe( pipeElement );
 
         element = new IIOMetadataNode( "wall" );
         element.setAttribute( "x1", x1.toString() );

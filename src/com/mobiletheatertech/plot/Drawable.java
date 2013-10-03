@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot;
 
+import org.w3c.dom.Element;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -13,6 +15,10 @@ import java.util.ArrayList;
  * @since 0.0.5
  */
 public class Drawable extends Minder {
+
+    public Drawable( Element element ) throws InvalidXMLException {
+        super( element );
+    }
 
     /**
      * Provides the list of all plot items defined.

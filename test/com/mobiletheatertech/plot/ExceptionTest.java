@@ -16,8 +16,8 @@ public class ExceptionTest {
     /**
      * For problems in command-line arguments.
      */
-    @Test(expectedExceptions = ArgumentException.class,
-          expectedExceptionsMessageRegExp = "Message here")
+    @Test( expectedExceptions = ArgumentException.class,
+           expectedExceptionsMessageRegExp = "Message here" )
     public void argumentException() throws Exception {
         throw new ArgumentException( "Message here" );
     }
@@ -27,9 +27,9 @@ public class ExceptionTest {
      *
      * @since 0.0.2
      */
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp =
-                  "Foo \\(sam\\) is missing required 'thingy' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp =
+                   "Foo \\(sam\\) is missing required 'thingy' attribute." )
     public void attributeMissingExceptionWithID() throws Exception {
         throw new AttributeMissingException( "Foo", "sam", "thingy" );
     }
@@ -39,9 +39,9 @@ public class ExceptionTest {
      *
      * @since 0.0.2
      */
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp =
-                  "Foo instance is missing required 'thingy' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp =
+                   "Foo instance is missing required 'thingy' attribute." )
     public void attributeMissingExceptionWithoutID() throws Exception {
         throw new AttributeMissingException( "Foo", "", "thingy" );
     }
@@ -51,11 +51,22 @@ public class ExceptionTest {
      *
      * @since 0.0.2
      */
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp =
-                  "Foo instance is missing required 'thingy' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp =
+                   "Foo instance is missing required 'thingy' attribute." )
     public void attributeMissingExceptionNullID() throws Exception {
         throw new AttributeMissingException( "Foo", null, "thingy" );
+    }
+
+    /**
+     * For features not yet implemented in Plot.
+     *
+     * @since 0.0.12
+     */
+    @Test( expectedExceptions = InvalidXMLException.class,
+           expectedExceptionsMessageRegExp = "grubby" )
+    public void featureException() throws Exception {
+        throw new FeatureException( "grubby" );
     }
 
     /**
@@ -63,8 +74,8 @@ public class ExceptionTest {
      *
      * @since 0.0.2
      */
-    @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "grubby")
+    @Test( expectedExceptions = InvalidXMLException.class,
+           expectedExceptionsMessageRegExp = "grubby" )
     public void invalidXMLException() throws Exception {
         throw new InvalidXMLException( "grubby" );
     }
@@ -74,8 +85,8 @@ public class ExceptionTest {
      *
      * @since 0.0.3
      */
-    @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp = "message")
+    @Test( expectedExceptions = LocationException.class,
+           expectedExceptionsMessageRegExp = "message" )
     public void LocationException() throws Exception {
         throw new LocationException( "message" );
     }
@@ -85,8 +96,8 @@ public class ExceptionTest {
      *
      * @since 0.0.5
      */
-    @Test(expectedExceptions = KindException.class,
-          expectedExceptionsMessageRegExp = "Foo of size 42 not supported. Try 12 or 20.")
+    @Test( expectedExceptions = KindException.class,
+           expectedExceptionsMessageRegExp = "Foo of size 42 not supported. Try 12 or 20." )
     public void kindException() throws Exception {
         throw new KindException( "Foo", 42 );
     }
@@ -96,8 +107,8 @@ public class ExceptionTest {
      *
      * @since 0.0.6
      */
-    @Test(expectedExceptions = SizeException.class,
-          expectedExceptionsMessageRegExp = "Foo should have a positive length.")
+    @Test( expectedExceptions = SizeException.class,
+           expectedExceptionsMessageRegExp = "Foo should have a positive length." )
     public void sizeException() throws Exception {
         throw new SizeException( "Foo", "length" );
     }
@@ -107,8 +118,8 @@ public class ExceptionTest {
      *
      * @since 0.0.5
      */
-    @Test(expectedExceptions = ReferenceException.class,
-          expectedExceptionsMessageRegExp = "Foo message.")
+    @Test( expectedExceptions = ReferenceException.class,
+           expectedExceptionsMessageRegExp = "Foo message." )
     public void ReferenceException() throws Exception {
         throw new ReferenceException( "Foo message." );
     }
@@ -118,8 +129,8 @@ public class ExceptionTest {
      *
      * @since 0.0.7
      */
-    @Test(expectedExceptions = MountingException.class,
-          expectedExceptionsMessageRegExp = "Foo message.")
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "Foo message." )
     public void MountingException() throws Exception {
         throw new MountingException( "Foo message." );
     }
