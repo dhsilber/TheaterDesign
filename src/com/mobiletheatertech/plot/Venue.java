@@ -66,7 +66,7 @@ public class Venue extends Minder implements Legendable {
 
         StaticVenue = this;
 
-        Legend.Register( this, 30, 12 );
+        Legend.Register( this, name.length() * 9, 12 );
     }
 
     /**
@@ -224,6 +224,7 @@ public class Venue extends Minder implements Legendable {
         text.setAttribute( "x", x.toString() );
         text.setAttribute( "y", start.y().toString() );
         text.setAttribute( "fill", "black" );
+        text.setAttribute( "stroke", "none" );
         text.setAttribute( "font-family", "serif" );
         text.setAttribute( "font-size", "10" );
 

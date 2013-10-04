@@ -129,8 +129,8 @@ public class PipeTest {
         Pipe pipe = new Pipe( element );
 
         assertEquals( TestHelpers.accessInteger( pipe, "length" ), (Integer) 120 );
-        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "offset" ) ) );
-        assertEquals( TestHelpers.accessPoint( pipe, "offset" ), new Point( 12, 23, 34 ) );
+        assertTrue( new Point( 12, 23, 34 ).equals( TestHelpers.accessPoint( pipe, "start" ) ) );
+        assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( 12, 23, 34 ) );
         assertEquals( TestHelpers.accessString( pipe, "id" ), "" );
     }
 

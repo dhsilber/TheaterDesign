@@ -19,13 +19,13 @@ import static org.testng.Assert.assertNotNull;
 public class LegendTest {
 
     private int calledBack = 0;
+    private Element venueElement;
 
     class testLegendable implements Legendable {
         @Override
         public PagePoint domLegendItem( Draw draw, PagePoint start ) {
             calledBack++;
-            return new PagePoint( 12,
-                                  13 );  //To change body of implemented methods use File | Settings | File Templates.
+            return new PagePoint( 12, 13 );
         }
     }
 
@@ -50,17 +50,29 @@ public class LegendTest {
 
     @Test
     public void invokeCallback() throws Exception {
+        new Venue( venueElement );
+
         testLegendable legendableObject = new testLegendable();
         Legend.Register( legendableObject, 1, 2 );
+        Draw draw = new Draw();
+        draw.getRoot();
 
-        Legend.Startup( new Draw() );
+        Legend.Startup( draw );
 //        TestHelpers.setStaticObject(
 //                "com.mobiletheatertech.plot.Legend", "INITIAL", new PagePoint( 1, 2 ) );
 
         Legend.Callback();
 
         assertEquals( calledBack, 1 );
+    }
 
+    @Test
+    public void widest() {
+        testLegendable legendableObject = new testLegendable();
+        Integer wildlyLarge = 10240;
+        Legend.Register( legendableObject, wildlyLarge, 7 );
+
+        assertEquals( Legend.Widest(), wildlyLarge );
     }
 
     @BeforeMethod
@@ -68,12 +80,11 @@ public class LegendTest {
         TestResets.LegendReset();
         calledBack = 0;
 
-        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
-        new Venue( venueElement );
     }
 
 }

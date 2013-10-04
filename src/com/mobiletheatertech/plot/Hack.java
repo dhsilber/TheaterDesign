@@ -20,6 +20,7 @@ public class Hack {
 
     public static void Dom( Draw draw ) {
 
+
 //        These lines are for the Reagle Repertory plot, to show the house booms
 //
 //        Element line1 = draw.element( "line" );
@@ -56,7 +57,7 @@ public class Hack {
 
         if (Venue.Name().equals( "Lawrence Academy" )) {
 
-//        These are for the Lawrence Academy apron:
+//        For the Lawrence Academy apron:
             Element line = draw.element( "line" );
             line.setAttribute( "fill", "none" );
             line.setAttribute( "x1", "105" );
@@ -64,6 +65,27 @@ public class Hack {
             line.setAttribute( "x2", "679" );
             line.setAttribute( "y2", "519" );
             draw.appendRootChild( line );
+
+            // For the raked platform for "The Sparrow":
+            Element raked = draw.element( "path" );
+            raked.setAttribute( "fill", "none" );
+            raked.setAttribute( "stroke", "orange" );
+            raked.setAttribute( "stroke-width", "1" );
+            raked.setAttribute( "d",
+//                               "M -185 -168, -120 -172, 120 -172, 185 -168, 72 190, -72 190 Z" );
+                                "M 207 575, 272 579, 512 579, 577 575, 464 269, 320 269 Z" );
+            draw.appendRootChild( raked );
+
+            // For the flat platform for "The Sparrow":
+            Element flat = draw.element( "path" );
+            flat.setAttribute( "fill", "none" );
+            flat.setAttribute( "stroke", "orange" );
+            flat.setAttribute( "stroke-width", "1" );
+            flat.setAttribute( "d",
+//                               "M  72 190, -72 190, -72 262, 72 262 Z" );
+                               "M  464 269, 320 269, 320 197, 464 197 Z" );
+
+            draw.appendRootChild( flat );
         }
 
 //        line = draw.element( "line" );

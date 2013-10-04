@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot;
 
+import org.w3c.dom.Element;
+
 /**
  * <code>Write</code> deals with output file issues and relies on {@link Draw Draw} to generate SVG
  * content.
@@ -42,6 +44,17 @@ public class Write {
         Hack.Draw( draw.canvas() );
 
         draw.getRoot();
+
+        // Specify the size of the generated SVG so that when it is larger than the display area,
+        // scrollbars will be provided.
+        Element rootElement = draw.root();
+        Integer width = Venue.Width() + Legend.Widest();
+        width += width / 20;
+        rootElement.setAttribute( "width", width.toString() );
+        Integer height = Venue.Depth();
+        height += height / 20;
+        rootElement.setAttribute( "height", height.toString() );
+//        rootElement.setAttribute( "overflow", "visible" );
 
         Grid.DOM( draw );
 

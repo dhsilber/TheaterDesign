@@ -4,10 +4,13 @@ import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created with IntelliJ IDEA. User: dhs Date: 8/15/13 Time: 6:21 PM To change this template use
  * File | Settings | File Templates.
- *
+ */
+
+/**
+ * @author dhs
  * @since 0.0.7
  */
 public class Legend {
@@ -19,8 +22,14 @@ public class Legend {
     private static PagePoint INITIAL;
     private static Draw DRAW;
 
-    private static Element box;
-
+    /**
+     * Register a callback function that will draw an individual legend entry
+     *
+     * @param callback {@code Legendable} method which will provide the SVG DOM for an individual
+     *                 legend entry
+     * @param width    to allow for this entry
+     * @param height   to allow for this entry
+     */
     public static void Register( Legendable callback, int width, int height ) {
         LEGENDLIST.add( callback );
 
@@ -32,19 +41,14 @@ public class Legend {
     }
 
     /**
-     * After everything that might want a Legend slot has registered and before we close out
-     * graphical drawing in favor of DOM manipulation, draw the outline and start off the legend
-     * with the name of the plot.
+     * After everything that might want a Legend slot has registered, draw the outline and start off
+     * the legend with the name of the plot.
      */
     public static void Startup( Draw draw ) {
         DRAW = draw;
         INITIAL = new PagePoint( Venue.Width() + 20, 15 );
 
-//        Graphics2D canvas = draw.canvas();
-//        canvas.setPaint( Color.BLACK );
-//        canvas.draw( new Rectangle( Venue.Width() + 10, 10, WIDEST, HEIGHT ) );
-
-        box = draw.document().createElement( "rect" );
+        Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
         Integer x = Venue.Width() + 5;
         box.setAttribute( "x", x.toString() );
@@ -55,6 +59,19 @@ public class Legend {
         draw.appendRootChild( box );
     }
 
+    /**
+     * Provide the width of the widest legend entry.
+     *
+     * @return width of widest legend
+     * @since 0.0.13
+     */
+    public static Integer Widest() {
+        return WIDEST;
+    }
+
+    /**
+     * Invoke all of the registered callbacks.
+     */
     public static void Callback() {
         PagePoint start = INITIAL;
         PagePoint finish;
