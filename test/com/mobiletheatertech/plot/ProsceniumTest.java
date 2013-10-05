@@ -191,7 +191,7 @@ public class ProsceniumTest {
 
     @Test( expectedExceptions = SizeException.class,
            expectedExceptionsMessageRegExp =
-                   "Proscenium should have a positive depth." )
+                   "Proscenium should have a positive height." )
     public void tooSmallHeight() throws Exception {
         element.setAttribute( "height", "0" );
         new Proscenium( element );

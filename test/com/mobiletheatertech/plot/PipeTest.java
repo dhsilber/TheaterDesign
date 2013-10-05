@@ -370,9 +370,25 @@ public class PipeTest {
         assert place.equals( new Point( 27, 23, 34 ) );
     }
 
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationOffPipe() throws Exception {
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( 121 );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationNegativeOffPipe() throws Exception {
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( -1 );
+    }
+
     @Test
     public void locationWithProscenium() throws Exception {
-        Proscenium p = new Proscenium( prosceniumElement );
+        new Proscenium( prosceniumElement );
 
         Pipe pipe = new Pipe( element );
 
@@ -380,6 +396,74 @@ public class PipeTest {
         assertEquals( place.x, 227 );
         assertEquals( place.y, 122 );
         assertEquals( place.z, 45 );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationOffPipeWithProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( 121 );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationNegativeOffPipeWithProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( -1 );
+    }
+
+    @Test
+    public void locationPipeCrossesCenterlineWithProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        element.setAttribute( "x", "-12" );
+        Pipe pipe = new Pipe( element );
+
+        Point place = pipe.location( 15 );
+        assertEquals( place.x, 215 );
+        assertEquals( place.y, 122 );
+        assertEquals( place.z, 45 );
+    }
+
+    @Test
+    public void locationNegativePipeCrossesCenterlineWithProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        element.setAttribute( "x", "-12" );
+        Pipe pipe = new Pipe( element );
+
+        Point place = pipe.location( -5 );
+        assertEquals( place.x, 195 );
+        assertEquals( place.y, 122 );
+        assertEquals( place.z, 45 );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationOffPipeCrossingCenterlineOfProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        element.setAttribute( "x", "-12" );
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( 120 );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "beyond the end of Pipe" )
+    public void locationNegativeOffPipeCrossingCenterlineOfProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+
+        element.setAttribute( "x", "-12" );
+        Pipe pipe = new Pipe( element );
+
+        pipe.location( -15 );
     }
 
     @BeforeClass

@@ -120,20 +120,44 @@ public class Pipe extends Minder {
     }
 
     /**
-     * Provide the drawing location of this {@code Pipe}.
+     * Provide the drawing location of a point along this {@code Pipe}.
      *
      * @param offset in the x dimension
      * @return drawing location
+     * @throws MountingException if location will be beyond the edge of the pipe
      */
-    public Point location( Integer offset ) {
+    public Point location( Integer offset ) throws MountingException {
         Point point;
         if (Proscenium.Active()) {
-            point = Proscenium.Locate( new Point( start.x() /*- (length / 2)*/ + offset,
-                                                  start.y() - 1,
-                                                  start.z() - 1 ) );
+            if ((start.x() < 0) && (start.x() + length > 0)) {
+                // Given a pipe that crosses the centerline, the offset is from the centerline.
+                point = Proscenium.Locate( new Point( offset,
+                                                      start.y() - 1,
+                                                      start.z() - 1 ) );
+
+                if ((offset < start.x()) || (start.x() + length < offset)) {
+                    throw new MountingException( "beyond the end of Pipe" );
+                }
+            }
+
+            else {
+                // For a pipe that doesn't cross the centerline, the offset is relative to the
+                // start of the pipe.
+                point = Proscenium.Locate( new Point( start.x() /*- (length / 2)*/ + offset,
+                                                      start.y() - 1,
+                                                      start.z() - 1 ) );
+                if ((offset < 0) || (length < offset)) {
+                    throw new MountingException( "beyond the end of Pipe" );
+                }
+            }
         }
+
         else {
+            // When there is no proscenium
             point = new Point( start.x() + offset, start.y(), start.z() );
+            if ((offset < 0) || (length < offset)) {
+                throw new MountingException( "beyond the end of Pipe" );
+            }
         }
 //        System.out.println(
 //                "Pipe.location(): " + point.toString() + " Start: " + start.toString() );

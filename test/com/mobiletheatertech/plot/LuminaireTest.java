@@ -20,7 +20,8 @@ import static org.testng.Assert.assertNull;
 public class LuminaireTest {
 
     Element element = null;
-    String type = "6x9";
+    final String type = "6x9";
+    final String pipeName = "luminaireTestPipe";
 
     public LuminaireTest() {
 
@@ -38,7 +39,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire( element );
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
-        assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
+        assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessInteger( luminaire, "location" ), (Integer) 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
@@ -58,7 +59,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire( element );
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
-        assertEquals( TestHelpers.accessString( luminaire, "on" ), "luminaireTestPipe" );
+        assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessInteger( luminaire, "location" ), (Integer) 12 );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "A12" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "19b" );
@@ -113,8 +114,10 @@ public class LuminaireTest {
         new Luminaire( element );
     }
 
+
     @Test( expectedExceptions = MountingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire of type '6x9' has unknown mounting." )
+           expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
+                   "' has unknown mounting: 'bloorglew'." )
     public void badLocation() throws Exception {
         element.setAttribute( "on", "bloorglew" );
         Luminaire luminaire = new Luminaire( element );
@@ -122,7 +125,7 @@ public class LuminaireTest {
     }
 
     @Test( expectedExceptions = MountingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting." )
+           expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting: 'bloorglew'." )
     public void badLocationOtherType() throws Exception {
         element.setAttribute( "type", "floob" );
         element.setAttribute( "on", "bloorglew" );
@@ -137,6 +140,15 @@ public class LuminaireTest {
         Point actual = luminaire.location();
         Point expected = new Point( 24, 34, 56 );
         assertEquals( actual, expected );
+    }
+
+    @Test( expectedExceptions = MountingException.class,
+           expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
+                   "' has location -1 which is beyond the end of Pipe '" + pipeName + "'." )
+    public void locateOffPipe() throws Exception {
+        element.setAttribute( "location", "-1" );
+        Luminaire luminaire = new Luminaire( element );
+        luminaire.location();
     }
 
     @Test
@@ -265,7 +277,7 @@ public class LuminaireTest {
         new Venue( venueElement );
 
         Element pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", "luminaireTestPipe" );
+        pipeElement.setAttribute( "id", pipeName );
         pipeElement.setAttribute( "length", "120" );
         pipeElement.setAttribute( "x", "12" );
         pipeElement.setAttribute( "y", "34" );
@@ -274,7 +286,7 @@ public class LuminaireTest {
 
         element = new IIOMetadataNode( "luminaire" );
         element.setAttribute( "type", type );
-        element.setAttribute( "on", "luminaireTestPipe" );
+        element.setAttribute( "on", pipeName );
         element.setAttribute( "location", "12" );
     }
 

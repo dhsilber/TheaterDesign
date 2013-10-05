@@ -90,9 +90,19 @@ public class Luminaire extends Minder {
     protected Point location() throws MountingException {
         Pipe mount = Pipe.Select( on );
         if (null == mount) {
-            throw new MountingException( "Luminaire of type '" + type + "' has unknown mounting." );
+            throw new MountingException(
+                    "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'." );
         }
-        return mount.location( location );
+        Point result;
+        try {
+            result = mount.location( location );
+        }
+        catch ( MountingException e ) {
+            throw new MountingException(
+                    "Luminaire of type '" + type + "' has location " + location + " which is " +
+                            e.getMessage() + " '" + on + "'." );
+        }
+        return result;
     }
 
     @Override

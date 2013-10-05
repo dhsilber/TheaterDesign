@@ -100,7 +100,21 @@ data from an arbitrary number of potential children.
 
 <h2>Versions</h2>
 
-<h3>0.0.13 <code>Usability Tweaks</code></h3>
+<h3>0.0.14 Fixes to correctly locate a <code>Luminaire</code> when a <code>Proscenium</code> is in
+    use</h3>
+
+<p>
+    Fixed code in <code>Pipe</code>.
+</p>
+
+<p>
+    Added MountingExceptions to be thrown when the mounting location is off the end of the pipe
+    (under a variety of conditions)
+    which involved code in <code>Pipe</code> to notice the errors and code in <code>Luminaire</code>
+    to include data from an offending 'luminaire' specification to help a user find the problem.
+</p>
+
+<h3>0.0.13 Usability Tweaks</h3>
 
 <p>
     Make there be scrollbars when the image (including legend area) is larger than the display area.

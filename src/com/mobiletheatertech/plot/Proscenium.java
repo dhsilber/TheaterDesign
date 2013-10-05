@@ -62,14 +62,31 @@ public class Proscenium extends Minder {
         }
     }
 
+    /**
+     * True if a {@code Proscenium} has been defined. False otherwise.
+     *
+     * @return true or false
+     */
     public static boolean Active() {
         return ACTIVE;
     }
 
+    /**
+     * Provide the origin of the coordinates used for a lighting plot.
+     *
+     * @return center of proscenium at the upstage side of the openng
+     */
     public static Point Origin() {
         return ORIGIN;
     }
 
+    /**
+     * Provide the drawing point, given a point relative to the origin established by the {@code
+     * Proscenium}.
+     *
+     * @param unfixed point relative to the {@code Proscenium}'s origin
+     * @return the drawing point
+     */
     public static Point Locate( Point unfixed ) {
         return new Point(
                 ORIGIN.x() + unfixed.x(),
@@ -77,6 +94,17 @@ public class Proscenium extends Minder {
                 ORIGIN.z() + unfixed.z() );
     }
 
+    /**
+     * Construct a {@code Proscenium} from an XML Element.
+     * <p/>
+     * Keep track of the defined origin.
+     *
+     * @param element DOM Element defining a proscenium
+     * @throws AttributeMissingException if any attribute is missing
+     * @throws LocationException         if the proscenium would not fit in the venue
+     * @throws SizeException             if any dimension is less than zero
+     * @throws InvalidXMLException       if more than one 'proscenium' element is found
+     */
     public Proscenium( Element element )
             throws AttributeMissingException, LocationException, SizeException, InvalidXMLException
     {
@@ -95,9 +123,7 @@ public class Proscenium extends Minder {
 
         if (0 >= width) throw new SizeException( "Proscenium", "width" );
         if (0 >= depth) throw new SizeException( "Proscenium", "depth" );
-        if (0 >= height) throw new SizeException( "Proscenium", "depth" );
-
-        System.err.println( this );
+        if (0 >= height) throw new SizeException( "Proscenium", "height" );
 
 
         if (!Venue.Contains2D( new Rectangle( x - width / 2, y, width, depth ) )) {
@@ -115,12 +141,6 @@ public class Proscenium extends Minder {
 
         ACTIVE = true;
         ORIGIN = new Point( x, y, z );
-    }
-
-    @Override
-    public String toString() {
-        return "Proscenium: " + width + " by " + height + " by " + depth + " at (" + x + "," + y +
-                "," + z + ")";
     }
 
     @Override
@@ -174,6 +194,17 @@ public class Proscenium extends Minder {
 
     @Override
     public void dom( Draw draw, View mode ) {
+    }
+
+    /**
+     * Describe this {@code Proscenium}.
+     *
+     * @return textual description
+     */
+    @Override
+    public String toString() {
+        return "Proscenium: " + width + " by " + height + " by " + depth + " at (" + x + "," + y +
+                "," + z + ")";
     }
 }
 

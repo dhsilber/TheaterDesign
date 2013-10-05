@@ -15,34 +15,34 @@ import java.awt.*;
 public class DrawableTest {
     Element element = null;
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test( expectedExceptions = UnsupportedOperationException.class )
     public void verify() throws Exception {
         Drawable drawable = new Drawable( element );
         drawable.verify();
     }
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test( expectedExceptions = UnsupportedOperationException.class )
     public void drawPlan() throws Exception {
         Drawable drawable = new Drawable( element );
         Graphics2D canvas = new Draw().canvas();
         drawable.drawPlan( canvas );
     }
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test( expectedExceptions = UnsupportedOperationException.class )
     public void drawSection() throws Exception {
         Drawable drawable = new Drawable( element );
         Graphics2D canvas = new Draw().canvas();
         drawable.drawSection( canvas );
     }
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test( expectedExceptions = UnsupportedOperationException.class )
     public void drawFront() throws Exception {
         Drawable drawable = new Drawable( element );
         Graphics2D canvas = new Draw().canvas();
         drawable.drawFront( canvas );
     }
 
-    @Test(expectedExceptions = UnsupportedOperationException.class)
+    @Test( expectedExceptions = UnsupportedOperationException.class )
     public void dom() throws Exception {
         Drawable drawable = new Drawable( element );
         Draw draw = new Draw();

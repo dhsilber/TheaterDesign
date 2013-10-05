@@ -63,7 +63,7 @@ public class ExceptionTest {
      *
      * @since 0.0.12
      */
-    @Test( expectedExceptions = InvalidXMLException.class,
+    @Test( expectedExceptions = FeatureException.class,
            expectedExceptionsMessageRegExp = "grubby" )
     public void featureException() throws Exception {
         throw new FeatureException( "grubby" );

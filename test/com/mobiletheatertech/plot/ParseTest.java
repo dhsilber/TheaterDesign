@@ -138,7 +138,7 @@ public class ParseTest {
     public void createsVenueAndProscenium() throws Exception {
         String xml = "<plot>" +
                 "<venue name=\"Bogus name\" width=\"480\" depth=\"720\" height=\"240\" >" +
-                "<proscenium width=\"300\" depth=\"23\" height=\"180\" x=\"20\" y=\"30\" z=\"0\" />" +
+                "<proscenium width=\"300\" depth=\"23\" height=\"180\" x=\"200\" y=\"30\" z=\"0\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -159,7 +159,7 @@ public class ParseTest {
         assert Minder.class.isInstance( minderProscenium );
         assert Proscenium.class.isInstance( minderProscenium );
 //        Proscenium proscenium = (Proscenium) minderProscenium;
-        assertEquals( Proscenium.Origin(), new Point( 20, 30, 0 ) );
+        assertEquals( Proscenium.Origin(), new Point( 200, 30, 0 ) );
 
     }
 
