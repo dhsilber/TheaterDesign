@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public abstract class Minder extends Elemental {
 
     /**
-     * Every <@code Minder}-derived objedt is referenced from this list.
+     * Every <@code Minder}-derived object is referenced from this list.
      */
     public static ArrayList<Minder> LIST = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public abstract class Minder extends Elemental {
     /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing media
+     * @param canvas drawing media
      */
     public static void DrawAllPlan( Graphics2D canvas ) throws MountingException {
         for (Minder item : LIST) {
@@ -55,7 +55,7 @@ public abstract class Minder extends Elemental {
     /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing media
+     * @param canvas drawing media
      */
     public static void DrawAllSection( Graphics2D canvas ) throws MountingException {
         for (Minder item : LIST) {
@@ -66,7 +66,7 @@ public abstract class Minder extends Elemental {
     /**
      * Draw each of the plot items that have been specified.
      *
-     * @param canvas Drawing media
+     * @param canvas drawing media
      * @throws MountingException
      */
     public static void DrawAllFront( Graphics2D canvas ) throws MountingException {
@@ -78,7 +78,7 @@ public abstract class Minder extends Elemental {
     /**
      * Give each of the plot items an opportunity to modify the document after the drawing is done.
      *
-     * @param draw Graphics manager.
+     * @param draw graphics manager
      */
     public static void DomAllPlan( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
@@ -89,7 +89,7 @@ public abstract class Minder extends Elemental {
     /**
      * Give each of the plot items an opportunity to modify the document after the drawing is done.
      *
-     * @param draw Graphics manager.
+     * @param draw graphics manager
      */
     public static void DomAllSection( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
@@ -100,7 +100,7 @@ public abstract class Minder extends Elemental {
     /**
      * Give each of the plot items an opportunity to modify the document after the drawing is done.
      *
-     * @param draw Graphics manager.
+     * @param draw graphics manager
      */
     public static void DomAllFront( Draw draw ) throws MountingException {
         for (Minder item : LIST) {
@@ -124,7 +124,7 @@ public abstract class Minder extends Elemental {
      * <p/>
      * Items that make use of this functionality will replace this comment with specifics.
      *
-     * @param canvas Drawing media.
+     * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
     public abstract void drawPlan( Graphics2D canvas ) throws MountingException;
@@ -134,7 +134,7 @@ public abstract class Minder extends Elemental {
      * <p/>
      * Items that make use of this functionality will replace this comment with specifics.
      *
-     * @param canvas Drawing media.
+     * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
     public abstract void drawSection( Graphics2D canvas ) throws MountingException;
@@ -144,7 +144,7 @@ public abstract class Minder extends Elemental {
      * <p/>
      * Items that make use of this functionality will replace this comment with specifics.
      *
-     * @param canvas Drawing media.
+     * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
     public abstract void drawFront( Graphics2D canvas ) throws MountingException;
@@ -154,7 +154,8 @@ public abstract class Minder extends Elemental {
      * <p/>
      * Items that make use of this functionality will replace this comment with specifics.
      *
-     * @param draw Canvas/DOM manager.
+     * @param draw canvas/DOM manager
+     * @param mode drawing mode
      * @throws MountingException if mounting location cannot be established
      */
     public abstract void dom( Draw draw, View mode ) throws MountingException;

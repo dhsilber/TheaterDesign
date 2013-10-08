@@ -43,6 +43,8 @@ public class Proscenium extends Minder {
      *
      * @param list of XML nodes
      * @throws AttributeMissingException if a required attribute is missing
+     * @throws InvalidXMLException       if more than one 'proscenium' element is found or if null
+     *                                   element is somehow presented to constructor
      * @throws LocationException         if the stage is outside the {@code Venue}
      * @throws SizeException             if a length attribute is too short
      */
@@ -101,9 +103,10 @@ public class Proscenium extends Minder {
      *
      * @param element DOM Element defining a proscenium
      * @throws AttributeMissingException if any attribute is missing
+     * @throws InvalidXMLException       if more than one 'proscenium' element is found or if null
+     *                                   element is somehow presented to constructor
      * @throws LocationException         if the proscenium would not fit in the venue
      * @throws SizeException             if any dimension is less than zero
-     * @throws InvalidXMLException       if more than one 'proscenium' element is found
      */
     public Proscenium( Element element )
             throws AttributeMissingException, LocationException, SizeException, InvalidXMLException
@@ -148,12 +151,12 @@ public class Proscenium extends Minder {
     }
 
     /**
-     * @param canvas Drawing media.
+     * @param canvas Drawing media
      */
     @Override
     public void drawPlan( Graphics2D canvas ) {
-        canvas.setPaint( Color.BLACK );
-        canvas.draw( new Rectangle( x - width / 2, y, width, depth ) );
+//        canvas.setPaint( Color.BLACK );
+//        canvas.draw( new Rectangle( x - width / 2, y, width, depth ) );
 
         // Draw CenterLine
         float[] dashPattern = { 6, 2, 3, 2 };
@@ -165,7 +168,7 @@ public class Proscenium extends Minder {
     }
 
     /**
-     * @param canvas Drawing media.
+     * @param canvas Drawing media
      */
     @Override
     public void drawSection( Graphics2D canvas ) {
@@ -175,7 +178,7 @@ public class Proscenium extends Minder {
     }
 
     /**
-     * @param canvas Drawing media.
+     * @param canvas Drawing media
      */
     @Override
     public void drawFront( Graphics2D canvas ) {
@@ -192,8 +195,65 @@ public class Proscenium extends Minder {
         canvas.setStroke( new BasicStroke( 1 ) );
     }
 
+    /**
+     * Draw the proscenium.
+     * <p/>
+     * Currently only drawing the plan view.
+     *
+     * @param draw Canvas/DOM manager
+     * @param mode
+     */
     @Override
     public void dom( Draw draw, View mode ) {
+        if (View.PLAN == mode) {
+            Integer startX = x - width / 2;
+            Integer startY = y;
+            Integer endX = x + width / 2;
+            Integer endY = y + depth;
+
+            // SR end of proscenium arch
+            Element line = draw.element( "line" );
+            line.setAttribute( "x1", startX.toString() );
+            line.setAttribute( "y1", startY.toString() );
+            line.setAttribute( "x2", startX.toString() );
+            line.setAttribute( "y2", endY.toString() );
+            line.setAttribute( "stroke", "black" );
+            line.setAttribute( "stroke-width", "1" );
+            draw.appendRootChild( line );
+
+            // SL end of proscenium arch
+            line = draw.element( "line" );
+            line.setAttribute( "x1", endX.toString() );
+            line.setAttribute( "y1", startY.toString() );
+            line.setAttribute( "x2", endX.toString() );
+            line.setAttribute( "y2", endY.toString() );
+            line.setAttribute( "stroke", "black" );
+            line.setAttribute( "stroke-width", "1" );
+            draw.appendRootChild( line );
+
+            // US side of proscenium arch
+            line = draw.element( "line" );
+            line.setAttribute( "x1", startX.toString() );
+            line.setAttribute( "y1", startY.toString() );
+            line.setAttribute( "x2", endX.toString() );
+            line.setAttribute( "y2", startY.toString() );
+            line.setAttribute( "stroke", "grey" );
+            line.setAttribute( "stroke-opacity", "0.3" );
+            line.setAttribute( "stroke-width", "1" );
+            draw.appendRootChild( line );
+
+            // DS side of proscenium arch
+            line = draw.element( "line" );
+            line.setAttribute( "x1", startX.toString() );
+            line.setAttribute( "y1", endY.toString() );
+            line.setAttribute( "x2", endX.toString() );
+            line.setAttribute( "y2", endY.toString() );
+            line.setAttribute( "stroke", "grey" );
+            line.setAttribute( "stroke-opacity", "0.1" );
+            line.setAttribute( "stroke-width", "1" );
+            draw.appendRootChild( line );
+
+        }
     }
 
     /**

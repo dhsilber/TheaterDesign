@@ -27,6 +27,7 @@ public class HangPoint extends Minder {
      * @param list Set of hangpoint nodes
      * @throws AttributeMissingException This ends up copied to each thing that inherits from
      *                                   Minder. There needs to be a factory somewhere.
+     * @throws InvalidXMLException       if null element is somehow presented to constructor
      */
     public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, LocationException {
 
@@ -51,6 +52,7 @@ public class HangPoint extends Minder {
      *
      * @param element describes this {@code HangPoint}.
      * @throws AttributeMissingException if some required attribute is missing.
+     * @throws InvalidXMLException       if null element is somehow presented to constructor
      * @throws LocationException         if some coordinate is outside the area of the {@link
      *                                   Venue}.
      */
@@ -82,8 +84,6 @@ public class HangPoint extends Minder {
      * @return {@code HangPoint} which matches specified {@code id}.
      */
     public static HangPoint Find( String id ) {
-
-        System.err.println( "HangPoint.Find" );
 
         for (Minder thingy : Drawable.List()) {
             if (HangPoint.class.isInstance( thingy )) {

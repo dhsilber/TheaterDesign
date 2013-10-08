@@ -105,10 +105,13 @@ public class Parse {
         NodeList pipe = root.getElementsByTagName( "pipe" );
         Pipe.ParseXML( pipe );
 
+        NodeList zone = root.getElementsByTagName( "zone" );
+        Zone.ParseXML( zone );
+
         NodeList luminaire = root.getElementsByTagName( "luminaire" );
         Luminaire.ParseXML( luminaire );
 
-        Truss.VerifyAll();
+        Minder.VerifyAll();
 
     }
 }

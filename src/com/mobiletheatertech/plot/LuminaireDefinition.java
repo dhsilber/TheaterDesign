@@ -40,17 +40,17 @@ public class LuminaireDefinition extends Minder implements Legendable {
     private int legendHeight;
 
     /**
-     * Extract the stage description element from a list of XML nodes.
+     * Extract the luminaire definition elements from a list of XML nodes and create {@code
+     * LuminaireDefinition} objects from them.
      *
      * @param list List of XML nodes
      * @throws AttributeMissingException If a required attribute is missing
-     * @throws LocationException         If the stage is outside the {@code Venue}
-     * @throws SizeException             If a length attribute is too short
+     * @throws InvalidXMLException       if null element is somehow presented to constructor
      */
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -60,7 +60,6 @@ public class LuminaireDefinition extends Minder implements Legendable {
                 Element element = (Element) node;
                 new LuminaireDefinition( element );
             }
-
         }
     }
 
@@ -182,6 +181,7 @@ public class LuminaireDefinition extends Minder implements Legendable {
         text.setAttribute( "x", x.toString() );
         text.setAttribute( "y", y.toString() );
         text.setAttribute( "fill", "black" );
+        text.setAttribute( "stroke", "none" );
         text.setAttribute( "font-family", "serif" );
         text.setAttribute( "font-size", "10" );
 

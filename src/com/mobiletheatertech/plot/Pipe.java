@@ -52,6 +52,8 @@ public class Pipe extends Minder {
      *
      * @param list of 'pipe' nodes
      * @throws AttributeMissingException if any attribute is missing from any {@code Pipe}
+     * @throws InvalidXMLException       if null element is somehow presented to constructor
+     * @throws SizeException             if a length is too short
      */
 
     /*
@@ -59,7 +61,7 @@ public class Pipe extends Minder {
      *                                   Minder. There needs to be a factory somewhere.
      */
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -97,6 +99,7 @@ public class Pipe extends Minder {
      *
      * @param element DOM Element defining a pipe
      * @throws AttributeMissingException if any attribute is missing
+     * @throws InvalidXMLException       if null element is somehow presented to constructor
      * @throws SizeException             if the length is too short
      */
     /*
@@ -107,6 +110,7 @@ public class Pipe extends Minder {
             throws AttributeMissingException, InvalidXMLException, SizeException
     {
         super( element );
+
         id = element.getAttribute( "id" );
         length = getIntegerAttribute( element, "length" );
         Integer x = getIntegerAttribute( element, "x" );

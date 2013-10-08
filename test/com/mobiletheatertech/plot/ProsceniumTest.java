@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
@@ -83,139 +85,139 @@ public class ProsceniumTest {
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'width' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'width' attribute.")
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'depth' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'depth' attribute.")
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'height' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'height' attribute.")
     public void noHeight() throws Exception {
         element.removeAttribute( "height" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'x' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'x' attribute.")
     public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'y' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'y' attribute.")
     public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'z' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Proscenium instance is missing required 'z' attribute.")
     public void noZ() throws Exception {
         element.removeAttribute( "z" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeWidth() throws Exception {
         element.setAttribute( "width", "600" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeDepth() throws Exception {
         element.setAttribute( "depth", "257" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeHeight() throws Exception {
         element.setAttribute( "height", "252" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeX() throws Exception {
         element.setAttribute( "x", "436" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeY() throws Exception {
         element.setAttribute( "y", "379" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooLargeZ() throws Exception {
         element.setAttribute( "z", "14" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = SizeException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should have a positive width." )
+    @Test(expectedExceptions = SizeException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should have a positive width.")
     public void tooSmallWidth() throws Exception {
         element.setAttribute( "width", "0" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = SizeException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should have a positive depth." )
+    @Test(expectedExceptions = SizeException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should have a positive depth.")
     public void tooSmallDepth() throws Exception {
         element.setAttribute( "depth", "0" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = SizeException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should have a positive height." )
+    @Test(expectedExceptions = SizeException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should have a positive height.")
     public void tooSmallHeight() throws Exception {
         element.setAttribute( "height", "0" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooSmallX() throws Exception {
         element.setAttribute( "x", "114" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooSmallY() throws Exception {
         element.setAttribute( "y", "-1" );
         new Proscenium( element );
     }
 
-    @Test( expectedExceptions = LocationException.class,
-           expectedExceptionsMessageRegExp =
-                   "Proscenium should not extend beyond the boundaries of the venue." )
+    @Test(expectedExceptions = LocationException.class,
+          expectedExceptionsMessageRegExp =
+                  "Proscenium should not extend beyond the boundaries of the venue.")
     public void tooSmallZ() throws Exception {
         element.setAttribute( "z", "-1" );
         new Proscenium( element );
@@ -253,9 +255,9 @@ public class ProsceniumTest {
         assertEquals( list.size(), 1 );
     }
 
-    @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp =
-                   "Multiple Prosceniums are not currently supported." )
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp =
+                  "Multiple Prosceniums are not currently supported.")
     public void parseMultiple() throws Exception {
         String xml = "<plot>" +
                 "<proscenium width=\"12\" height=\"22\" depth=\"65\" x=\"30\" y=\"6\" z=\"9\" />" +
@@ -293,6 +295,65 @@ public class ProsceniumTest {
 //
 //        proscenium.dom( null );
 //    }
+
+    @Test
+    public void dom() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Proscenium proscenium = new Proscenium( element );
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        proscenium.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+        assertEquals( list.getLength(), 4 );
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "85" );
+        assertEquals( element.getAttribute( "y1" ), "144" );
+        assertEquals( element.getAttribute( "x2" ), "85" );
+        assertEquals( element.getAttribute( "y2" ), "166" );
+        assertEquals( element.getAttribute( "stroke" ), "black" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "415" );
+        assertEquals( element.getAttribute( "y1" ), "144" );
+        assertEquals( element.getAttribute( "x2" ), "415" );
+        assertEquals( element.getAttribute( "y2" ), "166" );
+        assertEquals( element.getAttribute( "stroke" ), "black" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "85" );
+        assertEquals( element.getAttribute( "y1" ), "144" );
+        assertEquals( element.getAttribute( "x2" ), "415" );
+        assertEquals( element.getAttribute( "y2" ), "144" );
+        assertEquals( element.getAttribute( "stroke" ), "grey" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "0.3" );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 3 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "85" );
+        assertEquals( element.getAttribute( "y1" ), "166" );
+        assertEquals( element.getAttribute( "x2" ), "415" );
+        assertEquals( element.getAttribute( "y2" ), "166" );
+        assertEquals( element.getAttribute( "stroke" ), "grey" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

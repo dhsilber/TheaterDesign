@@ -35,7 +35,8 @@ public class Luminaire extends Minder {
     private String dimmer;
     private String channel;
     private String color;
-    private String unit = "5";
+    private String unit;
+    private String target;
 
     /**
      * Construct a {@code Luminaire} for each element in a list of XML nodes.
@@ -67,6 +68,7 @@ public class Luminaire extends Minder {
      *
      * @param element DOM Element defining a luminaire
      * @throws AttributeMissingException if any attribute is missing
+     * @throws InvalidXMLException       if element is null
      */
     public Luminaire( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
@@ -79,6 +81,7 @@ public class Luminaire extends Minder {
         channel = getOptionalStringAttribute( element, "channel" );
         color = getOptionalStringAttribute( element, "color" );
         unit = getOptionalStringAttribute( element, "unit" );
+        target = getOptionalStringAttribute( element, "target" );
     }
 
     /**
@@ -173,6 +176,27 @@ public class Luminaire extends Minder {
     }
 
     /**
+     * Provide the rotation required to orient this luminaire's icon to the specified point.
+     *
+     * @param point
+     * @return
+     */
+    private Integer alignWithZone( Point point ) {
+        Zone zone = Zone.Find( target );
+        if (null == zone) {
+            return 0;
+        }
+        int oppositeLength = point.y() - zone.drawY();
+        int adjacentLength = point.x() - zone.drawX();
+        Double angle = Math.atan2( oppositeLength, adjacentLength );
+        angle = Math.toDegrees( angle );
+
+        System.err.println(
+                "Angle: " + angle + "  al: " + adjacentLength + "  oL: " + oppositeLength );
+        return angle.intValue() + 90;
+    }
+
+    /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
      * unit information.
      *
@@ -186,6 +210,7 @@ public class Luminaire extends Minder {
 
         Integer z = Venue.Height() - point.z();
 
+        // use element for luminaire icon
         Element use = draw.element( "use" );
         use.setAttribute( "xlink:href", "#" + type );
 
@@ -202,12 +227,16 @@ public class Luminaire extends Minder {
                 use.setAttribute( "x", point.x().toString() );
                 use.setAttribute( "y", z.toString() );
                 break;
-
         }
-
+        if ("" != target) {
+            Integer rotation = alignWithZone( point );
+            String transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
+            use.setAttribute( "transform", transform );
+        }
         draw.appendRootChild( use );
 
-//        draw.appendRootChild( domCircuit( circuit ) );
+
+        // Hexagon and text for circuit
         Element circuitHexagon = draw.element( "path" );
         Integer x = point.x() - 9;
         Integer y = point.y() - 25;
@@ -234,6 +263,7 @@ public class Luminaire extends Minder {
         circuitText.setAttribute( "x", circuitTextX.toString() );
         circuitText.setAttribute( "y", circuitTextY.toString() );
         circuitText.setAttribute( "fill", "black" );
+        circuitText.setAttribute( "stroke", "none" );
         circuitText.setAttribute( "font-family", "serif" );
         circuitText.setAttribute( "font-size", "9" );
         draw.appendRootChild( circuitText );
@@ -242,6 +272,7 @@ public class Luminaire extends Minder {
         circuitText.appendChild( textCircuit );
 
 
+        // Rectangle and text for dimmer
         Text textDimmer = draw.document().createTextNode( dimmer );
 
         Element dimmerRectangle = draw.element( "rect" );
@@ -268,6 +299,7 @@ public class Luminaire extends Minder {
         dimmerText.setAttribute( "x", dimmerTextX.toString() );
         dimmerText.setAttribute( "y", dimmerTextY.toString() );
         dimmerText.setAttribute( "fill", "black" );
+        dimmerText.setAttribute( "stroke", "none" );
         dimmerText.setAttribute( "font-family", "serif" );
         dimmerText.setAttribute( "font-size", "9" );
         draw.appendRootChild( dimmerText );
@@ -275,6 +307,7 @@ public class Luminaire extends Minder {
         dimmerText.appendChild( textDimmer );
 
 
+        // Circle and text for channel number
         Element channelCircle = draw.element( "circle" );
         x = point.x();
         y = point.y() - 50;
@@ -290,6 +323,7 @@ public class Luminaire extends Minder {
         channelText.setAttribute( "x", channelTextX.toString() );
         channelText.setAttribute( "y", channelTextY.toString() );
         channelText.setAttribute( "fill", "black" );
+        channelText.setAttribute( "fill", "black" );
         channelText.setAttribute( "font-family", "serif" );
         channelText.setAttribute( "font-size", "9" );
         draw.appendRootChild( channelText );
@@ -298,6 +332,7 @@ public class Luminaire extends Minder {
         channelText.appendChild( textChannel );
 
 
+        // Unit number to overlay on icon
         Element unitText = draw.element( "text" );
         Integer unitTextX = point.x() - 2;
         Integer unitTextY = point.y() + 0;
@@ -307,13 +342,14 @@ public class Luminaire extends Minder {
         unitText.setAttribute( "font-family", "sans-serif" );
         unitText.setAttribute( "font-weight", "100" );
         unitText.setAttribute( "font-size", "6" );
-        unitText.setAttribute( "stroke-width", "1px" );
+        unitText.setAttribute( "stroke", "none" );
         draw.appendRootChild( unitText );
 
         Text textUnit = draw.document().createTextNode( unit );
         unitText.appendChild( textUnit );
 
 
+        // Color designation to display
         Element colorText = draw.element( "text" );
         Integer colorTextX = point.x() - 6;
         Integer colorTextY = point.y() + 18;

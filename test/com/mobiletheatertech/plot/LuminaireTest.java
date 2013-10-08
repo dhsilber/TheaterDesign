@@ -22,6 +22,7 @@ public class LuminaireTest {
     Element element = null;
     final String type = "6x9";
     final String pipeName = "luminaireTestPipe";
+    final String target = "frank";
 
     public LuminaireTest() {
 
@@ -46,6 +47,7 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "color" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), "" );
+        assertEquals( TestHelpers.accessString( luminaire, "target" ), "" );
     }
 
     @Test
@@ -55,6 +57,7 @@ public class LuminaireTest {
         element.setAttribute( "channel", "97" );
         element.setAttribute( "color", "R342" );
         element.setAttribute( "unit", "9" );
+        element.setAttribute( "target", target );
 
         Luminaire luminaire = new Luminaire( element );
 
@@ -66,6 +69,7 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "97" );
         assertEquals( TestHelpers.accessString( luminaire, "color" ), "R342" );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), "9" );
+        assertEquals( TestHelpers.accessString( luminaire, "target" ), target );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -188,6 +192,64 @@ public class LuminaireTest {
     }
 
     @Test
+    public void domPlanWithTarget() throws Exception {
+        Element zoneElement = new IIOMetadataNode( "zone" );
+        zoneElement.setAttribute( "id", target );
+        zoneElement.setAttribute( "x", "34" );
+        zoneElement.setAttribute( "y", "44" );
+        zoneElement.setAttribute( "r", "2" );
+        new Zone( zoneElement );
+
+        element.setAttribute( "target", target );
+        Luminaire luminaire = new Luminaire( element );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        Minder.VerifyAll();
+
+        luminaire.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "xlink:href" ), "#" + type );
+        assertEquals( element.getAttribute( "x" ), "24" );
+        assertEquals( element.getAttribute( "y" ), "34" );
+        assertEquals( element.getAttribute( "transform" ), "rotate(-45,24,34)" );
+    }
+
+    @Test
+    public void domPlanWithMissingTarget() throws Exception {
+        Element zoneElement = new IIOMetadataNode( "zone" );
+        zoneElement.setAttribute( "id", "bogus" );
+        zoneElement.setAttribute( "x", "34" );
+        zoneElement.setAttribute( "y", "44" );
+        zoneElement.setAttribute( "r", "2" );
+        new Zone( zoneElement );
+
+        element.setAttribute( "target", target );
+        Luminaire luminaire = new Luminaire( element );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        Minder.VerifyAll();
+
+        luminaire.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "xlink:href" ), "#" + type );
+        assertEquals( element.getAttribute( "x" ), "24" );
+        assertEquals( element.getAttribute( "y" ), "34" );
+        assertEquals( element.getAttribute( "transform" ), "rotate(0,24,34)" );
+    }
+
+    @Test
     public void domSection() throws Exception {
         Draw draw = new Draw();
         draw.getRoot();
@@ -269,6 +331,8 @@ public class LuminaireTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.MinderReset();
+
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );
         venueElement.setAttribute( "width", "350" );
