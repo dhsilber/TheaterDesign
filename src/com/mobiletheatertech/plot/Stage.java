@@ -36,7 +36,7 @@ public class Stage extends Minder {
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -60,7 +60,7 @@ public class Stage extends Minder {
      * @throws LocationException
      */
     public Stage( Element element )
-            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
+            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException
     {
         super( element );
 
@@ -90,7 +90,6 @@ public class Stage extends Minder {
 
     @Override
     public void verify() throws InvalidXMLException {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -110,7 +109,7 @@ public class Stage extends Minder {
      * @param canvas drawing space.
      */
     @Override
-    public void drawSection( Graphics2D canvas ) {
+    public void drawSection( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
         canvas.setPaint( Color.ORANGE );
         canvas.draw( new Line2D.Float( y, bottom, y, bottom - z ) );
@@ -124,7 +123,7 @@ public class Stage extends Minder {
      * @param canvas drawing space.
      */
     @Override
-    public void drawFront( Graphics2D canvas ) {
+    public void drawFront( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
         canvas.setPaint( Color.ORANGE );
         canvas.draw( new Line2D.Float( x, bottom, x, bottom - z ) );

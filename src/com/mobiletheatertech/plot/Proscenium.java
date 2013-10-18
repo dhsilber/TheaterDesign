@@ -51,7 +51,8 @@ public class Proscenium extends Minder {
 
     // This seems to be generic - refactor it into Minder
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException, LocationException, SizeException, InvalidXMLException
+            throws AttributeMissingException, InvalidXMLException, LocationException,
+            ReferenceException, SizeException
     {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -109,7 +110,7 @@ public class Proscenium extends Minder {
      * @throws SizeException             if any dimension is less than zero
      */
     public Proscenium( Element element )
-            throws AttributeMissingException, LocationException, SizeException, InvalidXMLException
+            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException
     {
         super( element );
 
@@ -151,10 +152,10 @@ public class Proscenium extends Minder {
     }
 
     /**
-     * @param canvas Drawing media
+     * @param canvas drawing media
      */
     @Override
-    public void drawPlan( Graphics2D canvas ) {
+    public void drawPlan( Graphics2D canvas ) throws ReferenceException {
 //        canvas.setPaint( Color.BLACK );
 //        canvas.draw( new Rectangle( x - width / 2, y, width, depth ) );
 
@@ -168,20 +169,20 @@ public class Proscenium extends Minder {
     }
 
     /**
-     * @param canvas Drawing media
+     * @param canvas drawing media
      */
     @Override
-    public void drawSection( Graphics2D canvas ) {
+    public void drawSection( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
         canvas.setPaint( Color.BLACK );
         canvas.draw( new Rectangle( y, bottom - z - height, depth, height ) );
     }
 
     /**
-     * @param canvas Drawing media
+     * @param canvas drawing media
      */
     @Override
-    public void drawFront( Graphics2D canvas ) {
+    public void drawFront( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
         canvas.setPaint( Color.BLACK );
         canvas.draw( new Rectangle( x - width / 2, bottom - z - height, width, height ) );
@@ -200,8 +201,8 @@ public class Proscenium extends Minder {
      * <p/>
      * Currently only drawing the plan view.
      *
-     * @param draw Canvas/DOM manager
-     * @param mode
+     * @param draw canvas/DOM manager
+     * @param mode drawing mode
      */
     @Override
     public void dom( Draw draw, View mode ) {

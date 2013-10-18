@@ -35,6 +35,8 @@ public class ZoneTest {
     Integer yDrawn = 116;
     //    Integer zDrawn = 56;
     Integer rDrawn = r;
+    String color = "magenta";
+    String defaultColor = "teal";
 
     @Test
     public void isMinder() throws Exception {
@@ -52,6 +54,21 @@ public class ZoneTest {
         assertEquals( TestHelpers.accessInteger( zone, "y" ), y );
 //        assertEquals( TestHelpers.accessInteger( zone, "z" ), z );
         assertEquals( TestHelpers.accessInteger( zone, "r" ), r );
+        assertEquals( TestHelpers.accessString( zone, "color" ), defaultColor );
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        element.setAttribute( "color", color );
+
+        Zone zone = new Zone( element );
+
+        assertEquals( TestHelpers.accessString( zone, "id" ), id );
+        assertEquals( TestHelpers.accessInteger( zone, "x" ), x );
+        assertEquals( TestHelpers.accessInteger( zone, "y" ), y );
+//        assertEquals( TestHelpers.accessInteger( zone, "z" ), z );
+        assertEquals( TestHelpers.accessInteger( zone, "r" ), r );
+        assertEquals( TestHelpers.accessString( zone, "color" ), color );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -236,7 +253,7 @@ public class ZoneTest {
         assertEquals( element.getAttribute( "r" ), rDrawn.toString() );
 
         assertEquals( element.getAttribute( "fill" ), "none" );
-        assertEquals( element.getAttribute( "stroke" ), "teal" );
+        assertEquals( element.getAttribute( "stroke" ), defaultColor );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.5" );
         assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -246,7 +263,93 @@ public class ZoneTest {
         Node textNode = textList.item( 0 );
         assertEquals( textNode.getNodeType(), Node.ELEMENT_NODE );
         Element textElement = (Element) textNode;
+        assertEquals( textElement.getAttribute( "fill" ), defaultColor );
 
+    }
+
+    @Test
+    public void domPlanColor() throws Exception {
+        element.setAttribute( "color", color );
+        new Proscenium( prosceniumElement );
+        Zone zone = new Zone( element );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        zone.verify();
+
+        NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( preCircleList.getLength(), 0 );
+        NodeList preTextList = draw.root().getElementsByTagName( "text" );
+        assertEquals( preTextList.getLength(), 0 );
+
+        zone.dom( draw, View.PLAN );
+
+        NodeList circleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( circleList.getLength(), 1 );
+        Node node = circleList.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "cx" ), xDrawn.toString() );
+        assertEquals( element.getAttribute( "cy" ), yDrawn.toString() );
+        assertEquals( element.getAttribute( "r" ), rDrawn.toString() );
+
+        assertEquals( element.getAttribute( "fill" ), "none" );
+        assertEquals( element.getAttribute( "stroke" ), color );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "0.5" );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+
+        NodeList textList = draw.root().getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 1 );
+        Node textNode = textList.item( 0 );
+        assertEquals( textNode.getNodeType(), Node.ELEMENT_NODE );
+        Element textElement = (Element) textNode;
+        assertEquals( textElement.getAttribute( "fill" ), color );
+
+    }
+
+    @Test
+    public void domSection() throws Exception {
+        new Proscenium( prosceniumElement );
+        Zone zone = new Zone( element );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        zone.verify();
+
+        NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( preCircleList.getLength(), 0 );
+        NodeList preTextList = draw.root().getElementsByTagName( "text" );
+        assertEquals( preTextList.getLength(), 0 );
+
+        zone.dom( draw, View.SECTION );
+
+        NodeList circleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( circleList.getLength(), 0 );
+        NodeList textList = draw.root().getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 0 );
+    }
+
+    @Test
+    public void domFront() throws Exception {
+        new Proscenium( prosceniumElement );
+        Zone zone = new Zone( element );
+
+        Draw draw = new Draw();
+        draw.getRoot();
+        zone.verify();
+
+        NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( preCircleList.getLength(), 0 );
+        NodeList preTextList = draw.root().getElementsByTagName( "text" );
+        assertEquals( preTextList.getLength(), 0 );
+
+        zone.dom( draw, View.FRONT );
+
+        NodeList circleList = draw.root().getElementsByTagName( "circle" );
+        assertEquals( circleList.getLength(), 0 );
+        NodeList textList = draw.root().getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 0 );
     }
 
     @BeforeClass

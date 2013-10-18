@@ -109,7 +109,9 @@ public class Parse {
         Zone.ParseXML( zone );
 
         NodeList luminaire = root.getElementsByTagName( "luminaire" );
-        Luminaire.ParseXML( luminaire );
+        if (luminaire.getLength() > 0) {
+            Luminaire.ParseXML( luminaire );
+        }
 
         Minder.VerifyAll();
 

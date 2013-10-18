@@ -19,13 +19,24 @@ import static org.testng.Assert.assertNull;
  */
 public class LuminaireTest {
 
+    Element venueElement;
     Element element = null;
     final String type = "6x9";
     final String pipeName = "luminaireTestPipe";
     final String target = "frank";
+    final String dimmer = "dimmer";
+    final String circuit = "circuit";
+    final String channel = "channel";
+    final String color = "color";
+    final String unit = "unit";
 
     public LuminaireTest() {
 
+    }
+
+    @Test
+    public void failure() throws Exception {
+        new Luminaire( element );
     }
 
     @Test
@@ -37,6 +48,12 @@ public class LuminaireTest {
 
     @Test
     public void storesAttributes() throws Exception {
+        element.removeAttribute( "dimmer" );
+        element.removeAttribute( "circuit" );
+        element.removeAttribute( "channel" );
+        element.removeAttribute( "color" );
+        element.removeAttribute( "unit" );
+
         Luminaire luminaire = new Luminaire( element );
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
@@ -52,11 +69,6 @@ public class LuminaireTest {
 
     @Test
     public void storesOptionalAttributes() throws Exception {
-        element.setAttribute( "circuit", "A12" );
-        element.setAttribute( "dimmer", "19b" );
-        element.setAttribute( "channel", "97" );
-        element.setAttribute( "color", "R342" );
-        element.setAttribute( "unit", "9" );
         element.setAttribute( "target", target );
 
         Luminaire luminaire = new Luminaire( element );
@@ -64,11 +76,11 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessInteger( luminaire, "location" ), (Integer) 12 );
-        assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "A12" );
-        assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "19b" );
-        assertEquals( TestHelpers.accessString( luminaire, "channel" ), "97" );
-        assertEquals( TestHelpers.accessString( luminaire, "color" ), "R342" );
-        assertEquals( TestHelpers.accessString( luminaire, "unit" ), "9" );
+        assertEquals( TestHelpers.accessString( luminaire, "circuit" ), circuit );
+        assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), dimmer );
+        assertEquals( TestHelpers.accessString( luminaire, "channel" ), channel );
+        assertEquals( TestHelpers.accessString( luminaire, "color" ), color );
+        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "target" ), target );
     }
 
@@ -118,7 +130,6 @@ public class LuminaireTest {
         new Luminaire( element );
     }
 
-
     @Test( expectedExceptions = MountingException.class,
            expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
                    "' has unknown mounting: 'bloorglew'." )
@@ -133,7 +144,7 @@ public class LuminaireTest {
     public void badLocationOtherType() throws Exception {
         element.setAttribute( "type", "floob" );
         element.setAttribute( "on", "bloorglew" );
-        new Luminaire( element );
+//        new Luminaire( element );
         Luminaire luminaire = new Luminaire( element );
         luminaire.location();
     }
@@ -187,9 +198,163 @@ public class LuminaireTest {
         assertEquals( element.getAttribute( "d" ),
                       "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
 
-//        assertEquals( element.getAttribute( "d" ),
-//                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
+        list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "circle" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "text" );
+        assertEquals( list.getLength(), 5 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        String text = element.getTextContent();
+        assertEquals( text, circuit );
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, dimmer );
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, channel );
+        node = list.item( 3 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, unit );
+        node = list.item( 4 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, color );
     }
+
+    @Test
+    public void domPlanCircuitingOne() throws Exception {
+        venueElement.setAttribute( "circuiting", "one-to-one" );
+        new Venue( venueElement );
+        Draw draw = new Draw();
+        draw.getRoot();
+        Luminaire luminaire = new Luminaire( element );
+
+        luminaire.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "xlink:href" ), "#" + type );
+        assertEquals( element.getAttribute( "x" ), "24" );
+        assertEquals( element.getAttribute( "y" ), "34" );
+
+        list = draw.root().getElementsByTagName( "path" );
+        assertEquals( list.getLength(), 0 );
+
+        list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "circle" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "text" );
+        assertEquals( list.getLength(), 4 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        String text = element.getTextContent();
+        assertEquals( text, dimmer );
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, channel );
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, unit );
+        node = list.item( 3 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, color );
+    }
+
+    @Test
+    public void domPlanCircuitingMany() throws Exception {
+        venueElement.setAttribute( "circuiting", "one-to-many" );
+        new Venue( venueElement );
+        Draw draw = new Draw();
+        draw.getRoot();
+        Luminaire luminaire = new Luminaire( element );
+
+        luminaire.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "xlink:href" ), "#" + type );
+        assertEquals( element.getAttribute( "x" ), "24" );
+        assertEquals( element.getAttribute( "y" ), "34" );
+
+        list = draw.root().getElementsByTagName( "path" );
+        assertEquals( list.getLength(), 0 );
+
+        list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "circle" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        element = (Element) node;
+
+        list = draw.root().getElementsByTagName( "text" );
+        assertEquals( list.getLength(), 4 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        String text = element.getTextContent();
+        assertEquals( text, circuit );
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, channel );
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, unit );
+        node = list.item( 3 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        text = element.getTextContent();
+        assertEquals( text, color );
+    }
+
 
     @Test
     public void domPlanWithTarget() throws Exception {
@@ -331,9 +496,10 @@ public class LuminaireTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.VenueReset();
         TestResets.MinderReset();
 
-        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "name", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
@@ -352,6 +518,11 @@ public class LuminaireTest {
         element.setAttribute( "type", type );
         element.setAttribute( "on", pipeName );
         element.setAttribute( "location", "12" );
+        element.setAttribute( "dimmer", dimmer );
+        element.setAttribute( "circuit", circuit );
+        element.setAttribute( "channel", channel );
+        element.setAttribute( "color", color );
+        element.setAttribute( "unit", unit );
     }
 
     @AfterMethod

@@ -72,8 +72,8 @@ public class Truss extends Minder {
     }
 
     /**
-     * @param mark Mark string to match while searching for a {@code Truss}
-     * @return Provides {@code Truss} whose mark matches specified string
+     * @param mark string to match while searching for a {@code Truss}
+     * @return {@code Truss} whose mark matches specified string
      */
     // Copied to Suspend - refactor to Minder?
     public static Truss Find( String mark ) {
@@ -129,21 +129,21 @@ public class Truss extends Minder {
         return null;
     }
 
-    // Totally untested. Yar!
-    private float slope( Point point1, Point point2 ) {
-        int x1 = point1.x();
-        int y1 = point1.y();
-        int x2 = point2.x();
-        int y2 = point2.y();
-
-        float changeInX = x1 - x2;
-        float changeInY = y1 - y2;
-
-        return changeInY / changeInX;
-    }
+//    // Totally untested. Yar!
+//    private float slope( Point point1, Point point2 ) {
+//        int x1 = point1.x();
+//        int y1 = point1.y();
+//        int x2 = point2.x();
+//        int y2 = point2.y();
+//
+//        float changeInX = x1 - x2;
+//        float changeInY = y1 - y2;
+//
+//        return changeInY / changeInX;
+//    }
 
     @Override
-    public void drawPlan( Graphics2D canvas ) {
+    public void drawPlan( Graphics2D canvas ) throws ReferenceException {
         System.out.println( "About to drawPlan Truss" );
         canvas.setPaint( Color.MAGENTA );
         Point point1 = suspend1.locate();
@@ -225,7 +225,7 @@ public class Truss extends Minder {
      * @since 0.0.5
      */
     @Override
-    public void drawSection( Graphics2D canvas ) {
+    public void drawSection( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
 
         System.out.println( "About to drawSection Truss" );
@@ -239,7 +239,7 @@ public class Truss extends Minder {
     }
 
     @Override
-    public void drawFront( Graphics2D canvas ) {
+    public void drawFront( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
 
         System.out.println( "About to drawFront Truss" );

@@ -125,6 +125,9 @@ public class ChairBlock extends Minder {
             SYMBOLGENERATED = true;
         }
 
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", "chairblock" );
+        draw.appendRootChild( group );
         int rowCount = depth / (CHAIRDEPTH + FOOTSPACE);
         int rowOffset = FOOTSPACE + CHAIRDEPTH / 2;
         int columnCount = width / CHAIRWIDTH;
@@ -142,7 +145,8 @@ public class ChairBlock extends Minder {
                 use.setAttribute( "y", yValue.toString() );
 
 
-                draw.appendRootChild( use );
+                group.appendChild( use );
+//                draw.appendRootChild( use );
             }
 
         }

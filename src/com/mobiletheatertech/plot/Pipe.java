@@ -174,7 +174,7 @@ public class Pipe extends Minder {
      * @throws LocationException if the pipe would at any point be outside of the venue
      */
     @Override
-    public void verify() throws LocationException {
+    public void verify() throws LocationException, ReferenceException {
         String identity = (id.equals( "" ))
                           ? this.toString()
                           : "Pipe (" + id + ")";
@@ -230,7 +230,7 @@ public class Pipe extends Minder {
      * @param canvas medium on which to draw
      */
     @Override
-    public void drawSection( Graphics2D canvas ) {
+    public void drawSection( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
 
         canvas.setPaint( Color.BLACK );
@@ -245,7 +245,7 @@ public class Pipe extends Minder {
      * @param canvas medium on which to draw
      */
     @Override
-    public void drawFront( Graphics2D canvas ) {
+    public void drawFront( Graphics2D canvas ) throws ReferenceException {
         int bottom = Venue.Height();
 
         canvas.setPaint( Color.BLACK );

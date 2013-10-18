@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 public class GridTest {
 
     @Test
-    public void draw() {
+    public void draw() throws ReferenceException {
         Draw draw = new Draw();
         draw.getRoot();
 

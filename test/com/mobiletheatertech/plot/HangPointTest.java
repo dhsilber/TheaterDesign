@@ -272,6 +272,7 @@ public class HangPointTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.VenueReset();
         TestResets.MinderReset();
 
         Element venueElement = new IIOMetadataNode();
@@ -280,7 +281,6 @@ public class HangPointTest {
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
-//        Venue.Height();
 
         element = new IIOMetadataNode( "hangpoint" );
         element.setAttribute( "id", "Blather" );

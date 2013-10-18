@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class Legend {
 
-    private static ArrayList<Legendable> LEGENDLIST = new ArrayList();
+    private static ArrayList<Legendable> LEGENDLIST = new ArrayList<>();
     private static Integer HEIGHT = 0;
     private static Integer WIDEST = 0;
 
@@ -44,7 +44,7 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw ) {
+    public static void Startup( Draw draw ) throws ReferenceException {
         DRAW = draw;
         INITIAL = new PagePoint( Venue.Width() + 20, 15 );
 

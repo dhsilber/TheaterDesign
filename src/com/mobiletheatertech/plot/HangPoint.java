@@ -29,7 +29,9 @@ public class HangPoint extends Minder {
      *                                   Minder. There needs to be a factory somewhere.
      * @throws InvalidXMLException       if null element is somehow presented to constructor
      */
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, LocationException {
+    public static void ParseXML( NodeList list )
+            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException
+    {
 
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -56,7 +58,9 @@ public class HangPoint extends Minder {
      * @throws LocationException         if some coordinate is outside the area of the {@link
      *                                   Venue}.
      */
-    HangPoint( Element element ) throws AttributeMissingException, InvalidXMLException, LocationException {
+    HangPoint( Element element )
+            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException
+    {
         super( element );
 
         id = getOptionalStringAttribute( element, "id" );
@@ -100,7 +104,7 @@ public class HangPoint extends Minder {
      *
      * @return coordinate of this {@code HangPoint}'s location
      */
-    public Point locate() {
+    public Point locate() throws ReferenceException {
 //        System.out.println( "Hangpoint (" + id + ") locate(): " + Venue.Height() );
         return new Point( x, y, Venue.Height() );
 
@@ -108,7 +112,6 @@ public class HangPoint extends Minder {
 
     @Override
     public void verify() throws InvalidXMLException {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**

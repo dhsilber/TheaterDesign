@@ -21,11 +21,15 @@ import java.awt.*;
  */
 public class Venue extends Minder implements Legendable {
 
+    public final static String ONETOMANY = "one-to-many";
+    public final static String ONETOONE = "one-to-one";
+
     private static Venue StaticVenue = null;
     private String name = null;
     private Integer width = null;
     private Integer depth = null;
     private Integer height = null;
+    private String circuiting;
 
     /**
      * Extract the venue description element from a list of XML nodes.
@@ -60,6 +64,15 @@ public class Venue extends Minder implements Legendable {
         width = getIntegerAttribute( element, "width" );
         depth = getIntegerAttribute( element, "depth" );
         height = getIntegerAttribute( element, "height" );
+        circuiting = getOptionalStringAttribute( element, "circuiting" );
+        switch (circuiting) {
+            case "":
+            case "one-to-one":
+            case "one-to-many":
+                break;
+            default:
+                throw new InvalidXMLException( "'circuiting' attribute invalid." );
+        }
 
         // Record the extreme point.
         new Point( width, depth, height );
@@ -76,7 +89,11 @@ public class Venue extends Minder implements Legendable {
      * @return true if inner {@code Box} fits entirely within the Venue.
      * @since 0.0.6
      */
-    public static boolean Contains( Box box ) {
+    public static boolean Contains( Box box ) throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
         Box room = new Box( new Point( 0, 0, 0 ), StaticVenue.width, StaticVenue.depth,
                             StaticVenue.height );
         return room.contains( box );
@@ -88,7 +105,11 @@ public class Venue extends Minder implements Legendable {
      * @param rectangle area to check
      * @return true if specified rectangle fits into this {@code Venue}.
      */
-    public static boolean Contains2D( Rectangle rectangle ) {
+
+    public static boolean Contains2D( Rectangle rectangle ) throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
 
         Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
 
@@ -102,7 +123,10 @@ public class Venue extends Minder implements Legendable {
      * @param y coordinate to check
      * @return outcode {@link Rectangle result of outcode call}
      */
-    public static int Contains2D( int x, int y ) {
+    public static int Contains2D( int x, int y ) throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
 
         Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
 
@@ -114,7 +138,11 @@ public class Venue extends Minder implements Legendable {
      *
      * @return name of the venue
      */
-    public static String Name() {
+    public static String Name() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
         return StaticVenue.name;
     }
 
@@ -123,7 +151,11 @@ public class Venue extends Minder implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Width() {
+    public static int Width() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
         return StaticVenue.width;
     }
 
@@ -132,7 +164,11 @@ public class Venue extends Minder implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Depth() {
+    public static int Depth() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
         return StaticVenue.depth;
     }
 
@@ -141,8 +177,25 @@ public class Venue extends Minder implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Height() {
+    public static int Height() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
         return StaticVenue.height;
+    }
+
+    /**
+     * Provides the circuiting mode of the venue.
+     *
+     * @return height of the venue
+     */
+    public static String Circuiting() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
+        return StaticVenue.circuiting;
     }
 
     @Override

@@ -34,6 +34,7 @@ public class Zone extends Minder {
     private Integer yDraw;
     //    private Integer zDraw;
 //    private Integer rDraw;
+    private String color;
 
     /**
      * Construct a {@code Zone} for each element in a list of XML nodes.
@@ -91,6 +92,10 @@ public class Zone extends Minder {
         y = getIntegerAttribute( element, "y" );
 //        z=getIntegerAttribute( element, "z" );
         r = getIntegerAttribute( element, "r" );
+        color = getOptionalStringAttribute( element, "color" );
+        if (color.equals( "" )) {
+            color = "teal";
+        }
     }
 
     /**
@@ -149,13 +154,17 @@ public class Zone extends Minder {
      */
     @Override
     public void dom( Draw draw, View mode ) throws MountingException {
+        if (View.PLAN != mode) {
+            return;
+        }
+
         Element circle = draw.element( "circle" );
 //        channelCircle.setAttribute( "fill", "none" );
         circle.setAttribute( "cx", xDraw.toString() );
         circle.setAttribute( "cy", yDraw.toString() );
         circle.setAttribute( "r", r.toString() );
         circle.setAttribute( "fill", "none" );
-        circle.setAttribute( "stroke", "teal" );
+        circle.setAttribute( "stroke", color );
         circle.setAttribute( "stroke-opacity", "0.5" );
         circle.setAttribute( "stroke-width", "1" );
 
@@ -167,7 +176,7 @@ public class Zone extends Minder {
         Integer textY = yDraw + (r / 5);
         text.setAttribute( "x", textX.toString() );
         text.setAttribute( "y", textY.toString() );
-        text.setAttribute( "fill", "teal" );
+        text.setAttribute( "fill", color );
         text.setAttribute( "stroke", "none" );
         text.setAttribute( "fill-opacity", "0.4" );
         text.setAttribute( "font-family", "serif" );

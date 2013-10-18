@@ -117,7 +117,14 @@ public class ChairBlockTest {
         draw.getRoot();
         ChairBlock chairBlock = new ChairBlock( element );
 
+        NodeList existingGroups = draw.root().getElementsByTagName( "g" );
+        assertEquals( existingGroups.getLength(), 1 );
+
         chairBlock.dom( draw, View.PLAN );
+
+
+        NodeList createdGroups = draw.root().getElementsByTagName( "g" );
+        assertEquals( createdGroups.getLength(), 2 );
 
         int count = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
         String expectedX = Integer.toString( X + CHAIRWIDTH / 2 + 2 );

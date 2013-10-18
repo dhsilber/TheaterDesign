@@ -24,7 +24,7 @@ public class Grid {
      *
      * @param draw canvas / DOM manager
      */
-    public static void DOM( Draw draw ) {
+    public static void DOM( Draw draw ) throws ReferenceException {
         Integer depth = Venue.Depth();
         Integer width = Venue.Width();
 

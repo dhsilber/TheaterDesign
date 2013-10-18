@@ -100,29 +100,48 @@ data from an arbitrary number of potential children.
 
 <h2>Versions</h2>
 
-<!--
-<h3>0.0.15 For a given <code>Venue</code> define the relationship between dimmers and circuits</h3>
+
+<h3>0.0.17 Toggle display of <code>ChairBlock</code>s.</h3>
 
 <p>
-    Possibilities are <dl>
+    Place an HMTL checkbox above the drawing to control whether 'chairblock' elements are displayed.
+</p>
+
+<p>
+    Wrapped the SVG I've been generating in an HTML document, which provides the checkbox,
+    Javascript functions to hide & show groups generated with a 'chairblock' class attribute and to
+    invoke the appropriate one as the checkbox is checked or unchecked, and an iframe for the SVG
+    document.
+</p>
+
+<p>
+    The result is relatively crude, but it works and I can move on to other tasks.
+</p>
+
+<h3>0.0.16 For a given <code>Venue</code> define the relationship between dimmers and circuits</h3>
+
+<p>
+    Possible relationships between dimmers and circuits are:
+<dl>
     <dt>dimmers are patched to arbitrary circuits</dt>
-    <dd></dd>
+    <dd>default setup</dd>
     <dt>one-to-one relationship between a dimmer and a circuit</dt>
     <dd>circuit hex not drawn, only a dimmer need be specified</dd>
     <dt>one-to-many relationship between a dimmer and a set of circuits</dt>
-    <dd>circuit hex not drawn, only a circuit need be specified, and that appears in the dimmer box</dd>
-    </dl>
+    <dd>circuit hex not drawn, only a circuit need be specified, and that appears in the dimmer
+        box
+    </dd>
+</dl>
 </p>
 
 <p>
-    It would be good to be able to specify the ranges of available dimmers and circuits.
+    Added 'color' attribute to <code>Zone</code> to set the color for both the circle and text.
 </p>
--->
 
 <h3>0.0.15 <code>Zone</code>s &amp; <code>target</code>s</h3>
 
 <p>
-    Mark zones in the plot.</p>
+    Mark zones in the plot.
 </p>
 
 <p>

@@ -76,8 +76,10 @@ public class Suspend extends Minder {
     }
 
     /**
-     * @param mark
-     * @return
+     * Find a {@code Suspend}
+     *
+     * @param mark string to match while searching for a {@code Suspend}
+     * @return {@code Suspend} whose mark matches specified string
      */
     // Copied from Truss - refactor to Minder?
     public static Suspend Find( String mark ) {
@@ -91,7 +93,7 @@ public class Suspend extends Minder {
         return null;
     }
 
-    public Point locate() {
+    public Point locate() throws ReferenceException {
         Point location = hangPoint.locate();
         return new Point(
                 location.x(),
@@ -101,7 +103,6 @@ public class Suspend extends Minder {
 
     @Override
     public void verify() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

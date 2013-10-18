@@ -35,7 +35,9 @@ public abstract class Minder extends Elemental {
      * @throws InvalidXMLException
      * @throws LocationException
      */
-    public static void VerifyAll() throws FeatureException, InvalidXMLException, LocationException {
+    public static void VerifyAll()
+            throws FeatureException, InvalidXMLException, LocationException, ReferenceException
+    {
         for (Minder item : LIST) {
             item.verify();
         }
@@ -46,7 +48,7 @@ public abstract class Minder extends Elemental {
      *
      * @param canvas drawing media
      */
-    public static void DrawAllPlan( Graphics2D canvas ) throws MountingException {
+    public static void DrawAllPlan( Graphics2D canvas ) throws MountingException, ReferenceException {
         for (Minder item : LIST) {
             item.drawPlan( canvas );
         }
@@ -57,7 +59,7 @@ public abstract class Minder extends Elemental {
      *
      * @param canvas drawing media
      */
-    public static void DrawAllSection( Graphics2D canvas ) throws MountingException {
+    public static void DrawAllSection( Graphics2D canvas ) throws MountingException, ReferenceException {
         for (Minder item : LIST) {
             item.drawSection( canvas );
         }
@@ -69,7 +71,9 @@ public abstract class Minder extends Elemental {
      * @param canvas drawing media
      * @throws MountingException
      */
-    public static void DrawAllFront( Graphics2D canvas ) throws MountingException {
+    public static void DrawAllFront( Graphics2D canvas )
+            throws MountingException, ReferenceException
+    {
         for (Minder item : LIST) {
             item.drawFront( canvas );
         }
@@ -80,7 +84,7 @@ public abstract class Minder extends Elemental {
      *
      * @param draw graphics manager
      */
-    public static void DomAllPlan( Draw draw ) throws MountingException {
+    public static void DomAllPlan( Draw draw ) throws MountingException, ReferenceException {
         for (Minder item : LIST) {
             item.dom( draw, View.PLAN );
         }
@@ -91,7 +95,7 @@ public abstract class Minder extends Elemental {
      *
      * @param draw graphics manager
      */
-    public static void DomAllSection( Draw draw ) throws MountingException {
+    public static void DomAllSection( Draw draw ) throws MountingException, ReferenceException {
         for (Minder item : LIST) {
             item.dom( draw, View.SECTION );
         }
@@ -102,7 +106,7 @@ public abstract class Minder extends Elemental {
      *
      * @param draw graphics manager
      */
-    public static void DomAllFront( Draw draw ) throws MountingException {
+    public static void DomAllFront( Draw draw ) throws MountingException, ReferenceException {
         for (Minder item : LIST) {
             item.dom( draw, View.FRONT );
         }
@@ -117,7 +121,8 @@ public abstract class Minder extends Elemental {
      * @throws InvalidXMLException if an invalid combination of XML specifications is found
      * @throws LocationException   if certain plot items don't fit in available physical space
      */
-    public abstract void verify() throws FeatureException, InvalidXMLException, LocationException;
+    public abstract void verify()
+            throws FeatureException, InvalidXMLException, LocationException, ReferenceException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to draw the plan view of that item.
@@ -127,7 +132,7 @@ public abstract class Minder extends Elemental {
      * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawPlan( Graphics2D canvas ) throws MountingException;
+    public abstract void drawPlan( Graphics2D canvas ) throws MountingException, ReferenceException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to draw the section view of that item.
@@ -137,7 +142,8 @@ public abstract class Minder extends Elemental {
      * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawSection( Graphics2D canvas ) throws MountingException;
+    public abstract void drawSection( Graphics2D canvas )
+            throws MountingException, ReferenceException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to draw the front view of that item.
@@ -147,7 +153,8 @@ public abstract class Minder extends Elemental {
      * @param canvas drawing media
      * @throws MountingException if mounting location cannot be established
      */
-    public abstract void drawFront( Graphics2D canvas ) throws MountingException;
+    public abstract void drawFront( Graphics2D canvas )
+            throws MountingException, ReferenceException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to update the DOM for the generated SVG.
@@ -158,6 +165,6 @@ public abstract class Minder extends Elemental {
      * @param mode drawing mode
      * @throws MountingException if mounting location cannot be established
      */
-    public abstract void dom( Draw draw, View mode ) throws MountingException;
+    public abstract void dom( Draw draw, View mode ) throws MountingException, ReferenceException;
 
 }

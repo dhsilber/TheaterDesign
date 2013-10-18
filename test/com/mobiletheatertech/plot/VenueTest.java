@@ -36,6 +36,20 @@ public class VenueTest {
     }
 
     @Test
+    public void hasOnetoone() throws Exception {
+        new Venue( element );
+
+        assertEquals( Venue.ONETOONE, "one-to-one" );
+    }
+
+    @Test
+    public void hasOnetomany() throws Exception {
+        new Venue( element );
+
+        assertEquals( Venue.ONETOMANY, "one-to-many" );
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         Venue venue = new Venue( element );
 
@@ -47,6 +61,19 @@ public class VenueTest {
         assertEquals( TestHelpers.accessInteger( venue, "width" ), (Integer) 1296 );
         assertEquals( TestHelpers.accessInteger( venue, "depth" ), (Integer) 1320 );
         assertEquals( TestHelpers.accessInteger( venue, "height" ), (Integer) 240 );
+        assertEquals( TestHelpers.accessString( venue, "circuiting" ), "" );
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        element.setAttribute( "circuiting", "one-to-one" );
+
+        Venue venue = new Venue( element );
+
+        assertEquals( TestHelpers.accessInteger( venue, "width" ), (Integer) 1296 );
+        assertEquals( TestHelpers.accessInteger( venue, "depth" ), (Integer) 1320 );
+        assertEquals( TestHelpers.accessInteger( venue, "height" ), (Integer) 240 );
+        assertEquals( TestHelpers.accessString( venue, "circuiting" ), "one-to-one" );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -65,6 +92,57 @@ public class VenueTest {
         assert thing.contains( venue );
     }
 
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueContains() throws Exception {
+        Point point = new Point( 1, 2, 3 );
+        Box box = new Box( point, 4, 5, 6 );
+        Venue.Contains( box );
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueContains2Dboolean() throws Exception {
+        Rectangle rectangle = new Rectangle( 1, 2, 3, 4 );
+        Venue.Contains2D( rectangle );
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueContains2Dint() throws Exception {
+        Venue.Contains2D( 1, 2 );
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueName() throws Exception {
+        Venue.Name();
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueWidth() throws Exception {
+        Venue.Width();
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueDepth() throws Exception {
+        Venue.Depth();
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueHeight() throws Exception {
+        Venue.Height();
+    }
+
+    @Test(expectedExceptions = ReferenceException.class,
+          expectedExceptionsMessageRegExp = "Venue is not defined.")
+    public void noVenueCircuiting() throws Exception {
+        Venue.Circuiting();
+    }
+
     @Test
     public void storesExtremePoints() throws Exception {
 
@@ -80,29 +158,29 @@ public class VenueTest {
         assertEquals( Point.SmallZ(), 0 );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'name' attribute.")
     public void noName() throws Exception {
         element.removeAttribute( "name" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'width' attribute.")
     public void noWidth() throws Exception {
         element.removeAttribute( "width" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'depth' attribute.")
     public void noDepth() throws Exception {
         element.removeAttribute( "depth" );
         new Venue( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Venue instance is missing required 'height' attribute.")
     public void noHeight() throws Exception {
         element.removeAttribute( "height" );
         new Venue( element );
@@ -289,6 +367,39 @@ public class VenueTest {
         assertEquals( Venue.Name(), title );
     }
 
+    @Test
+    public void circuiting() throws Exception {
+        Element venueElement = new IIOMetadataNode();
+        venueElement.setAttribute( "name", "Venue Name" );
+        venueElement.setAttribute( "width", "129" );
+        venueElement.setAttribute( "depth", "132" );
+        venueElement.setAttribute( "height", "24" );
+        venueElement.setAttribute( "circuiting", "one-to-many" );
+
+        new Venue( venueElement );
+
+        assertEquals( Venue.Circuiting(), "one-to-many" );
+
+        new Venue( element );
+
+        assertEquals( Venue.Circuiting(), "" );
+    }
+
+    @Test
+    public void circuitingOne() throws Exception {
+        element.setAttribute( "circuiting", "one-to-one" );
+        new Venue( element );
+
+        assertEquals( Venue.Circuiting(), "one-to-one" );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+          expectedExceptionsMessageRegExp = "'circuiting' attribute invalid.")
+    public void circuitingInvalid() throws Exception {
+        element.setAttribute( "circuiting", "bogus" );
+        new Venue( element );
+    }
+
     @Mocked
     Graphics2D mockCanvas;
 
@@ -365,6 +476,8 @@ public class VenueTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.VenueReset();
+
         element = new IIOMetadataNode();
         element.setAttribute( "name", title );
         element.setAttribute( "width", "1296" );

@@ -18,7 +18,7 @@ public class Hack {
 
     }
 
-    public static void Dom( Draw draw ) {
+    public static void Dom( Draw draw ) throws ReferenceException {
 
 
 //        These lines are for the Reagle Repertory plot, to show the house booms

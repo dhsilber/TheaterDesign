@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
+//import java.awt.geom.Line2D;
 
 /**
  * Represents a theatrical lighting instrument and includes various information about where it is
@@ -121,16 +121,16 @@ public class Luminaire extends Minder {
      */
     @Override
     public void drawPlan( Graphics2D canvas ) throws MountingException {
-        if (null == LuminaireDefinition.Select( type )) {
-            Point point = location();
-            canvas.setPaint( Color.RED );
-            canvas.draw(
-                    new Line2D.Float( point.x() - 2, point.y() - 2, point.x() + 2,
-                                      point.y() + 2 ) );
-            canvas.draw(
-                    new Line2D.Float( point.x() + 2, point.y() - 2, point.x() - 2,
-                                      point.y() + 2 ) );
-        }
+//        if (null == LuminaireDefinition.Select( type )) {
+//            Point point = location();
+//            canvas.setPaint( Color.RED );
+//            canvas.draw(
+//                    new Line2D.Float( point.x() - 2, point.y() - 2, point.x() + 2,
+//                                      point.y() + 2 ) );
+//            canvas.draw(
+//                    new Line2D.Float( point.x() + 2, point.y() - 2, point.x() - 2,
+//                                      point.y() + 2 ) );
+//        }
     }
 
     /**
@@ -142,16 +142,16 @@ public class Luminaire extends Minder {
      */
     @Override
     public void drawSection( Graphics2D canvas ) throws MountingException {
-        if (null == LuminaireDefinition.Select( type )) {
-            int bottom = Venue.Height();
-
-            Point point = location();
-            canvas.setPaint( Color.RED );
-            canvas.draw( new Line2D.Float( point.y() - 2, bottom - point.z() - 2,
-                                           point.y() + 2, bottom - point.z() + 2 ) );
-            canvas.draw( new Line2D.Float( point.y() + 2, bottom - point.z() - 2,
-                                           point.y() - 2, bottom - point.z() + 2 ) );
-        }
+//        if (null == LuminaireDefinition.Select( type )) {
+//            int bottom = Venue.Height();
+//
+//            Point point = location();
+//            canvas.setPaint( Color.RED );
+//            canvas.draw( new Line2D.Float( point.y() - 2, bottom - point.z() - 2,
+//                                           point.y() + 2, bottom - point.z() + 2 ) );
+//            canvas.draw( new Line2D.Float( point.y() + 2, bottom - point.z() - 2,
+//                                           point.y() - 2, bottom - point.z() + 2 ) );
+//        }
     }
 
     /**
@@ -163,23 +163,23 @@ public class Luminaire extends Minder {
      */
     @Override
     public void drawFront( Graphics2D canvas ) throws MountingException {
-        if (null == LuminaireDefinition.Select( type )) {
-            int bottom = Venue.Height();
-
-            Point point = location();
-            canvas.setPaint( Color.RED );
-            canvas.draw( new Line2D.Float( point.x() - 2, bottom - point.z() - 2,
-                                           point.x() + 2, bottom - point.z() + 2 ) );
-            canvas.draw( new Line2D.Float( point.x() + 2, bottom - point.z() - 2,
-                                           point.x() - 2, bottom - point.z() + 2 ) );
-        }
+//        if (null == LuminaireDefinition.Select( type )) {
+//            int bottom = Venue.Height();
+//
+//            Point point = location();
+//            canvas.setPaint( Color.RED );
+//            canvas.draw( new Line2D.Float( point.x() - 2, bottom - point.z() - 2,
+//                                           point.x() + 2, bottom - point.z() + 2 ) );
+//            canvas.draw( new Line2D.Float( point.x() + 2, bottom - point.z() - 2,
+//                                           point.x() - 2, bottom - point.z() + 2 ) );
+//        }
     }
 
     /**
      * Provide the rotation required to orient this luminaire's icon to the specified point.
      *
-     * @param point
-     * @return
+     * @param point towards which luminaire icon should be oriented
+     * @return angle
      */
     private Integer alignWithZone( Point point ) {
         Zone zone = Zone.Find( target );
@@ -191,10 +191,11 @@ public class Luminaire extends Minder {
         Double angle = Math.atan2( oppositeLength, adjacentLength );
         angle = Math.toDegrees( angle );
 
-        System.err.println(
-                "Angle: " + angle + "  al: " + adjacentLength + "  oL: " + oppositeLength );
+//        System.err.println(
+//                "Angle: " + angle + "  al: " + adjacentLength + "  oL: " + oppositeLength );
         return angle.intValue() + 90;
     }
+
 
     /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
@@ -205,9 +206,11 @@ public class Luminaire extends Minder {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public void dom( Draw draw, View mode ) throws MountingException {
+    public void dom( Draw draw, View mode ) throws MountingException, ReferenceException {
         Point point = location();
 
+        Integer x;
+        Integer y;
         Integer z = Venue.Height() - point.z();
 
         // use element for luminaire icon
@@ -218,6 +221,12 @@ public class Luminaire extends Minder {
             case PLAN:
                 use.setAttribute( "x", point.x().toString() );
                 use.setAttribute( "y", point.y().toString() );
+                if (!target.equals( "" )) {
+                    Integer rotation = alignWithZone( point );
+                    String transform =
+                            "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
+                    use.setAttribute( "transform", transform );
+                }
                 break;
             case SECTION:
                 use.setAttribute( "x", point.y().toString() );
@@ -228,121 +237,158 @@ public class Luminaire extends Minder {
                 use.setAttribute( "y", z.toString() );
                 break;
         }
-        if ("" != target) {
-            Integer rotation = alignWithZone( point );
-            String transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
-            use.setAttribute( "transform", transform );
-        }
         draw.appendRootChild( use );
 
+        // There is no good place to display extra information in section and front views.
+        switch (mode) {
+            case PLAN:
+                break;
+            case SECTION:
+            case FRONT:
+                return;
+        }
 
-        // Hexagon and text for circuit
         Element circuitHexagon = draw.element( "path" );
-        Integer x = point.x() - 9;
-        Integer y = point.y() - 25;
         circuitHexagon.setAttribute( "fill", "none" );
         circuitHexagon.setAttribute( "stroke", "black" );
         circuitHexagon.setAttribute( "stroke-width", "1" );
-        circuitHexagon.setAttribute( "d",
-                                     "M " + (x + 1) + " " + (y + 5) +
-                                             " L " + (x + 4) + " " + y +
-                                             " L " + (x + 14) + " " + y +
-                                             " L " + (x + 17) + " " + (y + 5) +
-                                             " L " + (x + 14) + " " + (y + 10) +
-                                             " L " + (x + 4) + " " + (y + 10) +
-                                             " Z" );
-        circuitHexagon.setAttribute( "x", x.toString() );
-        circuitHexagon.setAttribute( "y", y.toString() );
         circuitHexagon.setAttribute( "width", "18" );
         circuitHexagon.setAttribute( "height", "12" );
-        draw.appendRootChild( circuitHexagon );
+
+        Element dimmerRectangle = draw.element( "rect" );
+        dimmerRectangle.setAttribute( "fill", "none" );
+        dimmerRectangle.setAttribute( "height", "11" );
+
+        Element channelCircle = draw.element( "circle" );
+        channelCircle.setAttribute( "fill", "none" );
+        channelCircle.setAttribute( "r", "8" );
 
         Element circuitText = draw.element( "text" );
-        Integer circuitTextX = point.x() - 4;
-        Integer circuitTextY = point.y() - 17;
-        circuitText.setAttribute( "x", circuitTextX.toString() );
-        circuitText.setAttribute( "y", circuitTextY.toString() );
         circuitText.setAttribute( "fill", "black" );
         circuitText.setAttribute( "stroke", "none" );
         circuitText.setAttribute( "font-family", "serif" );
         circuitText.setAttribute( "font-size", "9" );
-        draw.appendRootChild( circuitText );
+        circuitText.setAttribute( "text-anchor", "middle" );
+
+        Element dimmerText = draw.element( "text" );
+        dimmerText.setAttribute( "fill", "black" );
+        dimmerText.setAttribute( "stroke", "none" );
+        dimmerText.setAttribute( "font-family", "serif" );
+        dimmerText.setAttribute( "font-size", "9" );
+        dimmerText.setAttribute( "text-anchor", "middle" );
+
+        Element channelText = draw.element( "text" );
+        channelText.setAttribute( "fill", "black" );
+        channelText.setAttribute( "fill", "black" );
+        channelText.setAttribute( "font-family", "serif" );
+        channelText.setAttribute( "font-size", "9" );
+        channelText.setAttribute( "text-anchor", "middle" );
 
         Text textCircuit = draw.document().createTextNode( circuit );
-        circuitText.appendChild( textCircuit );
-
-
-        // Rectangle and text for dimmer
         Text textDimmer = draw.document().createTextNode( dimmer );
+        Text textChannel = draw.document().createTextNode( channel );
 
-        Element dimmerRectangle = draw.element( "rect" );
+        Integer dimmerTextY;
+        Integer dimmerRectangleY;
+        Integer channelCircleY;
+        Integer channelTextY;
+        switch (Venue.Circuiting()) {
+            case Venue.ONETOONE:
+            case Venue.ONETOMANY:
+                dimmerTextY = point.y() - 20;
+                dimmerRectangleY = point.y() - 28;
+                channelCircleY = point.y() - 39;
+                channelTextY = point.y() - 25;
+                break;
+            default:
+                // Hexagon for circuit
+                x = point.x() - 9;
+                y = point.y() - 25;
+                circuitHexagon.setAttribute( "d",
+                                             "M " + (x + 1) + " " + (y + 5) +
+                                                     " L " + (x + 4) + " " + y +
+                                                     " L " + (x + 14) + " " + y +
+                                                     " L " + (x + 17) + " " + (y + 5) +
+                                                     " L " + (x + 14) + " " + (y + 10) +
+                                                     " L " + (x + 4) + " " + (y + 10) +
+                                                     " Z" );
+                circuitHexagon.setAttribute( "x", x.toString() );
+                circuitHexagon.setAttribute( "y", y.toString() );
+                draw.appendRootChild( circuitHexagon );
+
+                Integer circuitTextX = point.x();
+                Integer circuitTextY = point.y() - 17;
+                circuitText.setAttribute( "x", circuitTextX.toString() );
+                circuitText.setAttribute( "y", circuitTextY.toString() );
+                draw.appendRootChild( circuitText );
+                circuitText.appendChild( textCircuit );
+
+                dimmerTextY = point.y() - 31;
+                dimmerRectangleY = point.y() - 39;
+                channelCircleY = point.y() - 50;
+                channelTextY = point.y() - 46;
+                break;
+        }
+
+        // Text for dimmer
+        Integer dimmerTextX = point.x();
+        if (3 < textDimmer.getLength()) {
+            dimmerTextX -= 5;
+        }
+        dimmerText.setAttribute( "x", dimmerTextX.toString() );
+        dimmerText.setAttribute( "y", dimmerTextY.toString() );
+
+        // Rectangle for dimmer
         x = point.x() - 9;
-        y = point.y() - 39;
         Integer width = 18;
         if (3 < textDimmer.getLength()) {
             width = 30;
             x -= 4;
         }
-        dimmerRectangle.setAttribute( "fill", "none" );
+
         dimmerRectangle.setAttribute( "x", x.toString() );
-        dimmerRectangle.setAttribute( "y", y.toString() );
+        dimmerRectangle.setAttribute( "y", dimmerRectangleY.toString() );
         dimmerRectangle.setAttribute( "width", width.toString() );
-        dimmerRectangle.setAttribute( "height", "11" );
         draw.appendRootChild( dimmerRectangle );
 
-        Element dimmerText = draw.element( "text" );
-        Integer dimmerTextX = point.x() - 4;
-        if (3 < textDimmer.getLength()) {
-            dimmerTextX -= 5;
-        }
-        Integer dimmerTextY = point.y() - 31;
-        dimmerText.setAttribute( "x", dimmerTextX.toString() );
-        dimmerText.setAttribute( "y", dimmerTextY.toString() );
-        dimmerText.setAttribute( "fill", "black" );
-        dimmerText.setAttribute( "stroke", "none" );
-        dimmerText.setAttribute( "font-family", "serif" );
-        dimmerText.setAttribute( "font-size", "9" );
         draw.appendRootChild( dimmerText );
-
-        dimmerText.appendChild( textDimmer );
-
+        switch (Venue.Circuiting()) {
+            case Venue.ONETOMANY:
+                dimmerText.appendChild( textCircuit );
+                break;
+            case Venue.ONETOONE:
+            default:
+                dimmerText.appendChild( textDimmer );
+                break;
+        }
 
         // Circle and text for channel number
-        Element channelCircle = draw.element( "circle" );
         x = point.x();
-        y = point.y() - 50;
-        channelCircle.setAttribute( "fill", "none" );
         channelCircle.setAttribute( "cx", x.toString() );
-        channelCircle.setAttribute( "cy", y.toString() );
-        channelCircle.setAttribute( "r", "8" );
+        channelCircle.setAttribute( "cy", channelCircleY.toString() );
         draw.appendRootChild( channelCircle );
 
-        Element channelText = draw.element( "text" );
-        Integer channelTextX = point.x() - 5;
-        Integer channelTextY = point.y() - 46;
+        Integer channelTextX = point.x();
         channelText.setAttribute( "x", channelTextX.toString() );
         channelText.setAttribute( "y", channelTextY.toString() );
-        channelText.setAttribute( "fill", "black" );
-        channelText.setAttribute( "fill", "black" );
-        channelText.setAttribute( "font-family", "serif" );
-        channelText.setAttribute( "font-size", "9" );
         draw.appendRootChild( channelText );
 
-        Text textChannel = draw.document().createTextNode( channel );
         channelText.appendChild( textChannel );
 
 
         // Unit number to overlay on icon
         Element unitText = draw.element( "text" );
-        Integer unitTextX = point.x() - 2;
+        Integer unitTextX = point.x();
         Integer unitTextY = point.y() + 0;
         unitText.setAttribute( "x", unitTextX.toString() );
         unitText.setAttribute( "y", unitTextY.toString() );
         unitText.setAttribute( "fill", "black" );
+        unitText.setAttribute( "stroke", "none" );
         unitText.setAttribute( "font-family", "sans-serif" );
         unitText.setAttribute( "font-weight", "100" );
         unitText.setAttribute( "font-size", "6" );
         unitText.setAttribute( "stroke", "none" );
+        unitText.setAttribute( "text-anchor", "middle" );
         draw.appendRootChild( unitText );
 
         Text textUnit = draw.document().createTextNode( unit );
@@ -351,15 +397,17 @@ public class Luminaire extends Minder {
 
         // Color designation to display
         Element colorText = draw.element( "text" );
-        Integer colorTextX = point.x() - 6;
+        Integer colorTextX = point.x();
         Integer colorTextY = point.y() + 18;
         colorText.setAttribute( "x", colorTextX.toString() );
         colorText.setAttribute( "y", colorTextY.toString() );
         colorText.setAttribute( "fill", "black" );
+        colorText.setAttribute( "stroke", "none" );
         colorText.setAttribute( "font-family", "sans-serif" );
         colorText.setAttribute( "font-weight", "100" );
         colorText.setAttribute( "font-size", "5" );
         colorText.setAttribute( "stroke-width", "1px" );
+        colorText.setAttribute( "text-anchor", "middle" );
         draw.appendRootChild( colorText );
 
         Text textColor = draw.document().createTextNode( color );
