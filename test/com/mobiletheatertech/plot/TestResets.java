@@ -123,6 +123,19 @@ public class TestResets {
 */
 
     /**
+     * Reset the Accumulator maintained by {@link Setup} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code Accumulator} field isn't there.
+     * @throws IllegalAccessException if the {@code Accumulator} field cannot be accessed.
+     */
+    public static void SetupReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Setup.class.getDeclaredField( "Accumulator" );
+        field.setAccessible( true );
+        StringBuilder accumulator = (StringBuilder) field.get( Setup.class );
+        field.set( accumulator, new StringBuilder() );
+    }
+
+    /**
      * Reset the StaticVenue maintained by {@link Venue} to its initial null state.
      *
      * @throws NoSuchFieldException   if the {@code StaticVenue} field isn't there.

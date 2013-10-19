@@ -276,6 +276,21 @@ public class ParseTest {
         assert Luminaire.class.isInstance( thing );
     }
 
+    @Test
+    public void createsSetup() throws Exception {
+        String xml = "<plot>" +
+                "<setup name=\"Try this\" tag=\"flavor\" />" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+        new Parse( stream );
+
+        assertEquals( Setup.List(),
+                      "<input type=\"radio\" name=\"setup\" onclick=\"parent.selectsetup();\" checked=\"checked\" value=\"" +
+                              "flavor\" />" +
+                              "Try this<br />\n" );
+    }
+
     /**
      * @throws Exception
      */

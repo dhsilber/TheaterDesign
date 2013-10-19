@@ -115,5 +115,7 @@ public class Parse {
 
         Minder.VerifyAll();
 
+        NodeList setup = root.getElementsByTagName( "setup" );
+        Setup.ParseXML( setup );
     }
 }

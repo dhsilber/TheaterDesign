@@ -80,11 +80,24 @@ public class Write {
                 "  else\n" +
                 "    hide();\n" +
                 "}\n" +
+                "function selectsetup()\n" +
+                "{\n" +
+                "  for(i=0;i<document.configure.setup.length; i++) {\n" +
+                "    if( document.configure.setup[i].checked==true) {\n" +
+                "      setsetup( document.configure.setup[i].value );\n" +
+                "    }\n" +
+                "  }\n" +
+                "}\n" +
+                "function setsetup(tag)\n" +
+                "{\n" +
+                "  alert( tag );\n" +
+                "}\n" +
                 "</script>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div>\n" +
-                "<form>\n" +
+                "<form name=\"configure\" >\n" +
+                Setup.List() +
                 "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
                 " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
                 "</form>\n" +
