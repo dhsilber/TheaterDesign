@@ -18,12 +18,23 @@ import java.awt.*;
  * XML tag is 'zone'. Required attributes are:<dl><dt>id</dt><dd>name with which to reference this
  * zone</dd><dt>x</dt><dd>x-coordinate relative to origin</dd><dt>y</dt><dd>y-coordinate relative to
  * origin</dd><dt>z</dt><dd>z-coordinate relative to origin</dd><dt>r</dt><dd>radius of circle
- * marking zone</dd></dl>
+ * marking zone</dd></dl>. Optional attribute is <dl><dt>color</dt><dd>color in which to draw this
+ * zone</dd></dl>
  *
  * @author dhs
  * @since 0.0.15
  */
 public class Zone extends Minder {
+
+    /**
+     * Name of {@code Layer} of {@code Zone}s.
+     */
+    public static final String LAYERNAME = "Zones";
+
+    /**
+     * Name of {@code Layer} of {@code Zone}s.
+     */
+    public static final String LAYERTAG = "zone";
 
     private Integer x;
     private Integer y;
@@ -96,6 +107,8 @@ public class Zone extends Minder {
         if (color.equals( "" )) {
             color = "teal";
         }
+
+        new Layer( LAYERNAME, LAYERTAG );
     }
 
     /**
@@ -158,6 +171,10 @@ public class Zone extends Minder {
             return;
         }
 
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
+
         Element circle = draw.element( "circle" );
 //        channelCircle.setAttribute( "fill", "none" );
         circle.setAttribute( "cx", xDraw.toString() );
@@ -168,7 +185,7 @@ public class Zone extends Minder {
         circle.setAttribute( "stroke-opacity", "0.5" );
         circle.setAttribute( "stroke-width", "1" );
 
-        draw.appendRootChild( circle );
+        group.appendChild( circle );
 
 
         Element text = draw.element( "text" );

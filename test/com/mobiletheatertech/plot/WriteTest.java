@@ -81,6 +81,25 @@ public class WriteTest {
         assertEquals( contents.length, 4 );
     }
 
+//    @Test
+//    public void checkbox() throws Exception {
+//        String name="name of thing";
+//        String tag="tag for thing";
+//        HashMap<String,String> thing=new HashMap<>(  );
+//        thing                       .put( name,tag );
+//
+//        Write write=new Write( "foo" );
+//
+//        write.
+//
+//        String result=
+//
+//        assertEquals( thing,
+//                      "<input type=\"radio\" name=\"setup\" onclick=\"parent.selectsetup();\" checked=\"checked\" value=\"" +
+//                              tag + "\" />" +
+//                              name + "<br />\n" );
+//    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }

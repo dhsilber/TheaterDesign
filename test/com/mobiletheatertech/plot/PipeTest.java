@@ -2,9 +2,12 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.testng.Assert.*;
 
@@ -19,15 +22,35 @@ public class PipeTest {
     Element element = null;
     Element prosceniumElement = null;
 
-    public PipeTest() {
+    Integer x = 12;
+    Integer y = 23;
+    Integer z = 34;
+    String length = "120";   // 10' pipe.
 
-    }
+    Integer prosceniumX = 200;
+    Integer prosceniumY = 144;
+    Integer prosceniumZ = 12;
 
     @Test
     public void isMinder() throws Exception {
         Pipe pipe = new Pipe( element );
 
         assert Minder.class.isInstance( pipe );
+    }
+
+    @Test
+    public void constantDiameter() {
+        assertEquals( Pipe.DIAMETER, (Integer) 2 );
+    }
+
+    @Test
+    public void constantLayerName() {
+        assertEquals( Pipe.LAYERNAME, "Pipes" );
+    }
+
+    @Test
+    public void constantLayerTag() {
+        assertEquals( Pipe.LAYERTAG, "pipe" );
     }
 
     @Test
@@ -110,6 +133,16 @@ public class PipeTest {
         ArrayList<Pipe> list2 = (ArrayList<Pipe>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Pipe", "PIPELIST" );
         assertFalse( list2.contains( pipe ) );
+    }
+
+    @Test
+    public void registersLayer() throws Exception {
+        Pipe pipe = new Pipe( element );
+
+        HashMap<String, String> layers = Layer.List();
+
+        assertTrue( layers.containsKey( Pipe.LAYERNAME ) );
+        assertEquals( layers.get( Pipe.LAYERNAME ), Pipe.LAYERTAG );
     }
 
     @Test
@@ -466,6 +499,205 @@ public class PipeTest {
         pipe.location( -15 );
     }
 
+    @Test
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.PLAN );
+
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Pipe.LAYERTAG );
+
+        NodeList list = groupElement.getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "width" ), length );
+        assertEquals( element.getAttribute( "height" ), Pipe.DIAMETER.toString() );
+        assertEquals( element.getAttribute( "fill" ), "none" );
+    }
+
+    @Test
+    public void domPlanProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        Integer ex = prosceniumX + x;
+        Integer wy = prosceniumY - (y - 1);
+        assertEquals( element.getAttribute( "x" ), ex.toString() );
+        assertEquals( element.getAttribute( "y" ), wy.toString() );
+    }
+
+    @Test
+    public void domPlanNoProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "x" ), x.toString() );
+        assertEquals( element.getAttribute( "y" ), ((Integer) (y - 1)).toString() );
+    }
+
+    @Test
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.SECTION );
+
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Pipe.LAYERTAG );
+
+        NodeList list = groupElement.getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "width" ), Pipe.DIAMETER.toString() );
+        assertEquals( element.getAttribute( "height" ), Pipe.DIAMETER.toString() );
+        assertEquals( element.getAttribute( "fill" ), "none" );
+    }
+
+    @Test
+    public void domSectionProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.SECTION );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        Integer wye = prosceniumY - (y - 1);
+        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        assertEquals( element.getAttribute( "x" ), wye.toString() );
+        assertEquals( element.getAttribute( "y" ), zee.toString() );
+    }
+
+    @Test
+    public void domSectionNoProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.SECTION );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        Integer wye = y - 1;
+        Integer zee = Venue.Height() - (z - 1);
+        assertEquals( element.getAttribute( "x" ), wye.toString() );
+        assertEquals( element.getAttribute( "y" ), zee.toString() );
+    }
+
+    @Test
+    public void domFront() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.FRONT );
+
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Pipe.LAYERTAG );
+
+        NodeList list = groupElement.getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "width" ), length );
+        assertEquals( element.getAttribute( "height" ), Pipe.DIAMETER.toString() );
+        assertEquals( element.getAttribute( "fill" ), "none" );
+    }
+
+    @Test
+    public void domFrontProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.FRONT );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        Integer exe = prosceniumX + x;
+        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        assertEquals( element.getAttribute( "x" ), exe.toString() );
+        assertEquals( element.getAttribute( "y" ), zee.toString() );
+    }
+
+    @Test
+    public void domFrontNoProscenium() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
+        Pipe pipe = new Pipe( element );
+        pipe.verify();
+
+        pipe.dom( draw, View.FRONT );
+
+        NodeList list = draw.root().getElementsByTagName( "rect" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        Integer zee = Venue.Height() - (z - 1);
+        assertEquals( element.getAttribute( "x" ), x.toString() );
+        assertEquals( element.getAttribute( "y" ), zee.toString() );
+    }
+
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -489,15 +721,15 @@ public class PipeTest {
         prosceniumElement.setAttribute( "width", "260" );
         prosceniumElement.setAttribute( "height", "200" );
         prosceniumElement.setAttribute( "depth", "22" );
-        prosceniumElement.setAttribute( "x", "200" );
-        prosceniumElement.setAttribute( "y", "144" );
-        prosceniumElement.setAttribute( "z", "12" );
+        prosceniumElement.setAttribute( "x", prosceniumX.toString() );
+        prosceniumElement.setAttribute( "y", prosceniumY.toString() );
+        prosceniumElement.setAttribute( "z", prosceniumZ.toString() );
 
         element = new IIOMetadataNode( "pipe" );
-        element.setAttribute( "length", "120" );  // 10' pipe.
-        element.setAttribute( "x", "12" );
-        element.setAttribute( "y", "23" );
-        element.setAttribute( "z", "34" );
+        element.setAttribute( "length", length );
+        element.setAttribute( "x", x.toString() );
+        element.setAttribute( "y", y.toString() );
+        element.setAttribute( "z", z.toString() );
     }
 
     @AfterMethod

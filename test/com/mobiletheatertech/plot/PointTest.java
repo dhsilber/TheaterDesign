@@ -22,7 +22,7 @@ public class PointTest {
 
         assertEquals( point.x(), (Integer) 1 );
         assertEquals( point.y(), (Integer) 2 );
-        assertEquals( point.z(), 3 );
+        assertEquals( point.z(), (Integer) 3 );
     }
 
     @Test
@@ -32,11 +32,11 @@ public class PointTest {
 
         assertEquals( point1.x(), (Integer) 1 );
         assertEquals( point1.y(), (Integer) 2 );
-        assertEquals( point1.z(), 3 );
+        assertEquals( point1.z(), (Integer) 3 );
 
         assertEquals( point2.x(), (Integer) 4 );
         assertEquals( point2.y(), (Integer) 5 );
-        assertEquals( point2.z(), 6 );
+        assertEquals( point2.z(), (Integer) 6 );
     }
 
     @Test

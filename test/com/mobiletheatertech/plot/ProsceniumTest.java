@@ -237,7 +237,7 @@ public class ProsceniumTest {
 //        assert new Point( 150, 24, 72 ).equals( fixed );
         assertEquals( fixed.x(), (Integer) 350, "X" );
         assertEquals( fixed.y(), (Integer) 24, "Y" );
-        assertEquals( fixed.z(), 72, "Z" );
+        assertEquals( fixed.z(), (Integer) 72, "Z" );
     }
 
     @Test

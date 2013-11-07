@@ -59,27 +59,47 @@ public class Write {
                 "<head>\n" +
                 "<title>" + Venue.Name() + "</title>\n" +
                 "<script>\n" +
-                "function show()\n" +
+                "function show( victim )\n" +
                 "{\n" +
-                "  var links = plan.document.getElementsByClassName(\"chairblock\");\n" +
+                "  var links = plan.document.getElementsByClassName( victim );\n" +
                 "  for (var i=0; i < links.length; i++) {\n" +
                 "      links[i].setAttribute(\"visibility\", \"visible\");\n" +
                 "  } \n" +
                 "}\n" +
-                "function hide()\n" +
+                "function hide( victim )\n" +
                 "{\n" +
-                "  var links = plan.document.getElementsByClassName(\"chairblock\");\n" +
+                "  var links = plan.document.getElementsByClassName( victim );\n" +
                 "  for (var i=0; i < links.length; i++) {\n" +
                 "      links[i].setAttribute(\"visibility\", \"hidden\");\n" +
                 "  } \n" +
                 "}\n" +
-                "function process()\n" +
-                "{\n" +
-                "  if( document.getElementById('process').checked)\n" +
-                "    show();\n" +
-                "  else\n" +
-                "    hide();\n" +
-                "}\n" +
+//                "function process()\n" +
+//                "{\n" +
+//                "  if( document.getElementById('process').checked)\n" +
+//                "    show( \"chairblock\" );\n" +
+//                "  else\n" +
+//                "    hide( \"chairblock\" );\n" +
+//                "}\n" +
+                HTML.SelectFunction( ChairBlock.LAYERTAG ) +
+                HTML.SelectFunction( HangPoint.LAYERTAG ) +
+                HTML.SelectFunction( Luminaire.LAYERTAG ) +
+                HTML.SelectFunction( Pipe.LAYERTAG ) +
+                HTML.SelectFunction( Zone.LAYERTAG ) +
+
+//                "function selectLayer()\n" +
+//                "{\n" +
+//                "  if( document.getElementById('" + HangPoint.LAYERTAG + "layer').checked)\n" +
+//                "    show( \"" + HangPoint.LAYERTAG + "\" );\n" +
+//                "  else\n" +
+//                "    hide( \"" + HangPoint.LAYERTAG + "\" );\n" +
+//                "}\n" +
+//                "function selectLayer()\n" +
+//                "{\n" +
+//                "  if( document.getElementById('" + Luminaire.LAYERTAG + "layer').checked)\n" +
+//                "    show( \"" + Luminaire.LAYERTAG + "\" );\n" +
+//                "  else\n" +
+//                "    hide( \"" + Luminaire.LAYERTAG + "\" );\n" +
+//                "}\n" +
                 "function selectsetup()\n" +
                 "{\n" +
                 "  for(i=0;i<document.configure.setup.length; i++) {\n" +
@@ -98,11 +118,13 @@ public class Write {
                 "<div>\n" +
                 "<form name=\"configure\" >\n" +
                 Setup.List() +
-                "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
-                " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
+                HTML.Checkboxes( Layer.List() ) +
+//                "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
+//                " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
                 "</form>\n" +
                 "</div>\n" +
-                "<iframe id=\"plan\" src=\"plan.svg\"></iframe>\n" +
+                "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + Venue.Depth() + "\" width=\"" +
+                Venue.Width() + "\" ></iframe>\n" +
                 "</body>\n" +
                 "</html>\n";
 
@@ -191,5 +213,9 @@ public class Write {
 
         draw.create( pathname );
     }
+//
+//    private String checkboxes( HashMap<String,String> data){
+//        return "";
+//    }
 }
 

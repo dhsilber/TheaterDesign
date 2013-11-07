@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.testng.Assert.*;
 
@@ -71,24 +72,34 @@ public class ZoneTest {
         assertEquals( TestHelpers.accessString( zone, "color" ), color );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Zone instance is missing required 'id' attribute.")
+    @Test
+    public void registersLayer() throws Exception {
+        Zone zone = new Zone( element );
+
+        HashMap<String, String> layers = Layer.List();
+
+        assertTrue( layers.containsKey( Zone.LAYERNAME ) );
+        assertEquals( layers.get( Zone.LAYERNAME ), Zone.LAYERTAG );
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Zone instance is missing required 'id' attribute." )
     public void noId() throws Exception {
         element.removeAttribute( "id" );
         new Zone( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                  "\\) is missing required 'x' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                   "\\) is missing required 'x' attribute." )
     public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Zone( element );
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                  "\\) is missing required 'y' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                   "\\) is missing required 'y' attribute." )
     public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Zone( element );
@@ -101,9 +112,9 @@ public class ZoneTest {
 //        new Zone( element );
 //    }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                  "\\) is missing required 'r' attribute.")
+    @Test( expectedExceptions = AttributeMissingException.class,
+           expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                   "\\) is missing required 'r' attribute." )
     public void noR() throws Exception {
         element.removeAttribute( "r" );
         new Zone( element );
@@ -284,7 +295,15 @@ public class ZoneTest {
 
         zone.dom( draw, View.PLAN );
 
-        NodeList circleList = draw.root().getElementsByTagName( "circle" );
+//        NodeList circleList = draw.root().getElementsByTagName( "circle" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Zone.LAYERTAG );
+
+        NodeList circleList = groupElement.getElementsByTagName( "circle" );
         assertEquals( circleList.getLength(), 1 );
         Node node = circleList.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
@@ -299,7 +318,7 @@ public class ZoneTest {
         assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
 
-        NodeList textList = draw.root().getElementsByTagName( "text" );
+        NodeList textList = groupElement.getElementsByTagName( "text" );
         assertEquals( textList.getLength(), 1 );
         Node textNode = textList.item( 0 );
         assertEquals( textNode.getNodeType(), Node.ELEMENT_NODE );

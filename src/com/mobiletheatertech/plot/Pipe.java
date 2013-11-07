@@ -5,26 +5,35 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 /**
  * Generic pipe.
  * <p/>
  * XML tag is 'pipe'. Required attributes are 'length', 'x', 'y', and 'z'. Coordinates are relative
- * to the page origin, which is suboptimal for lighting plots.
+ * to the {@code Proscenium} origin, if any, otherwise relative to the page origin.
  *
  * @author dhs
  * @since 0.0.6
  */
 public class Pipe extends Minder {
 
-    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
+    /**
+     * Name of {@code Layer} of {@code Pipe}s.
+     */
+    public static final String LAYERNAME = "Pipes";
 
     /**
-     * Identifier of pipe. (optional)
+     * Tag for {@code Layer} of {@code Pipe}s.
      */
-//    private String id = null;
+    public static final String LAYERTAG = "pipe";
+
+    /**
+     * Diameter of a generic pipe.
+     */
+    public static final Integer DIAMETER = 2;
+
+    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
 
     /**
      * Length of pipe. I'm using inches so that the line thickness isn't ridiculous, but that isn't
@@ -41,11 +50,6 @@ public class Pipe extends Minder {
      * Origin of {@code Box} which defines area used by this pipe.
      */
     private Point boxOrigin = null;
-
-    /**
-     * Diameter of a generic pipe.
-     */
-    private static int Diameter = 2;
 
     /**
      * Construct a {@code Pipe} for each element in a list of XML nodes.
@@ -121,6 +125,8 @@ public class Pipe extends Minder {
         if (0 >= length) throw new SizeException( this.toString(), "length" );
 
         PIPELIST.add( this );
+
+        new Layer( LAYERNAME, LAYERTAG );
     }
 
     /**
@@ -189,7 +195,7 @@ public class Pipe extends Minder {
                                                       start.y() - 1,
                                                       start.z() - 1 ) );
 
-            Box box = new Box( boxOrigin, length, Diameter, Diameter );
+            Box box = new Box( boxOrigin, length, DIAMETER, DIAMETER );
 
             if (!Venue.Contains( box )) {
                 PIPELIST.remove( this );
@@ -201,7 +207,7 @@ public class Pipe extends Minder {
         else {
             boxOrigin = new Point( start.x(), start.y() - 1, start.z() - 1 );
 
-            Box box = new Box( boxOrigin, length, Diameter, Diameter );
+            Box box = new Box( boxOrigin, length, DIAMETER, DIAMETER );
 
             if (!Venue.Contains( box )) {
                 PIPELIST.remove( this );
@@ -212,49 +218,58 @@ public class Pipe extends Minder {
         }
     }
 
-    /**
-     * Draw this {@code pipe} onto the plan view.
-     *
-     * @param canvas medium on which to draw
-     */
     @Override
     public void drawPlan( Graphics2D canvas ) {
-        canvas.setPaint( Color.BLACK );
-
-        canvas.draw( new Rectangle( boxOrigin.x(), boxOrigin.y(), length, Diameter ) );
     }
 
-    /**
-     * Draw this {@code pipe} onto the section view.
-     *
-     * @param canvas medium on which to draw
-     */
     @Override
     public void drawSection( Graphics2D canvas ) throws ReferenceException {
-        int bottom = Venue.Height();
+    }
 
-        canvas.setPaint( Color.BLACK );
-
-        canvas.draw( new Ellipse2D.Float( boxOrigin.y(), bottom - boxOrigin.z(), Diameter,
-                                          Diameter ) );
+    @Override
+    public void drawFront( Graphics2D canvas ) throws ReferenceException {
     }
 
     /**
-     * Draw this {@code pipe} onto the front view.
+     * Generate SVG DOM for a {@code Pipe}
      *
-     * @param canvas medium on which to draw
+     * @param draw Canvas/DOM manager
+     * @param mode drawing mode
+     * @throws ReferenceException
      */
     @Override
-    public void drawFront( Graphics2D canvas ) throws ReferenceException {
-        int bottom = Venue.Height();
+    public void dom( Draw draw, View mode ) throws ReferenceException {
+        Integer height = Venue.Height() - boxOrigin.z();
 
-        canvas.setPaint( Color.BLACK );
 
-        canvas.draw( new Rectangle( boxOrigin.x(), bottom - boxOrigin.z(), length, Diameter ) );
-    }
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
 
-    @Override
-    public void dom( Draw draw, View mode ) {
+        Element dimmerRectangle = draw.element( "rect" );
+        dimmerRectangle.setAttribute( "height", DIAMETER.toString() );
+        dimmerRectangle.setAttribute( "fill", "none" );
+        group.appendChild( dimmerRectangle );
+
+        switch (mode) {
+            case PLAN:
+                dimmerRectangle.setAttribute( "x", boxOrigin.x().toString() );
+                dimmerRectangle.setAttribute( "y", boxOrigin.y().toString() );
+                dimmerRectangle.setAttribute( "width", length.toString() );
+                break;
+            case SECTION:
+                dimmerRectangle.setAttribute( "x", boxOrigin.y().toString() );
+                dimmerRectangle.setAttribute( "y", height.toString() );
+                dimmerRectangle.setAttribute( "width", DIAMETER.toString() );
+                break;
+            case FRONT:
+                dimmerRectangle.setAttribute( "x", boxOrigin.x().toString() );
+                dimmerRectangle.setAttribute( "y", height.toString() );
+                dimmerRectangle.setAttribute( "width", length.toString() );
+                break;
+            default:
+
+        }
     }
 
     /**

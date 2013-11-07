@@ -78,7 +78,7 @@ public class Point {
      *
      * @return Z-coordinate
      */
-    public int z() {
+    public Integer z() {
         return z;
     }
 

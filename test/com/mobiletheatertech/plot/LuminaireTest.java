@@ -7,9 +7,9 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 /**
  * Test {@code Luminaire}.
@@ -101,6 +101,16 @@ public class LuminaireTest {
         assert thing.contains( luminaire );
     }
 
+    @Test
+    public void registersLayer() throws Exception {
+        Luminaire luminaire = new Luminaire( element );
+
+        HashMap<String, String> layers = Layer.List();
+
+        assertTrue( layers.containsKey( Luminaire.LAYERNAME ) );
+        assertEquals( layers.get( Luminaire.LAYERNAME ), Luminaire.LAYERTAG );
+    }
+
     /*
      * This is to ensure that no exception is thrown if data is OK.
      */
@@ -109,38 +119,38 @@ public class LuminaireTest {
         new Luminaire( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute.")
     public void noType() throws Exception {
         element.removeAttribute( "type" );
         new Luminaire( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'on' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'on' attribute.")
     public void noOn() throws Exception {
         element.removeAttribute( "on" );
         new Luminaire( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'location' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'location' attribute.")
     public void noLocation() throws Exception {
         element.removeAttribute( "location" );
         new Luminaire( element );
     }
 
-    @Test( expectedExceptions = MountingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
-                   "' has unknown mounting: 'bloorglew'." )
+    @Test(expectedExceptions = MountingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
+                  "' has unknown mounting: 'bloorglew'.")
     public void badLocation() throws Exception {
         element.setAttribute( "on", "bloorglew" );
         Luminaire luminaire = new Luminaire( element );
         luminaire.location();
     }
 
-    @Test( expectedExceptions = MountingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting: 'bloorglew'." )
+    @Test(expectedExceptions = MountingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire of type 'floob' has unknown mounting: 'bloorglew'.")
     public void badLocationOtherType() throws Exception {
         element.setAttribute( "type", "floob" );
         element.setAttribute( "on", "bloorglew" );
@@ -157,9 +167,9 @@ public class LuminaireTest {
         assertEquals( actual, expected );
     }
 
-    @Test( expectedExceptions = MountingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
-                   "' has location -1 which is beyond the end of Pipe '" + pipeName + "'." )
+    @Test(expectedExceptions = MountingException.class,
+          expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
+                  "' has location -1 which is beyond the end of Pipe '" + pipeName + "'.")
     public void locateOffPipe() throws Exception {
         element.setAttribute( "location", "-1" );
         Luminaire luminaire = new Luminaire( element );
@@ -174,7 +184,15 @@ public class LuminaireTest {
 
         luminaire.dom( draw, View.PLAN );
 
-        NodeList list = draw.root().getElementsByTagName( "use" );
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
+
+        NodeList list = groupElement.getElementsByTagName( "use" );
         assertEquals( list.getLength(), 1 );
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
@@ -183,7 +201,7 @@ public class LuminaireTest {
         assertEquals( element.getAttribute( "x" ), "24" );
         assertEquals( element.getAttribute( "y" ), "34" );
 
-        list = draw.root().getElementsByTagName( "path" );
+        list = groupElement.getElementsByTagName( "path" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
@@ -198,19 +216,19 @@ public class LuminaireTest {
         assertEquals( element.getAttribute( "d" ),
                       "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
 
-        list = draw.root().getElementsByTagName( "rect" );
+        list = groupElement.getElementsByTagName( "rect" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
 //        element = (Element) node;
 
-        list = draw.root().getElementsByTagName( "circle" );
+        list = groupElement.getElementsByTagName( "circle" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
 //        element = (Element) node;
 
-        list = draw.root().getElementsByTagName( "text" );
+        list = groupElement.getElementsByTagName( "text" );
         assertEquals( list.getLength(), 5 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );

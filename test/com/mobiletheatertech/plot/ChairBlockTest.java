@@ -6,9 +6,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
+import java.util.HashMap;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.*;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 9/17/13 Time: 11:43 PM To change this template use
@@ -41,6 +41,16 @@ public class ChairBlockTest {
         assertEquals( TestHelpers.accessInteger( chairBlock, "y" ), Y );
         assertEquals( TestHelpers.accessInteger( chairBlock, "width" ), WIDTH );
         assertEquals( TestHelpers.accessInteger( chairBlock, "depth" ), DEPTH );
+    }
+
+    @Test
+    public void registersLayer() throws Exception {
+        ChairBlock chairBlock = new ChairBlock( element );
+
+        HashMap<String, String> layers = Layer.List();
+
+        assertTrue( layers.containsKey( ChairBlock.LAYERNAME ) );
+        assertEquals( layers.get( ChairBlock.LAYERNAME ), ChairBlock.LAYERTAG );
     }
 
     @Test
@@ -123,15 +133,22 @@ public class ChairBlockTest {
         chairBlock.dom( draw, View.PLAN );
 
 
-        NodeList createdGroups = draw.root().getElementsByTagName( "g" );
-        assertEquals( createdGroups.getLength(), 2 );
+//        NodeList createdGroups = draw.root().getElementsByTagName( "g" );
+//        assertEquals( createdGroups.getLength(), 2 );
+
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), ChairBlock.LAYERTAG );
 
         int count = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
         String expectedX = Integer.toString( X + CHAIRWIDTH / 2 + 2 );
         String expectedY = Integer.toString( Y + CHAIRDEPTH / 2 + FOOTSPACE );
         assert (count > 0);
 
-        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList list = groupElement.getElementsByTagName( "use" );
         assertEquals( list.getLength(), count );
 
         Node node = list.item( 0 );

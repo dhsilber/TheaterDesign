@@ -127,8 +127,14 @@ public class Wall extends Minder {
      */
     @Override
     public void dom( Draw draw, View mode ) {
+        if (mode != View.PLAN) {
+            return;
+        }
+
         Iterator<Opening> iterator = openingList.iterator();
-        if (openingList.size() > 0) {
+        if (openingList.size() > 0)
+
+        {
             if (x1.equals( x2 )) {
                 Integer yOne = y1;
                 Integer yTwo;
@@ -188,7 +194,10 @@ public class Wall extends Minder {
                 draw.appendRootChild( line );
             }
         }
-        else {
+
+        else
+
+        {
             Element line = draw.element( "line" );
 
             line.setAttribute( "x1", x1.toString() );

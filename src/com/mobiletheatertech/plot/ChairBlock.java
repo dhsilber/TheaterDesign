@@ -17,6 +17,17 @@ import java.awt.*;
  * @since 0.0.9
  */
 public class ChairBlock extends Minder {
+
+    /**
+     * Name of {@code Layer} of {@code ChairBlock}s.
+     */
+    public static final String LAYERNAME = "Chair Blocks";
+
+    /**
+     * Tag for {@code Layer} of {@code ChairBlock}s.
+     */
+    public static final String LAYERTAG = "chairblock";
+
     private static boolean SYMBOLGENERATED = false;
 
     private static final Integer CHAIRWIDTH = 18;
@@ -65,6 +76,8 @@ public class ChairBlock extends Minder {
         y = getIntegerAttribute( element, "y" );
         width = getIntegerAttribute( element, "width" );
         depth = getIntegerAttribute( element, "depth" );
+
+        new Layer( LAYERNAME, LAYERTAG );
     }
 
     @Override
@@ -126,7 +139,7 @@ public class ChairBlock extends Minder {
         }
 
         Element group = draw.element( "g" );
-        group.setAttribute( "class", "chairblock" );
+        group.setAttribute( "class", LAYERTAG );
         draw.appendRootChild( group );
         int rowCount = depth / (CHAIRDEPTH + FOOTSPACE);
         int rowOffset = FOOTSPACE + CHAIRDEPTH / 2;

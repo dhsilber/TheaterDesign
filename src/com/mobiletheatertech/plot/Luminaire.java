@@ -28,6 +28,17 @@ import java.awt.*;
  * @since 0.0.7
  */
 public class Luminaire extends Minder {
+
+    /**
+     * Name of {@code Layer} of {@code Luminaoire}s.
+     */
+    public static final String LAYERNAME = "Luminaires";
+
+    /**
+     * Name of {@code Layer} of {@code Luminare}s.
+     */
+    public static final String LAYERTAG = "luminaire";
+
     private String type;
     private String on;
     private Integer location;
@@ -82,6 +93,8 @@ public class Luminaire extends Minder {
         color = getOptionalStringAttribute( element, "color" );
         unit = getOptionalStringAttribute( element, "unit" );
         target = getOptionalStringAttribute( element, "target" );
+
+        new Layer( LAYERNAME, LAYERTAG );
     }
 
     /**
@@ -112,67 +125,16 @@ public class Luminaire extends Minder {
     public void verify() {
     }
 
-    /**
-     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
-     * the luminaire should be in the plan view.
-     *
-     * @param canvas drawing media
-     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
-     */
     @Override
     public void drawPlan( Graphics2D canvas ) throws MountingException {
-//        if (null == LuminaireDefinition.Select( type )) {
-//            Point point = location();
-//            canvas.setPaint( Color.RED );
-//            canvas.draw(
-//                    new Line2D.Float( point.x() - 2, point.y() - 2, point.x() + 2,
-//                                      point.y() + 2 ) );
-//            canvas.draw(
-//                    new Line2D.Float( point.x() + 2, point.y() - 2, point.x() - 2,
-//                                      point.y() + 2 ) );
-//        }
     }
 
-    /**
-     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
-     * the luminaire should be in the section view.
-     *
-     * @param canvas drawing media
-     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
-     */
     @Override
     public void drawSection( Graphics2D canvas ) throws MountingException {
-//        if (null == LuminaireDefinition.Select( type )) {
-//            int bottom = Venue.Height();
-//
-//            Point point = location();
-//            canvas.setPaint( Color.RED );
-//            canvas.draw( new Line2D.Float( point.y() - 2, bottom - point.z() - 2,
-//                                           point.y() + 2, bottom - point.z() + 2 ) );
-//            canvas.draw( new Line2D.Float( point.y() + 2, bottom - point.z() - 2,
-//                                           point.y() - 2, bottom - point.z() + 2 ) );
-//        }
     }
 
-    /**
-     * If the specified type is not defined by a {@code LuminaireDefinition}, draw a big red X where
-     * the luminaire should be in the front view.
-     *
-     * @param canvas drawing media
-     * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
-     */
     @Override
     public void drawFront( Graphics2D canvas ) throws MountingException {
-//        if (null == LuminaireDefinition.Select( type )) {
-//            int bottom = Venue.Height();
-//
-//            Point point = location();
-//            canvas.setPaint( Color.RED );
-//            canvas.draw( new Line2D.Float( point.x() - 2, bottom - point.z() - 2,
-//                                           point.x() + 2, bottom - point.z() + 2 ) );
-//            canvas.draw( new Line2D.Float( point.x() + 2, bottom - point.z() - 2,
-//                                           point.x() - 2, bottom - point.z() + 2 ) );
-//        }
     }
 
     /**
@@ -213,6 +175,10 @@ public class Luminaire extends Minder {
         Integer y;
         Integer z = Venue.Height() - point.z();
 
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
+
         // use element for luminaire icon
         Element use = draw.element( "use" );
         use.setAttribute( "xlink:href", "#" + type );
@@ -237,7 +203,7 @@ public class Luminaire extends Minder {
                 use.setAttribute( "y", z.toString() );
                 break;
         }
-        draw.appendRootChild( use );
+        group.appendChild( use );
 
         // There is no good place to display extra information in section and front views.
         switch (mode) {
@@ -314,7 +280,7 @@ public class Luminaire extends Minder {
                                                      " Z" );
                 circuitHexagon.setAttribute( "x", x.toString() );
                 circuitHexagon.setAttribute( "y", y.toString() );
-                draw.appendRootChild( circuitHexagon );
+                group.appendChild( circuitHexagon );
 
                 Integer circuitTextX = point.x();
                 Integer circuitTextY = point.y() - 17;
@@ -349,9 +315,9 @@ public class Luminaire extends Minder {
         dimmerRectangle.setAttribute( "x", x.toString() );
         dimmerRectangle.setAttribute( "y", dimmerRectangleY.toString() );
         dimmerRectangle.setAttribute( "width", width.toString() );
-        draw.appendRootChild( dimmerRectangle );
+        group.appendChild( dimmerRectangle );
 
-        draw.appendRootChild( dimmerText );
+        group.appendChild( dimmerText );
         switch (Venue.Circuiting()) {
             case Venue.ONETOMANY:
                 dimmerText.appendChild( textCircuit );
@@ -366,12 +332,12 @@ public class Luminaire extends Minder {
         x = point.x();
         channelCircle.setAttribute( "cx", x.toString() );
         channelCircle.setAttribute( "cy", channelCircleY.toString() );
-        draw.appendRootChild( channelCircle );
+        group.appendChild( channelCircle );
 
         Integer channelTextX = point.x();
         channelText.setAttribute( "x", channelTextX.toString() );
         channelText.setAttribute( "y", channelTextY.toString() );
-        draw.appendRootChild( channelText );
+        group.appendChild( channelText );
 
         channelText.appendChild( textChannel );
 
@@ -387,9 +353,8 @@ public class Luminaire extends Minder {
         unitText.setAttribute( "font-family", "sans-serif" );
         unitText.setAttribute( "font-weight", "100" );
         unitText.setAttribute( "font-size", "6" );
-        unitText.setAttribute( "stroke", "none" );
         unitText.setAttribute( "text-anchor", "middle" );
-        draw.appendRootChild( unitText );
+        group.appendChild( unitText );
 
         Text textUnit = draw.document().createTextNode( unit );
         unitText.appendChild( textUnit );
@@ -408,7 +373,7 @@ public class Luminaire extends Minder {
         colorText.setAttribute( "font-size", "5" );
         colorText.setAttribute( "stroke-width", "1px" );
         colorText.setAttribute( "text-anchor", "middle" );
-        draw.appendRootChild( colorText );
+        group.appendChild( colorText );
 
         Text textColor = draw.document().createTextNode( color );
         colorText.appendChild( textColor );

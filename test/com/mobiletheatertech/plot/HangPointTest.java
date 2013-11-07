@@ -1,16 +1,15 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Expectations;
-import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.awt.*;
-import java.awt.geom.Line2D;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.testng.Assert.*;
 
@@ -50,6 +49,16 @@ public class HangPointTest {
         ArrayList<Minder> thing = Drawable.List();
 
         assert thing.contains( hangPoint );
+    }
+
+    @Test
+    public void registersLayer() throws Exception {
+        HangPoint hangPoint = new HangPoint( element );
+
+        HashMap<String, String> layers = Layer.List();
+
+        assertTrue( layers.containsKey( HangPoint.LAYERNAME ) );
+        assertEquals( layers.get( HangPoint.LAYERNAME ), HangPoint.LAYERTAG );
     }
 
     @Test
@@ -213,54 +222,56 @@ public class HangPointTest {
         Point location = hangPoint.locate();
         assertEquals( location.x(), (Integer) 296 );
         assertEquals( location.y(), (Integer) 320 );
-        assertEquals( location.z(), 240 );
+        assertEquals( location.z(), (Integer) 240 );
     }
 
-    @Mocked
-    Graphics2D mockCanvas;
+//    @Mocked
+//    Graphics2D mockCanvas;
+//
+//    @Test
+//    public void drawPlan() throws Exception {
+//        HangPoint hangPoint = new HangPoint( element );
+//
+//        new Expectations() {
+//            {
+//                mockCanvas.setPaint( Color.BLUE );
+//                mockCanvas.draw( new Line2D.Float( 294, 318, 298, 322 ) );
+//                mockCanvas.draw( new Line2D.Float( 298, 318, 294, 322 ) );
+//            }
+//        };
+//        hangPoint.drawPlan( mockCanvas );
+//    }
 
     @Test
-    public void drawPlan() throws Exception {
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
         HangPoint hangPoint = new HangPoint( element );
 
-        new Expectations() {
-            {
-                mockCanvas.setPaint( Color.BLUE );
-                mockCanvas.draw( new Line2D.Float( 294, 318, 298, 322 ) );
-                mockCanvas.draw( new Line2D.Float( 298, 318, 294, 322 ) );
-            }
-        };
-        hangPoint.drawPlan( mockCanvas );
+        hangPoint.dom( draw, View.PLAN );
+
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), HangPoint.LAYERTAG );
+
+        NodeList list = groupElement.getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "xlink:href" ), "#hangpoint" );
     }
 
-    @Test
-    public void drawSection() throws Exception {
-        HangPoint hangPoint = new HangPoint( element );
-
-        new Expectations() {
-            {
-            }
-        };
-        hangPoint.drawSection( mockCanvas );
-    }
-
-    @Test
-    public void drawFront() throws Exception {
-        HangPoint hangPoint = new HangPoint( element );
-
-        new Expectations() {
-            {
-            }
-        };
-        hangPoint.drawFront( mockCanvas );
-    }
-
-    @Test
-    public void domUnused() throws Exception {
-        HangPoint hangPoint = new HangPoint( element );
-
-        hangPoint.dom( null, View.PLAN );
-    }
+//    @Test
+//    public void domUnused() throws Exception {
+//        HangPoint hangPoint = new HangPoint( element );
+//
+//        hangPoint.dom( null, View.PLAN );
+//    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

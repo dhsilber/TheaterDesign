@@ -209,7 +209,7 @@ public class SuspendTest {
 
         assertEquals( location.x(), (Integer) 100 );
         assertEquals( location.y(), (Integer) 200 );
-        assertEquals( location.z(), 208 );
+        assertEquals( location.z(), (Integer) 208 );
     }
 
     @Test
