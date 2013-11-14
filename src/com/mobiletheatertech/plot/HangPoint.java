@@ -16,7 +16,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.4
  */
-public class HangPoint extends Minder {
+public class HangPoint extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code HangPoint}s.
@@ -102,7 +102,7 @@ public class HangPoint extends Minder {
      */
     public static HangPoint Find( String id ) {
 
-        for (Minder thingy : Drawable.List()) {
+        for (MinderDom thingy : Drawable.List()) {
             if (HangPoint.class.isInstance( thingy )) {
                 if (((HangPoint) thingy).id.equals( id )) {
                     return (HangPoint) thingy;
@@ -127,17 +127,17 @@ public class HangPoint extends Minder {
     public void verify() throws InvalidXMLException {
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
 
     /**
      * Draw a {@code HangPoint} onto the provided plan canvas.
@@ -167,7 +167,7 @@ public class HangPoint extends Minder {
             circle.setAttribute( "stroke-width", "1" );
             circle.setAttribute( "cx", "0" );
             circle.setAttribute( "cy", "0" );
-            circle.setAttribute( "r", "3" );
+            circle.setAttribute( "r", "4" );
             symbol.appendChild( circle );
 
             Element line = draw.element( "line" );
@@ -211,7 +211,7 @@ public class HangPoint extends Minder {
         idText.setAttribute( "stroke", "none" );
         idText.setAttribute( "font-family", "sans-serif" );
         idText.setAttribute( "font-weight", "100" );
-        idText.setAttribute( "font-size", "8" );
+        idText.setAttribute( "font-size", "12pt" );
         idText.setAttribute( "text-anchor", "left" );
         group.appendChild( idText );
 

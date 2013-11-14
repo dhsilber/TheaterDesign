@@ -13,8 +13,8 @@ import java.awt.*;
  * All aspects of the lighting plot which are descriptions of the venue are encapsulated here.
  * <p/>
  * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'wall',
- * 'hangpoint', and/or 'airwall' tags. Required attributes are 'name', 'width', 'depth', and
- * 'height'. (I expect to move the 'name' attribute into its own tag at some point.)
+ * 'hangpoint', and/or 'airwall' tags. Required attributes are 'room', 'width', 'depth', and
+ * 'height'. (I expect to move the 'room' attribute into its own tag at some point.)
  *
  * @author dhs
  * @since 0.0.2
@@ -25,11 +25,12 @@ public class Venue extends Minder implements Legendable {
     public final static String ONETOONE = "one-to-one";
 
     private static Venue StaticVenue = null;
-    private String name = null;
+    private String room = null;
     private Integer width = null;
     private Integer depth = null;
     private Integer height = null;
     private String circuiting;
+    private String building;
 
     /**
      * Extract the venue description element from a list of XML nodes.
@@ -57,13 +58,15 @@ public class Venue extends Minder implements Legendable {
     public Venue( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        name = element.getAttribute( "name" );
-        if (name.isEmpty()) {
-            throw new AttributeMissingException( "Venue", null, "name" );
-        }
+//        room = element.getAttribute( "room" );
+//        if (room.isEmpty()) {
+//            throw new AttributeMissingException( "Venue", null, "room" );
+//        }
+        room = getStringAttribute( element, "room" );
         width = getIntegerAttribute( element, "width" );
         depth = getIntegerAttribute( element, "depth" );
         height = getIntegerAttribute( element, "height" );
+        building = getOptionalStringAttribute( element, "building" );
         circuiting = getOptionalStringAttribute( element, "circuiting" );
         switch (circuiting) {
             case "":
@@ -79,7 +82,7 @@ public class Venue extends Minder implements Legendable {
 
         StaticVenue = this;
 
-        Legend.Register( this, name.length() * 9, 12 );
+        Legend.Register( this, room.length() * 9, 12, LegendOrder.Room );
     }
 
     /**
@@ -134,16 +137,16 @@ public class Venue extends Minder implements Legendable {
     }
 
     /**
-     * Provides the name of the venue.
+     * Provides the room of the venue.
      *
-     * @return name of the venue
+     * @return room of the venue
      */
     public static String Name() throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
         }
 
-        return StaticVenue.name;
+        return StaticVenue.room;
     }
 
     /**
@@ -183,6 +186,19 @@ public class Venue extends Minder implements Legendable {
         }
 
         return StaticVenue.height;
+    }
+
+    /**
+     * Provides the building of the venue.
+     *
+     * @return building of the venue
+     */
+    public static String Building() throws ReferenceException {
+        if (null == StaticVenue) {
+            throw new ReferenceException( "Venue is not defined." );
+        }
+
+        return StaticVenue.building;
     }
 
     /**
@@ -236,35 +252,19 @@ public class Venue extends Minder implements Legendable {
     }
 
     /**
-     * Make the venue's name into the title of the drawing.
+     * Make the venue's room into the title of the drawing.
      *
      * @param draw Provide access to the generated DOM.
      */
     @Override
     public void dom( Draw draw, View mode ) {
-
-        StringBuilder title = new StringBuilder( name + " - " );
-
-        switch (mode) {
-            case PLAN:
-                title.append( "Plan view" );
-                break;
-            case SECTION:
-                title.append( "Section view" );
-                break;
-            case FRONT:
-                title.append( "Front view" );
-                break;
-
-        }
-        draw.setDocumentTitle( title.toString() );
     }
 
     /**
      * Callback used by {@code Legend} to allow this object to generate the information it needs to
      * put into the legend area.
      * <p/>
-     * {@code Venue} puts out a 'text' element containing the name of the venue.
+     * {@code Venue} puts out a 'text' element containing the room of the venue.
      *
      * @param draw  Canvas/DOM manager
      * @param start position on the canvas for this legend entry
@@ -283,7 +283,7 @@ public class Venue extends Minder implements Legendable {
 
         draw.appendRootChild( text );
 
-        Text foo = draw.document().createTextNode( name );
+        Text foo = draw.document().createTextNode( room );
         text.appendChild( foo );
 
         return new PagePoint( start.x(), start.y() + 12 );

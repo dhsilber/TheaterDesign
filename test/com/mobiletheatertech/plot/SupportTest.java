@@ -167,7 +167,7 @@
 //                "</plot>";
 //        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 //
-//        TestHelpers.MinderReset();
+//        TestHelpers.MinderDomReset();
 //
 //        new Parse( stream );
 //
@@ -240,7 +240,7 @@
 //    public void setUpMethod() throws Exception {
 //        System.err.println( "Starting SupportTest method." );
 //
-//        TestHelpers.MinderReset();
+//        TestHelpers.MinderDomReset();
 //
 //        Element venueElement = new IIOMetadataNode();
 //        venueElement.setAttribute( "name", "Support Venue Name" );

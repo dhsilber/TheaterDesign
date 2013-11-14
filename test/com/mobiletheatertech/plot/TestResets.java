@@ -9,6 +9,20 @@ import java.util.ArrayList;
  */
 public class TestResets {
 
+    public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
+        field.setAccessible( true );
+        boolean generated = field.getBoolean( ChairBlock.class );
+        field.set( generated, false );
+    }
+
+    public static void EventReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Event.class.getDeclaredField( "Only" );
+        field.setAccessible( true );
+        Event singleton = (Event) field.get( Event.class );
+        field.set( singleton, null );
+    }
+
     /**
      * Reset the LEGENDLIST maintained by {@link Legend} to its initial empty state.
      *
@@ -48,10 +62,10 @@ public class TestResets {
      * @throws NoSuchFieldException   if the {@code LIST} field isn't there.
      * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
      */
-    public static void MinderReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Minder.class.getDeclaredField( "LIST" );
+    public static void MinderDomReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = MinderDom.class.getDeclaredField( "LIST" );
         field.setAccessible( true );
-        ArrayList<Minder> list = (ArrayList<Minder>) field.get( Minder.class );
+        ArrayList<MinderDom> list = (ArrayList<MinderDom>) field.get( MinderDom.class );
         list.clear();
     }
 
@@ -105,13 +119,6 @@ public class TestResets {
         field.set( active, true );
     }
 */
-
-    public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
-        field.setAccessible( true );
-        boolean generated = field.getBoolean( ChairBlock.class );
-        field.set( generated, false );
-    }
 
 /*
     public static void ProsceniumDeactivate() throws NoSuchFieldException, IllegalAccessException {

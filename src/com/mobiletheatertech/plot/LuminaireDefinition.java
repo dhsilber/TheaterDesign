@@ -2,7 +2,6 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /*
@@ -28,7 +27,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.7
  */
-public class LuminaireDefinition extends Minder implements Legendable {
+public class LuminaireDefinition extends MinderDom implements Legendable {
 
     private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
 
@@ -111,7 +110,7 @@ public class LuminaireDefinition extends Minder implements Legendable {
                             ? length
                             : width);
         if (complete) {
-            Legend.Register( this, 130, legendHeight );
+            Legend.Register( this, 130, legendHeight, LegendOrder.Luminaire );
         }
     }
 
@@ -119,17 +118,17 @@ public class LuminaireDefinition extends Minder implements Legendable {
     public void verify() {
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
 
     /**
      * Generate SVG DOM for the symbol definition used for each individual luminaire.

@@ -240,11 +240,11 @@ public class TrussTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 5 );
     }
 
@@ -257,7 +257,7 @@ public class TrussTest {
 //                "</plot>";
 //        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 //
-//        TestHelpers.MinderReset();
+//        TestHelpers.MinderDomReset();
 //
 //        new Parse( stream );
 //
@@ -281,11 +281,11 @@ public class TrussTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 8 );
     }
 
@@ -307,7 +307,7 @@ public class TrussTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

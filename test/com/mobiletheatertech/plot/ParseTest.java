@@ -26,12 +26,12 @@ public class ParseTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 0 );
     }
 
@@ -49,35 +49,35 @@ public class ParseTest {
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
         // Initial size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         int size = list.size();
 
         new Parse( stream );
 
         // Final size of list
         assertEquals( list.size(), size + 1 );
-        Minder thing = list.get( list.size() - 1 );
+        MinderDom thing = list.get( list.size() - 1 );
 
-        assert Minder.class.isInstance( thing );
+        assert MinderDom.class.isInstance( thing );
         assert LuminaireDefinition.class.isInstance( thing );
     }
 
     @Test
     public void createsVenue() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" />" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" />" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
         // Initial size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         int size = list.size();
 
         new Parse( stream );
 
         // Final size of list
         assertEquals( list.size(), size + 1 );
-        Minder thing = list.get( list.size() - 1 );
+        MinderDom thing = list.get( list.size() - 1 );
 
         assert Minder.class.isInstance( thing );
         assert Venue.class.isInstance( thing );
@@ -86,24 +86,24 @@ public class ParseTest {
     @Test
     public void createsVenueAndStage() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" />" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" />" +
                 "<stage width=\"12\" depth=\"15\" x=\"20\" y=\"30\" z=\"11\" />" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder stage = list.get( 1 );
+        MinderDom stage = list.get( 1 );
         assert Minder.class.isInstance( stage );
         assert Stage.class.isInstance( stage );
     }
@@ -111,51 +111,51 @@ public class ParseTest {
     @Test
     public void createsVenueAndHangPoint() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
                 "<hangpoint x=\"20\" y=\"30\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder hangpoint = list.get( 1 );
-        assert Minder.class.isInstance( hangpoint );
+        MinderDom hangpoint = list.get( 1 );
+        assert MinderDom.class.isInstance( hangpoint );
         assert HangPoint.class.isInstance( hangpoint );
     }
 
     @Test
     public void createsVenueAndProscenium() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"480\" depth=\"720\" height=\"240\" >" +
+                "<venue room=\"Bogus name\" width=\"480\" depth=\"720\" height=\"240\" >" +
                 "<proscenium width=\"300\" depth=\"23\" height=\"180\" x=\"200\" y=\"30\" z=\"0\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder minderProscenium = list.get( 1 );
+        MinderDom minderProscenium = list.get( 1 );
         assert Minder.class.isInstance( minderProscenium );
         assert Proscenium.class.isInstance( minderProscenium );
 //        Proscenium proscenium = (Proscenium) minderProscenium;
@@ -166,31 +166,31 @@ public class ParseTest {
     @Test
     public void createsVenueAndTwoHangPoint() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
                 "<hangpoint x=\"20\" y=\"30\" />" +
                 "<hangpoint x=\"25\" y=\"35\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 3 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder hangpoint = list.get( 1 );
-        assert Minder.class.isInstance( hangpoint );
+        MinderDom hangpoint = list.get( 1 );
+        assert MinderDom.class.isInstance( hangpoint );
         assert HangPoint.class.isInstance( hangpoint );
 
-        Minder hangpoint2 = list.get( 2 );
-        assert Minder.class.isInstance( hangpoint2 );
+        MinderDom hangpoint2 = list.get( 2 );
+        assert MinderDom.class.isInstance( hangpoint2 );
         assert HangPoint.class.isInstance( hangpoint2 );
 
         assertNotSame( hangpoint, hangpoint2 );
@@ -199,57 +199,57 @@ public class ParseTest {
     @Test
     public void createsVenueAndPipe() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
                 "<pipe length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder pipe = list.get( 1 );
-        assert Minder.class.isInstance( pipe );
+        MinderDom pipe = list.get( 1 );
+        assert MinderDom.class.isInstance( pipe );
         assert Pipe.class.isInstance( pipe );
     }
 
     @Test
     public void createsVenueAndTwoPipe() throws Exception {
         String xml = "<plot>" +
-                "<venue name=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
                 "<pipe length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
                 "<pipe length=\"24\" x=\"25\" y=\"35\" z=\"34\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 3 );
 
-        Minder venue = list.get( 0 );
+        MinderDom venue = list.get( 0 );
         assert Minder.class.isInstance( venue );
         assert Venue.class.isInstance( venue );
 
-        Minder pipe = list.get( 1 );
-        assert Minder.class.isInstance( pipe );
+        MinderDom pipe = list.get( 1 );
+        assert MinderDom.class.isInstance( pipe );
         assert Pipe.class.isInstance( pipe );
 
-        Minder pipe2 = list.get( 2 );
-        assert Minder.class.isInstance( pipe2 );
+        MinderDom pipe2 = list.get( 2 );
+        assert MinderDom.class.isInstance( pipe2 );
         assert Pipe.class.isInstance( pipe2 );
 
         assertNotSame( pipe, pipe2 );
@@ -263,16 +263,16 @@ public class ParseTest {
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
         // Initial size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         int size = list.size();
 
         new Parse( stream );
 
         // Final size of list
         assertEquals( list.size(), size + 1 );
-        Minder thing = list.get( list.size() - 1 );
+        MinderDom thing = list.get( list.size() - 1 );
 
-        assert Minder.class.isInstance( thing );
+        assert MinderDom.class.isInstance( thing );
         assert Luminaire.class.isInstance( thing );
     }
 
@@ -322,7 +322,7 @@ public class ParseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
         TestResets.PipeReset();
         TestResets.ProsceniumReset();
     }

@@ -4,8 +4,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
-
-import java.awt.*;
 //import java.awt.geom.Line2D;
 
 /**
@@ -27,7 +25,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.7
  */
-public class Luminaire extends Minder {
+public class Luminaire extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code Luminaoire}s.
@@ -125,17 +123,17 @@ public class Luminaire extends Minder {
     public void verify() {
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) throws MountingException {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) throws MountingException {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) throws MountingException {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) throws MountingException {
+//    }
 
     /**
      * Provide the rotation required to orient this luminaire's icon to the specified point.

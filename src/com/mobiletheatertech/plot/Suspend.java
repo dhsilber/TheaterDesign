@@ -8,13 +8,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
-
 /**
  * @author dhs
  * @since 0.0.5
  */
-public class Suspend extends Minder {
+
+// Should extend Lister rather than MinderDom
+
+public class Suspend extends MinderDom {
 
     private String refId = null;
     private Integer distance = null;
@@ -22,7 +23,9 @@ public class Suspend extends Minder {
     //    private Truss truss = null;        // Should reference Truss which is suspended by this.
     private String processedMark = null;
 
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, ReferenceException {
+    public static void ParseXML( NodeList list )
+            throws AttributeMissingException, InvalidXMLException, ReferenceException
+    {
 
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
@@ -83,7 +86,7 @@ public class Suspend extends Minder {
      */
     // Copied from Truss - refactor to Minder?
     public static Suspend Find( String mark ) {
-        for (Minder thingy : Drawable.List()) {
+        for (MinderDom thingy : Drawable.List()) {
             if (Suspend.class.isInstance( thingy )) {
                 if (((Suspend) thingy).processedMark.equals( mark )) {
                     return (Suspend) thingy;
@@ -105,17 +108,17 @@ public class Suspend extends Minder {
     public void verify() {
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
 
     @Override
     public void dom( Draw draw, View mode ) {

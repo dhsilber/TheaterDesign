@@ -40,7 +40,7 @@ public class LegendTest {
     @Test
     public void registerCallback() throws Exception {
         testLegendable legendableObject = new testLegendable();
-        Legend.Register( legendableObject, 1, 2 );
+        Legend.Register( legendableObject, 1, 2, LegendOrder.Show );
 
         ArrayList<Legendable> thingy = (ArrayList<Legendable>) TestHelpers.accessStaticObject(
                 "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
@@ -53,7 +53,7 @@ public class LegendTest {
         new Venue( venueElement );
 
         testLegendable legendableObject = new testLegendable();
-        Legend.Register( legendableObject, 1, 2 );
+        Legend.Register( legendableObject, 1, 2, LegendOrder.Show );
         Draw draw = new Draw();
         draw.getRoot();
 
@@ -70,7 +70,7 @@ public class LegendTest {
     public void widest() {
         testLegendable legendableObject = new testLegendable();
         Integer wildlyLarge = 10240;
-        Legend.Register( legendableObject, wildlyLarge, 7 );
+        Legend.Register( legendableObject, wildlyLarge, 7, LegendOrder.Show );
 
         assertEquals( Legend.Widest(), wildlyLarge );
     }

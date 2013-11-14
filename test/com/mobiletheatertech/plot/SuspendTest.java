@@ -26,10 +26,10 @@ public class SuspendTest {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Suspend suspend = new Suspend( element );
 
-        assert Minder.class.isInstance( suspend );
+        assert MinderDom.class.isInstance( suspend );
     }
 
     @Test
@@ -135,7 +135,7 @@ public class SuspendTest {
     @Test
     public void referencesHangPoint() throws Exception {
         Suspend suspend = new Suspend( element );
-        Field hangPointField = TestHelpers.accessField( suspend, "ref" );
+        Field hangPointField = TestHelpers.accessField( suspend, "refId" );
         HangPoint hangPoint = (HangPoint) hangPointField.get( suspend );
 
         assertNotNull( hangPoint );
@@ -169,32 +169,32 @@ public class SuspendTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 5 );
 
-        Minder hangpoint = list.get( 0 );
-        assert Minder.class.isInstance( hangpoint );
+        MinderDom hangpoint = list.get( 0 );
+        assert MinderDom.class.isInstance( hangpoint );
         assert HangPoint.class.isInstance( hangpoint );
 
-        Minder hangpoint2 = list.get( 1 );
-        assert Minder.class.isInstance( hangpoint2 );
+        MinderDom hangpoint2 = list.get( 1 );
+        assert MinderDom.class.isInstance( hangpoint2 );
         assert HangPoint.class.isInstance( hangpoint2 );
 
-        Minder truss = list.get( 2 );
+        MinderDom truss = list.get( 2 );
         assert Minder.class.isInstance( truss );
         assert Truss.class.isInstance( truss );
 
-        Minder suspend1 = list.get( 3 );
-        assert Minder.class.isInstance( suspend1 );
+        MinderDom suspend1 = list.get( 3 );
+        assert MinderDom.class.isInstance( suspend1 );
         assert Suspend.class.isInstance( suspend1 );
 
-        Minder suspend2 = list.get( 4 );
-        assert Minder.class.isInstance( suspend2 );
+        MinderDom suspend2 = list.get( 4 );
+        assert MinderDom.class.isInstance( suspend2 );
         assert Suspend.class.isInstance( suspend2 );
 
         assertNotSame( suspend1, suspend2 );
@@ -212,12 +212,12 @@ public class SuspendTest {
         assertEquals( location.z(), (Integer) 208 );
     }
 
-    @Test
-    public void drawUnused() throws Exception {
-        Suspend suspend = new Suspend( element );
-
-        suspend.drawPlan( null );
-    }
+//    @Test
+//    public void drawUnused() throws Exception {
+//        Suspend suspend = new Suspend( element );
+//
+//        suspend.drawPlan( null );
+//    }
 
     @Test
     public void domUnused() throws Exception {
@@ -242,10 +242,10 @@ public class SuspendTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting SuspendTest method." );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "Suspend Venue Name" );
+        venueElement.setAttribute( "room", "Suspend Venue Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

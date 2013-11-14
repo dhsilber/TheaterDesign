@@ -1,11 +1,9 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Expectations;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.awt.*;
 import java.io.File;
 import java.util.Random;
 
@@ -24,24 +22,24 @@ public class WriteTest {
     public WriteTest() {
     }
 
-    @Test
-    public void drawAndCreate() throws Exception {
-
-        new Expectations() {
-            Draw draw;
-
-            {
-                draw = new Draw();
-                Graphics2D canvas = draw.canvas();
-                Minder.DrawAllPlan( canvas );
-                draw.getRoot();
-                Minder.DomAllPlan( draw );
-                draw.create( "/Users/dhs/Plot/out/Fiddle-Faddle.svg" );
-            }
-        };
-        String filename = "Fiddle-Faddle";
-        new Write( filename );
-    }
+//    @Test
+//    public void drawAndCreate() throws Exception {
+//
+//        new Expectations() {
+//            Draw draw;
+//
+//            {
+//                draw = new Draw();
+//                Graphics2D canvas = draw.canvas();
+//                Minder.DrawAllPlan( canvas );
+//                draw.getRoot();
+//                Minder.DomAllPlan( draw );
+//                draw.create( "/Users/dhs/Plot/out/Fiddle-Faddle.svg" );
+//            }
+//        };
+//        String filename = "Fiddle-Faddle";
+//        new Write( filename );
+//    }
 
     @Test
 //        ( expectedExceptions=SystemDataMissingException.class,
@@ -68,6 +66,9 @@ public class WriteTest {
         File index = new File( pathName + "/index.html" );
         assertTrue( index.exists() );
 
+        File css = new File( pathName + "/styles.css" );
+        assertTrue( css.exists() );
+
         File plan = new File( pathName + "/plan.svg" );
         assertTrue( plan.exists() );
 
@@ -78,7 +79,7 @@ public class WriteTest {
         assertTrue( front.exists() );
 
         File[] contents = tmp.listFiles();
-        assertEquals( contents.length, 4 );
+        assertEquals( contents.length, 5 );
     }
 
 //    @Test
@@ -111,10 +112,10 @@ public class WriteTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

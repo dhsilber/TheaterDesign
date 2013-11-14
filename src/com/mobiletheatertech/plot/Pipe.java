@@ -4,7 +4,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.6
  */
-public class Pipe extends Minder {
+public class Pipe extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -218,17 +217,17 @@ public class Pipe extends Minder {
         }
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) throws ReferenceException {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) throws ReferenceException {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) throws ReferenceException {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) throws ReferenceException {
+//    }
 
     /**
      * Generate SVG DOM for a {@code Pipe}

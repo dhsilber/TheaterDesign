@@ -56,7 +56,7 @@ public class ProsceniumTest {
     public void storesSelf() throws Exception {
         Proscenium proscenium = new Proscenium( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( proscenium );
     }
@@ -247,11 +247,11 @@ public class ProsceniumTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 1 );
     }
 
@@ -265,11 +265,11 @@ public class ProsceniumTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
     }
 
@@ -368,7 +368,7 @@ public class ProsceniumTest {
         TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "550" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "263" );

@@ -93,6 +93,9 @@ public class Parse {
         NodeList hangpoints = root.getElementsByTagName( "hangpoint" );
         HangPoint.ParseXML( hangpoints );
 
+        NodeList events = root.getElementsByTagName( "event" );
+        Event.ParseXML( events );
+
         NodeList truss = root.getElementsByTagName( "truss" );
         Truss.ParseXML( truss );
 

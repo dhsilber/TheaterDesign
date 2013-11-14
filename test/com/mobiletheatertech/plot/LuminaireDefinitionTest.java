@@ -17,30 +17,46 @@ import static org.testng.Assert.*;
 public class LuminaireDefinitionTest {
 
     Element element = null;
+    Integer width = 13;
+    Integer length = 27;
 
     public LuminaireDefinitionTest() {
 
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
-        assert Minder.class.isInstance( luminaireDefinition );
+        assert MinderDom.class.isInstance( luminaireDefinition );
     }
 
     @Test
     public void storesAttributes() throws Exception {
+        element.removeAttribute( "width" );
+        element.removeAttribute( "length" );
+
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), "6x9" );
+        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "width" ), (Integer) 0 );
+        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "length" ), (Integer) 0 );
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
+
+        assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), "6x9" );
+        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "width" ), width );
+        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "length" ), length );
     }
 
     @Test
     public void storesSelf() throws Exception {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( luminaireDefinition );
     }
@@ -92,7 +108,7 @@ public class LuminaireDefinitionTest {
         TestResets.LuminaireDefinitionReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
@@ -100,6 +116,8 @@ public class LuminaireDefinitionTest {
 
         element = new IIOMetadataNode( "luminaire-definition" );
         element.setAttribute( "name", "6x9" );
+        element.setAttribute( "width", width.toString() );
+        element.setAttribute( "length", length.toString() );
 
         Element svg = new IIOMetadataNode( "svg" );
         element.appendChild( svg );

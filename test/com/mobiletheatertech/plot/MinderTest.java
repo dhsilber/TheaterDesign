@@ -65,23 +65,23 @@ public class MinderTest {
     }
 
     @Test
-    public void isElemental() throws Exception {
+    public void isMinderDom() throws Exception {
         Minded foo = new Minded( element );
 
-        assert Elemental.class.isInstance( foo );
+        assert MinderDom.class.isInstance( foo );
     }
 
     @Test
     public void stores() throws Exception {
         Minded foo = new Minded( element );
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
         assertNotNull( thing, "List should exist" );
 
         assert thing.contains( foo );
     }
 
-    @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Element unexpectedly null!")
+    @Test( expectedExceptions = InvalidXMLException.class,
+           expectedExceptionsMessageRegExp = "Element unexpectedly null!" )
     public void NullElement() throws Exception {
         new Minded( null );
     }

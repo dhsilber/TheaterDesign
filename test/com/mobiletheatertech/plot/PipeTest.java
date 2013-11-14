@@ -32,10 +32,10 @@ public class PipeTest {
     Integer prosceniumZ = 12;
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Pipe pipe = new Pipe( element );
 
-        assert Minder.class.isInstance( pipe );
+        assert MinderDom.class.isInstance( pipe );
     }
 
     @Test
@@ -178,7 +178,7 @@ public class PipeTest {
     public void storesSelf() throws Exception {
         Pipe pipe = new Pipe( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( pipe );
     }
@@ -711,7 +711,7 @@ public class PipeTest {
         TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

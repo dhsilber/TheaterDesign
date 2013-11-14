@@ -27,10 +27,10 @@ public class HangPointTest {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
-        assert Minder.class.isInstance( hangPoint );
+        assert MinderDom.class.isInstance( hangPoint );
     }
 
     @Test
@@ -46,7 +46,7 @@ public class HangPointTest {
     public void storesSelf() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( hangPoint );
     }
@@ -196,20 +196,20 @@ public class HangPointTest {
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         new Parse( stream );
 
         // Final size of list
-        ArrayList<Minder> list = Drawable.List();
+        ArrayList<MinderDom> list = Drawable.List();
         assertEquals( list.size(), 2 );
 
-        Minder hangpoint = list.get( 0 );
-        assert Minder.class.isInstance( hangpoint );
+        MinderDom hangpoint = list.get( 0 );
+        assert MinderDom.class.isInstance( hangpoint );
         assert HangPoint.class.isInstance( hangpoint );
 
-        Minder hangpoint2 = list.get( 1 );
-        assert Minder.class.isInstance( hangpoint2 );
+        MinderDom hangpoint2 = list.get( 1 );
+        assert MinderDom.class.isInstance( hangpoint2 );
         assert HangPoint.class.isInstance( hangpoint2 );
 
         assertNotSame( hangpoint, hangpoint2 );
@@ -284,10 +284,10 @@ public class HangPointTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

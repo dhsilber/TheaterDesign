@@ -40,14 +40,15 @@ public class LuminaireTest {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Luminaire luminaire = new Luminaire( element );
 
-        assert Minder.class.isInstance( luminaire );
+        assert MinderDom.class.isInstance( luminaire );
     }
 
     @Test
     public void storesAttributes() throws Exception {
+        // These are optional, so their absence should not cause a problem:
         element.removeAttribute( "dimmer" );
         element.removeAttribute( "circuit" );
         element.removeAttribute( "channel" );
@@ -96,7 +97,7 @@ public class LuminaireTest {
     public void storesSelf() throws Exception {
         Luminaire luminaire = new Luminaire( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( luminaire );
     }
@@ -515,10 +516,10 @@ public class LuminaireTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
 
         venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

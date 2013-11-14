@@ -77,7 +77,7 @@ public class Truss extends Minder {
      */
     // Copied to Suspend - refactor to Minder?
     public static Truss Find( String mark ) {
-        for (Minder thingy : Drawable.List()) {
+        for (MinderDom thingy : Drawable.List()) {
             if (Truss.class.isInstance( thingy )) {
                 if (((Truss) thingy).processedMark.equals( mark )) {
                     return (Truss) thingy;

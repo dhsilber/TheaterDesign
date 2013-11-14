@@ -87,7 +87,7 @@ public class GridTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "351" );
         venueElement.setAttribute( "depth", "401" );
         venueElement.setAttribute( "height", "241" );

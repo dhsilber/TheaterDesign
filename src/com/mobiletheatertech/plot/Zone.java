@@ -10,8 +10,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import java.awt.*;
-
 /**
  * A lighting zone.
  * <p/>
@@ -24,7 +22,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.15
  */
-public class Zone extends Minder {
+public class Zone extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code Zone}s.
@@ -78,7 +76,7 @@ public class Zone extends Minder {
      */
     public static Zone Find( String id ) {
 
-        for (Minder thingy : Drawable.List()) {
+        for (MinderDom thingy : Drawable.List()) {
             if (Zone.class.isInstance( thingy )) {
                 if (((Zone) thingy).id.equals( id )) {
                     return (Zone) thingy;
@@ -146,17 +144,17 @@ public class Zone extends Minder {
         }
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) throws MountingException {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) throws MountingException {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) throws MountingException {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) throws MountingException {
+//    }
 
     /**
      * Draw a circle with a textual label to represent the zone.

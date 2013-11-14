@@ -40,10 +40,10 @@ public class ZoneTest {
     String defaultColor = "teal";
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Zone zone = new Zone( element );
 
-        assert Minder.class.isInstance( zone );
+        assert MinderDom.class.isInstance( zone );
     }
 
     @Test
@@ -82,24 +82,24 @@ public class ZoneTest {
         assertEquals( layers.get( Zone.LAYERNAME ), Zone.LAYERTAG );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Zone instance is missing required 'id' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Zone instance is missing required 'id' attribute.")
     public void noId() throws Exception {
         element.removeAttribute( "id" );
         new Zone( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                   "\\) is missing required 'x' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                  "\\) is missing required 'x' attribute.")
     public void noX() throws Exception {
         element.removeAttribute( "x" );
         new Zone( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                   "\\) is missing required 'y' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                  "\\) is missing required 'y' attribute.")
     public void noY() throws Exception {
         element.removeAttribute( "y" );
         new Zone( element );
@@ -112,9 +112,9 @@ public class ZoneTest {
 //        new Zone( element );
 //    }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Zone \\(" + id +
-                   "\\) is missing required 'r' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Zone \\(" + id +
+                  "\\) is missing required 'r' attribute.")
     public void noR() throws Exception {
         element.removeAttribute( "r" );
         new Zone( element );
@@ -124,7 +124,7 @@ public class ZoneTest {
     public void storesSelf() throws Exception {
         Zone zone = new Zone( element );
 
-        ArrayList<Minder> thing = Drawable.List();
+        ArrayList<MinderDom> thing = Drawable.List();
 
         assert thing.contains( zone );
     }
@@ -381,11 +381,11 @@ public class ZoneTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.MinderReset();
+        TestResets.MinderDomReset();
         TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

@@ -4,8 +4,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
-
 /**
  * Represents a rectangular block of individual chairs, such as a hotel would lay out in a function
  * room for audience seating.
@@ -16,7 +14,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.9
  */
-public class ChairBlock extends Minder {
+public class ChairBlock extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code ChairBlock}s.
@@ -83,21 +81,21 @@ public class ChairBlock extends Minder {
     @Override
     public void verify() {
     }
-
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-        // Draw just the outline of the ChairBlock... left here for use in debugging.
-//        canvas.setPaint( Color.BLACK );
-//        canvas.draw( new Rectangle( x, y, width, depth ) );
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-    }
+//
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//        // Draw just the outline of the ChairBlock... left here for use in debugging.
+////        canvas.setPaint( Color.BLACK );
+////        canvas.draw( new Rectangle( x, y, width, depth ) );
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
 
     /**
      * Generate SVG DOM for a {@code ChairBlock}. <p/> The first {@code ChairBlock} generated also

@@ -1,6 +1,7 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +17,14 @@ import java.io.IOException;
 public class Write {
 
     private String home = null;
+
+    private String CSS = "\n"
+            + ".heading { font-size: 14pt; text-anchor: middle; font-weight: bold; stroke: none }\n"
+            + "iframe { display: inline }\n"
+            + "@media print {\n"
+            + "  .noprint { display: none }"
+            + "}\n";
+
 
     /**
      * Draw each of the Plot items that have been defined to a SVG file.
@@ -39,6 +48,7 @@ public class Write {
 
         writeDirectory( pathname );
         writeIndex( pathname );
+        writeStyles( pathname );
         writePlan( pathname );
         writeSection( pathname );
         writeFront( pathname );
@@ -54,9 +64,13 @@ public class Write {
         String filename = basename + "/index.html";
         File file = new File( filename );
 
+        Integer width = Venue.Width() + Legend.Width();
+        width += width / 100 + 5;
+
         String output = "" +
                 "<!DOCTYPE html>\n" +
                 "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"styles.css\" type=\"text/css\">\n" +
                 "<title>" + Venue.Name() + "</title>\n" +
                 "<script>\n" +
                 "function show( victim )\n" +
@@ -115,7 +129,7 @@ public class Write {
                 "</script>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<div>\n" +
+                "<div class=\"noprint\" >\n" +
                 "<form name=\"configure\" >\n" +
                 Setup.List() +
                 HTML.Checkboxes( Layer.List() ) +
@@ -124,7 +138,9 @@ public class Write {
                 "</form>\n" +
                 "</div>\n" +
                 "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + Venue.Depth() + "\" width=\"" +
-                Venue.Width() + "\" ></iframe>\n" +
+//                Venue.Width() + "\" ></iframe>\n" +
+//                "<iframe id=\"plan\" src=\"legend.html\" height=\"" + Venue.Depth() + "\" width=\"" +
+                width + "\" ></iframe>\n" +
                 "</body>\n" +
                 "</html>\n";
 
@@ -133,6 +149,26 @@ public class Write {
                 file.createNewFile();
             }
             byte[] bytes = output.getBytes();
+
+            stream.write( bytes );
+            stream.flush();
+            stream.close();
+        }
+        catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeStyles( String basename ) throws ReferenceException {
+        String filename = basename + "/styles.css";
+        File file = new File( filename );
+
+
+        try ( FileOutputStream stream = new FileOutputStream( file ) ) {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            byte[] bytes = CSS.getBytes();
 
             stream.write( bytes );
             stream.flush();
@@ -155,13 +191,21 @@ public class Write {
         // Specify the size of the generated SVG so that when it is larger than the display area,
         // scrollbars will be provided.
         Element rootElement = draw.root();
-        Integer width = Venue.Width() + Legend.Widest();
-        width += width / 20;
+        Integer width = Venue.Width() + Legend.Width();
+        width += width / 100;
         rootElement.setAttribute( "width", width.toString() );
         Integer height = Venue.Depth();
-        height += height / 20;
+        height += height / 100;
         rootElement.setAttribute( "height", height.toString() );
 //        rootElement.setAttribute( "overflow", "visible" );
+
+        Text textNode = draw.document().createCDATASection( CSS );
+//                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
+        Element style = draw.element( "style" );
+        style.setAttribute( "type", "text/css" );
+        style.appendChild( textNode );
+        rootElement.appendChild( style );
+
 
         Grid.DOM( draw );
 

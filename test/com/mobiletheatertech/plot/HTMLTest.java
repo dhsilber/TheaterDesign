@@ -18,17 +18,17 @@ public class HTMLTest {
 
     @Test
     public void checkbox() throws Exception {
-        String name = "name of thing";
-        String tag = "tag for thing";
+        String name = "name_of_thing";
+        String tag = "tag_for_thing";
         HashMap<String, String> thing = new HashMap<>();
         thing.put( name, tag );
 
         String result = HTML.Checkboxes( thing );
 
         assertEquals( result,
-                      "<input type=\"checkbox\" onclick=\"parent.selectLayer();\" name=\"layer\"" +
-                              " id=\"process\" checked=\"checked\" value=\"" + tag + "\" />" +
-                              name +
+                      "<input type=\"checkbox\" onclick=\"parent.selectLayer" + tag +
+                              "();\" name=\"layer\"" + " id=\"" + tag +
+                              "layer\" checked=\"checked\" value=\"" + tag + "\" />" + name +
                               "<br />\n" );
     }
 

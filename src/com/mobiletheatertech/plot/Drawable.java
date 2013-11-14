@@ -25,7 +25,7 @@ public class Drawable extends Minder {
      *
      * @return list of plot items
      */
-    public static ArrayList<Minder> List() {
+    public static ArrayList<MinderDom> List() {
         return LIST;
     }
 

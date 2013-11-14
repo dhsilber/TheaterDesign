@@ -29,10 +29,10 @@ public class WallTest {
     Integer y2 = 78;
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Wall wall = new Wall( element );
 
-        assert Minder.class.isInstance( wall );
+        assert MinderDom.class.isInstance( wall );
     }
 
     @Test
@@ -45,29 +45,29 @@ public class WallTest {
         assertEquals( TestHelpers.accessInteger( wall, "y2" ), y2 );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Wall instance is missing required 'x1' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Wall instance is missing required 'x1' attribute.")
     public void noX1() throws Exception {
         element.removeAttribute( "x1" );
         new Wall( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Wall instance is missing required 'y1' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Wall instance is missing required 'y1' attribute.")
     public void noY1() throws Exception {
         element.removeAttribute( "y1" );
         new Wall( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Wall instance is missing required 'x2' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Wall instance is missing required 'x2' attribute.")
     public void noX2() throws Exception {
         element.removeAttribute( "x2" );
         new Wall( element );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Wall instance is missing required 'y2' attribute." )
+    @Test(expectedExceptions = AttributeMissingException.class,
+          expectedExceptionsMessageRegExp = "Wall instance is missing required 'y2' attribute.")
     public void noY2() throws Exception {
         element.removeAttribute( "y2" );
         new Wall( element );
@@ -79,8 +79,8 @@ public class WallTest {
         wall.verify();
     }
 
-    @Test( expectedExceptions = FeatureException.class,
-           expectedExceptionsMessageRegExp = "Wall at angle does not yet support openings." )
+    @Test(expectedExceptions = FeatureException.class,
+          expectedExceptionsMessageRegExp = "Wall at angle does not yet support openings.")
     public void verifyAngledWallWithOpening() throws Exception {
         Element openingElement = new IIOMetadataNode( "opening" );
         openingElement.setAttribute( "width", "6" );
@@ -173,7 +173,7 @@ public class WallTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

@@ -9,7 +9,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -26,7 +25,7 @@ import java.util.TreeSet;
  * @author dhs
  * @since 0.0.11
  */
-public class Wall extends Minder {
+public class Wall extends MinderDom {
 
     private Integer x1 = null;
     private Integer y1 = null;
@@ -107,17 +106,17 @@ public class Wall extends Minder {
         }
     }
 
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-    }
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
 
     /**
      * Draw the wall.
