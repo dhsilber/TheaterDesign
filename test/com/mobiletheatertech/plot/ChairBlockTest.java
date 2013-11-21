@@ -18,6 +18,7 @@ public class ChairBlockTest {
 
     Draw draw = null;
     Element element = null;
+    Element pathElement = null;
     private static final Integer CHAIRWIDTH = 18;
     private static final Integer CHAIRDEPTH = 19;
     private static final Integer FOOTSPACE = 11;
@@ -25,6 +26,8 @@ public class ChairBlockTest {
     private static final Integer Y = 40;
     private static final Integer WIDTH = 100;
     private static final Integer DEPTH = 120;
+    private static final Integer ZERO = 0;
+    private static final String PATH = "M 200 300 L 180 280";
 
     @Test
     public void isMinderDom() throws Exception {
@@ -34,13 +37,25 @@ public class ChairBlockTest {
     }
 
     @Test
-    public void storesAttributes() throws Exception {
+    public void storesAttributesLocation() throws Exception {
         ChairBlock chairBlock = new ChairBlock( element );
 
         assertEquals( TestHelpers.accessInteger( chairBlock, "x" ), X );
         assertEquals( TestHelpers.accessInteger( chairBlock, "y" ), Y );
         assertEquals( TestHelpers.accessInteger( chairBlock, "width" ), WIDTH );
         assertEquals( TestHelpers.accessInteger( chairBlock, "depth" ), DEPTH );
+        assertEquals( TestHelpers.accessString( chairBlock, "path" ), "" );
+    }
+
+    @Test
+    public void storesAttributesPath() throws Exception {
+        ChairBlock chairBlock = new ChairBlock( pathElement );
+
+        assertEquals( TestHelpers.accessInteger( chairBlock, "x" ), ZERO );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "y" ), ZERO );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "width" ), ZERO );
+        assertEquals( TestHelpers.accessInteger( chairBlock, "depth" ), ZERO );
+        assertEquals( TestHelpers.accessString( chairBlock, "path" ), PATH );
     }
 
     @Test
@@ -176,11 +191,14 @@ public class ChairBlockTest {
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
 
-        element = new IIOMetadataNode( "chairs" );
+        element = new IIOMetadataNode( "chairblock" );
         element.setAttribute( "x", X.toString() );
         element.setAttribute( "y", Y.toString() );
         element.setAttribute( "width", WIDTH.toString() );
         element.setAttribute( "depth", DEPTH.toString() );
+
+        pathElement = new IIOMetadataNode( "chairblock" );
+        pathElement.setAttribute( "path", PATH );
 
         TestResets.ChairBlockReset();
         draw = new Draw();

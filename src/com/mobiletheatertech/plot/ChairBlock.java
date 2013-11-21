@@ -8,8 +8,8 @@ import org.w3c.dom.NodeList;
  * Represents a rectangular block of individual chairs, such as a hotel would lay out in a function
  * room for audience seating.
  * <p/>
- * XML tag is 'chairblock'. Required attributes are 'x', 'y', 'width', and 'depth'. Coordinates are
- * relative to the page origin.
+ * XML tag is 'chairblock'. Required attributes are the set of: 'x', 'y', 'width', and 'depth', or
+ * just 'path'. Coordinates are relative to the page origin.
  *
  * @author dhs
  * @since 0.0.9
@@ -36,6 +36,7 @@ public class ChairBlock extends MinderDom {
     private Integer y = null;
     private Integer width = null;
     private Integer depth = null;
+    private String path = null;
 
     /**
      * Construct a {@code ChairBlock} for each element in a list of XML nodes.
@@ -70,10 +71,11 @@ public class ChairBlock extends MinderDom {
     public ChairBlock( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        x = getIntegerAttribute( element, "x" );
-        y = getIntegerAttribute( element, "y" );
-        width = getIntegerAttribute( element, "width" );
-        depth = getIntegerAttribute( element, "depth" );
+        x = getOptionalIntegerAttribute( element, "x" );
+        y = getOptionalIntegerAttribute( element, "y" );
+        width = getOptionalIntegerAttribute( element, "width" );
+        depth = getOptionalIntegerAttribute( element, "depth" );
+        path = getOptionalStringAttribute( element, "path" );
 
         new Layer( LAYERNAME, LAYERTAG );
     }
