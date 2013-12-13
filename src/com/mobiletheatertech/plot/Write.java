@@ -38,31 +38,31 @@ public class Write {
      *
      * @param basename basename of the file to be written.
      */
-    public Write( String basename ) throws MountingException, ReferenceException {
-        home = System.getProperty( "user.home" );
+    public Write(String basename) throws MountingException, ReferenceException {
+        home = System.getProperty("user.home");
 //        if (null == home) {
 //            // throw exception
 //        }
 
-        String pathname = home + "/Plot/out/" + basename;
+        String pathname = home + "/Dropbox/Plot/out/" + basename;
 
-        writeDirectory( pathname );
-        writeIndex( pathname );
-        writeStyles( pathname );
-        writePlan( pathname );
-        writeSection( pathname );
-        writeFront( pathname );
+        writeDirectory(pathname);
+        writeIndex(pathname);
+        writeStyles(pathname);
+        writePlan(pathname);
+        writeSection(pathname);
+        writeFront(pathname);
     }
 
-    private void writeDirectory( String basename ) /*throws MountingException, ReferenceException*/ {
-        File directory = new File( basename );
+    private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
+        File directory = new File(basename);
         Boolean dir = directory.mkdir();
-        System.err.println( "Directory: " + basename + ". Good? " + dir.toString() );
+        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
     }
 
-    private void writeIndex( String basename ) throws ReferenceException {
+    private void writeIndex(String basename) throws ReferenceException {
         String filename = basename + "/index.html";
-        File file = new File( filename );
+        File file = new File(filename);
 
         Integer width = Venue.Width() + Legend.Width();
         width += width / 100 + 5;
@@ -94,11 +94,11 @@ public class Write {
 //                "  else\n" +
 //                "    hide( \"chairblock\" );\n" +
 //                "}\n" +
-                HTML.SelectFunction( ChairBlock.LAYERTAG ) +
-                HTML.SelectFunction( HangPoint.LAYERTAG ) +
-                HTML.SelectFunction( Luminaire.LAYERTAG ) +
-                HTML.SelectFunction( Pipe.LAYERTAG ) +
-                HTML.SelectFunction( Zone.LAYERTAG ) +
+                HTML.SelectFunction(ChairBlock.LAYERTAG) +
+                HTML.SelectFunction(HangPoint.LAYERTAG) +
+                HTML.SelectFunction(Luminaire.LAYERTAG) +
+                HTML.SelectFunction(Pipe.LAYERTAG) +
+                HTML.SelectFunction(Zone.LAYERTAG) +
 
 //                "function selectLayer()\n" +
 //                "{\n" +
@@ -132,7 +132,7 @@ public class Write {
                 "<div class=\"noprint\" >\n" +
                 "<form name=\"configure\" >\n" +
                 Setup.List() +
-                HTML.Checkboxes( Layer.List() ) +
+                HTML.Checkboxes(Layer.List()) +
 //                "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
 //                " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
                 "</form>\n" +
@@ -144,47 +144,45 @@ public class Write {
                 "</body>\n" +
                 "</html>\n";
 
-        try ( FileOutputStream stream = new FileOutputStream( file ) ) {
+        try (FileOutputStream stream = new FileOutputStream(file)) {
             if (!file.exists()) {
                 file.createNewFile();
             }
             byte[] bytes = output.getBytes();
 
-            stream.write( bytes );
+            stream.write(bytes);
             stream.flush();
             stream.close();
-        }
-        catch ( IOException e ) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeStyles( String basename ) throws ReferenceException {
+    private void writeStyles(String basename) throws ReferenceException {
         String filename = basename + "/styles.css";
-        File file = new File( filename );
+        File file = new File(filename);
 
 
-        try ( FileOutputStream stream = new FileOutputStream( file ) ) {
+        try (FileOutputStream stream = new FileOutputStream(file)) {
             if (!file.exists()) {
                 file.createNewFile();
             }
             byte[] bytes = CSS.getBytes();
 
-            stream.write( bytes );
+            stream.write(bytes);
             stream.flush();
             stream.close();
-        }
-        catch ( IOException e ) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writePlan( String basename ) throws MountingException, ReferenceException {
+    private void writePlan(String basename) throws MountingException, ReferenceException {
         Draw draw = new Draw();
 
-        Minder.DrawAllPlan( draw.canvas() );
+        Minder.DrawAllPlan(draw.canvas());
 
-        Hack.Draw( draw.canvas() );
+        Hack.Draw(draw.canvas());
 
         draw.getRoot();
 
@@ -193,69 +191,69 @@ public class Write {
         Element rootElement = draw.root();
         Integer width = Venue.Width() + Legend.Width();
         width += width / 100;
-        rootElement.setAttribute( "width", width.toString() );
+        rootElement.setAttribute("width", width.toString());
         Integer height = Venue.Depth();
         height += height / 100;
-        rootElement.setAttribute( "height", height.toString() );
+        rootElement.setAttribute("height", height.toString());
 //        rootElement.setAttribute( "overflow", "visible" );
 
-        Text textNode = draw.document().createCDATASection( CSS );
+        Text textNode = draw.document().createCDATASection(CSS);
 //                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
-        Element style = draw.element( "style" );
-        style.setAttribute( "type", "text/css" );
-        style.appendChild( textNode );
-        rootElement.appendChild( style );
+        Element style = draw.element("style");
+        style.setAttribute("type", "text/css");
+        style.appendChild(textNode);
+        rootElement.appendChild(style);
 
 
-        Grid.DOM( draw );
+        Grid.DOM(draw);
 
-        Legend.Startup( draw );
+        Legend.Startup(draw);
 
-        Minder.DomAllPlan( draw );
+        Minder.DomAllPlan(draw);
 
-        Hack.Dom( draw );
+        Hack.Dom(draw);
 
         Legend.Callback();
 
         String pathname = basename + "/plan.svg";
 
-        draw.create( pathname );
+        draw.create(pathname);
     }
 
-    private void writeSection( String basename ) throws MountingException, ReferenceException {
+    private void writeSection(String basename) throws MountingException, ReferenceException {
         Draw draw = new Draw();
 
-        Minder.DrawAllSection( draw.canvas() );
+        Minder.DrawAllSection(draw.canvas());
 
 //        Hack.Draw( drawPlan.canvas() );
 
         draw.getRoot();
 
-        Minder.DomAllSection( draw );
+        Minder.DomAllSection(draw);
 
-        Hack.Dom( draw );
+        Hack.Dom(draw);
 
         String pathname = basename + "/section.svg";
 
-        draw.create( pathname );
+        draw.create(pathname);
     }
 
-    private void writeFront( String basename ) throws MountingException, ReferenceException {
+    private void writeFront(String basename) throws MountingException, ReferenceException {
         Draw draw = new Draw();
 
-        Minder.DrawAllFront( draw.canvas() );
+        Minder.DrawAllFront(draw.canvas());
 
 //        Hack.Draw( drawPlan.canvas() );
 
         draw.getRoot();
 
-        Minder.DomAllFront( draw );
+        Minder.DomAllFront(draw);
 
-        Hack.Dom( draw );
+        Hack.Dom(draw);
 
         String pathname = basename + "/front.svg";
 
-        draw.create( pathname );
+        draw.create(pathname);
     }
 //
 //    private String checkboxes( HashMap<String,String> data){

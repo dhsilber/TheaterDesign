@@ -12,11 +12,11 @@
 //import static org.testng.Assert.assertNull;
 //
 ///**
-// * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:01 PM To change this template use
-// * File | Settings | File Templates.
-// *
-// * @since 0.0.5
-// */
+//* Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:01 PM To change this template use
+//* File | Settings | File Templates.
+//*
+//* @since 0.0.5
+//*/
 //public class BaseTest {
 //
 //    Element element = null;

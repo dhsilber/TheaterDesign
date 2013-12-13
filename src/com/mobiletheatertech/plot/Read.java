@@ -22,17 +22,17 @@ public class Read {
      * @param basename basename of the file to be read.
      * @throws FileNotFoundException if the file cannot be found
      */
-    public Read( String basename ) throws Exception {
+    public Read(String basename) throws Exception {
 
-        String home = System.getProperty( "user.home" );
+        String home = System.getProperty("user.home");
         if (null == home) {
             // throw exception
         }
 
-        String pathname = home + "/Plot/plotfiles/" + basename + ".xml";
+        String pathname = home + "/Dropbox/Plot/plotfiles/" + basename + ".xml";
 
-        InputStream stream = new FileInputStream( pathname );
+        InputStream stream = new FileInputStream(pathname);
 
-        new Parse( stream );
+        new Parse(stream);
     }
 }

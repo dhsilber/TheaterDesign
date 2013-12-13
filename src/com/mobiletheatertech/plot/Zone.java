@@ -54,16 +54,15 @@ public class Zone extends MinderDom {
      */
 
     // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/
-    {
+    public static void ParseXML(NodeList list)
+            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/ {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
+            Node node = list.item(index);
 
             if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                new Zone( element );
+                new Zone(element);
             }
         }
     }
@@ -74,11 +73,11 @@ public class Zone extends MinderDom {
      * @param id Name of {@code Zone} to find
      * @return {@code Zone} which matches specified {@code id}.
      */
-    public static Zone Find( String id ) {
+    public static Zone Find(String id) {
 
         for (MinderDom thingy : Drawable.List()) {
-            if (Zone.class.isInstance( thingy )) {
-                if (((Zone) thingy).id.equals( id )) {
+            if (Zone.class.isInstance(thingy)) {
+                if (((Zone) thingy).id.equals(id)) {
                     return (Zone) thingy;
                 }
             }
@@ -93,20 +92,20 @@ public class Zone extends MinderDom {
      * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException       if element is null
      */
-    public Zone( Element element ) throws AttributeMissingException, InvalidXMLException {
-        super( element );
+    public Zone(Element element) throws AttributeMissingException, InvalidXMLException {
+        super(element);
 
-        id = getStringAttribute( element, "id" );
-        x = getIntegerAttribute( element, "x" );
-        y = getIntegerAttribute( element, "y" );
+        id = getStringAttribute(element, "id");
+        x = getIntegerAttribute(element, "x");
+        y = getIntegerAttribute(element, "y");
 //        z=getIntegerAttribute( element, "z" );
-        r = getIntegerAttribute( element, "r" );
-        color = getOptionalStringAttribute( element, "color" );
-        if (color.equals( "" )) {
+        r = getIntegerAttribute(element, "r");
+        color = getOptionalStringAttribute(element, "color");
+        if (color.equals("")) {
             color = "teal";
         }
 
-        new Layer( LAYERNAME, LAYERTAG );
+        new Layer(LAYERNAME, LAYERTAG);
     }
 
     /**
@@ -134,11 +133,10 @@ public class Zone extends MinderDom {
     @Override
     public void verify() /*throws FeatureException, InvalidXMLException, LocationException*/ {
         if (Proscenium.Active()) {
-            Point point = Proscenium.Locate( new Point( x, y, 48 ) );
+            Point point = Proscenium.Locate(new Point(x, y, 48));
             xDraw = point.x();
             yDraw = point.y();
-        }
-        else {
+        } else {
             xDraw = x;
             yDraw = y;
         }
@@ -164,41 +162,41 @@ public class Zone extends MinderDom {
      * @throws MountingException if mounting location cannot be established
      */
     @Override
-    public void dom( Draw draw, View mode ) throws MountingException {
+    public void dom(Draw draw, View mode) throws MountingException {
         if (View.PLAN != mode) {
             return;
         }
 
-        Element group = draw.element( "g" );
-        group.setAttribute( "class", LAYERTAG );
-        draw.appendRootChild( group );
+        Element group = draw.element("g");
+        group.setAttribute("class", LAYERTAG);
+        draw.appendRootChild(group);
 
-        Element circle = draw.element( "circle" );
+        Element circle = draw.element("circle");
 //        channelCircle.setAttribute( "fill", "none" );
-        circle.setAttribute( "cx", xDraw.toString() );
-        circle.setAttribute( "cy", yDraw.toString() );
-        circle.setAttribute( "r", r.toString() );
-        circle.setAttribute( "fill", "none" );
-        circle.setAttribute( "stroke", color );
-        circle.setAttribute( "stroke-opacity", "0.5" );
-        circle.setAttribute( "stroke-width", "1" );
+        circle.setAttribute("cx", xDraw.toString());
+        circle.setAttribute("cy", yDraw.toString());
+        circle.setAttribute("r", r.toString());
+        circle.setAttribute("fill", "none");
+        circle.setAttribute("stroke", color);
+        circle.setAttribute("stroke-opacity", "0.5");
+        circle.setAttribute("stroke-width", "1");
 
-        group.appendChild( circle );
+        group.appendChild(circle);
 
 
-        Element text = draw.element( "text" );
+        Element text = draw.element("text");
         Integer textX = xDraw - (r / 5);
         Integer textY = yDraw + (r / 5);
-        text.setAttribute( "x", textX.toString() );
-        text.setAttribute( "y", textY.toString() );
-        text.setAttribute( "fill", color );
-        text.setAttribute( "stroke", "none" );
-        text.setAttribute( "fill-opacity", "0.4" );
-        text.setAttribute( "font-family", "serif" );
-        text.setAttribute( "font-size", "22" );
-        draw.appendRootChild( text );
+        text.setAttribute("x", textX.toString());
+        text.setAttribute("y", textY.toString());
+        text.setAttribute("fill", color);
+        text.setAttribute("stroke", "none");
+        text.setAttribute("fill-opacity", "0.4");
+        text.setAttribute("font-family", "serif");
+        text.setAttribute("font-size", "22");
+        group.appendChild(text);
 
-        Text textNode = draw.document().createTextNode( id );
-        text.appendChild( textNode );
+        Text textNode = draw.document().createTextNode(id);
+        text.appendChild(textNode);
     }
 }

@@ -2,6 +2,7 @@ package com.mobiletheatertech.plot;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 9/18/13 Time: 7:49 AM To change this template use
@@ -29,14 +30,29 @@ public class TestResets {
      * @throws NoSuchFieldException   if the {@code LEGENDLIST} field isn't there.
      * @throws IllegalAccessException if the {@code LEGENDLIST} field cannot be accessed.
      */
+    public static void LayerReset()
+            throws NoSuchFieldException, IllegalAccessException {
+        Field field = Layer.class.getDeclaredField("LIST");
+        field.setAccessible(true);
+        HashMap<String, String> list =
+                (HashMap<String, String>) field.get(Legend.class);
+        list.clear();
+    }
+
+    /**
+     * Reset the LEGENDLIST maintained by {@link Legend} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code LEGENDLIST} field isn't there.
+     * @throws IllegalAccessException if the {@code LEGENDLIST} field cannot be accessed.
+     */
     public static void LegendReset()
             throws NoSuchFieldException, IllegalAccessException
     {
         Field field = Legend.class.getDeclaredField( "LEGENDLIST" );
         field.setAccessible( true );
-        ArrayList<Legendable> LegendList =
+        ArrayList<Legendable> legendList =
                 (ArrayList<Legendable>) field.get( Legend.class );
-        LegendList.clear();
+        legendList.clear();
     }
 
     /**

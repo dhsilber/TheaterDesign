@@ -15,23 +15,23 @@ import java.util.ArrayList;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
-/*
- * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:43 PM To change this template use
+/**
+ * Created with IntelliJ IDEA. User: dhs Date: 11/28/13 Time: 5:32 PM To change this template use
  * File | Settings | File Templates.
  */
 
 /**
- * Test {@code Table}.
+ * Test {@code ScaffoldTower}.
  *
  * @author dhs
  * @since 0.0.3
  */
-public class TableTest {
+public class ScaffoldTowerTest {
 
     Element element = null;
     Element elementP = null;
 
-    public TableTest() {
+    public ScaffoldTowerTest() {
     }
 
     @Test

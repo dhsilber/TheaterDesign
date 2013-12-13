@@ -40,7 +40,7 @@ public class Parse {
      *                                   sense (e.g. a {@code Pipe} with a length of zero)
      */
     public Parse( InputStream stream )
-            throws AttributeMissingException, FeatureException, InvalidXMLException,
+            throws AttributeMissingException, DataException, FeatureException, InvalidXMLException,
             KindException, LocationException,
             ReferenceException, SizeException
     {
@@ -86,6 +86,9 @@ public class Parse {
 
         NodeList stage = root.getElementsByTagName( "stage" );
         Stage.ParseXML( stage );
+
+        NodeList tables = root.getElementsByTagName("table");
+        Table.ParseXML(tables);
 
         NodeList chairs = root.getElementsByTagName( "chairblock" );
         ChairBlock.ParseXML( chairs );

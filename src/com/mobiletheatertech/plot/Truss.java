@@ -21,6 +21,16 @@ import java.awt.geom.Line2D;
  */
 public class Truss extends Minder {
 
+    /**
+     * Name of {@code Layer} of {@code Pipe}s.
+     */
+    public static final String LAYERNAME = "Trusses";
+
+    /**
+     * Tag for {@code Layer} of {@code Pipe}s.
+     */
+    public static final String LAYERTAG = "truss";
+
     private Integer size = null;
     private Integer length = null;
     private Suspend suspend1 = null;
@@ -28,16 +38,16 @@ public class Truss extends Minder {
     private String processedMark = null;
     private Element element = null;
 
-    public static void ParseXML( NodeList list ) throws AttributeMissingException, InvalidXMLException, KindException {
+    public static void ParseXML(NodeList list) throws AttributeMissingException, InvalidXMLException, KindException {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
+            Node node = list.item(index);
 
             // Much of this copied to Suspend.Suspend - refactor
             if (null != node) {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    new Truss( element );
+                    new Truss(element);
                 }
             }
         }
@@ -50,25 +60,24 @@ public class Truss extends Minder {
      * @throws AttributeMissingException
      * @throws KindException
      */
-    public Truss( Element element )
-            throws AttributeMissingException, InvalidXMLException, KindException
-    {
-        super( element );
+    public Truss(Element element)
+            throws AttributeMissingException, InvalidXMLException, KindException {
+        super(element);
 
         this.element = element;
-        size = getIntegerAttribute( element, "size" );
-        length = getIntegerAttribute( element, "length" );
+        size = getIntegerAttribute(element, "size");
+        length = getIntegerAttribute(element, "length");
 
         switch (size) {
             case 12:
             case 20:
                 break;
             default:
-                throw new KindException( "Truss", size );
+                throw new KindException("Truss", size);
         }
 
         processedMark = Mark.Generate();
-        element.setAttribute( "processedMark", processedMark );
+        element.setAttribute("processedMark", processedMark);
     }
 
     /**
@@ -76,10 +85,10 @@ public class Truss extends Minder {
      * @return {@code Truss} whose mark matches specified string
      */
     // Copied to Suspend - refactor to Minder?
-    public static Truss Find( String mark ) {
+    public static Truss Find(String mark) {
         for (MinderDom thingy : Drawable.List()) {
-            if (Truss.class.isInstance( thingy )) {
-                if (((Truss) thingy).processedMark.equals( mark )) {
+            if (Truss.class.isInstance(thingy)) {
+                if (((Truss) thingy).processedMark.equals(mark)) {
                     return (Truss) thingy;
                 }
             }
@@ -99,7 +108,7 @@ public class Truss extends Minder {
     public void verify() throws InvalidXMLException {
         assert null != element;
 //        NodeList baseList = element.getElementsByTagName( "base" );
-        NodeList suspendList = element.getElementsByTagName( "suspend" );
+        NodeList suspendList = element.getElementsByTagName("suspend");
 
 //        if (2 != suspendList.getLength() && 1 != baseList.getLength()) {
 //            System.err.println( "Found " + suspendList.getLength() + " suspend child nodes" );
@@ -108,60 +117,60 @@ public class Truss extends Minder {
 //        }
 
         if (2 != suspendList.getLength()) {
-            System.err.println( "Found " + suspendList.getLength() + " suspend child nodes" );
-            throw new InvalidXMLException( "Truss must have exactly two suspend children" );
+            System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
+            throw new InvalidXMLException("Truss must have exactly two suspend children");
         }
 
-        suspend1 = findSuspend( 0, suspendList );
-        suspend2 = findSuspend( 1, suspendList );
+        suspend1 = findSuspend(0, suspendList);
+        suspend2 = findSuspend(1, suspendList);
     }
 
-    private Suspend findSuspend( int item, NodeList suspendList ) {
-        Node node = suspendList.item( item );
+    private Suspend findSuspend(int item, NodeList suspendList) {
+        Node node = suspendList.item(item);
         // Much of this code is copied from HangPoint.ParseXML - refactor
         if (null != node) {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element parent = (Element) node;
-                String mark = parent.getAttribute( "processedMark" );
-                return Suspend.Find( mark );
+                String mark = parent.getAttribute("processedMark");
+                return Suspend.Find(mark);
             }
         }
         return null;
     }
 
-//    // Totally untested. Yar!
-//    private float slope( Point point1, Point point2 ) {
-//        int x1 = point1.x();
-//        int y1 = point1.y();
-//        int x2 = point2.x();
-//        int y2 = point2.y();
-//
-//        float changeInX = x1 - x2;
-//        float changeInY = y1 - y2;
-//
-//        return changeInY / changeInX;
-//    }
-
-    @Override
-    public void drawPlan( Graphics2D canvas ) throws ReferenceException {
-        System.out.println( "About to drawPlan Truss" );
-        canvas.setPaint( Color.MAGENTA );
-        Point point1 = suspend1.locate();
-        Point point2 = suspend2.locate();
-
+    // Totally untested. Yar!
+    private float slope(Point point1, Point point2) {
         int x1 = point1.x();
         int y1 = point1.y();
         int x2 = point2.x();
         int y2 = point2.y();
-        canvas.draw( new Line2D.Float( x1, y1, x2, y2 ) );
 
-        double supportSpan = point1.distance( point2 );
-        double overHang = (length - supportSpan) / 2;
+        float changeInX = x1 - x2;
+        float changeInY = y1 - y2;
 
-        drawHelper( canvas,
-                    (int) (point1.x() - overHang),
-                    point1.y() + size / 2,
-                    size, length );
+        return changeInY / changeInX;
+    }
+
+    @Override
+    public void drawPlan(Graphics2D canvas) throws ReferenceException {
+//        System.out.println( "About to drawPlan Truss" );
+//        canvas.setPaint( Color.MAGENTA );
+//        Point point1 = suspend1.locate();
+//        Point point2 = suspend2.locate();
+//
+//        int x1 = point1.x();
+//        int y1 = point1.y();
+//        int x2 = point2.x();
+//        int y2 = point2.y();
+//        canvas.draw( new Line2D.Float( x1, y1, x2, y2 ) );
+//
+//        double supportSpan = point1.distance( point2 );
+//        double overHang = (length - supportSpan) / 2;
+//
+//        drawHelper( canvas,
+//                    (int) (point1.x() - overHang),
+//                    point1.y() + size / 2,
+//                    size, length );
 /*
         int supportSpan =
 
@@ -213,7 +222,7 @@ public class Truss extends Minder {
 */
 
 
-        System.out.println( "Done drawing Truss" );
+        System.out.println("Done drawing Truss");
     }
 
     /**
@@ -225,50 +234,109 @@ public class Truss extends Minder {
      * @since 0.0.5
      */
     @Override
-    public void drawSection( Graphics2D canvas ) throws ReferenceException {
+    public void drawSection(Graphics2D canvas) throws ReferenceException {
         int bottom = Venue.Height();
 
-        System.out.println( "About to drawSection Truss" );
-        canvas.setPaint( Color.MAGENTA );
+        System.out.println("About to drawSection Truss");
+        canvas.setPaint(Color.MAGENTA);
         Point point1 = suspend1.locate();
 
         int shift = size / 2;
 
-        canvas.draw( new Rectangle( point1.y() - shift, bottom - point1.z() - shift,
-                                    size, size ) );
+        canvas.draw(new Rectangle(point1.y() - shift, bottom - point1.z() - shift,
+                size, size));
     }
 
     @Override
-    public void drawFront( Graphics2D canvas ) throws ReferenceException {
+    public void drawFront(Graphics2D canvas) throws ReferenceException {
         int bottom = Venue.Height();
 
-        System.out.println( "About to drawFront Truss" );
-        canvas.setPaint( Color.MAGENTA );
+        System.out.println("About to drawFront Truss");
+        canvas.setPaint(Color.MAGENTA);
         Point point1 = suspend1.locate();
         Point point2 = suspend2.locate();
 
-        double supportSpan = point1.distance( point2 );
+        double supportSpan = point1.distance(point2);
         double overHang = (length - supportSpan) / 2;
 
-        drawHelper( canvas,
-                    (int) (point1.x() - overHang),
-                    bottom - point1.z() + size / 2,
-                    size, length );
+        drawHelper(canvas,
+                (int) (point1.x() - overHang),
+                bottom - point1.z() + size / 2,
+                size, length);
     }
 
 
-    private void drawHelper( Graphics2D canvas, int x, int y, int width, int length ) {
+    private void drawHelper(Graphics2D canvas, int x, int y, int width, int length) {
 
-        canvas.setPaint( Color.MAGENTA );
-        canvas.draw( new Line2D.Float( x, y, x + length, y ) );
-        canvas.draw( new Line2D.Float( x, y - width, x + length, y - width ) );
-        canvas.draw( new Line2D.Float( x, y, x, y - width ) );
-        canvas.draw( new Line2D.Float( x + length, y, x + length, y - width ) );
+        canvas.setPaint(Color.MAGENTA);
+        canvas.draw(new Line2D.Float(x, y, x + length, y));
+        canvas.draw(new Line2D.Float(x, y - width, x + length, y - width));
+        canvas.draw(new Line2D.Float(x, y, x, y - width));
+        canvas.draw(new Line2D.Float(x + length, y, x + length, y - width));
 
     }
 
     @Override
-    public void dom( Draw draw, View mode ) {
+    public void dom(Draw draw, View mode) throws ReferenceException {
+        if (View.PLAN != mode) {
+            return;
+        }
+
+        Point point1 = suspend1.locate();
+        Point point2 = suspend2.locate();
+        Float slope = slope(point1, point2);
+        Double rotation = Math.toDegrees(Math.atan(slope));
+//        Tan-1 (Slope Percent/100).
+        System.err.println("Slope: " + slope + "   Rotation:" + rotation);
+
+        Integer x1 = point1.x();
+        Integer y1 = point1.y();
+//        int x2 = point2.x();
+//        int y2 = point2.y();
+//
+//
+//
+//        Integer height = Venue.Height() - boxOrigin.z();
+
+
+        Element group = draw.element("g");
+        group.setAttribute("class", LAYERTAG);
+        draw.appendRootChild(group);
+
+        Element dimmerRectangle = draw.element("rect");
+        dimmerRectangle.setAttribute("height", size.toString());
+        dimmerRectangle.setAttribute("fill", "none");
+        dimmerRectangle.setAttribute("stroke", "green");
+        dimmerRectangle.setAttribute("transform",
+                "rotate(" + rotation.toString() + "," + x1.toString() + "," +
+                        y1.toString() + ")");
+        dimmerRectangle.setAttribute("x", x1.toString());
+        dimmerRectangle.setAttribute("y", y1.toString());
+        dimmerRectangle.setAttribute("width", length.toString());
+
+
+        group.appendChild(dimmerRectangle);
+
+//        transform = "rotate(-45 100 100)"
+//        switch (mode) {
+//            case PLAN:
+//                dimmerRectangle.setAttribute( "x", x1.toString() );
+//                dimmerRectangle.setAttribute( "y", y1.toString() );
+//                dimmerRectangle.setAttribute( "width", length.toString() );
+//                break;
+//            case SECTION:
+//                dimmerRectangle.setAttribute( "x", boxOrigin.y().toString() );
+//                dimmerRectangle.setAttribute( "y", height.toString() );
+//                dimmerRectangle.setAttribute( "width", DIAMETER.toString() );
+//                break;
+//            case FRONT:
+//                dimmerRectangle.setAttribute( "x", boxOrigin.x().toString() );
+//                dimmerRectangle.setAttribute( "y", height.toString() );
+//                dimmerRectangle.setAttribute( "width", length.toString() );
+//                break;
+//            default:
+//
+//        }
     }
 
 }

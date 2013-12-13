@@ -30,20 +30,20 @@ public class StageTest {
 
     @Test
     public void isMinder() throws Exception {
-        Stage stage = new Stage( element );
+        Stage stage = new Stage(element);
 
-        assert Minder.class.isInstance( stage );
+        assert Minder.class.isInstance(stage);
     }
 
     @Test
-    public void storesFlatAttributes() throws Exception {
-        Stage stage = new Stage( element );
+    public void storesAttributes() throws Exception {
+        Stage stage = new Stage(element);
 
-        assertEquals( TestHelpers.accessInteger( stage, "width" ), (Integer) 288 );
-        assertEquals( TestHelpers.accessInteger( stage, "depth" ), (Integer) 144 );
-        assertEquals( TestHelpers.accessInteger( stage, "x" ), (Integer) 56 );
-        assertEquals( TestHelpers.accessInteger( stage, "y" ), (Integer) 16 );
-        assertEquals( TestHelpers.accessInteger( stage, "z" ), (Integer) 12 );
+        assertEquals(TestHelpers.accessInteger(stage, "width"), (Integer) 288);
+        assertEquals(TestHelpers.accessInteger(stage, "depth"), (Integer) 144);
+        assertEquals(TestHelpers.accessInteger(stage, "x"), (Integer) 56);
+        assertEquals(TestHelpers.accessInteger(stage, "y"), (Integer) 16);
+        assertEquals(TestHelpers.accessInteger(stage, "z"), (Integer) 12);
     }
 
 //    @Test
@@ -60,18 +60,18 @@ public class StageTest {
     // Until such time as I properly implement this class' use of id.
     @Test
     public void idUnused() throws Exception {
-        Stage stage = new Stage( element );
+        Stage stage = new Stage(element);
 
-        assertNull( TestHelpers.accessString( stage, "id" ) );
+        assertNull(TestHelpers.accessString(stage, "id"));
     }
 
     @Test
     public void storesSelf() throws Exception {
-        Stage stage = new Stage( element );
+        Stage stage = new Stage(element);
 
         ArrayList<MinderDom> thing = Drawable.List();
 
-        assert thing.contains( stage );
+        assert thing.contains(stage);
     }
 
     /*
@@ -79,122 +79,122 @@ public class StageTest {
      */
     @Test
     public void justFine() throws Exception {
-        new Stage( element );
+        new Stage(element);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'width' attribute.")
+            expectedExceptionsMessageRegExp = "Stage instance is missing required 'width' attribute.")
     public void noWidth() throws Exception {
-        element.removeAttribute( "width" );
-        new Stage( element );
+        element.removeAttribute("width");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'depth' attribute.")
+            expectedExceptionsMessageRegExp = "Stage instance is missing required 'depth' attribute.")
     public void noDepth() throws Exception {
-        element.removeAttribute( "depth" );
-        new Stage( element );
+        element.removeAttribute("depth");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'x' attribute.")
+            expectedExceptionsMessageRegExp = "Stage instance is missing required 'x' attribute.")
     public void noX() throws Exception {
-        element.removeAttribute( "x" );
-        new Stage( element );
+        element.removeAttribute("x");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'y' attribute.")
+            expectedExceptionsMessageRegExp = "Stage instance is missing required 'y' attribute.")
     public void noY() throws Exception {
-        element.removeAttribute( "y" );
-        new Stage( element );
+        element.removeAttribute("y");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Stage instance is missing required 'z' attribute.")
+            expectedExceptionsMessageRegExp = "Stage instance is missing required 'z' attribute.")
     public void noZ() throws Exception {
-        element.removeAttribute( "z" );
-        new Stage( element );
+        element.removeAttribute("z");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooLargeWidth() throws Exception {
-        element.setAttribute( "width", "495" );
-        new Stage( element );
+        element.setAttribute("width", "495");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooLargeDepth() throws Exception {
-        element.setAttribute( "depth", "401" );
-        new Stage( element );
+        element.setAttribute("depth", "401");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooLargeX() throws Exception {
-        element.setAttribute( "x", "263" );
-        new Stage( element );
+        element.setAttribute("x", "263");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooLargeY() throws Exception {
-        element.setAttribute( "y", "401" );
-        new Stage( element );
+        element.setAttribute("y", "401");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooLargeZ() throws Exception {
-        element.setAttribute( "z", "241" );
-        new Stage( element );
+        element.setAttribute("z", "241");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = SizeException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should have a positive width.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should have a positive width.")
     public void tooSmallWidth() throws Exception {
-        element.setAttribute( "width", "-1" );
-        new Stage( element );
+        element.setAttribute("width", "-1");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = SizeException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should have a positive depth.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should have a positive depth.")
     public void tooSmallDepth() throws Exception {
-        element.setAttribute( "depth", "-1" );
-        new Stage( element );
+        element.setAttribute("depth", "-1");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooSmallX() throws Exception {
-        element.setAttribute( "x", "-1" );
-        new Stage( element );
+        element.setAttribute("x", "-1");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooSmallY() throws Exception {
-        element.setAttribute( "y", "-1" );
-        new Stage( element );
+        element.setAttribute("y", "-1");
+        new Stage(element);
     }
 
     @Test(expectedExceptions = LocationException.class,
-          expectedExceptionsMessageRegExp =
-                  "Stage should not extend beyond the boundaries of the venue.")
+            expectedExceptionsMessageRegExp =
+                    "Stage should not extend beyond the boundaries of the venue.")
     public void tooSmallZ() throws Exception {
-        element.setAttribute( "z", "-1" );
-        new Stage( element );
+        element.setAttribute("z", "-1");
+        new Stage(element);
     }
 
     @Test
@@ -202,14 +202,14 @@ public class StageTest {
         String xml = "<plot>" +
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
                 "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+        InputStream stream = new ByteArrayInputStream(xml.getBytes());
 
         TestResets.MinderDomReset();
 
-        new Parse( stream );
+        new Parse(stream);
 
         ArrayList<MinderDom> list = Drawable.List();
-        assertEquals( list.size(), 1 );
+        assertEquals(list.size(), 1);
     }
 
     @Test
@@ -218,14 +218,14 @@ public class StageTest {
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
                 "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+        InputStream stream = new ByteArrayInputStream(xml.getBytes());
 
         TestResets.MinderDomReset();
 
-        new Parse( stream );
+        new Parse(stream);
 
         ArrayList<MinderDom> list = Drawable.List();
-        assertEquals( list.size(), 2 );
+        assertEquals(list.size(), 2);
     }
 
     @Mocked
@@ -233,22 +233,22 @@ public class StageTest {
 
     @Test
     public void draw() throws Exception {
-        Stage stage = new Stage( element );
+        Stage stage = new Stage(element);
 
         new Expectations() {
             {
-                mockCanvas.setPaint( Color.orange );
-                mockCanvas.draw( new Rectangle( 56, 16, 288, 144 ) );
+                mockCanvas.setPaint(Color.orange);
+                mockCanvas.draw(new Rectangle(56, 16, 288, 144));
             }
         };
-        stage.drawPlan( mockCanvas );
+        stage.drawPlan(mockCanvas);
     }
 
     @Test
     public void domUnused() throws Exception {
-        Stage stage = new Stage( element );
+        Stage stage = new Stage(element);
 
-        stage.dom( null, View.PLAN );
+        stage.dom(null, View.PLAN);
     }
 
 //    @Test
@@ -268,18 +268,18 @@ public class StageTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "550" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        new Venue( venueElement );
+        venueElement.setAttribute("room", "Test Name");
+        venueElement.setAttribute("width", "550");
+        venueElement.setAttribute("depth", "400");
+        venueElement.setAttribute("height", "240");
+        new Venue(venueElement);
 
-        element = new IIOMetadataNode( "stage" );
-        element.setAttribute( "width", "288" );
-        element.setAttribute( "depth", "144" );
-        element.setAttribute( "x", "56" );
-        element.setAttribute( "y", "16" );
-        element.setAttribute( "z", "12" );
+        element = new IIOMetadataNode("stage");
+        element.setAttribute("width", "288");
+        element.setAttribute("depth", "144");
+        element.setAttribute("x", "56");
+        element.setAttribute("y", "16");
+        element.setAttribute("z", "12");
 
 //        elementP = new IIOMetadataNode( "stage" );
 //        elementP.setAttribute( "proscenium-width", "330" );
