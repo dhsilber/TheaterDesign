@@ -57,16 +57,15 @@ public class Luminaire extends MinderDom {
      */
 
     // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException
-    {
+    public static void ParseXML(NodeList list)
+            throws AttributeMissingException, InvalidXMLException, LocationException, SizeException {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
+            Node node = list.item(index);
 
             if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                new Luminaire( element );
+                new Luminaire(element);
             }
 
         }
@@ -79,20 +78,20 @@ public class Luminaire extends MinderDom {
      * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException       if element is null
      */
-    public Luminaire( Element element ) throws AttributeMissingException, InvalidXMLException {
-        super( element );
+    public Luminaire(Element element) throws AttributeMissingException, InvalidXMLException {
+        super(element);
 
-        type = getStringAttribute( element, "type" );
-        on = getStringAttribute( element, "on" );
-        location = getIntegerAttribute( element, "location" );
-        circuit = getOptionalStringAttribute( element, "circuit" );
-        dimmer = getOptionalStringAttribute( element, "dimmer" );
-        channel = getOptionalStringAttribute( element, "channel" );
-        color = getOptionalStringAttribute( element, "color" );
-        unit = getOptionalStringAttribute( element, "unit" );
-        target = getOptionalStringAttribute( element, "target" );
+        type = getStringAttribute(element, "type");
+        on = getStringAttribute(element, "on");
+        location = getIntegerAttribute(element, "location");
+        circuit = getOptionalStringAttribute(element, "circuit");
+        dimmer = getOptionalStringAttribute(element, "dimmer");
+        channel = getOptionalStringAttribute(element, "channel");
+        color = getOptionalStringAttribute(element, "color");
+        unit = getOptionalStringAttribute(element, "unit");
+        target = getOptionalStringAttribute(element, "target");
 
-        new Layer( LAYERNAME, LAYERTAG );
+        new Layer(LAYERNAME, LAYERTAG);
     }
 
     /**
@@ -102,19 +101,18 @@ public class Luminaire extends MinderDom {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     protected Point location() throws MountingException {
-        Pipe mount = Pipe.Select( on );
+        Pipe mount = Pipe.Select(on);
         if (null == mount) {
             throw new MountingException(
-                    "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'." );
+                    "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
         }
         Point result;
         try {
-            result = mount.location( location );
-        }
-        catch ( MountingException e ) {
+            result = mount.location(location);
+        } catch (MountingException e) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has location " + location + " which is " +
-                            e.getMessage() + " '" + on + "'." );
+                            e.getMessage() + " '" + on + "'.");
         }
         return result;
     }
@@ -123,33 +121,21 @@ public class Luminaire extends MinderDom {
     public void verify() {
     }
 
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) throws MountingException {
-//    }
-//
-//    @Override
-//    public void drawSection( Graphics2D canvas ) throws MountingException {
-//    }
-//
-//    @Override
-//    public void drawFront( Graphics2D canvas ) throws MountingException {
-//    }
-
     /**
      * Provide the rotation required to orient this luminaire's icon to the specified point.
      *
      * @param point towards which luminaire icon should be oriented
      * @return angle
      */
-    private Integer alignWithZone( Point point ) {
-        Zone zone = Zone.Find( target );
+    private Integer alignWithZone(Point point) {
+        Zone zone = Zone.Find(target);
         if (null == zone) {
             return 0;
         }
         int oppositeLength = point.y() - zone.drawY();
         int adjacentLength = point.x() - zone.drawX();
-        Double angle = Math.atan2( oppositeLength, adjacentLength );
-        angle = Math.toDegrees( angle );
+        Double angle = Math.atan2(oppositeLength, adjacentLength);
+        angle = Math.toDegrees(angle);
 
 //        System.err.println(
 //                "Angle: " + angle + "  al: " + adjacentLength + "  oL: " + oppositeLength );
@@ -166,42 +152,42 @@ public class Luminaire extends MinderDom {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public void dom( Draw draw, View mode ) throws MountingException, ReferenceException {
+    public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
         Point point = location();
 
         Integer x;
         Integer y;
         Integer z = Venue.Height() - point.z();
 
-        Element group = draw.element( "g" );
-        group.setAttribute( "class", LAYERTAG );
-        draw.appendRootChild( group );
+        Element group = draw.element("g");
+        group.setAttribute("class", LAYERTAG);
+        draw.appendRootChild(group);
 
         // use element for luminaire icon
-        Element use = draw.element( "use" );
-        use.setAttribute( "xlink:href", "#" + type );
+        Element use = draw.element("use");
+        use.setAttribute("xlink:href", "#" + type);
 
         switch (mode) {
             case PLAN:
-                use.setAttribute( "x", point.x().toString() );
-                use.setAttribute( "y", point.y().toString() );
-                if (!target.equals( "" )) {
-                    Integer rotation = alignWithZone( point );
+                use.setAttribute("x", point.x().toString());
+                use.setAttribute("y", point.y().toString());
+                if (!target.equals("")) {
+                    Integer rotation = alignWithZone(point);
                     String transform =
                             "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
-                    use.setAttribute( "transform", transform );
+                    use.setAttribute("transform", transform);
                 }
                 break;
             case SECTION:
-                use.setAttribute( "x", point.y().toString() );
-                use.setAttribute( "y", z.toString() );
+                use.setAttribute("x", point.y().toString());
+                use.setAttribute("y", z.toString());
                 break;
             case FRONT:
-                use.setAttribute( "x", point.x().toString() );
-                use.setAttribute( "y", z.toString() );
+                use.setAttribute("x", point.x().toString());
+                use.setAttribute("y", z.toString());
                 break;
         }
-        group.appendChild( use );
+        group.appendChild(use);
 
         // There is no good place to display extra information in section and front views.
         switch (mode) {
@@ -212,45 +198,45 @@ public class Luminaire extends MinderDom {
                 return;
         }
 
-        Element circuitHexagon = draw.element( "path" );
-        circuitHexagon.setAttribute( "fill", "none" );
-        circuitHexagon.setAttribute( "stroke", "black" );
-        circuitHexagon.setAttribute( "stroke-width", "1" );
-        circuitHexagon.setAttribute( "width", "18" );
-        circuitHexagon.setAttribute( "height", "12" );
+        Element circuitHexagon = draw.element("path");
+        circuitHexagon.setAttribute("fill", "none");
+        circuitHexagon.setAttribute("stroke", "black");
+        circuitHexagon.setAttribute("stroke-width", "1");
+        circuitHexagon.setAttribute("width", "18");
+        circuitHexagon.setAttribute("height", "12");
 
-        Element dimmerRectangle = draw.element( "rect" );
-        dimmerRectangle.setAttribute( "fill", "none" );
-        dimmerRectangle.setAttribute( "height", "11" );
+        Element dimmerRectangle = draw.element("rect");
+        dimmerRectangle.setAttribute("fill", "none");
+        dimmerRectangle.setAttribute("height", "11");
 
-        Element channelCircle = draw.element( "circle" );
-        channelCircle.setAttribute( "fill", "none" );
-        channelCircle.setAttribute( "r", "8" );
+        Element channelCircle = draw.element("circle");
+        channelCircle.setAttribute("fill", "none");
+        channelCircle.setAttribute("r", "8");
 
-        Element circuitText = draw.element( "text" );
-        circuitText.setAttribute( "fill", "black" );
-        circuitText.setAttribute( "stroke", "none" );
-        circuitText.setAttribute( "font-family", "serif" );
-        circuitText.setAttribute( "font-size", "9" );
-        circuitText.setAttribute( "text-anchor", "middle" );
+        Element circuitText = draw.element("text");
+        circuitText.setAttribute("fill", "black");
+        circuitText.setAttribute("stroke", "none");
+        circuitText.setAttribute("font-family", "serif");
+        circuitText.setAttribute("font-size", "9");
+        circuitText.setAttribute("text-anchor", "middle");
 
-        Element dimmerText = draw.element( "text" );
-        dimmerText.setAttribute( "fill", "black" );
-        dimmerText.setAttribute( "stroke", "none" );
-        dimmerText.setAttribute( "font-family", "serif" );
-        dimmerText.setAttribute( "font-size", "9" );
-        dimmerText.setAttribute( "text-anchor", "middle" );
+        Element dimmerText = draw.element("text");
+        dimmerText.setAttribute("fill", "black");
+        dimmerText.setAttribute("stroke", "none");
+        dimmerText.setAttribute("font-family", "serif");
+        dimmerText.setAttribute("font-size", "9");
+        dimmerText.setAttribute("text-anchor", "middle");
 
-        Element channelText = draw.element( "text" );
-        channelText.setAttribute( "fill", "black" );
-        channelText.setAttribute( "fill", "black" );
-        channelText.setAttribute( "font-family", "serif" );
-        channelText.setAttribute( "font-size", "9" );
-        channelText.setAttribute( "text-anchor", "middle" );
+        Element channelText = draw.element("text");
+        channelText.setAttribute("fill", "black");
+        channelText.setAttribute("fill", "black");
+        channelText.setAttribute("font-family", "serif");
+        channelText.setAttribute("font-size", "9");
+        channelText.setAttribute("text-anchor", "middle");
 
-        Text textCircuit = draw.document().createTextNode( circuit );
-        Text textDimmer = draw.document().createTextNode( dimmer );
-        Text textChannel = draw.document().createTextNode( channel );
+        Text textCircuit = draw.document().createTextNode(circuit);
+        Text textDimmer = draw.document().createTextNode(dimmer);
+        Text textChannel = draw.document().createTextNode(channel);
 
         Integer dimmerTextY;
         Integer dimmerRectangleY;
@@ -268,24 +254,24 @@ public class Luminaire extends MinderDom {
                 // Hexagon for circuit
                 x = point.x() - 9;
                 y = point.y() - 25;
-                circuitHexagon.setAttribute( "d",
-                                             "M " + (x + 1) + " " + (y + 5) +
-                                                     " L " + (x + 4) + " " + y +
-                                                     " L " + (x + 14) + " " + y +
-                                                     " L " + (x + 17) + " " + (y + 5) +
-                                                     " L " + (x + 14) + " " + (y + 10) +
-                                                     " L " + (x + 4) + " " + (y + 10) +
-                                                     " Z" );
-                circuitHexagon.setAttribute( "x", x.toString() );
-                circuitHexagon.setAttribute( "y", y.toString() );
-                group.appendChild( circuitHexagon );
+                circuitHexagon.setAttribute("d",
+                        "M " + (x + 1) + " " + (y + 5) +
+                                " L " + (x + 4) + " " + y +
+                                " L " + (x + 14) + " " + y +
+                                " L " + (x + 17) + " " + (y + 5) +
+                                " L " + (x + 14) + " " + (y + 10) +
+                                " L " + (x + 4) + " " + (y + 10) +
+                                " Z");
+                circuitHexagon.setAttribute("x", x.toString());
+                circuitHexagon.setAttribute("y", y.toString());
+                group.appendChild(circuitHexagon);
 
                 Integer circuitTextX = point.x();
                 Integer circuitTextY = point.y() - 17;
-                circuitText.setAttribute( "x", circuitTextX.toString() );
-                circuitText.setAttribute( "y", circuitTextY.toString() );
-                draw.appendRootChild( circuitText );
-                circuitText.appendChild( textCircuit );
+                circuitText.setAttribute("x", circuitTextX.toString());
+                circuitText.setAttribute("y", circuitTextY.toString());
+                draw.appendRootChild(circuitText);
+                circuitText.appendChild(textCircuit);
 
                 dimmerTextY = point.y() - 31;
                 dimmerRectangleY = point.y() - 39;
@@ -299,8 +285,8 @@ public class Luminaire extends MinderDom {
         if (3 < textDimmer.getLength()) {
             dimmerTextX -= 5;
         }
-        dimmerText.setAttribute( "x", dimmerTextX.toString() );
-        dimmerText.setAttribute( "y", dimmerTextY.toString() );
+        dimmerText.setAttribute("x", dimmerTextX.toString());
+        dimmerText.setAttribute("y", dimmerTextY.toString());
 
         // Rectangle for dimmer
         x = point.x() - 9;
@@ -310,71 +296,71 @@ public class Luminaire extends MinderDom {
             x -= 4;
         }
 
-        dimmerRectangle.setAttribute( "x", x.toString() );
-        dimmerRectangle.setAttribute( "y", dimmerRectangleY.toString() );
-        dimmerRectangle.setAttribute( "width", width.toString() );
-        group.appendChild( dimmerRectangle );
+        dimmerRectangle.setAttribute("x", x.toString());
+        dimmerRectangle.setAttribute("y", dimmerRectangleY.toString());
+        dimmerRectangle.setAttribute("width", width.toString());
+        group.appendChild(dimmerRectangle);
 
-        group.appendChild( dimmerText );
+        group.appendChild(dimmerText);
         switch (Venue.Circuiting()) {
             case Venue.ONETOMANY:
-                dimmerText.appendChild( textCircuit );
+                dimmerText.appendChild(textCircuit);
                 break;
             case Venue.ONETOONE:
             default:
-                dimmerText.appendChild( textDimmer );
+                dimmerText.appendChild(textDimmer);
                 break;
         }
 
         // Circle and text for channel number
         x = point.x();
-        channelCircle.setAttribute( "cx", x.toString() );
-        channelCircle.setAttribute( "cy", channelCircleY.toString() );
-        group.appendChild( channelCircle );
+        channelCircle.setAttribute("cx", x.toString());
+        channelCircle.setAttribute("cy", channelCircleY.toString());
+        group.appendChild(channelCircle);
 
         Integer channelTextX = point.x();
-        channelText.setAttribute( "x", channelTextX.toString() );
-        channelText.setAttribute( "y", channelTextY.toString() );
-        group.appendChild( channelText );
+        channelText.setAttribute("x", channelTextX.toString());
+        channelText.setAttribute("y", channelTextY.toString());
+        group.appendChild(channelText);
 
-        channelText.appendChild( textChannel );
+        channelText.appendChild(textChannel);
 
 
         // Unit number to overlay on icon
-        Element unitText = draw.element( "text" );
+        Element unitText = draw.element("text");
         Integer unitTextX = point.x();
         Integer unitTextY = point.y() + 0;
-        unitText.setAttribute( "x", unitTextX.toString() );
-        unitText.setAttribute( "y", unitTextY.toString() );
-        unitText.setAttribute( "fill", "black" );
-        unitText.setAttribute( "stroke", "none" );
-        unitText.setAttribute( "font-family", "sans-serif" );
-        unitText.setAttribute( "font-weight", "100" );
-        unitText.setAttribute( "font-size", "6" );
-        unitText.setAttribute( "text-anchor", "middle" );
-        group.appendChild( unitText );
+        unitText.setAttribute("x", unitTextX.toString());
+        unitText.setAttribute("y", unitTextY.toString());
+        unitText.setAttribute("fill", "black");
+        unitText.setAttribute("stroke", "none");
+        unitText.setAttribute("font-family", "sans-serif");
+        unitText.setAttribute("font-weight", "100");
+        unitText.setAttribute("font-size", "6");
+        unitText.setAttribute("text-anchor", "middle");
+        group.appendChild(unitText);
 
-        Text textUnit = draw.document().createTextNode( unit );
-        unitText.appendChild( textUnit );
+        Text textUnit = draw.document().createTextNode(unit);
+        unitText.appendChild(textUnit);
 
 
         // Color designation to display
-        Element colorText = draw.element( "text" );
+        Element colorText = draw.element("text");
         Integer colorTextX = point.x();
         Integer colorTextY = point.y() + 18;
-        colorText.setAttribute( "x", colorTextX.toString() );
-        colorText.setAttribute( "y", colorTextY.toString() );
-        colorText.setAttribute( "fill", "black" );
-        colorText.setAttribute( "stroke", "none" );
-        colorText.setAttribute( "font-family", "sans-serif" );
-        colorText.setAttribute( "font-weight", "100" );
-        colorText.setAttribute( "font-size", "5" );
-        colorText.setAttribute( "stroke-width", "1px" );
-        colorText.setAttribute( "text-anchor", "middle" );
-        group.appendChild( colorText );
+        colorText.setAttribute("x", colorTextX.toString());
+        colorText.setAttribute("y", colorTextY.toString());
+        colorText.setAttribute("fill", "black");
+        colorText.setAttribute("stroke", "none");
+        colorText.setAttribute("font-family", "sans-serif");
+        colorText.setAttribute("font-weight", "100");
+        colorText.setAttribute("font-size", "5");
+        colorText.setAttribute("stroke-width", "1px");
+        colorText.setAttribute("text-anchor", "middle");
+        group.appendChild(colorText);
 
-        Text textColor = draw.document().createTextNode( color );
-        colorText.appendChild( textColor );
+        Text textColor = draw.document().createTextNode(color);
+        colorText.appendChild(textColor);
     }
 
     /**

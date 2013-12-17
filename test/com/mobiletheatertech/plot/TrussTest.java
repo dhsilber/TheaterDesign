@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
@@ -23,15 +25,20 @@ public class TrussTest {
     Element suspendElement1 = null;
     Element suspendElement2 = null;
 //    Element baseElement = null;
+Integer size = 12;
+    Integer length = 320;
+    Integer x1 = 100;
+    Integer y1 = 200;
+    Integer x2 = 180;
 
     public TrussTest() {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isMinderDom() throws Exception {
         Truss truss = new Truss( element );
 
-        assert Minder.class.isInstance( truss );
+        assert MinderDom.class.isInstance(truss);
     }
 
     @Test
@@ -116,7 +123,8 @@ public class TrussTest {
         assert Suspend.class.isInstance( suspend2 );
 
         Field baseField = TestHelpers.accessField( truss, "base" );
-        assertNull( baseField );
+        Object baseReference = baseField.get(truss);
+        assertNull(baseReference);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
@@ -290,11 +298,144 @@ public class TrussTest {
     }
 
     @Test
-    public void domUnused() throws Exception {
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+        draw.getRoot();
         Truss truss = new Truss( element );
+        new Suspend(suspendElement1);
+        new Suspend(suspendElement2);
+        truss.verify();
 
-        truss.dom( null, View.PLAN );
+        truss.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Truss.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("rect");
+        assertEquals(list.getLength(), 1);
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("width"), length.toString());
+        assertEquals(element.getAttribute("height"), size.toString());
+        assertEquals(element.getAttribute("fill"), "none");
+        assertEquals(element.getAttribute("stroke"), "green");
+        Integer x = x1 - (length - (x2 - x1)) / 2;
+        assertEquals(element.getAttribute("x"), x.toString());
+        Integer y = y1 - size / 2;
+        assertEquals(element.getAttribute("y"), y.toString());
+        assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + y1.toString() + ")");
     }
+
+//    @Test
+//    public void domPlanProscenium() throws Exception {
+//        Draw draw = new Draw();
+//        draw.getRoot();
+//        new Proscenium( prosceniumElement );
+//        Pipe pipe = new Pipe( element );
+//        pipe.verify();
+//
+//        pipe.dom( draw, View.PLAN );
+//
+//        NodeList list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element element = (Element) node;
+//        Integer ex = prosceniumX + x;
+//        Integer wy = prosceniumY - (y - 1);
+//        assertEquals( element.getAttribute( "x" ), ex.toString() );
+//        assertEquals( element.getAttribute( "y" ), wy.toString() );
+//    }
+//
+//    @Test
+//    public void domPlanNoProscenium() throws Exception {
+//        Draw draw = new Draw();
+//        draw.getRoot();
+//        Pipe pipe = new Pipe( element );
+//        pipe.verify();
+//
+//        pipe.dom( draw, View.PLAN );
+//
+//        NodeList list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element element = (Element) node;
+//        assertEquals( element.getAttribute( "x" ), x.toString() );
+//        assertEquals( element.getAttribute( "y" ), ((Integer) (y - 1)).toString() );
+//    }
+
+//    @Test
+//    public void domSection() throws Exception {
+//        Draw draw = new Draw();
+//        draw.getRoot();
+//        Pipe pipe = new Pipe( element );
+//        pipe.verify();
+//
+//        pipe.dom( draw, View.SECTION );
+//
+//        NodeList group = draw.root().getElementsByTagName( "g" );
+//        assertEquals( group.getLength(), 2 );
+//        Node groupNode = group.item( 1 );
+//        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+//        Element groupElement = (Element) groupNode;
+//        assertEquals( groupElement.getAttribute( "class" ), Pipe.LAYERTAG );
+//
+//        NodeList list = groupElement.getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element element = (Element) node;
+//        assertEquals( element.getAttribute( "width" ), Pipe.DIAMETER.toString() );
+//        assertEquals( element.getAttribute( "height" ), Pipe.DIAMETER.toString() );
+//        assertEquals( element.getAttribute( "fill" ), "none" );
+//    }
+//
+//    @Test
+//    public void domSectionProscenium() throws Exception {
+//        Draw draw = new Draw();
+//        draw.getRoot();
+//        new Proscenium( prosceniumElement );
+//        Pipe pipe = new Pipe( element );
+//        pipe.verify();
+//
+//        pipe.dom( draw, View.SECTION );
+//
+//        NodeList list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element element = (Element) node;
+//        Integer wye = prosceniumY - (y - 1);
+//        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+//        assertEquals( element.getAttribute( "x" ), wye.toString() );
+//        assertEquals( element.getAttribute("y"), zee.toString() );
+//    }
+//
+//    @Test
+//    public void domSectionNoProscenium() throws Exception {
+//        Draw draw = new Draw();
+//        draw.getRoot();
+//        Pipe pipe = new Pipe( element );
+//        pipe.verify();
+//
+//        pipe.dom( draw, View.SECTION );
+//
+//        NodeList list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element element = (Element) node;
+//        Integer wye = y - 1;
+//        Integer zee = Venue.Height() - (z - 1);
+//        assertEquals( element.getAttribute( "x" ), wye.toString() );
+//        assertEquals( element.getAttribute( "y" ), zee.toString() );
+//    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -315,13 +456,13 @@ public class TrussTest {
 
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
         hangPoint1.setAttribute( "id", "jim" );
-        hangPoint1.setAttribute( "x", "100" );
-        hangPoint1.setAttribute( "y", "200" );
+        hangPoint1.setAttribute("x", x1.toString());
+        hangPoint1.setAttribute("y", y1.toString());
         hanger1 = new HangPoint( hangPoint1 );
 
         Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
         hangPoint2.setAttribute( "id", "joan" );
-        hangPoint2.setAttribute( "x", "180" );
+        hangPoint2.setAttribute("x", x2.toString());
         hangPoint2.setAttribute( "y", "200" );
         hanger2 = new HangPoint( hangPoint2 );
 
@@ -337,9 +478,9 @@ public class TrussTest {
 //        baseElement.setAttribute( "x", "1" );
 //        baseElement.setAttribute( "y", "2" );
 
-        element = new IIOMetadataNode();
-        element.setAttribute( "size", "12" );
-        element.setAttribute( "length", "320" );
+        element = new IIOMetadataNode("truss");
+        element.setAttribute("size", size.toString());
+        element.setAttribute("length", length.toString());
         element.appendChild( suspendElement1 );
         element.appendChild( suspendElement2 );
     }

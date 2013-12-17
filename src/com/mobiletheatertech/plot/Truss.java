@@ -8,9 +8,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
-
 /**
  * Defines a box truss. <p> XML tag is 'truss'. Required children are 'suspend' elements. Required
  * attributes are 'size' (valid values are 12 and 20) and 'length'. </p><p> For now, I'm allowing
@@ -19,7 +16,8 @@ import java.awt.geom.Line2D;
  * @author dhs
  * @since 0.0.5
  */
-public class Truss extends Minder {
+public class Truss extends MinderDom /* make "Mountable" as an abstract class that
+extends MinderDom and provides Pipe's PIPELIST functionality*/ {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -37,6 +35,9 @@ public class Truss extends Minder {
     private Suspend suspend2 = null;
     private String processedMark = null;
     private Element element = null;
+
+    // Placeholder to allow tests to confirm that there is no base set, even though the base class is commented out entirely.
+    private Integer base = null;
 
     public static void ParseXML(NodeList list) throws AttributeMissingException, InvalidXMLException, KindException {
         int length = list.getLength();
@@ -108,6 +109,7 @@ public class Truss extends Minder {
     public void verify() throws InvalidXMLException {
         assert null != element;
 //        NodeList baseList = element.getElementsByTagName( "base" );
+
         NodeList suspendList = element.getElementsByTagName("suspend");
 
 //        if (2 != suspendList.getLength() && 1 != baseList.getLength()) {
@@ -151,8 +153,8 @@ public class Truss extends Minder {
         return changeInY / changeInX;
     }
 
-    @Override
-    public void drawPlan(Graphics2D canvas) throws ReferenceException {
+//    @Override
+//    public void drawPlan(Graphics2D canvas) throws ReferenceException {
 //        System.out.println( "About to drawPlan Truss" );
 //        canvas.setPaint( Color.MAGENTA );
 //        Point point1 = suspend1.locate();
@@ -222,8 +224,8 @@ public class Truss extends Minder {
 */
 
 
-        System.out.println("Done drawing Truss");
-    }
+//        System.out.println("Done drawing Truss");
+//    }
 
     /**
      * Draw a {@code Truss} onto the provided section canvas.
@@ -233,49 +235,47 @@ public class Truss extends Minder {
      * @param canvas surface to draw on
      * @since 0.0.5
      */
-    @Override
-    public void drawSection(Graphics2D canvas) throws ReferenceException {
-        int bottom = Venue.Height();
+//    @Override
+//    public void drawSection(Graphics2D canvas) throws ReferenceException {
+//        int bottom = Venue.Height();
+//
+//        System.out.println("About to drawSection Truss");
+//        canvas.setPaint(Color.MAGENTA);
+//        Point point1 = suspend1.locate();
+//
+//        int shift = size / 2;
+//
+//        canvas.draw(new Rectangle(point1.y() - shift, bottom - point1.z() - shift,
+//                size, size));
+//    }
 
-        System.out.println("About to drawSection Truss");
-        canvas.setPaint(Color.MAGENTA);
-        Point point1 = suspend1.locate();
+//    @Override
+//    public void drawFront(Graphics2D canvas) throws ReferenceException {
+//        int bottom = Venue.Height();
+//
+//        System.out.println("About to drawFront Truss");
+//        canvas.setPaint(Color.MAGENTA);
+//        Point point1 = suspend1.locate();
+//        Point point2 = suspend2.locate();
+//
+//        double supportSpan = point1.distance(point2);
+//        double overHang = (length - supportSpan) / 2;
+//
+//        drawHelper(canvas,
+//                (int) (point1.x() - overHang),
+//                bottom - point1.z() + size / 2,
+//                size, length);
+//    }
 
-        int shift = size / 2;
-
-        canvas.draw(new Rectangle(point1.y() - shift, bottom - point1.z() - shift,
-                size, size));
-    }
-
-    @Override
-    public void drawFront(Graphics2D canvas) throws ReferenceException {
-        int bottom = Venue.Height();
-
-        System.out.println("About to drawFront Truss");
-        canvas.setPaint(Color.MAGENTA);
-        Point point1 = suspend1.locate();
-        Point point2 = suspend2.locate();
-
-        double supportSpan = point1.distance(point2);
-        double overHang = (length - supportSpan) / 2;
-
-        drawHelper(canvas,
-                (int) (point1.x() - overHang),
-                bottom - point1.z() + size / 2,
-                size, length);
-    }
-
-
-    private void drawHelper(Graphics2D canvas, int x, int y, int width, int length) {
-
-        canvas.setPaint(Color.MAGENTA);
-        canvas.draw(new Line2D.Float(x, y, x + length, y));
-        canvas.draw(new Line2D.Float(x, y - width, x + length, y - width));
-        canvas.draw(new Line2D.Float(x, y, x, y - width));
-        canvas.draw(new Line2D.Float(x + length, y, x + length, y - width));
-
-    }
-
+//    private void drawHelper(Graphics2D canvas, int x, int y, int width, int length) {
+//
+//        canvas.setPaint(Color.MAGENTA);
+//        canvas.draw(new Line2D.Float(x, y, x + length, y));
+//        canvas.draw(new Line2D.Float(x, y - width, x + length, y - width));
+//        canvas.draw(new Line2D.Float(x, y, x, y - width));
+//        canvas.draw(new Line2D.Float(x + length, y, x + length, y - width));
+//
+//    }
     @Override
     public void dom(Draw draw, View mode) throws ReferenceException {
         if (View.PLAN != mode) {
@@ -287,35 +287,38 @@ public class Truss extends Minder {
         Float slope = slope(point1, point2);
         Double rotation = Math.toDegrees(Math.atan(slope));
 //        Tan-1 (Slope Percent/100).
-        System.err.println("Slope: " + slope + "   Rotation:" + rotation);
+//        System.err.println("Slope: " + slope + "   Rotation:" + rotation);
+
+        Double supportSpan = point1.distance(point2);
+        Long span = Math.round(supportSpan);
+        Integer overHang = (length - span.intValue()) / 2;
 
         Integer x1 = point1.x();
         Integer y1 = point1.y();
 //        int x2 = point2.x();
 //        int y2 = point2.y();
 //
-//
-//
 //        Integer height = Venue.Height() - boxOrigin.z();
-
 
         Element group = draw.element("g");
         group.setAttribute("class", LAYERTAG);
         draw.appendRootChild(group);
 
-        Element dimmerRectangle = draw.element("rect");
-        dimmerRectangle.setAttribute("height", size.toString());
-        dimmerRectangle.setAttribute("fill", "none");
-        dimmerRectangle.setAttribute("stroke", "green");
-        dimmerRectangle.setAttribute("transform",
+        Element trussRectangle = draw.element("rect");
+        trussRectangle.setAttribute("height", size.toString());
+        trussRectangle.setAttribute("fill", "none");
+        trussRectangle.setAttribute("stroke", "green");
+        trussRectangle.setAttribute("transform",
                 "rotate(" + rotation.toString() + "," + x1.toString() + "," +
                         y1.toString() + ")");
-        dimmerRectangle.setAttribute("x", x1.toString());
-        dimmerRectangle.setAttribute("y", y1.toString());
-        dimmerRectangle.setAttribute("width", length.toString());
+        Integer x = x1 - overHang/*.intValue()*/;
+        trussRectangle.setAttribute("x", x.toString());
+        Integer y = y1 - size / 2;
+        trussRectangle.setAttribute("y", y.toString());
+        trussRectangle.setAttribute("width", length.toString());
 
 
-        group.appendChild(dimmerRectangle);
+        group.appendChild(trussRectangle);
 
 //        transform = "rotate(-45 100 100)"
 //        switch (mode) {
