@@ -104,6 +104,10 @@ public class Suspend extends MinderDom {
                 location.z() - distance );
     }
 
+    public String ref() {
+        return refId;
+    }
+
     @Override
     public void verify() {
     }
@@ -122,6 +126,14 @@ public class Suspend extends MinderDom {
 
     @Override
     public void dom( Draw draw, View mode ) {
+        switch (mode) {
+            case TRUSS:
+                return;
+        }
+    }
+
+    public String toString() {
+      return "Suspend - refId: "+refId+" distance: "+distance+" processedMark: "+processedMark+" hangpoint: "+hangPoint+".";
     }
 
 }

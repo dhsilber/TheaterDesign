@@ -89,7 +89,7 @@ public class WriteTest {
 //        HashMap<String,String> thing=new HashMap<>(  );
 //        thing                       .put( name,tag );
 //
-//        Write write=new Write( "foo" );
+//        Write write=new Write( "stringValue" );
 //
 //        write.
 //

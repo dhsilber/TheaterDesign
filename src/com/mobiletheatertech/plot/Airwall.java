@@ -91,5 +91,9 @@ public class Airwall extends Minder {
 
     @Override
     public void dom( Draw draw, View mode ) throws MountingException {
+        switch (mode) {
+            case TRUSS:
+                return;
+        }
     }
 }

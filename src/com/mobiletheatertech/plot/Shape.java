@@ -78,7 +78,7 @@ public class Shape {
 
 //            points[pointIndex]    =        new Coordinate(x,y);
 
-            System.out.println("Found x: " + x + ", y: " + y);
+//            System.out.println("Found x: " + x + ", y: " + y);
 //            vertices.add(new Point(x, y,0));
         }
 

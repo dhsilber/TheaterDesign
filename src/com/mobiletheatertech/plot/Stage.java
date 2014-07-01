@@ -133,5 +133,9 @@ public class Stage extends Minder {
 
     @Override
     public void dom( Draw draw, View mode ) {
+        switch (mode) {
+            case TRUSS:
+                return;
+        }
     }
 }

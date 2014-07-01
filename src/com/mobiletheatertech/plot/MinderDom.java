@@ -25,9 +25,12 @@ public abstract class MinderDom extends Elemental {
      *
      */
     public MinderDom( Element element ) throws InvalidXMLException {
-        if (null == element) {
-            throw new InvalidXMLException( "Element unexpectedly null!" );
-        }
+        super (element);
+
+//        if (null == element) {
+//            throw new InvalidXMLException( this.getClass().getSimpleName() + " element unexpectedly null!" );
+//        }
+
         LIST.add( this );
     }
 
@@ -36,7 +39,7 @@ public abstract class MinderDom extends Elemental {
      * @throws LocationException
      */
     public static void VerifyAll()
-            throws FeatureException, InvalidXMLException, LocationException, ReferenceException
+            throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException
     {
         for (MinderDom item : LIST) {
             item.verify();
@@ -50,6 +53,7 @@ public abstract class MinderDom extends Elemental {
      */
     public static void DomAllPlan( Draw draw ) throws MountingException, ReferenceException {
         for (MinderDom item : LIST) {
+//            System.out.println( "MinderDom.DomAllPlan: About to dom "+item.getClass().getSimpleName()+".");
             item.dom( draw, View.PLAN );
         }
     }
@@ -77,6 +81,20 @@ public abstract class MinderDom extends Elemental {
     }
 
     /**
+     * Give each of the plot items an opportunity to modify the SVG DOM.
+     *
+     * @param draw graphics manager
+     */
+    public static void DomAllTruss( Draw draw ) throws MountingException, ReferenceException {
+        // This is a terrible, terrible hack
+        HangPoint.SYMBOLGENERATED = false;
+
+        for (MinderDom item : LIST) {
+            item.dom( draw, View.TRUSS );
+        }
+    }
+
+    /**
      * Hook to allow each {@code Minder}-derived instance to perform sanity checks after all XML has
      * been parsed.
      * <p/>
@@ -86,7 +104,7 @@ public abstract class MinderDom extends Elemental {
      * @throws LocationException   if certain plot items don't fit in available physical space
      */
     public abstract void verify()
-            throws FeatureException, InvalidXMLException, LocationException, ReferenceException;
+            throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException;
 
     /**
      * Hook to allow each {@code Minder}-derived instance to update the DOM for the generated SVG.

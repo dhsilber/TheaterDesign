@@ -9,5 +9,6 @@ package com.mobiletheatertech.plot;
 public enum View {
     PLAN,
     SECTION,
-    FRONT
+    FRONT,
+    TRUSS
 }

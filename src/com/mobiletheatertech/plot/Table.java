@@ -148,6 +148,10 @@ public class Table extends MinderDom {
 
     @Override
     public void dom(Draw draw, View mode) {
+        switch (mode) {
+            case TRUSS:
+                return;
+        }
         if (View.PLAN != mode) {
             return;
         }

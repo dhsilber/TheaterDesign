@@ -81,7 +81,7 @@ public class MinderTest {
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Element unexpectedly null!" )
+           expectedExceptionsMessageRegExp = "Minded elementOnPipe unexpectedly null!" )
     public void NullElement() throws Exception {
         new Minded( null );
     }
@@ -107,12 +107,12 @@ public class MinderTest {
         element.setAttribute( "depth", "14" );
         element.setAttribute( "height", "4" );
         final Venue venue = new Venue( element );
-//        final Minded foo = new Minded();
+//        final Minded stringValue = new Minded();
 
         new Expectations() {
             {
                 venue.drawPlan( canvas );
-//                foo.drawPlan( canvas );
+//                stringValue.drawPlan( canvas );
 //                drawPlan.transform( 1, 2 );
             }
         };

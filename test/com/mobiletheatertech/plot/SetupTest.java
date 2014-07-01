@@ -86,7 +86,7 @@ public class SetupTest {
 
 //    @Test
 //    public void finds() throws Exception {
-//        Setup setup = new Setup( element );
+//        Setup setup = new Setup( elementOnPipe );
 //
 //        HangPoint found = HangPoint.Find( "Blather" );
 //

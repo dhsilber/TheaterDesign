@@ -28,7 +28,8 @@ public class HangPoint extends MinderDom {
      */
     public static final String LAYERTAG = "hangpoint";
 
-    private static Boolean SYMBOLGENERATED = false;
+    // This is public to allow for a terrible, terrible hack in MinderDom.DomAllTruss().
+    public static Boolean SYMBOLGENERATED = false;
 
     private Integer x = null;
     private Integer y = null;
@@ -112,6 +113,34 @@ public class HangPoint extends MinderDom {
         return null;
     }
 
+    public static void Draw( Draw draw, Integer x, Integer y, Integer textX, Integer textY, String id ) {
+//System.out.println( "HangPoint.Draw( "+x.toString()+", "+ y.toString()+", "+ textX.toString()+", "+ textY.toString()+", "+ id+" )" );
+
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
+
+        Element use = draw.element( "use" );
+        use.setAttribute( "xlink:href", "#hangpoint" );
+        use.setAttribute( "x", x.toString() );
+        use.setAttribute( "y", y.toString() );
+        group.appendChild( use );
+
+        Element idText = draw.element( "text" );
+        idText.setAttribute( "x", textX.toString() );
+        idText.setAttribute( "y", textY.toString() );
+        idText.setAttribute( "fill", "blue" );
+        idText.setAttribute( "stroke", "none" );
+        idText.setAttribute( "font-family", "sans-serif" );
+        idText.setAttribute( "font-weight", "100" );
+        idText.setAttribute( "font-size", "12pt" );
+        idText.setAttribute( "text-anchor", "left" );
+        group.appendChild( idText );
+
+        Text textId = draw.document().createTextNode( id );
+        idText.appendChild( textId );
+    }
+
     /**
      * Provide the location of this {@code HangPoint}.
      *
@@ -147,11 +176,7 @@ public class HangPoint extends MinderDom {
      */
     @Override
     public void dom( Draw draw, View mode ) {
-        if (View.PLAN != mode) {
-            return;
-        }
-
-        if (!SYMBOLGENERATED) {
+        if (( View.PLAN == mode || View.TRUSS == mode ) && !SYMBOLGENERATED) {
 
             Element defs = draw.element( "defs" );
             draw.appendRootChild( defs );
@@ -191,55 +216,14 @@ public class HangPoint extends MinderDom {
             SYMBOLGENERATED = true;
         }
 
-        Element group = draw.element( "g" );
-        group.setAttribute( "class", LAYERTAG );
-        draw.appendRootChild( group );
+        if (View.PLAN != mode) {
+            return;
+        }
 
-        Element use = draw.element( "use" );
-        use.setAttribute( "xlink:href", "#hangpoint" );
-
-        use.setAttribute( "x", x.toString() );
-        use.setAttribute( "y", y.toString() );
-        group.appendChild( use );
-
-        Element idText = draw.element( "text" );
         Integer unitTextX = x + 12;
         Integer unitTextY = y + 12;
-        idText.setAttribute( "x", unitTextX.toString() );
-        idText.setAttribute( "y", unitTextY.toString() );
-        idText.setAttribute( "fill", "blue" );
-        idText.setAttribute( "stroke", "none" );
-        idText.setAttribute( "font-family", "sans-serif" );
-        idText.setAttribute( "font-weight", "100" );
-        idText.setAttribute( "font-size", "12pt" );
-        idText.setAttribute( "text-anchor", "left" );
-        group.appendChild( idText );
 
-        Text textId = draw.document().createTextNode( id );
-        idText.appendChild( textId );
-
-//        Integer exPlus = x + 2;
-//        Integer exMinus = x - 2;
-//        Integer whyPlus = y + 2;
-//        Integer whyMinus = y - 2;
-//
-//        Element line = draw.element( "line" );
-//        line.setAttribute( "x1", exMinus.toString() );
-//        line.setAttribute( "y1", whyMinus.toString() );
-//        line.setAttribute( "x2", exPlus.toString() );
-//        line.setAttribute( "y2", whyPlus.toString() );
-//        line.setAttribute( "stroke", "blue" );
-//        line.setAttribute( "stroke-width", "2" );
-//        group.appendChild( line );
-//
-//        Element line2 = draw.element( "line" );
-//        line2.setAttribute( "x1", exPlus.toString() );
-//        line2.setAttribute( "y1", whyMinus.toString() );
-//        line2.setAttribute( "x2", exMinus.toString() );
-//        line2.setAttribute( "y2", whyPlus.toString() );
-//        line2.setAttribute( "stroke", "blue" );
-//        line2.setAttribute( "stroke-width", "2" );
-//        group.appendChild( line2 );
+        Draw( draw, x, y, unitTextX, unitTextY, id );
     }
 
 }

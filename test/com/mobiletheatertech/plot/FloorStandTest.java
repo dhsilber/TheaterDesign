@@ -17,7 +17,7 @@
 // */
 //public class FloorStandTest {
 //
-//    Element element = null;
+//    Element elementOnPipe = null;
 //    Luminaire luminaire = null;
 //    Integer x = 12;
 //    Integer y=32;
@@ -29,14 +29,14 @@
 //
 //    @Test
 //    public void isMinderDom() throws Exception {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        assert MinderDom.class.isInstance( floorStand );
 //    }
 //
 //    @Test
 //    public void storesAttributes() throws Exception {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        assertEquals( TestHelpers.accessInteger( floorStand, "x" ), x );
 //        assertEquals( TestHelpers.accessInteger( floorStand, "y" ), y );
@@ -47,7 +47,7 @@
 //    // Until such time as I properly implement this class' use of id.
 //    @Test
 //    public void idUnused() throws Exception {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        assertNull( TestHelpers.accessString( floorStand, "id" ) );
 //    }
@@ -56,7 +56,7 @@
 //    @Test
 //    public void storesSelf() throws Exception
 //    {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        ArrayList<Minder> thing = Drawable.List();
 //        assertNotNull( thing, "List should exist" );
@@ -71,21 +71,21 @@
 //     */
 //    @Test
 //    public void justFine() throws Exception {
-//        new FloorStand( element );
+//        new FloorStand( elementOnPipe );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "FloorStand instance is missing required 'x' attribute.")
 //    public void noX() throws Exception {
-//        element.removeAttribute( "x" );
-//        new FloorStand( element );
+//        elementOnPipe.removeAttribute( "x" );
+//        new FloorStand( elementOnPipe );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "FloorStand instance is missing required 'y' attribute.")
 //    public void noY() throws Exception {
-//        element.removeAttribute( "y" );
-//        new FloorStand( element );
+//        elementOnPipe.removeAttribute( "y" );
+//        new FloorStand( elementOnPipe );
 //    }
 //
 //    @Test
@@ -112,7 +112,7 @@
 //
 //    @Test
 //    public void locate() throws Exception {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        Point location = floorStand.locate();
 //
@@ -123,14 +123,14 @@
 //
 //    @Test
 //    public void drawUnused() throws Exception {
-//        new FloorStand( element );
+//        new FloorStand( elementOnPipe );
 //
 ////        floorStand.drawPlan( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        FloorStand floorStand = new FloorStand( element );
+//        FloorStand floorStand = new FloorStand( elementOnPipe );
 //
 //        floorStand.dom( null, View.PLAN );
 //    }
@@ -166,16 +166,16 @@
 //        otherFloorStand.setAttribute( "ref", "jane" );
 //        otherFloorStand.setAttribute( "distance", "200" );
 //
-//        element = new IIOMetadataNode( "floorStand" );
-//        element.setAttribute( "x", "12" );
-//        element.setAttribute( "y", "32" );
-//        element.setAttribute( "width", width.toString() );
-//        element.setAttribute( "depth", depth.toString() );
+//        elementOnPipe = new IIOMetadataNode( "floorStand" );
+//        elementOnPipe.setAttribute( "x", "12" );
+//        elementOnPipe.setAttribute( "y", "32" );
+//        elementOnPipe.setAttribute( "width", width.toString() );
+//        elementOnPipe.setAttribute( "depth", depth.toString() );
 //
 //        Element luminaire1 = new IIOMetadataNode( "luminaire" );
 //        luminaire1.setAttribute( "size", "12" );
 //        luminaire1.setAttribute( "length", "320" );
-//        luminaire1.appendChild( element );
+//        luminaire1.appendChild( elementOnPipe );
 //        luminaire1.appendChild( otherFloorStand );
 //        luminaire = new Luminaire( luminaire1 );
 //    }

@@ -167,8 +167,47 @@ public class Point {
         if (getClass() != other.getClass()) return false;
 
         Point point = (Point) other;
-        return (x == point.x() && y == point.y() && z == point.z());
+        boolean same = (x == point.x() && y == point.y() && z == point.z());
+        if (!same) {
+//            System.out.println( "X: "+x+", "+point.x()+
+//                    " Y: "+y+", "+point.y()+
+//                    " Z: "+z+", "+point.z()+"." );
+        }
+        return same;
     }
+
+    /*
+     * Started going down the path of finding the coordinated for each hanged item, but turning the math into an
+      * algorithm is defeating me right now.
+      *
+      * @author dhs
+      * @since 0.0.23
+     */
+//    public Point pointOnSlope( Double slope, Double distance ) {
+//        // Given (x1 - x)slope = (y1 - y), solve for x1
+//        double slopeTimesX = x * slope;
+//        // also, x1 * slope, but we'll later isolate x1 & divide both sides by slope,
+//        // so just leave x1 intact.
+//
+//        // Gather simple numbers
+//        double rightNumber = y + slopeTimesX;
+//
+//        // x1 = (y1 / slope) - (rightNumber / slope)
+//        rightNumber /= slope;
+//
+//        // x1 = (y1 / slope) - rightNumber
+//
+//
+//
+//        // Given circle equation with radius 'distance':
+//        // (x1 -x)^2 + (y1-y)^2 = distance ^2
+//        // (((y1 /slope) - rightNumber) - x)^2 + (y1 - y)^2 = distance ^2
+//        double distSquared = distance * distance;
+//
+//
+//
+//return this;
+//    }
 
     @Override
     public String toString() {

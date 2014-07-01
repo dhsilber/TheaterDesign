@@ -7,6 +7,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
+import org.jopendocument.dom.OOUtils;
+
+
 /**
  * <code>Write</code> deals with output file issues and relies on {@link Draw Draw} to generate SVG
  * content.
@@ -52,6 +59,8 @@ public class Write {
         writePlan(pathname);
         writeSection(pathname);
         writeFront(pathname);
+        writeTruss(pathname);
+        writeSpreadsheet(pathname);
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
@@ -64,7 +73,7 @@ public class Write {
         String filename = basename + "/index.html";
         File file = new File(filename);
 
-        Integer width = Venue.Width() + Legend.Width();
+        Integer width = Venue.Width() + Legend.PlanWidth();
         width += width / 100 + 5;
 
         String output = "" +
@@ -97,6 +106,7 @@ public class Write {
                 HTML.SelectFunction(ChairBlock.LAYERTAG) +
                 HTML.SelectFunction(HangPoint.LAYERTAG) +
                 HTML.SelectFunction(Luminaire.LAYERTAG) +
+                HTML.SelectFunction(Luminaire.INFOLAYERTAG) +
                 HTML.SelectFunction(Pipe.LAYERTAG) +
                 HTML.SelectFunction(Zone.LAYERTAG) +
 
@@ -134,7 +144,7 @@ public class Write {
                 Setup.List() +
                 HTML.Checkboxes(Layer.List()) +
 //                "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
-//                " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
+//                " id=\"process\" checked=\"checked\" /> Session Chairs\n" +
                 "</form>\n" +
                 "</div>\n" +
                 "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + Venue.Depth() + "\" width=\"" +
@@ -178,18 +188,19 @@ public class Write {
     }
 
     private void writePlan(String basename) throws MountingException, ReferenceException {
+//        System.out.println( "writePlan: About to start.");
         Draw draw = new Draw();
 
         Minder.DrawAllPlan(draw.canvas());
 
-        Hack.Draw(draw.canvas());
+//        Hack.Draw(draw.canvas());
 
         draw.getRoot();
 
         // Specify the size of the generated SVG so that when it is larger than the display area,
         // scrollbars will be provided.
         Element rootElement = draw.root();
-        Integer width = Venue.Width() + Legend.Width();
+        Integer width = Venue.Width() + Legend.PlanWidth();
         width += width / 100;
         rootElement.setAttribute("width", width.toString());
         Integer height = Venue.Depth();
@@ -207,17 +218,22 @@ public class Write {
 
         Grid.DOM(draw);
 
-        Legend.Startup(draw);
+        Legend.Startup(draw, View.PLAN, Venue.Width() + 5, Legend.PlanWidth() );
 
-        Minder.DomAllPlan(draw);
+//        System.out.println( "writePlan: About to MinderDom.DomAllPlan.");
 
-        Hack.Dom(draw);
+        MinderDom.DomAllPlan(draw);
 
+//        System.out.println( "writePlan: About to Hack.Dom.");
+        Hack.Dom(draw, View.PLAN );
+
+//        System.out.println( "writePlan: About to Legend.Callback.");
         Legend.Callback();
 
         String pathname = basename + "/plan.svg";
 
         draw.create(pathname);
+//        System.out.println( "writePlan: done.");
     }
 
     private void writeSection(String basename) throws MountingException, ReferenceException {
@@ -231,7 +247,7 @@ public class Write {
 
         Minder.DomAllSection(draw);
 
-        Hack.Dom(draw);
+        Hack.Dom(draw, View.SECTION);
 
         String pathname = basename + "/section.svg";
 
@@ -249,12 +265,88 @@ public class Write {
 
         Minder.DomAllFront(draw);
 
-        Hack.Dom(draw);
+        Hack.Dom(draw, View.FRONT);
 
         String pathname = basename + "/front.svg";
 
         draw.create(pathname);
     }
+
+    private void writeTruss(String basename) throws MountingException, ReferenceException {
+        System.out.println( "writeTruss: About to start.");
+        Draw draw = new Draw();
+
+        draw.getRoot();
+
+        // Specify the size of the generated SVG so that when it is larger than the display area,
+        // scrollbars will be provided.
+        Element rootElement = draw.root();
+        Integer width = 1000;
+        width += width / 100;
+        rootElement.setAttribute("width", width.toString());
+        Integer height = Venue.Depth();
+        height += height / 100;
+        rootElement.setAttribute("height", height.toString());
+//        rootElement.setAttribute( "overflow", "visible" );
+
+        Text textNode = draw.document().createCDATASection(CSS);
+//                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
+        Element style = draw.element("style");
+        style.setAttribute("type", "text/css");
+        style.appendChild(textNode);
+        rootElement.appendChild(style);
+
+
+//        Grid.DOM(draw);
+
+        // Hardcoded values here are for Arisia '14 flying truss.
+        Legend.Startup(draw, View.TRUSS, 700, 300 );
+
+//        System.out.println( "writeTruss: About to MinderDom.DomAllTruss.");
+
+        MinderDom.DomAllTruss(draw);
+
+//        System.out.println( "writeTruss: About to Hack.Dom.");
+        Hack.Dom(draw, View.TRUSS);
+
+//        System.out.println( "writeTruss: About to Legend.Callback.");
+        Legend.Callback();
+
+        String pathname = basename + "/truss.svg";
+
+        draw.create(pathname);
+//        System.out.println( "writeTruss: done.");
+    }
+
+    private void writeSpreadsheet( String basename) {
+        // Create the data to save.
+        final Object[][] data = GearList.Report();
+//        new Object[6][2];
+//        data[0] = new Object[] { "January", 1 };
+//        data[1] = new Object[] { "February", 3 };
+//        data[2] = new Object[] { "March", 8 };
+//        data[3] = new Object[] { "April", 10 };
+//        data[4] = new Object[] { "May", 15 };
+//        data[5] = new Object[] { "June", 18 };
+
+        String[] columns = new String[] { "Item", "Quantity" };
+
+        TableModel model = new DefaultTableModel(data, columns);
+
+        // Save the data to an ODS file and open it.
+        final File file = new File(basename+"/gear.ods");
+
+        try {
+        SpreadSheet.createEmpty(model).saveAs(file);
+
+//        OOUtils.open(file);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        };
+
+    }
+
 //
 //    private String checkboxes( HashMap<String,String> data){
 //        return "";
