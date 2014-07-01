@@ -14,20 +14,20 @@ import static org.testng.Assert.assertEquals;
  * @author dhs
  * @since 0.0.20
  */
-public class ShowTest {
+public class SessionTest {
 
-    Show show;
+    Session show;
 
     Element element = null;
     String setup = "SetupName";
-    String name = "Show Name";
+    String name = "Session Name";
 
-    public ShowTest() {
+    public SessionTest() {
     }
 
     @Test
     public void isElemental() throws Exception {
-        Show show = new Show( element );
+        Session show = new Session( element );
 
         assert Elemental.class.isInstance( show );
     }
@@ -36,7 +36,7 @@ public class ShowTest {
     public void storesAttributes() throws Exception {
         element.removeAttribute( "setup" );
 
-        Show show = new Show( element );
+        Session show = new Session( element );
 
         assertEquals( TestHelpers.accessString( show, "id" ), name );
         assertEquals( TestHelpers.accessString( show, "setup" ), "" );
@@ -49,10 +49,10 @@ public class ShowTest {
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Show instance is missing required 'name' attribute." )
+           expectedExceptionsMessageRegExp = "Session instance is missing required 'name' attribute." )
     public void noName() throws Exception {
         element.removeAttribute( "name" );
-        new Show( element );
+        new Session( element );
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ShowTest {
         element.setAttribute( "setup", setup );
         element.setAttribute( "name", name );
 
-        show = new Show( element );
+        show = new Session( element );
     }
 
     @AfterMethod
