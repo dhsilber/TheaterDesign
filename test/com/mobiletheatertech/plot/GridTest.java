@@ -9,6 +9,7 @@ import org.testng.annotations.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.svg.SVGElement;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
@@ -57,43 +58,59 @@ public class GridTest {
         NodeList list = draw.root().getElementsByTagName( "line" );
         assertEquals( list.getLength(), 17 );
 
+        Integer x1 = 1 + SvgElement.OffsetX();
+        Integer y1 = SvgElement.OffsetY();
+        Integer x2 = 1 + SvgElement.OffsetX();
+        Integer y2 = 401 + SvgElement.OffsetY();
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), "1" );
-        assertEquals( element.getAttribute( "y1" ), "0" );
-        assertEquals( element.getAttribute( "x2" ), "1" );
-        assertEquals( element.getAttribute( "y2" ), "401" );
+        assertEquals( element.getAttribute( "x1" ), x1.toString() );
+        assertEquals( element.getAttribute( "y1" ), y1.toString() );
+        assertEquals( element.getAttribute( "x2" ), x2.toString() );
+        assertEquals( element.getAttribute( "y2" ), y2.toString() );
         assertEquals( element.getAttribute( "stroke" ), "blue" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
 
+        x1 = 337 + SvgElement.OffsetX();
+        y1 = SvgElement.OffsetY();
+        x2 = 337 + SvgElement.OffsetX();
+        y2 = 401 + SvgElement.OffsetY();
         node = list.item( 7 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), "337" );
-        assertEquals( element.getAttribute( "y1" ), "0" );
-        assertEquals( element.getAttribute( "x2" ), "337" );
-        assertEquals( element.getAttribute( "y2" ), "401" );
+        assertEquals( element.getAttribute( "x1" ), x1.toString() );
+        assertEquals( element.getAttribute( "y1" ), y1.toString() );
+        assertEquals( element.getAttribute( "x2" ), x2.toString() );
+        assertEquals( element.getAttribute( "y2" ), y2.toString() );
         assertEquals( element.getAttribute( "stroke" ), "blue" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
 
+        x1 = SvgElement.OffsetX();
+        y1 = 1 + SvgElement.OffsetY();
+        x2 = 351 + SvgElement.OffsetX();
+        y2 = 1 + SvgElement.OffsetY();
         node = list.item( 8 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), "0" );
-        assertEquals( element.getAttribute( "y1" ), "1" );
-        assertEquals( element.getAttribute( "x2" ), "351" );
-        assertEquals( element.getAttribute( "y2" ), "1" );
+        assertEquals( element.getAttribute( "x1" ), x1.toString() );
+        assertEquals( element.getAttribute( "y1" ), y1.toString() );
+        assertEquals( element.getAttribute( "x2" ), x2.toString() );
+        assertEquals( element.getAttribute( "y2" ), y2.toString() );
         assertEquals( element.getAttribute( "stroke" ), "blue" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
 
+        x1 = SvgElement.OffsetX();
+        y1 = 385 + SvgElement.OffsetY();
+        x2 = 351 + SvgElement.OffsetX();
+        y2 = 385 + SvgElement.OffsetY();
         node = list.item( 16 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), "0" );
-        assertEquals( element.getAttribute( "y1" ), "385" );
-        assertEquals( element.getAttribute( "x2" ), "351" );
-        assertEquals( element.getAttribute( "y2" ), "385" );
+        assertEquals( element.getAttribute( "x1" ), x1.toString() );
+        assertEquals( element.getAttribute( "y1" ), y1.toString() );
+        assertEquals( element.getAttribute( "x2" ), x2.toString() );
+        assertEquals( element.getAttribute( "y2" ), y2.toString() );
         assertEquals( element.getAttribute( "stroke" ), "blue" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
     }

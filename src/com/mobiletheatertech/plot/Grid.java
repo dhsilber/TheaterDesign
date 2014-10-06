@@ -30,8 +30,7 @@ public class Grid extends MinderDom {
     }
 
     @Override
-    public void verify() throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException {
-
+    public void verify() {
     }
 
     /**
@@ -74,17 +73,17 @@ public class Grid extends MinderDom {
     private void line( Draw draw, Integer x1, Integer y1, Integer x2, Integer y2,
                               String opacity )
     {
-        SvgElement line;
-        line = draw.element( "line" );
-        line.attribute("x1", x1.toString());
-        line.attribute("y1", y1.toString());
-        line.attribute("x2", x2.toString());
-        line.attribute("y2", y2.toString());
-
-        line.attribute("stroke", "blue");
+        SvgElement line = draw.line( draw, x1, y1, x2, y2, "blue" );
+//        line = draw.element( "line" );
+//        line.attribute("x1", x1.toString());
+//        line.attribute("y1", y1.toString());
+//        line.attribute("x2", x2.toString());
+//        line.attribute("y2", y2.toString());
+//
+//        line.attribute("stroke", "blue");
         line.attribute("stroke-opacity", opacity);
 
-        draw.appendRootChild( line );
+//        draw.appendRootChild( line );
     }
 
 }
