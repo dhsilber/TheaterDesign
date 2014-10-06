@@ -21,8 +21,17 @@ public class AttributeMissingException extends Exception {
         super(
                 tag + " "
                         + (null == id || id.isEmpty()
-                           ? "instance"
-                           : "(" + id + ")")
+                        ? "instance"
+                        : "(" + id + ")")
                         + " is missing required '" + attribute + "' attribute." );
+    }
+
+    /**
+     * Constructs an instance of <code>AttributeMissingException</code> with a specified message.
+     *
+     * @param message   pre-constructed message
+     */
+    public AttributeMissingException( StringBuilder message ) {
+        super( message.toString() );
     }
 }

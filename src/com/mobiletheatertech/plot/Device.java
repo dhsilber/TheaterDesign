@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Provides a generic item that can describe a real-world device.
@@ -20,39 +21,15 @@ public class Device extends MinderDom
     private String on;
 
     private DeviceTemplate template = null;
-    private Table surface = null;
+    private Stackable surface = null;
 
-    /**
-     * Construct a {@code Box} for each element in a list of XML nodes.
-     *
-     * @param list of XML nodes
-     * @throws AttributeMissingException if a required attribute is missing
-     * @throws LocationException         if the stage is outside the {@code Venue}
-     * @throws SizeException             if a length attribute is too short
-     */
+    Solid shape = null;
+    Point place = null;
+    String layer = null;
 
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML(NodeList list)
-            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/ {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item(index);
+    private static final String COLOR = "black";
+    private static final String FILLCOLOR = "grey";
 
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new Device(element);
-            }
-        }
-    }
-
-    public static Device Select( String type ) {
-        for (Device selection : DEVICELIST) {
-            if (selection.id.equals( type )) {
-                return selection;
-            }
-        }
-        return null;
-    }
 
     /**
      * Construct a {@code Box} from an XML element.
@@ -73,66 +50,94 @@ public class Device extends MinderDom
         DEVICELIST.add( this );
     }
 
+    public static Device Select( String type ) {
+        for (Device selection : DEVICELIST) {
+            if (selection.id.equals( type )) {
+                return selection;
+            }
+        }
+        return null;
+    }
+
+    public String layer() {
+        return layer;
+    }
+
+    public String is() {
+        return is;
+    }
+
+    public Point location() {
+        return place;
+    }
+
     @Override
     public void verify()
-            throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException {
+            throws FeatureException, InvalidXMLException, LocationException,
+            MountingException, ReferenceException
+    {
         template = DeviceTemplate.Select( is );
         if( null == template ){
-            throw new InvalidXMLException( "Box", id,
+            throw new InvalidXMLException( "Device", id,
                     "'is' reference ("+is+") does not exist" );
         }
 
-        surface = Table.Select( on );
+        surface = Stackable.Select(on);
         if( null == surface ){
-            throw new InvalidXMLException( "Box", id,
+            throw new InvalidXMLException( "Device", id,
                     "'on' reference ("+on+") does not exist" );
         }
+
+        // Get what needs to be drawn from 'is'.
+        shape = template.getSolid();
+
+        // Give the what to 'on' to find out where
+        place = surface.location( shape );
+
+        layer = template.layer();
     }
 
     @Override
     public void dom(Draw draw, View mode)
-            throws MountingException, ReferenceException {
-
-        // Get what needs to be drawn from 'is'.
-        Solid shape = template.getSolid();
-
-        // Give the what to 'on' to find out where
-//        Table surface =
-        Point place = surface.location( shape );
-
-        Element group = draw.element("g");
-        group.setAttribute("class", template.layer() );
+            throws MountingException, ReferenceException
+    {
+        SvgElement group = svgClassGroup( draw, layer );
+//        draw.element("g");
+//        group.setAttribute("class", layer);
         draw.appendRootChild(group);
 
-        Element tableElement = draw.element("rect");
-//        tableElement.setAttribute("class", LAYERTAG);
-        tableElement.setAttribute("x", place.x().toString());
-        tableElement.setAttribute("y", place.y().toString());
-        tableElement.setAttribute("width", shape.getWidth().toString());
+        Integer width = shape.getWidth().intValue();
+        Integer height = shape.getDepth().intValue();
+        SvgElement tableElement = group.rectangle( draw, place.x(), place.y(), width, height, COLOR );
+//        draw.element("rect");
+//        tableElement.setAttribute("x", place.x().toString());
+//        tableElement.setAttribute("y", place.y().toString());
+//        tableElement.setAttribute("width", shape.getWidth().toString());
 //        // Plot attribute is 'depth'. SVG attribute is 'height'.
-        tableElement.setAttribute("height", shape.getDepth().toString());
-        tableElement.setAttribute("fill", "grey");
-        tableElement.setAttribute("stroke", "black");
+//        tableElement.setAttribute("height", shape.getDepth().toString());
+        tableElement.attribute("fill", FILLCOLOR );
+//        tableElement.setAttribute("stroke", "black");
 
-        group.appendChild(tableElement);
+//        group.appendChild(tableElement);
 
 
         Integer y = place.y() + shape.getDepth().intValue() + 9;
-        Element idText = draw.element( "text" );
-        idText.setAttribute( "x", place.x().toString() );
-        idText.setAttribute( "y", y.toString() );
-        idText.setAttribute( "fill", "black" );
-        idText.setAttribute( "stroke", "none" );
-        idText.setAttribute( "font-family", "sans-serif" );
-        idText.setAttribute( "font-weight", "100" );
-        idText.setAttribute( "font-size", "7pt" );
-        idText.setAttribute( "text-anchor", "left" );
+        SvgElement idText = group.text( draw, id, place.x(), y, COLOR );
+//        draw.element("text");
+//        idText.setAttribute( "x", place.x().toString() );
+//        idText.setAttribute( "y", y.toString() );
+//        idText.setAttribute( "fill", "black" );
+//        idText.setAttribute( "stroke", "none" );
+//        idText.setAttribute( "font-family", "sans-serif" );
+//        idText.setAttribute( "font-weight", "100" );
+//        idText.setAttribute( "font-size", "7pt" );
+        idText.attribute( "text-anchor", "left" );
 
-        group.appendChild( idText );
+//        group.appendChild( idText );
 
 
-        Text textId = draw.document().createTextNode( id );
-        idText.appendChild( textId );
+//        Text textId = draw.document().createTextNode( id );
+//        idText.appendChild( textId );
 
     }
 

@@ -1,33 +1,34 @@
 package com.mobiletheatertech.plot;
 
-import com.mobiletheatertech.plot.*;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
+ * Create a {@code Layer} under user control.
+ *
  * Created by dhs on 8/15/14.
  */
 public class UserLayerTest {
 
     Element element = null;
 
-    private final String id = "Layer ID";
+    private final String id = "Layer_ID";
     private final String name = "Layer name";
 
     public UserLayerTest() {
     }
 
     @Test
-    public void isMinderDom() throws Exception {
+    public void isa() throws Exception {
         UserLayer userLayer = new UserLayer( element );
 
-        assert MinderDom.class.isInstance( userLayer );
+        assert Elemental.class.isInstance( userLayer );
     }
 
     @Test
@@ -40,24 +41,13 @@ public class UserLayerTest {
 
     @Test
     public void makesLayer() throws Exception {
-        UserLayer userLayer = new UserLayer( element );
+        new UserLayer( element );
 
-        HashMap<String, String> thing = Layer.List();
+        HashMap<String, Layer> thing = Layer.List();
 
-        assertTrue( thing.containsKey( name ) );
-        assertTrue( thing.containsValue( id ) );
+        assertTrue( thing.containsKey( id ) );
+        assertEquals( thing.get( id ).name(), name );
     }
-
-//    @Test
-//    public void recallsNull() {
-//        assertNull( UserLayer.Select( "bogus" ) );
-//    }
-//
-//    @Test
-//    public void recalls() throws Exception {
-//        UserLayer definition = new UserLayer( element );
-//        assertSame( UserLayer.Select( "6x9" ), definition );
-//    }
 
     /*
      * This is to ensure that no exception is thrown if data is OK.
@@ -81,6 +71,27 @@ public class UserLayerTest {
         new UserLayer( element );
     }
 
+    @Test
+    public void noLayerNoCheckbox() throws Exception {
+        Write writer = new Write();
+        String output = writer.generateIndex();
+        CharSequence chars = "checkbox";
+
+        assertFalse(output.contains(chars));
+    }
+
+    @Test
+    public void layerCheckbox() throws Exception {
+        new UserLayer( element );
+        Write writer = new Write();
+        String output = writer.generateDesigner();
+        CharSequence checkbox = "checkbox";
+        CharSequence selector = "selectLayer" + id;
+
+        assertTrue(output.contains(checkbox));
+        assertTrue(output.contains(selector));
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -91,14 +102,7 @@ public class UserLayerTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-//        TestResets.UserLayerReset();
-
-//        Element venueElement = new IIOMetadataNode( "venue" );
-//        venueElement.setAttribute( "room", "Test Name" );
-//        venueElement.setAttribute( "width", "350" );
-//        venueElement.setAttribute( "depth", "400" );
-//        venueElement.setAttribute( "height", "240" );
-//        new Venue( venueElement );
+        TestResets.LayerReset();
 
         element = new IIOMetadataNode( "layer" );
         element.setAttribute( "id", id );

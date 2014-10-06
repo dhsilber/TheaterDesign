@@ -4,6 +4,8 @@ import org.testng.annotations.*;
 
 import java.util.HashMap;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -14,38 +16,102 @@ import static org.testng.Assert.assertTrue;
  * @since 0.0.19
  */
 public class LayerTest {
-    String name = "Name text";
-    String tag = "Tag text";
+    private final String name = "Name text";
+    private final String tag = "Tag text";
+
+    @Test
+    public void providesName() throws Exception {
+        Layer layer = new Layer( tag, name );
+
+        assertEquals( layer.name(), name );
+    }
 
     @Test
     public void providesListWithOne() throws Exception {
-        new Layer( name, tag );
+        new Layer( tag, name );
 
-        HashMap<String, String> thing = Layer.List();
+        HashMap<String, Layer> thing = Layer.List();
 
-        assertTrue( thing.containsKey( name ) );
-        assertTrue( thing.containsValue( tag ) );
+        assertTrue( thing.containsKey( tag ) );
+        Layer layer = thing.get( tag );
+
+        assertEquals( layer.name(), name );
     }
 
     @Test
     public void providesListWithMultiple() throws Exception {
-        new Layer( name, tag );
+        new Layer( tag, name );
 
         String name2 = "Second name";
         String tag2 = "Tag number two";
-        new Layer( name2, tag2 );
+        new Layer( tag2, name2 );
 
-        HashMap<String, String> thing = Layer.List();
+        HashMap<String, Layer> thing = Layer.List();
 
-        assertTrue( thing.containsKey( name ) );
-        assertTrue( thing.containsValue( tag ) );
-        assertTrue( thing.containsKey( name2 ) );
-        assertTrue( thing.containsValue( tag2 ) );
+        assertTrue( thing.containsKey( tag ) );
+        assertEquals( thing.get( tag ).name(), name );
+        assertTrue( thing.containsKey( tag2 ) );
+        assertEquals( thing.get( tag2 ).name(), name2 );
     }
+
+    @Test
+    public void newLayerInactive() throws Exception {
+        Layer foo = new Layer( tag, name );
+
+        assertFalse(foo.active());
+    }
+
+    @Test
+    public void activate() throws Exception {
+        Layer foo = new Layer( tag, name );
+
+        foo.activate();
+
+        assertTrue(foo.active());
+    }
+
+    @Test( expectedExceptions = DataException.class,
+            expectedExceptionsMessageRegExp = "Layer "+tag+" is already defined." )
+    public void noChangeName() throws Exception {
+        new Layer( tag, name );
+        new Layer( tag, "other name" );
+    }
+
+    @Test
+    public void okSameName() throws Exception {
+        new Layer( tag, name );
+        new Layer( tag, name );
+    }
+
+//TODO    Test that layers are not drawn if not activated
+
+      //TODO      Test that active layers are drawn
+
+    @Test
+    public void noLayerNoCheckbox() throws Exception {
+        Write writer = new Write();
+        String output = writer.generateIndex();
+        CharSequence chars = "checkbox";
+
+        assertFalse(output.contains(chars));
+    }
+
+    @Test
+    public void layerCheckbox() throws Exception {
+        new Layer( "zig", "zag" );
+        Write writer = new Write();
+        String output = writer.generateDesigner();
+        CharSequence checkbox = "checkbox";
+        CharSequence selector = "selectLayerzig";
+
+        assertTrue(output.contains(checkbox));
+        assertTrue(output.contains(selector));
+    }
+
 
 ////    @Test
 ////    public void finds() throws Exception {
-////        Layer layer = new Layer( element );
+////        Layer layer = new Layer( elementOnPipe );
 ////
 ////        HangPoint found = HangPoint.Find( "Blather" );
 ////
@@ -69,7 +135,7 @@ public class LayerTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-//        TestResets.LayerReset();
+        TestResets.LayerReset();
     }
 
     @AfterMethod

@@ -15,14 +15,35 @@ import java.util.HashMap;
  */
 public class Layer {
 
-    private static HashMap<String, String> LIST = new HashMap<>();
+    private static HashMap<String, Layer> LIST = new HashMap<>();
 
-    public Layer( String name, String tag ) {
-        LIST.put( name, tag );
+    public static HashMap<String, Layer> List() {
+        return LIST;
     }
 
-    public static HashMap<String, String> List() {
-        return LIST;
+    private String name = null;
+    private Boolean active = false;
+
+    public Layer( String tag, String name ) throws DataException {
+        if ( LIST.containsKey( tag ) ) {
+            if ( ! LIST.get( tag ).name().equals( name ) ) {
+                throw new DataException("Layer " + tag + " is already defined.");
+            }
+        }
+        this.name = name;
+        LIST.put( tag, this );
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Boolean active() {
+        return active;
+    }
+
+    public void activate() {
+        active = true;
     }
 }
 

@@ -2,29 +2,33 @@ package com.mobiletheatertech.plot;
 
 public class Solid
 {
-	float height;
-	float width;
-	float depth;
+    double height;
+    double width;
+    double depth;
 	
-	public Solid( float height, float width, float depth )
+	public Solid( double width, double depth, double height )
 	{
 		this.height = height;
 		this.width = width;
 		this.depth = depth;
 	}
 	
-	public float getHeight()
+	public Double getHeight()
 	{
 		return height;
 	}
 	
-	public float getWidth()
+	public Double getWidth()
 	{
 		return width;
 	}
 	
-	public float getDepth()
+	public Double getDepth()
 	{
 		return depth;
 	}
+
+    public String toString() {
+        return "Solid: "+height+", "+width+", "+depth+".";
+    }
 }

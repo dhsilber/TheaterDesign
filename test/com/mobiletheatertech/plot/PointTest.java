@@ -236,6 +236,19 @@ public class PointTest {
         assertFalse( point1.equals( this ) );
     }
 
+//    @Test
+//    public void pointOnSlope() {
+//        Point result = point1.pointOnSlope( 1.0, 14.0 );
+//
+//        assertEquals( result, new Point( 32, 43, 44 ) );
+//    }
+//
+//    @Test
+//    public void pointOnSlopeZeroDistance() {
+//        Point result = point1.pointOnSlope( 1.0, 0.0 );
+//
+//        assertEquals( result, point1 );
+//    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

@@ -74,12 +74,12 @@ public class ZoneTest {
 
     @Test
     public void registersLayer() throws Exception {
-        Zone zone = new Zone( element );
+        new Zone( element );
 
-        HashMap<String, String> layers = Layer.List();
+        HashMap<String, Layer> layers = Layer.List();
 
-        assertTrue( layers.containsKey( Zone.LAYERNAME ) );
-        assertEquals( layers.get( Zone.LAYERNAME ), Zone.LAYERTAG );
+        assertTrue( layers.containsKey( Zone.LAYERTAG ) );
+        assertEquals( layers.get( Zone.LAYERTAG ).name(), Zone.LAYERNAME );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -108,8 +108,8 @@ public class ZoneTest {
 //    @Test( expectedExceptions = AttributeMissingException.class,
 //           expectedExceptionsMessageRegExp = "Zone \\("+id+"\\) is missing required 'z' attribute." )
 //    public void noZ() throws Exception {
-//        element.removeAttribute( "z" );
-//        new Zone( element );
+//        elementOnPipe.removeAttribute( "z" );
+//        new Zone( elementOnPipe );
 //    }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -124,7 +124,7 @@ public class ZoneTest {
     public void storesSelf() throws Exception {
         Zone zone = new Zone( element );
 
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains( zone );
     }
@@ -167,6 +167,7 @@ public class ZoneTest {
     public void findIgnoresOther() throws Exception {
         Element pipeElement = new IIOMetadataNode( "pipe" );
         pipeElement.setAttribute( "length", "120" );
+        pipeElement.setAttribute( "id", "pipe id" );
         pipeElement.setAttribute( "x", "2" );
         pipeElement.setAttribute( "y", "4" );
         pipeElement.setAttribute( "z", "6" );
@@ -244,15 +245,24 @@ public class ZoneTest {
         Zone zone = new Zone( element );
 
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         zone.verify();
 
+        NodeList preGroupList = draw.root().getElementsByTagName( "g" );
+        assertEquals( preGroupList.getLength(), 1 );
         NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
         assertEquals( preCircleList.getLength(), 0 );
         NodeList preTextList = draw.root().getElementsByTagName( "text" );
         assertEquals( preTextList.getLength(), 0 );
 
         zone.dom( draw, View.PLAN );
+
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Zone.LAYERTAG );
 
         NodeList circleList = draw.root().getElementsByTagName( "circle" );
         assertEquals( circleList.getLength(), 1 );
@@ -285,9 +295,11 @@ public class ZoneTest {
         Zone zone = new Zone( element );
 
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         zone.verify();
 
+        NodeList preGroupList = draw.root().getElementsByTagName( "g" );
+        assertEquals( preGroupList.getLength(), 1 );
         NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
         assertEquals( preCircleList.getLength(), 0 );
         NodeList preTextList = draw.root().getElementsByTagName( "text" );
@@ -295,7 +307,6 @@ public class ZoneTest {
 
         zone.dom( draw, View.PLAN );
 
-//        NodeList circleList = draw.root().getElementsByTagName( "circle" );
         NodeList group = draw.root().getElementsByTagName( "g" );
         assertEquals( group.getLength(), 2 );
         Node groupNode = group.item( 1 );
@@ -333,7 +344,7 @@ public class ZoneTest {
         Zone zone = new Zone( element );
 
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         zone.verify();
 
         NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
@@ -355,7 +366,7 @@ public class ZoneTest {
         Zone zone = new Zone( element );
 
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         zone.verify();
 
         NodeList preCircleList = draw.root().getElementsByTagName( "circle" );
@@ -383,6 +394,7 @@ public class ZoneTest {
     public void setUpMethod() throws Exception {
         TestResets.MinderDomReset();
         TestResets.ProsceniumReset();
+        TestResets.LayerReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -403,7 +415,7 @@ public class ZoneTest {
         element.setAttribute( "id", id );
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
-//        element.setAttribute( "z", z.toString() );
+//        elementOnPipe.setAttribute( "z", z.toString() );
         element.setAttribute( "r", r.toString() );
     }
 

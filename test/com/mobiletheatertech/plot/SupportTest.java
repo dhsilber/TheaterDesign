@@ -23,7 +23,7 @@
 // */
 //public class SupportTest {
 //
-//    Element element = null;
+//    Element elementOnPipe = null;
 //    HangPoint hanger1 = null;
 //    Truss truss = null;
 //
@@ -32,14 +32,14 @@
 //
 //    @Test
 //    public void isMinder() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        assert Minder.class.isInstance( support );
 //    }
 //
 //    @Test
 //    public void storesAttributes() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        assertEquals( TestHelpers.accessString( support, "refId" ), "jim" );
 //        assertEquals( TestHelpers.accessInteger( support, "distance" ), 32 );
@@ -48,7 +48,7 @@
 //    // Until such time as I properly implement this class' use of id.
 //    @Test
 //    public void idUnused() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        assertNull( TestHelpers.accessString( support, "id" ) );
 //    }
@@ -58,7 +58,7 @@
 //    @Test
 //    public void storesSelf() throws Exception
 //    {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        ArrayList<Minder> thing = Drawable.List();
 //        assertNotNull( thing, "List should exist" );
@@ -70,13 +70,13 @@
 //
 //    @Test
 //    public void marksProcessed() throws Exception {
-//        String emptyMark = element.getAttribute( "processedMark" );
+//        String emptyMark = elementOnPipe.attribute( "processedMark" );
 //        assertEquals( emptyMark, "", "Should be unset" );
 //
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        String supportMark = TestHelpers.accessString( support, "processedMark" );
-//        String elementMark = element.getAttribute( "processedMark" );
+//        String elementMark = elementOnPipe.attribute( "processedMark" );
 //        assertNotNull( supportMark );
 //        assertNotEquals( supportMark, "", "Should be set in Support object" );
 //        assertNotEquals( elementMark, "", "Should be set in Element" );
@@ -85,7 +85,7 @@
 //
 //    @Test
 //    public void findNull() throws Exception {
-//        new Support( element );
+//        new Support( elementOnPipe );
 //
 //        Support found = Support.Find( null );
 //
@@ -94,9 +94,9 @@
 //
 //    @Test
 //    public void findsMarked() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
-//        Support found = Support.Find( element.getAttribute( "processedMark" ) );
+//        Support found = Support.Find( elementOnPipe.attribute( "processedMark" ) );
 //
 //        assertSame( found, support );
 //    }
@@ -106,33 +106,33 @@
 //     */
 //    @Test
 //    public void justFine() throws Exception {
-//        new Support( element );
+//        new Support( elementOnPipe );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "Support is missing required 'ref' attribute")
 //    public void noRef() throws Exception {
-//        element.removeAttribute( "ref" );
-//        new Support( element );
+//        elementOnPipe.removeAttribute( "ref" );
+//        new Support( elementOnPipe );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "Support is missing required 'distance' attribute")
 //    public void noDistance() throws Exception {
-//        element.removeAttribute( "distance" );
-//        new Support( element );
+//        elementOnPipe.removeAttribute( "distance" );
+//        new Support( elementOnPipe );
 //    }
 //
 //    @Test(expectedExceptions = ReferenceException.class,
 //          expectedExceptionsMessageRegExp = "Cannot support from unknown hangpoint ref 302.")
 //    public void missingRefTarget() throws Exception {
-//        element.setAttribute( "ref", "302" );
-//        new Support( element );
+//        elementOnPipe.setAttribute( "ref", "302" );
+//        new Support( elementOnPipe );
 //    }
 //
 //    @Test
 //    public void referencesHangPoint() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //        Field hangPointField = TestHelpers.accessField( support, "ref" );
 //        HangPoint hangPoint = (HangPoint) hangPointField.get( support );
 //
@@ -144,7 +144,7 @@
 //    @Test
 //    public void associatesWithParentTruss() throws Exception
 //    {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //        Field parentTrussField = TestHelpers.accessField( support, "truss" );
 //        Truss parentTruss = (Truss) parentTrussField.get( support );
 //
@@ -201,7 +201,7 @@
 //
 //    @Test
 //    public void locate() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        Point location = support.locate();
 //
@@ -212,14 +212,14 @@
 //
 //    @Test
 //    public void drawUnused() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        support.draw( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Support support = new Support( element );
+//        Support support = new Support( elementOnPipe );
 //
 //        support.dom( null );
 //    }
@@ -261,14 +261,14 @@
 //        otherSupport.setAttribute( "ref", "jane" );
 //        otherSupport.setAttribute( "distance", "200" );
 //
-//        element = new IIOMetadataNode( "support" );
-//        element.setAttribute( "ref", "jim" );
-//        element.setAttribute( "distance", "32" );
+//        elementOnPipe = new IIOMetadataNode( "support" );
+//        elementOnPipe.setAttribute( "ref", "jim" );
+//        elementOnPipe.setAttribute( "distance", "32" );
 //
 //        Element truss1 = new IIOMetadataNode( "truss" );
 //        truss1.setAttribute( "size", "12" );
 //        truss1.setAttribute( "length", "320" );
-//        truss1.appendChild( element );
+//        truss1.appendChild( elementOnPipe );
 //        truss1.appendChild( otherSupport );
 //        truss = new Truss( truss1 );
 //    }

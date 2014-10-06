@@ -38,7 +38,7 @@ public class Setup extends Elemental {
      */
 
     public static void ParseXML( NodeList list )
-            throws AttributeMissingException/*, InvalidXMLException, LocationException, ReferenceException*/
+            throws AttributeMissingException, InvalidXMLException/*, LocationException, ReferenceException*/
     {
 
         int length = list.getLength();
@@ -61,7 +61,10 @@ public class Setup extends Elemental {
      * @param element DOM element defining a setup option
      * @throws AttributeMissingException if any attribute is missing
      */
-    public Setup( Element element ) throws AttributeMissingException {
+    public Setup( Element element )
+            throws AttributeMissingException, InvalidXMLException {
+        super(element);
+
         name = getStringAttribute( element, "name" );
         tag = getStringAttribute( element, "tag" );
 

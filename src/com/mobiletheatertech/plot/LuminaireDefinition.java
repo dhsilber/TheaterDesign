@@ -38,29 +38,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     private Integer length;
     private int legendHeight;
 
-    /**
-     * Extract the luminaire definition elements from a list of XML nodes and create {@code
-     * LuminaireDefinition} objects from them.
-     *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing
-     * @throws InvalidXMLException       if null element is somehow presented to constructor
-     */
-
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/
-    {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
-
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new LuminaireDefinition( element );
-            }
-        }
-    }
+    private static final String COLOR = "black";
 
     /**
      * Find a specific {@code LuminaireDefinition} from all that have been constructed.
@@ -114,21 +92,19 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
         }
     }
 
+    public Integer height() {
+        return legendHeight;
+    }
+
+    public Integer width() {
+        return   ((width < length)
+                  ? length
+                  : width);
+    }
+
     @Override
     public void verify() {
     }
-
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawSection( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawFront( Graphics2D canvas ) {
-//    }
 
     /**
      * Generate SVG DOM for the symbol definition used for each individual luminaire.
@@ -140,11 +116,12 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     public void dom( Draw draw, View mode ) {
         Document document = draw.document();
 
-        Element defs = draw.element( "defs" );
+        SvgElement defs = draw.element("defs");
 
-        Element symbol = draw.element( "symbol" );
-        symbol.setAttribute( "id", id );
-        symbol.setAttribute( "overflow", "visible" );
+        SvgElement symbol = defs.symbol( draw, id );
+//        draw.element("symbol");
+//        symbol.setAttribute( "id", id );
+//        symbol.setAttribute( "overflow", "visible" );
         defs.appendChild( symbol );
 
         Node svgNode = document.importNode( svg, true );
@@ -166,29 +143,33 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
      */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        Element use = draw.element( "use" );
-        use.setAttribute( "xlink:href", "#" + id );
-        use.setAttribute( "x", start.x().toString() );
-        use.setAttribute( "y", start.y().toString() );
+        SvgElement use = draw.use( draw, id, start.x(), start.y() );
+//        draw.element("use");
+//        use.setAttribute( "xlink:href", "#" + id );
+//        use.setAttribute( "x", start.x().toString() );
+//        use.setAttribute( "y", start.y().toString() );
         if (length > width) {
-            use.setAttribute( "transform", "rotate(-90," + start.x() + "," + start.y() + ")" );
+            Integer transformX = start.x() + SvgElement.OffsetX();
+            Integer transformY = start.y() + SvgElement.OffsetY();
+            use.attribute( "transform", "rotate(-90," + transformX + "," + transformY + ")" );
         }
 
-        Element text = draw.element( "text" );
-        Integer x = start.x() + 20;
+        Integer x = start.x() + Legend.TEXTOFFSET;
         Integer y = start.y() + 3;
-        text.setAttribute( "x", x.toString() );
-        text.setAttribute( "y", y.toString() );
-        text.setAttribute( "fill", "black" );
-        text.setAttribute( "stroke", "none" );
-        text.setAttribute( "font-family", "serif" );
-        text.setAttribute( "font-size", "10" );
+        SvgElement text = draw.text( draw, id, x, y, COLOR );
+//        draw.element("text");
+//        text.setAttribute( "x", x.toString() );
+//        text.setAttribute( "y", y.toString() );
+//        text.setAttribute( "fill", "black" );
+//        text.setAttribute( "stroke", "none" );
+//        text.setAttribute( "font-family", "serif" );
+//        text.setAttribute( "font-size", "10" );
 
-        draw.appendRootChild( use );
-        draw.appendRootChild( text );
+//        draw.appendRootChild( use );
+//        draw.appendRootChild( text );
 
-        Text foo = draw.document().createTextNode( id );
-        text.appendChild( foo );
+//        Text foo = draw.document().createTextNode( id );
+//        text.appendChild( foo );
 
         return new PagePoint( start.x(), start.y() + legendHeight );
     }

@@ -82,7 +82,7 @@ public class EventTest {
     public void domSetsTitle() throws Exception {
         Draw draw = new Draw();
         Event event = new Event( element );
-        draw.getRoot();
+        draw.establishRoot();
 
         event.dom( draw, View.PLAN );
 
@@ -102,7 +102,7 @@ public class EventTest {
     public void setUpMethod() throws Exception {
         TestResets.EventReset();
 
-        element = new IIOMetadataNode();
+        element = new IIOMetadataNode( "event" );
         element.setAttribute( "name", name );
     }
 

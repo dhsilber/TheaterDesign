@@ -56,7 +56,7 @@ public class LuminaireDefinitionTest {
     public void storesSelf() throws Exception {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains( luminaireDefinition );
     }

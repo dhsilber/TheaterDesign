@@ -10,7 +10,13 @@ package com.mobiletheatertech.plot;
 public enum LegendOrder {
     Show( 1 ),
     Building( 2 ),
-    Room( 3 ),
+    Room( 3 )
+            {
+                @Override
+                public Integer next() {
+                    return last++;
+                }
+            },
     Furniture( 100 )
             {
                 @Override
@@ -19,6 +25,13 @@ public enum LegendOrder {
                 }
             },
     Luminaire( 200 )
+            {
+                @Override
+                public Integer next() {
+                    return last++;
+                }
+            },
+    Device( 300 )
             {
                 @Override
                 public Integer next() {

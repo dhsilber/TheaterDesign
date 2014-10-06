@@ -31,7 +31,8 @@ public class MainTest {
         new Expectations() {
             {
                 new Read( "Fiddle-Faddle" );
-                new Write( "Fiddle-Faddle" );
+                Write write = new Write();
+                write.init( "Fiddle-Faddle" );
             }
         };
         String[] args = new String[]{ "Fiddle-Faddle" };

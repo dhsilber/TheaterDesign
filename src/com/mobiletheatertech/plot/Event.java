@@ -4,9 +4,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.imageio.metadata.IIOMetadataNode;
+
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 11/13/13 Time: 8:00 PM To change this template use
  * File | Settings | File Templates.
+ *
+ *
  *
  * @author dhs
  * @since 0.0.20
@@ -15,23 +19,23 @@ public class Event extends MinderDom {
 
     private static Event Only = null;
 
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, ReferenceException
-    {
-
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
-
-            // Much of this copied to Suspend.Suspend - refactor
-            if (null != node) {
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    new Event( element );
-                }
-            }
-        }
-    }
+//    public static void ParseXML( NodeList list )
+//            throws AttributeMissingException, InvalidXMLException, ReferenceException
+//    {
+//
+//        int length = list.getLength();
+//        for (int index = 0; index < length; index++) {
+//            Node node = list.item( index );
+//
+//            // Much of this copied to Suspend.Suspend - refactor
+//            if (null != node) {
+//                if (node.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element element = (Element) node;
+//                    new Event( element );
+//                }
+//            }
+//        }
+//    }
 
     public static String Name() throws ReferenceException {
         if (null != Only) {

@@ -45,27 +45,6 @@ public class Zone extends MinderDom {
 //    private Integer rDraw;
     private String color;
 
-    /**
-     * Construct a {@code Zone} for each element in a list of XML nodes.
-     *
-     * @param list of XML nodes
-     * @throws AttributeMissingException if a required attribute is missing
-     * @throws InvalidXMLException       if null element is somehow presented to constructor
-     */
-
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML(NodeList list)
-            throws AttributeMissingException, InvalidXMLException/*, LocationException, SizeException*/ {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item(index);
-
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new Zone(element);
-            }
-        }
-    }
 
     /**
      * Find a specific {@code Zone} in the set of plot objects.
@@ -75,7 +54,7 @@ public class Zone extends MinderDom {
      */
     public static Zone Find(String id) {
 
-        for (MinderDom thingy : Drawable.List()) {
+        for (ElementalLister thingy : ElementalLister.List()) {
             if (Zone.class.isInstance(thingy)) {
                 if (((Zone) thingy).id.equals(id)) {
                     return (Zone) thingy;
@@ -92,7 +71,9 @@ public class Zone extends MinderDom {
      * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException       if element is null
      */
-    public Zone(Element element) throws AttributeMissingException, InvalidXMLException {
+    public Zone(Element element)
+            throws AttributeMissingException, DataException, InvalidXMLException
+    {
         super(element);
 
         id = getStringAttribute(element, "id");
@@ -105,7 +86,7 @@ public class Zone extends MinderDom {
             color = "teal";
         }
 
-        new Layer(LAYERNAME, LAYERTAG);
+        new Layer(LAYERTAG, LAYERNAME);
     }
 
     /**
@@ -127,11 +108,11 @@ public class Zone extends MinderDom {
     }
 
     /**
-     * Compute the drawing coordinates for a zone. (They are different, depending on whether a
-     * proscenium has been defined.)
+     * Compute the drawing coordinates for a zone. (They are different,
+     * depending on whether a proscenium has been defined.)
      */
     @Override
-    public void verify() /*throws FeatureException, InvalidXMLException, LocationException*/ {
+    public void verify() {
         if (Proscenium.Active()) {
             Point point = Proscenium.Locate(new Point(x, y, 48));
             xDraw = point.x();
@@ -142,17 +123,6 @@ public class Zone extends MinderDom {
         }
     }
 
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) throws MountingException {
-//    }
-//
-//    @Override
-//    public void drawSection( Graphics2D canvas ) throws MountingException {
-//    }
-//
-//    @Override
-//    public void drawFront( Graphics2D canvas ) throws MountingException {
-//    }
 
     /**
      * Draw a circle with a textual label to represent the zone.
@@ -163,40 +133,49 @@ public class Zone extends MinderDom {
      */
     @Override
     public void dom(Draw draw, View mode) throws MountingException {
+        switch (mode) {
+            case TRUSS:
+//            case PLAN:
+                return;
+        }
         if (View.PLAN != mode) {
             return;
         }
 
-        Element group = draw.element("g");
-        group.setAttribute("class", LAYERTAG);
+        SvgElement group = svgClassGroup( draw, LAYERTAG );
+//        draw.element("g");
+//        group.setAttribute("class", LAYERTAG);
         draw.appendRootChild(group);
 
-        Element circle = draw.element("circle");
-//        channelCircle.setAttribute( "fill", "none" );
-        circle.setAttribute("cx", xDraw.toString());
-        circle.setAttribute("cy", yDraw.toString());
-        circle.setAttribute("r", r.toString());
-        circle.setAttribute("fill", "none");
-        circle.setAttribute("stroke", color);
-        circle.setAttribute("stroke-opacity", "0.5");
-        circle.setAttribute("stroke-width", "1");
 
-        group.appendChild(circle);
+        SvgElement circle = group.circle( draw, xDraw, yDraw, r, color );
+//        draw.element("circle");
+////        channelCircle.setAttribute( "fill", "none" );
+//        circle.setAttribute("cx", xDraw.toString());
+//        circle.setAttribute("cy", yDraw.toString());
+//        circle.setAttribute("r", r.toString());
+//        circle.setAttribute("fill", "none");
+//        circle.setAttribute("stroke", color);
+        circle.attribute("stroke-opacity", "0.5");
+//        circle.setAttribute("stroke-width", "1");
+//        group.appendChild(circle);
 
 
-        Element text = draw.element("text");
         Integer textX = xDraw - (r / 5);
         Integer textY = yDraw + (r / 5);
-        text.setAttribute("x", textX.toString());
-        text.setAttribute("y", textY.toString());
-        text.setAttribute("fill", color);
-        text.setAttribute("stroke", "none");
-        text.setAttribute("fill-opacity", "0.4");
-        text.setAttribute("font-family", "serif");
-        text.setAttribute("font-size", "22");
-        group.appendChild(text);
+        SvgElement text = group.text( draw, id, textX, textY, color );
+//        draw.element("text");
+//        text.setAttribute("x", textX.toString());
+//        text.setAttribute("y", textY.toString());
+//        text.setAttribute("fill", color);
+//        text.setAttribute("stroke", "none");
+        text.attribute("fill-opacity", "0.4");
+//        text.setAttribute("font-family", "serif");
+        text.attribute("font-size", "22");
+//        group.appendChild(text);
 
-        Text textNode = draw.document().createTextNode(id);
-        text.appendChild(textNode);
+
+//        Text textNode = draw.document().createTextNode(id);
+//        text.appendChild(textNode);
     }
 }

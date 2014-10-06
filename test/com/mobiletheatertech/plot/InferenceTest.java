@@ -5,9 +5,9 @@ import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import java.util.ArrayList;
+
+import static org.testng.Assert.*;
 
 /**
  * Created by dhs on 5/28/14.
@@ -16,89 +16,53 @@ public class InferenceTest {
 
     Session show;
 
-    Element element = null;
-    String setup = "SetupName";
-    String name = "Session Name";
-    String eventName = "String event name";
+    String key = "SetupName";
+    String data = "Session Name";
 
     public InferenceTest() {
     }
 
     @Test
-    public void isElemental() throws Exception {
-        Session show = new Session( element );
+    public void reset() throws Exception {
+        Inference.Reset( );
 
-        assert Elemental.class.isInstance( show );
+        assertEquals( Inference.Count(), 0 );
     }
 
     @Test
-    public void storesAttributes() throws Exception {
-        element.removeAttribute( "setup" );
+    public void count() throws Exception {
+        Inference.Add(key, data);
 
-        Session show = new Session( element );
-
-        assertEquals( TestHelpers.accessString( show, "id" ), name );
-        assertEquals( TestHelpers.accessString( show, "setup" ), "" );
+        assertEquals( Inference.Count(), 1 );
     }
 
     @Test
-    public void storesOptionalAttributes() throws Exception {
-        assertEquals( TestHelpers.accessString( show, "id" ), name );
-        assertEquals( TestHelpers.accessString( show, "setup" ), setup );
+    public void add() throws Exception {
+        Inference.Add( key, data );
+
+        assertEquals( Inference.Count(), 1 );
+//        assertEquals( Inference.Get( key ), data );
     }
 
     @Test
-    public void storesNameString() throws Exception {
-        Session show = new Session( eventName );
+    public void get() throws Exception {
+        Inference.Add( key, data );
+        Inference.Add( key, "different data" );
 
-        assertEquals( TestHelpers.accessString( show, "id" ), eventName );
+        assertEquals( Inference.Count(), 1 );
+        ArrayList<String> values = Inference.Get( key );
+        assertNotNull( values);
+        assertEquals( values.size(), 2);
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Session instance is missing required 'name' attribute." )
-    public void noName() throws Exception {
-        element.removeAttribute( "name" );
-        new Session( element );
-    }
-
-    @Test
-    public void parseXML() {
-        // See ParseTest.createsShow*()
-    }
-
-    @Test
-    public void addRequirement() throws Exception {
-        Session show = new Session( eventName );
-        String requirement = "thingy";
-
-        show.needs( requirement );
-
-        assertTrue( show.needs().contains(requirement));
-        assertEquals( show.needs().size(), 1);
-    }
-
-    @Test
-    public void addRedundantRequirement() throws Exception {
-        Session show = new Session( eventName );
-        String requirement = "thingy";
-
-        show.needs( requirement );
-        show.needs( requirement );
-
-        assertTrue( show.needs().contains(requirement));
-        assertEquals( show.needs().size(), 1);
-    }
-
-    @Test
-    public void addNotEmptyRequirement() throws Exception {
-        Session show = new Session( eventName );
-        String requirement = "";
-
-        show.needs( requirement );
-
-        assertFalse( show.needs().contains(requirement));
-        assertEquals(show.needs().size(), 0);
-    }
+//    @Test
+//    public void useKeytwice() throws Exception {
+//        Inference.Add( key, data );
+//        Inference.Add( key, "different data" );
+//
+//        assertEquals( Inference.Count(), 1 );
+////        assertEquals( Inference.Get( key ), data );
+//    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -110,11 +74,7 @@ public class InferenceTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        element = new IIOMetadataNode();
-        element.setAttribute( "setup", setup );
-        element.setAttribute( "name", name );
-
-        show = new Session( element );
+        Inference.Reset();
     }
 
     @AfterMethod

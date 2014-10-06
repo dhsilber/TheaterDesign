@@ -22,10 +22,10 @@ public class HTML {
      * @param data set of {@code Layer}s.
      * @return
      */
-    public static String Checkboxes( HashMap<String, String> data ) {
+    public static String Checkboxes( HashMap<String, Layer> data ) {
         StringBuilder output = new StringBuilder();
-        for (String name : data.keySet()) {
-            String tag = data.get( name );
+        for (String tag : data.keySet()) {
+            String name = data.get( tag ).name();
             output.append(
                     "<input type=\"checkbox\" onclick=\"parent.selectLayer" + tag +
                             "();\" name=\"layer\"" +
@@ -38,12 +38,29 @@ public class HTML {
     }
 
     /**
+     * Generate an HTML checkbox for each defined {@code Layer} which invokes an appropriate
+     * JavaScript function when its state changes.
+     *
+     * @param data set of {@code Layer}s.
+     * @return
+     */
+    public static String SelectFunctions( HashMap<String, Layer> data ) {
+        StringBuilder output = new StringBuilder();
+        for (String tag : data.keySet()) {
+//            String name = data.get( tag ).name();
+            output.append( SelectFunction( tag ) );
+        }
+
+        return output.toString();
+    }
+
+    /**
      * Generate a JavaScript function to show or hide a particular layer.
      *
      * @param tag which specifies the layer to be hidden or shown
      * @return
      */
-    public static String SelectFunction( String tag ) {
+    private static String SelectFunction( String tag ) {
         return "function selectLayer" + tag + "()\n" +
                 "{\n" +
                 "  if( document.getElementById('" + tag + "layer').checked)\n" +

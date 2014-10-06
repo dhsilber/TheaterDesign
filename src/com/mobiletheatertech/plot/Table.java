@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:42 PM To change this template use
@@ -21,7 +22,12 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.3
  */
-public class Table extends MinderDom {
+public class Table extends Stackable implements Legendable {
+
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        return null;
+    }
 
     /**
      * Name of {@code Layer} of {@code Table}s.
@@ -40,29 +46,7 @@ public class Table extends MinderDom {
     private Integer y = null;
     private Integer z = null;
 
-    /**
-     * Extract the table description element from a list of XML nodes.
-     *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the table is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
-     */
-
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML(NodeList list)
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item(index);
-
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new Table(element);
-            }
-
-        }
-    }
+    static final String CATEGORY = "table";
 
     /**
      * Creates a {@code Table}.
@@ -76,6 +60,8 @@ public class Table extends MinderDom {
     public Table(Element element)
             throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException {
         super(element);
+
+        id = getOptionalStringAttribute(element, "id");
 
         width = getIntegerAttribute(element, "width");
         depth = getIntegerAttribute(element, "depth");
@@ -101,65 +87,90 @@ public class Table extends MinderDom {
             throw new LocationException(
                     "Table should not extend beyond the boundaries of the venue.");
         }
+
+        new Category( CATEGORY, this.getClass() );
     }
 
+    public static Table Select( String type ) {
+        for (ElementalLister selection : LIST) {
+            if( Table.class.isInstance( selection )) {
+                Table selected = (Table) selection;
+                if (selected.id.equals( type )) {
+                    return selected;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     *
+     * @throws InvalidXMLException
+     */
     @Override
     public void verify() throws InvalidXMLException {
     }
 
-//    /**
-//     * Draw a {@code Table} onto the provided plan canvas.
-//     *
-//     * @param canvas drawing space.
-//     */
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) {
-//        canvas.setPaint( Color.ORANGE );
-//        canvas.draw( new Rectangle( x, y, width, depth ) );
-//    }
-//
-//    /**
-//     * Draw a {@code Table} onto the provided section canvas.
-//     *
-//     * @param canvas drawing space.
-//     */
-//    @Override
-//    public void drawSection( Graphics2D canvas ) throws ReferenceException {
-//        int bottom = Venue.Height();
-//        canvas.setPaint( Color.ORANGE );
-//        canvas.draw( new Line2D.Float( y, bottom, y, bottom - z ) );
-//        canvas.draw( new Line2D.Float( y, bottom - z, y + depth, bottom - z ) );
-//        canvas.draw( new Line2D.Float( y + depth, bottom - z, y + depth, bottom ) );
-//    }
-//
-//    /**
-//     * Draw a {@code Table} onto the provided front canvas.
-//     *
-//     * @param canvas drawing space.
-//     */
-//    @Override
-//    public void drawFront( Graphics2D canvas ) throws ReferenceException {
-//        int bottom = Venue.Height();
-//        canvas.setPaint( Color.ORANGE );
-//        canvas.draw( new Line2D.Float( x, bottom, x, bottom - z ) );
-//        canvas.draw( new Line2D.Float( x, bottom - z, x + width, bottom - z ) );
-//        canvas.draw( new Line2D.Float( x + width, bottom - z, x + width, bottom ) );
-//    }
+    /**
+     * Find a place for the shape given to fit on this table.
+     *
+     * @param shape
+     * @return
+     */
+    public Point location( Solid shape ) {
+        int ex = x;
+        int wy = y;
+        int ze = z;
+
+        Double lastWidth = 0.0;
+
+        for ( Thing item : things ) {
+            ex = Math.max( ex, item.point.x() );
+            wy = Math.max( wy, item.point.y() );
+            ze = Math.max( ze, item.point.z() );
+
+            lastWidth = item.solid.getWidth();
+        }
+        Thing thing = new Thing();
+        thing.point = new Point( x, wy + lastWidth.intValue(), z + height );
+        thing.solid = shape;
+
+        things.add( thing );
+
+        return thing.point;
+    }
 
     @Override
     public void dom(Draw draw, View mode) {
+        switch (mode) {
+            case TRUSS:
+                return;
+        }
         if (View.PLAN != mode) {
             return;
         }
 
-        Element tableElement = draw.element("rect");
-        tableElement.setAttribute("class", LAYERTAG);
-        draw.appendRootChild(tableElement);
-        tableElement.setAttribute("x", x.toString());
-        tableElement.setAttribute("y", y.toString());
-        tableElement.setAttribute("width", width.toString());
-        tableElement.setAttribute("height", depth.toString());
-        tableElement.setAttribute("fill", "none");
-        tableElement.setAttribute("stroke", "brown");
+//        System.err.println("Drawing Table "+id+".");
+
+
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        SvgElement tableElement = draw.rectangle( draw, x, y, width, depth, "brown" )
+                .svgClass(LAYERTAG)
+        ;
+
+//        Element tableElement = draw.element("rect");
+//        tableElement.setAttribute("class", LAYERTAG);
+//        draw.appendRootChild(tableElement);
+//        tableElement.setAttribute("x", x.toString());
+//        tableElement.setAttribute("y", y.toString());
+//        tableElement.setAttribute("width", width.toString());
+//        tableElement.setAttribute("height", depth.toString());
+//        tableElement.setAttribute("fill", "none");
+//        tableElement.setAttribute("stroke", "brown");
+    }
+
+    public String toString() {
+        return "Table ("+id+"): "+height+", "+width+", "+depth+" at "+x+", "+y+", "+z+".";
     }
 }

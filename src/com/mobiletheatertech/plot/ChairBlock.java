@@ -39,28 +39,31 @@ public class ChairBlock extends MinderDom {
     private String perimeter = null;
     private Shape perimeterShape = null;
 
-    /**
-     * Construct a {@code ChairBlock} for each element in a list of XML nodes.
-     *
-     * @param list of 'chairblock' nodes
-     * @throws AttributeMissingException if any attribute is missing from any {@code ChairBlock}
-     */
-//   This ends up copied to each thing that inherits from Minder. There needs to be a factory somewhere.
-    public static void ParseXML(NodeList list)
-            throws AttributeMissingException, DataException, InvalidXMLException {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item(index);
+    private static final String COLOR = "black";
+    private static final String CHAIR = "chair";
 
-            // Much of this copied to Suspend.Suspend - refactor
-            if (null != node) {
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    new ChairBlock(element);
-                }
-            }
-        }
-    }
+//    /**
+//     * Construct a {@code ChairBlock} for each element in a list of XML nodes.
+//     *
+//     * @param list of 'chairblock' nodes
+//     * @throws AttributeMissingException if any attribute is missing from any {@code ChairBlock}
+//     */
+////   This ends up copied to each thing that inherits from Minder. There needs to be a factory somewhere.
+//    public static void ParseXML(NodeList list)
+//            throws AttributeMissingException, DataException, InvalidXMLException {
+//        int length = list.getLength();
+//        for (int index = 0; index < length; index++) {
+//            Node node = list.item(index);
+//
+//            // Much of this copied to Suspend.Suspend - refactor
+//            if (null != node) {
+//                if (node.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element element = (Element) node;
+//                    new ChairBlock(element);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Construct a {@code ChairBlock} from an XML Element.
@@ -96,12 +99,13 @@ public class ChairBlock extends MinderDom {
             depth = perimeterShape.depth();
         }
 
-        new Layer(LAYERNAME, LAYERTAG);
+        new Layer(LAYERTAG, LAYERNAME);
     }
 
     @Override
     public void verify() {
     }
+
 
     /**
      * Generate SVG DOM for a {@code ChairBlock}. <p/> The first {@code ChairBlock} generated also
@@ -117,33 +121,41 @@ public class ChairBlock extends MinderDom {
         }
 
         if (!SYMBOLGENERATED) {
-            Element defs = draw.element("defs");
+            SvgElement defs = draw.element("defs");
             draw.appendRootChild(defs);
 
-            Element symbol = draw.element("symbol");
-            symbol.setAttribute("id", "chair");
-            symbol.setAttribute("overflow", "visible");
+            SvgElement symbol = defs.symbol( draw, CHAIR );
+//            draw.element("symbol");
+//            symbol.setAttribute("id", "chair");
+//            symbol.setAttribute("overflow", "visible");
             defs.appendChild(symbol);
 
-            Element perimeter = draw.element("path");
-            perimeter.setAttribute("fill", "none");
-            perimeter.setAttribute("stroke", "black");
-            perimeter.setAttribute("stroke-width", "2");
             int sideways = CHAIRWIDTH / 3;
             int forward = CHAIRDEPTH / 2;
-            perimeter.setAttribute("d",
-                    "M -" + sideways + " -" + forward +
-                            " L -" + sideways + " " + forward +
-                            " L " + sideways + " " + forward +
-                            " L " + sideways + " -" + forward
-            );
-            symbol.appendChild(perimeter);
+            String path =                     "M -" + sideways + " -" + forward +
+                    " L -" + sideways + " " + forward +
+                    " L " + sideways + " " + forward +
+                    " L " + sideways + " -" + forward;
+
+            SvgElement perimeter = symbol.path( draw, path, COLOR );
+//            draw.element("path");
+//            perimeter.setAttribute("fill", "none");
+//            perimeter.setAttribute("stroke", "black");
+//            perimeter.setAttribute("stroke-width", "2");
+//            perimeter.setAttribute("d",
+//                    "M -" + sideways + " -" + forward +
+//                            " L -" + sideways + " " + forward +
+//                            " L " + sideways + " " + forward +
+//                            " L " + sideways + " -" + forward
+//            );
+//            symbol.appendChild(perimeter);
 
             SYMBOLGENERATED = true;
         }
 
-        Element group = draw.element("g");
-        group.setAttribute("class", LAYERTAG);
+        SvgElement group = svgClassGroup( draw, LAYERTAG );
+//        draw.element("g");
+//        group.setAttribute("class", LAYERTAG);
         draw.appendRootChild(group);
 
         double rowCount = depth / (CHAIRDEPTH + FOOTSPACE);
@@ -158,14 +170,15 @@ public class ChairBlock extends MinderDom {
                     continue;
                 }
 
-                Element use = draw.element("use");
-                use.setAttribute("xlink:href", "#chair");
-//                System.err.println( "x: "+x+", columnIndex: "+columnIndex+", xValue: "+xValue );
-                use.setAttribute("x", xValue.toString());
-//                System.err.println( "y: "+y+", rowIndex: "+rowIndex+", yValue: "+yValue );
-                use.setAttribute("y", yValue.toString());
+                SvgElement use = group.use( draw, CHAIR, xValue.intValue(), yValue.intValue() );
+//                draw.element("use");
+//                use.setAttribute("xlink:href", "#chair");
+////                System.err.println( "x: "+x+", columnIndex: "+columnIndex+", xValue: "+xValue );
+//                use.setAttribute("x", xValue.toString());
+////                System.err.println( "y: "+y+", rowIndex: "+rowIndex+", yValue: "+yValue );
+//                use.setAttribute("y", yValue.toString());
 
-                group.appendChild(use);
+//                group.appendChild(use);
 //                draw.appendRootChild( use );
             }
 

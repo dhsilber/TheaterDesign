@@ -15,11 +15,33 @@ import java.awt.*;
  * XML tag is 'venue'. Exactly one venue must be defined. Children may be any number of 'wall',
  * 'hangpoint', and/or 'airwall' tags. Required attributes are 'room', 'width', 'depth', and
  * 'height'. (I expect to move the 'room' attribute into its own tag at some point.)
+ * <p/>
+ * There are four circuiting modes. They control how luminaire information
+ * is displayed and apply to the venue as a whole. They are:
+ * <dl>
+ *     <dt>default</dt><dd>Venue dimmers are patched to arbitrary circuits
+ *     as needed. Displays a dimmer number in a
+ * rectangle, a channel number in a circle, and a circuit number in a
+ * hexagon </dd>
+ * <dt>one-to-one</dt><dd>Venue dimmers are circuited to only one location or
+ * there is no installed circuiting.
+ * Displays only the dimmer and channel.</dd>
+ * <dt>one-to-many</dt><dd>Venue dimmers are circuited to multiple locations.
+ * Displays the channel as normal and the circuit
+ * in the rectangle.</dd>
+ * </dl>
  *
  * @author dhs
  * @since 0.0.2
  */
-public class Venue extends Minder implements Legendable {
+/*
+Not yet implemented:
+ * <dt>direct</dt><dd>Venue does not provide circuiting. Board does not
+ * allow for patching. Displays the dimmer/channel number in the rectangle.</dd>
+ *
+ * also, make 'patched' be a synonym for the default. (Make attribute required?)
+ */
+public class Venue extends MinderDom implements Legendable {
 
     public final static String ONETOMANY = "one-to-many";
     public final static String ONETOONE = "one-to-one";
@@ -32,22 +54,8 @@ public class Venue extends Minder implements Legendable {
     private String circuiting;
     private String building;
 
-    /**
-     * Extract the venue description element from a list of XML nodes.
-     *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     */
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException
-    {
+    private static final String COLOR = "black";
 
-        Node node = list.item( 0 );
-        if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-            Element element = (Element) node;
-            new Venue( element );
-        }
-    }
 
     /**
      * Construct a {@code Venue} from an XML Element.
@@ -58,10 +66,6 @@ public class Venue extends Minder implements Legendable {
     public Venue( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-//        room = element.getAttribute( "room" );
-//        if (room.isEmpty()) {
-//            throw new AttributeMissingException( "Venue", null, "room" );
-//        }
         room = getStringAttribute( element, "room" );
         width = getIntegerAttribute( element, "width" );
         depth = getIntegerAttribute( element, "depth" );
@@ -82,24 +86,28 @@ public class Venue extends Minder implements Legendable {
 
         StaticVenue = this;
 
-        Legend.Register( this, room.length() * 9, 12, LegendOrder.Room );
+//        Legend.Register( this, room.length() * 9, 12, LegendOrder.Room );
+    }
+
+    public static Venue Venue() {
+        return StaticVenue;
     }
 
     /**
-     * Determine if the provided {@code Box} fits entirely within the {@code Venue}.
+     * Determine if the provided {@code Space} fits entirely within the {@code Venue}.
      *
-     * @param box (Hopefully) inner {@code Box}.
-     * @return true if inner {@code Box} fits entirely within the Venue.
+     * @param space (Hopefully) inner {@code Space}.
+     * @return true if inner {@code Space} fits entirely within the Venue.
      * @since 0.0.6
      */
-    public static boolean Contains( Box box ) throws ReferenceException {
+    public static boolean Contains( Space space ) throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
         }
 
-        Box room = new Box( new Point( 0, 0, 0 ), StaticVenue.width, StaticVenue.depth,
+        Space room = new Space( new Point( 0, 0, 0 ), StaticVenue.width, StaticVenue.depth,
                             StaticVenue.height );
-        return room.contains( box );
+        return room.contains( space );
     }
 
     /**
@@ -218,38 +226,38 @@ public class Venue extends Minder implements Legendable {
     public void verify() {
     }
 
-    /**
-     * Draw a plan view of this {@code Venue} to the provided canvas.
-     *
-     * @param canvas drawing region.
-     */
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-        canvas.setPaint( Color.BLACK );
-        canvas.draw( new Rectangle( 0, 0, width, depth ) );
-    }
-
-    /**
-     * Draw a section view of this {@code Venue} to the provided canvas.
-     *
-     * @param canvas drawing region.
-     */
-    @Override
-    public void drawSection( Graphics2D canvas ) {
-        canvas.setPaint( Color.BLACK );
-        canvas.draw( new Rectangle( 0, 0, depth, height ) );
-    }
-
-    /**
-     * Draw a front view of this {@code Venue} to the provided canvas.
-     *
-     * @param canvas drawing region.
-     */
-    @Override
-    public void drawFront( Graphics2D canvas ) {
-        canvas.setPaint( Color.BLACK );
-        canvas.draw( new Rectangle( 0, 0, width, height ) );
-    }
+//    /**
+//     * Draw a plan view of this {@code Venue} to the provided canvas.
+//     *
+//     * @param canvas drawing region.
+//     */
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//        canvas.setPaint( Color.BLACK );
+//        canvas.draw( new Rectangle( 0, 0, width, depth ) );
+//    }
+//
+//    /**
+//     * Draw a section view of this {@code Venue} to the provided canvas.
+//     *
+//     * @param canvas drawing region.
+//     */
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//        canvas.setPaint( Color.BLACK );
+//        canvas.draw( new Rectangle( 0, 0, depth, height ) );
+//    }
+//
+//    /**
+//     * Draw a front view of this {@code Venue} to the provided canvas.
+//     *
+//     * @param canvas drawing region.
+//     */
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//        canvas.setPaint( Color.BLACK );
+//        canvas.draw( new Rectangle( 0, 0, width, height ) );
+//    }
 
     /**
      * Make the venue's room into the title of the drawing.
@@ -258,6 +266,24 @@ public class Venue extends Minder implements Legendable {
      */
     @Override
     public void dom( Draw draw, View mode ) {
+        SvgElement element = null;
+
+        switch (mode) {
+            case PLAN:
+                element = draw.rectangle( draw, 0, 0, width, depth, COLOR );
+//                draw.appendRootChild( element );
+                break;
+            case SECTION:
+                element = draw.rectangle(draw, 0, 0, depth, height, COLOR);
+//                draw.appendRootChild( element );
+                break;
+            case FRONT:
+                element = draw.rectangle(draw, 0, 0, width, height, COLOR);
+//                draw.appendRootChild( element );
+                break;
+            case TRUSS:
+                break;
+        }
     }
 
     /**
@@ -272,20 +298,30 @@ public class Venue extends Minder implements Legendable {
      */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        Element text = draw.element( "text" );
         Integer x = start.x() + 10;
-        text.setAttribute( "x", x.toString() );
-        text.setAttribute( "y", start.y().toString() );
-        text.setAttribute( "fill", "black" );
-        text.setAttribute( "stroke", "none" );
-        text.setAttribute( "font-family", "serif" );
-        text.setAttribute( "font-size", "10" );
+        SvgElement text = draw.text( draw, room, x, start.y(), Legend.TEXTCOLOR );
+//        draw.element("text");
+//        text.setAttribute( "x", x.toString() );
+//        text.setAttribute( "y", start.y().toString() );
+//        text.setAttribute( "fill", "black" );
+//        text.setAttribute( "stroke", "none" );
+        text.attribute( "font-family", "serif" );
+        text.attribute( "font-size", "10" );
 
-        draw.appendRootChild( text );
+//        draw.appendRootChild( text );
 
         Text foo = draw.document().createTextNode( room );
         text.appendChild( foo );
 
         return new PagePoint( start.x(), start.y() + 12 );
+    }
+
+    public String toString() {
+        return building+room+"\nWidth: "+width+
+                ", Depth: "+depth+", Height: "+height;
+    }
+
+    public static String ToString() {
+        return StaticVenue.toString();
     }
 }

@@ -16,7 +16,9 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.4
  */
-public class HangPoint extends MinderDom {
+public class HangPoint extends MinderDom implements Legendable {
+
+    static final String SYMBOL = "hangpoint";
 
     /**
      * Name of {@code Layer} of {@code HangPoint}s.
@@ -26,38 +28,21 @@ public class HangPoint extends MinderDom {
     /**
      * Name of {@code Layer} of {@code HangPoint}s.
      */
-    public static final String LAYERTAG = "hangpoint";
+    public static final String LAYERTAG = SYMBOL;
 
-    private static Boolean SYMBOLGENERATED = false;
+    // This is public to allow for a terrible, terrible hack in MinderDom.DomAllTruss().
+    public static Boolean SYMBOLGENERATED = false;
 
     private Integer x = null;
     private Integer y = null;
 
-    /**
-     * Extract each hangpoint description element from a list of XML nodes.
-     *
-     * @param list Set of hangpoint nodes
-     * @throws AttributeMissingException This ends up copied to each thing that inherits from
-     *                                   Minder. There needs to be a factory somewhere.
-     * @throws InvalidXMLException       if null element is somehow presented to constructor
-     */
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException
-    {
+    static final String CATEGORY = SYMBOL;
 
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
+    private static final String COLOR = "light blue";
 
-            // Much of this copied to Suspend.Suspend - refactor
-            if (null != node) {
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    new HangPoint( element );
-                }
-            }
-        }
-    }
+    static final Integer RADIUS = 6;
+
+    private static Boolean Legended = false;
 
     /**
      * Create a {@code HangPoint}
@@ -71,7 +56,8 @@ public class HangPoint extends MinderDom {
      *                                   Venue}.
      */
     HangPoint( Element element )
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, LocationException, ReferenceException
     {
         super( element );
 
@@ -91,7 +77,14 @@ public class HangPoint extends MinderDom {
                         "HangPoint y value outside boundary of the venue" );
         }
 
-        new Layer( LAYERNAME, LAYERTAG );
+        new Layer( LAYERTAG, LAYERNAME );
+
+        new Category( CATEGORY, this.getClass() );
+
+        if( ! Legended ) {
+            Legend.Register( this, 130, 7, LegendOrder.Room );
+            Legended = true;
+        }
     }
 
     /**
@@ -102,7 +95,7 @@ public class HangPoint extends MinderDom {
      */
     public static HangPoint Find( String id ) {
 
-        for (MinderDom thingy : Drawable.List()) {
+        for (ElementalLister thingy : ElementalLister.List()) {
             if (HangPoint.class.isInstance( thingy )) {
                 if (((HangPoint) thingy).id.equals( id )) {
                     return (HangPoint) thingy;
@@ -110,6 +103,38 @@ public class HangPoint extends MinderDom {
             }
         }
         return null;
+    }
+
+    public static void Draw( Draw draw, Integer x, Integer y, Integer textX, Integer textY, String id ) {
+//System.out.println( "HangPoint.Draw( "+x.toString()+", "+ y.toString()+", "+ textX.toString()+", "+ textY.toString()+", "+ id+" )" );
+
+        SvgElement group = svgClassGroup(draw, LAYERTAG);
+//        draw.element("g");
+//        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
+
+        String reference = SYMBOL;
+        SvgElement use = group.use( draw, reference, x, y );
+//        draw.element("use");
+//        use.setAttribute( "xlink:href", "#hangpoint" );
+//        use.setAttribute( "x", x.toString() );
+//        use.setAttribute( "y", y.toString() );
+//        group.appendChild( use );
+
+        SvgElement idText = group.text( draw, id, textX, textY, COLOR );
+//        draw.element("text");
+//        idText.setAttribute( "x", textX.toString() );
+//        idText.setAttribute( "y", textY.toString() );
+//        idText.setAttribute( "fill", color );
+        idText.attribute( "stroke", "none" );
+        idText.attribute("font-family", "sans-serif");
+        idText.attribute("font-weight", "100");
+        idText.attribute("font-size", "12pt");
+        idText.attribute("text-anchor", "left");
+//        group.appendChild( idText );
+
+//        Text textId = draw.document().createTextNode( id );
+//        idText.appendChild( textId );
     }
 
     /**
@@ -127,18 +152,6 @@ public class HangPoint extends MinderDom {
     public void verify() throws InvalidXMLException {
     }
 
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawSection( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawFront( Graphics2D canvas ) {
-//    }
-
     /**
      * Draw a {@code HangPoint} onto the provided plan canvas.
      *
@@ -147,99 +160,84 @@ public class HangPoint extends MinderDom {
      */
     @Override
     public void dom( Draw draw, View mode ) {
-        if (View.PLAN != mode) {
-            return;
-        }
+        if (( View.PLAN == mode || View.TRUSS == mode ) && !SYMBOLGENERATED) {
 
-        if (!SYMBOLGENERATED) {
-
-            Element defs = draw.element( "defs" );
+            SvgElement defs = draw.element("defs");
             draw.appendRootChild( defs );
 
-            Element symbol = draw.element( "symbol" );
-            symbol.setAttribute( "id", "hangpoint" );
-            symbol.setAttribute( "overflow", "visible" );
-            defs.appendChild( symbol );
+            SvgElement symbol = defs.symbol( draw, SYMBOL );
+////            draw.element("symbol");
+////            symbol.setAttribute( "id", "hangpoint" );
+////            symbol.setAttribute( "overflow", "visible" );
+//            defs.appendChild( symbol );
 
-            Element circle = draw.element( "circle" );
-            circle.setAttribute( "fill", "none" );
-            circle.setAttribute( "stroke", "blue" );
-            circle.setAttribute( "stroke-width", "1" );
-            circle.setAttribute( "cx", "0" );
-            circle.setAttribute( "cy", "0" );
-            circle.setAttribute( "r", "4" );
-            symbol.appendChild( circle );
+            SvgElement circle = symbol.circle( draw, 0, 0, 4, COLOR );
+////            draw.element("circle");
+////            circle.setAttribute( "fill", "none" );
+////            circle.setAttribute( "stroke", color );
+////            circle.setAttribute( "stroke-width", "1" );
+////            circle.setAttribute( "cx", "0" );
+////            circle.setAttribute( "cy", "0" );
+////            circle.setAttribute( "r", "4" );
+//            symbol.appendChild( circle );
 
-            Element line = draw.element( "line" );
-            line.setAttribute( "x1", "0" );
-            line.setAttribute( "y1", "-6" );
-            line.setAttribute( "x2", "0" );
-            line.setAttribute( "y2", "6" );
-            line.setAttribute( "stroke", "blue" );
-            line.setAttribute( "stroke-width", "1" );
-            symbol.appendChild( line );
+            SvgElement line = symbol.line( draw, 0, -RADIUS, 0, RADIUS, COLOR );
+//                    draw.element("line");
+//            line.setAttribute( "x1", "0" );
+//            line.setAttribute( "y1", "-6" );
+//            line.setAttribute( "x2", "0" );
+//            line.setAttribute( "y2", "6" );
+//            line.setAttribute( "stroke", color );
+//            line.setAttribute( "stroke-width", "1" );
+//            symbol.appendChild( line );
 
-            Element line2 = draw.element( "line" );
-            line2.setAttribute( "x1", "-6" );
-            line2.setAttribute( "y1", "0" );
-            line2.setAttribute( "x2", "6" );
-            line2.setAttribute( "y2", "0" );
-            line2.setAttribute( "stroke", "blue" );
-            line2.setAttribute( "stroke-width", "1" );
-            symbol.appendChild( line2 );
+            SvgElement line2 = symbol.line(draw, -RADIUS, 0, RADIUS, 0, COLOR);
+//            draw.element("line");
+//            line2.setAttribute( "x1", "-6" );
+//            line2.setAttribute( "y1", "0" );
+//            line2.setAttribute( "x2", "6" );
+//            line2.setAttribute( "y2", "0" );
+//            line2.setAttribute( "stroke", color );
+//            line2.setAttribute( "stroke-width", "1" );
+//            symbol.appendChild( line2 );
 
             SYMBOLGENERATED = true;
         }
 
-        Element group = draw.element( "g" );
-        group.setAttribute( "class", LAYERTAG );
-        draw.appendRootChild( group );
+        if (View.PLAN != mode) {
+            return;
+        }
 
-        Element use = draw.element( "use" );
-        use.setAttribute( "xlink:href", "#hangpoint" );
+        Integer unitTextX = x + RADIUS * 2;
+        Integer unitTextY = y + RADIUS;
 
-        use.setAttribute( "x", x.toString() );
-        use.setAttribute( "y", y.toString() );
-        group.appendChild( use );
-
-        Element idText = draw.element( "text" );
-        Integer unitTextX = x + 12;
-        Integer unitTextY = y + 12;
-        idText.setAttribute( "x", unitTextX.toString() );
-        idText.setAttribute( "y", unitTextY.toString() );
-        idText.setAttribute( "fill", "blue" );
-        idText.setAttribute( "stroke", "none" );
-        idText.setAttribute( "font-family", "sans-serif" );
-        idText.setAttribute( "font-weight", "100" );
-        idText.setAttribute( "font-size", "12pt" );
-        idText.setAttribute( "text-anchor", "left" );
-        group.appendChild( idText );
-
-        Text textId = draw.document().createTextNode( id );
-        idText.appendChild( textId );
-
-//        Integer exPlus = x + 2;
-//        Integer exMinus = x - 2;
-//        Integer whyPlus = y + 2;
-//        Integer whyMinus = y - 2;
-//
-//        Element line = draw.element( "line" );
-//        line.setAttribute( "x1", exMinus.toString() );
-//        line.setAttribute( "y1", whyMinus.toString() );
-//        line.setAttribute( "x2", exPlus.toString() );
-//        line.setAttribute( "y2", whyPlus.toString() );
-//        line.setAttribute( "stroke", "blue" );
-//        line.setAttribute( "stroke-width", "2" );
-//        group.appendChild( line );
-//
-//        Element line2 = draw.element( "line" );
-//        line2.setAttribute( "x1", exPlus.toString() );
-//        line2.setAttribute( "y1", whyMinus.toString() );
-//        line2.setAttribute( "x2", exMinus.toString() );
-//        line2.setAttribute( "y2", whyPlus.toString() );
-//        line2.setAttribute( "stroke", "blue" );
-//        line2.setAttribute( "stroke-width", "2" );
-//        group.appendChild( line2 );
+        Draw( draw, x, y, unitTextX, unitTextY, id );
     }
 
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        Integer unitTextX = x + RADIUS * 2;
+        Integer unitTextY = y + RADIUS;
+
+//        Draw( draw, x, y, unitTextX, unitTextY, id );
+
+        SvgElement use = draw.use( draw, SYMBOL, start.x()+RADIUS, start.y()+RADIUS );
+//        draw.appendRootChild( use );
+//        SvgElement circle = svgCircle( draw, start.x()+RADIUS, start.y()+RADIUS, 4, COLOR );
+//        draw.appendRootChild( circle );
+//
+//        SvgElement line =svgLine( draw, start.x()+RADIUS, start.y(), start.x()+RADIUS, start.y()+RADIUS*2, COLOR );
+//        draw.appendRootChild( line );
+//
+//        SvgElement line2 = svgLine(draw, start.x(), start.y()+RADIUS, start.x()+RADIUS*2, start.y()+RADIUS, COLOR);
+//        draw.appendRootChild( line2 );
+
+        Integer x = start.x() + Legend.TEXTOFFSET;
+        Integer y = start.y() + RADIUS * 3 / 2;
+
+        SvgElement text = draw.text( draw, "Hangpoint", x, y, COLOR );
+//        draw.appendRootChild( text );
+
+        return new PagePoint( start.x(), start.y() + RADIUS * 2 );
+    }
 }

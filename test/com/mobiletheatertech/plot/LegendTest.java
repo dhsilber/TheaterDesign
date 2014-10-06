@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -19,6 +19,7 @@ import static org.testng.Assert.assertNotNull;
 public class LegendTest {
 
     private int calledBack = 0;
+    private Element eventElement;
     private Element venueElement;
 
     class testLegendable implements Legendable {
@@ -34,7 +35,7 @@ public class LegendTest {
         Object thingy = TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend",
                                                         "LEGENDLIST" );
         assertNotNull( thingy );
-        assert ArrayList.class.isInstance( thingy );
+        assert TreeMap.class.isInstance( thingy );
     }
 
     @Test
@@ -42,7 +43,7 @@ public class LegendTest {
         testLegendable legendableObject = new testLegendable();
         Legend.Register( legendableObject, 1, 2, LegendOrder.Show );
 
-        ArrayList<Legendable> thingy = (ArrayList<Legendable>) TestHelpers.accessStaticObject(
+        TreeMap<Integer, Legendable> thingy = (TreeMap<Integer, Legendable>) TestHelpers.accessStaticObject(
                 "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
         assertNotNull( thingy );
         assertEquals( thingy.size(), 1 );
@@ -50,14 +51,15 @@ public class LegendTest {
 
     @Test
     public void invokeCallback() throws Exception {
+        new Event( eventElement );
         new Venue( venueElement );
 
         testLegendable legendableObject = new testLegendable();
         Legend.Register( legendableObject, 1, 2, LegendOrder.Show );
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
 
-        Legend.Startup( draw );
+        Legend.Startup( draw, View.PLAN, 100, 100 );
 //        TestHelpers.setStaticObject(
 //                "com.mobiletheatertech.plot.Legend", "INITIAL", new PagePoint( 1, 2 ) );
 
@@ -80,8 +82,12 @@ public class LegendTest {
         TestResets.LegendReset();
         calledBack = 0;
 
+        eventElement = new IIOMetadataNode( "event" );
+        eventElement.setAttribute( "name", "name" );
+
         venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "name", "Test Name" );
+//        venueElement.setAttribute( "name", "Test Name" );
+        venueElement.setAttribute( "room", "Test Room" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );

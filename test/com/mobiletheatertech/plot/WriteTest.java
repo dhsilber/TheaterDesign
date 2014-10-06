@@ -22,25 +22,6 @@ public class WriteTest {
     public WriteTest() {
     }
 
-//    @Test
-//    public void drawAndCreate() throws Exception {
-//
-//        new Expectations() {
-//            Draw draw;
-//
-//            {
-//                draw = new Draw();
-//                Graphics2D canvas = draw.canvas();
-//                Minder.DrawAllPlan( canvas );
-//                draw.getRoot();
-//                Minder.DomAllPlan( draw );
-//                draw.create( "/Users/dhs/Plot/out/Fiddle-Faddle.svg" );
-//            }
-//        };
-//        String filename = "Fiddle-Faddle";
-//        new Write( filename );
-//    }
-
     @Test
 //        ( expectedExceptions=SystemDataMissingException.class,
 //        expectedExceptionsMessageRegExp = "User has no home directory")
@@ -58,7 +39,7 @@ public class WriteTest {
         File tmp = new File( pathName );
         assertFalse( tmp.exists() );
 
-        new Write( directoryName );
+        new Write().init( directoryName );
         tmp = new File( pathName );
         assertTrue( tmp.exists() );
         assertTrue( tmp.isDirectory() );
@@ -82,6 +63,9 @@ public class WriteTest {
         assertEquals( contents.length, 5 );
     }
 
+//    TODO    Test that correct HTML/Javascript bits are generated for active layers.
+
+
 //    @Test
 //    public void checkbox() throws Exception {
 //        String name="name of thing";
@@ -89,7 +73,7 @@ public class WriteTest {
 //        HashMap<String,String> thing=new HashMap<>(  );
 //        thing                       .put( name,tag );
 //
-//        Write write=new Write( "foo" );
+//        Write write=new Write( "stringValue" );
 //
 //        write.
 //
@@ -115,11 +99,15 @@ public class WriteTest {
         TestResets.MinderDomReset();
 
         venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "room", "Test Room" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
+
+        Element eventElement = new IIOMetadataNode( "event" );
+        eventElement.setAttribute( "name", "WriteTest event" );
+        new Event( eventElement );
     }
 
     @AfterMethod

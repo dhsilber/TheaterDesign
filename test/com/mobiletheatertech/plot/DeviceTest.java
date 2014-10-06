@@ -15,20 +15,30 @@ import static org.testng.Assert.assertSame;
 /**
  * Created by dhs on 6/22/14.
  */
-public class BoxTest {
+public class DeviceTest {
 
     Element tableElement = null;
     Element templateElement = null;
     Element layeredTemplateElement = null;
     Element element = null;
+    Element layeredElement = null;
 
     final String deviceName = "Intercom base station";
     final String tableName = "control table";
     final String templateName = "Clear-Com CS-210";
+    final String layeredTemplateName = "Clear-Com RS-100A";
     final String layerName = "intercom";
 
+    Integer tableWidth = 1;
+    Integer tableDepth = 2;
+    Integer tableHeight = 3;
+    Integer tableX = 4;
+    Integer tableY = 5;
+    Integer tableZ = 6;
+
+
     @Test
-    public void isMinderDom() throws Exception {
+    public void isA() throws Exception {
         Device device = new Device( element );
 
         assert MinderDom.class.isInstance( device );
@@ -52,7 +62,7 @@ public class BoxTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Device \\("+deviceName+"\\) is missing required 'on' attribute.")
+            expectedExceptionsMessageRegExp = "Device \\(" + deviceName + "\\) is missing required 'on' attribute.")
     public void noOn() throws Exception {
         element.removeAttribute("on");
         new Device(element);
@@ -97,10 +107,18 @@ public class BoxTest {
     }
 
     @Test
+    public void validIsOnDefinedAfterDevice() throws Exception {
+        Device device = new Device(element);
+        new Table( tableElement );
+        new DeviceTemplate(templateElement);
+        device.verify();
+    }
+
+    @Test
     public void storesSelf() throws Exception {
         Device device = new Device( element );
 
-        ArrayList<ElementalLister> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains( device );
     }
@@ -126,13 +144,57 @@ public class BoxTest {
     }
 
     @Test
+    public void noLayer() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate( templateElement );
+        Device device = new Device( element );
+        device.verify();
+
+        assertNull( device.layer() );
+    }
+
+    @Test
+    public void layer() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate( layeredTemplateElement );
+        Device device = new Device( layeredElement );
+        device.verify();
+
+        assertEquals( device.layer(), layerName );
+    }
+
+    @Test
+    public void is() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate( templateElement );
+        Device device = new Device( element );
+        device.verify();
+
+        assertEquals( device.is(), templateName );
+    }
+
+    @Test
+    public void location() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate(templateElement);
+        Device device = new Device( element );
+        device.verify();
+
+        Point place = device.location();
+
+        assertEquals( (Integer)place.x, tableX );
+        assertEquals( (Integer)place.y, tableY );
+        assertEquals( place.z, tableZ + tableHeight );
+    }
+
+    @Test
     public void domPlan() throws Exception {
         DeviceTemplate deviceTemplate =  new DeviceTemplate(templateElement);
         Table table = new Table( tableElement );
 
         Draw draw = new Draw();
 
-        draw.getRoot();
+        draw.establishRoot();
         Device device = new Device( element );
         device.verify();
 
@@ -146,16 +208,18 @@ public class BoxTest {
         Node groupNode = rectangles.item(0);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element deviceElement = (Element) groupNode;
-//        assertEquals(tableElement.getAttribute("class"), Table.LAYERTAG);
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
 
         Solid deviceTemplateShape = deviceTemplate.getSolid();
         Point tableLocation = table.things.get(0).point;
 
         assertEquals(deviceElement.getAttribute("x"), tableLocation.x().toString() );
         assertEquals(deviceElement.getAttribute("y"), tableLocation.y().toString() );
-        assertEquals(deviceElement.getAttribute("width"), deviceTemplateShape.getWidth().toString() );
-        // Plot attribute is 'depth'. SVG attribute is 'height'.
-        assertEquals(deviceElement.getAttribute("height"), deviceTemplateShape.getDepth().toString() );
+        Integer width = deviceTemplateShape.getWidth().intValue();
+        assertEquals(deviceElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.\
+        Integer height = deviceTemplateShape.getDepth().intValue();
+        assertEquals(deviceElement.getAttribute("height"), height.toString() );
         assertEquals(deviceElement.getAttribute("fill"), "grey");
         assertEquals(deviceElement.getAttribute("stroke"), "black");
     }
@@ -171,10 +235,11 @@ public class BoxTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
 //        TestResets.GearListReset();
-//        TestResets.ElementalListerReset(); // so that Tables are reset.
-////        TestResets.TableThingsReset();
-//        TestResets.DeviceTemplateReset();
+        TestResets.ElementalListerReset(); // so that Tables are reset.
+//        TestResets.TableThingsReset();
+        TestResets.DeviceTemplateReset();
         TestResets.DeviceReset();
+        TestResets.StackableReset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");
@@ -185,12 +250,12 @@ public class BoxTest {
 
         tableElement = new IIOMetadataNode("table");
         tableElement.setAttribute("id", tableName);
-        tableElement.setAttribute("width", "1");
-        tableElement.setAttribute("depth", "2");
-        tableElement.setAttribute("height", "3");
-        tableElement.setAttribute("x", "4");
-        tableElement.setAttribute("y", "5");
-        tableElement.setAttribute("z", "6");
+        tableElement.setAttribute("width", tableWidth.toString() );
+        tableElement.setAttribute("depth", tableDepth.toString() );
+        tableElement.setAttribute("height", tableHeight.toString() );
+        tableElement.setAttribute("x", tableX.toString() );
+        tableElement.setAttribute("y", tableY.toString() );
+        tableElement.setAttribute("z", tableZ.toString() );
 
         templateElement = new IIOMetadataNode("device-template");
         templateElement.setAttribute("type", templateName );
@@ -199,7 +264,7 @@ public class BoxTest {
         templateElement.setAttribute("height", "9");
 
         layeredTemplateElement = new IIOMetadataNode("device-template");
-        layeredTemplateElement.setAttribute("type", templateName );
+        layeredTemplateElement.setAttribute("type", layeredTemplateName );
         layeredTemplateElement.setAttribute("width", "7");
         layeredTemplateElement.setAttribute("depth", "8");
         layeredTemplateElement.setAttribute("height", "9");
@@ -209,6 +274,11 @@ public class BoxTest {
         element.setAttribute( "id", deviceName );
         element.setAttribute( "on", tableName );
         element.setAttribute( "is", templateName );
+
+        layeredElement = new IIOMetadataNode( "device" );
+        layeredElement.setAttribute( "id", deviceName );
+        layeredElement.setAttribute( "on", tableName );
+        layeredElement.setAttribute( "is", layeredTemplateName );
     }
 
     @AfterMethod

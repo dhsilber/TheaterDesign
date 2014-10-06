@@ -23,23 +23,6 @@ public class Suspend extends MinderDom {
     //    private Truss truss = null;        // Should reference Truss which is suspended by this.
     private String processedMark = null;
 
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, ReferenceException
-    {
-
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
-
-            // Much of this copied to Suspend.Suspend - refactor
-            if (null != node) {
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    new Suspend( element );
-                }
-            }
-        }
-    }
 
     public Suspend( Element element )
             throws AttributeMissingException, InvalidXMLException, ReferenceException
@@ -70,7 +53,7 @@ public class Suspend extends MinderDom {
         if ( null != node ) {
             if ( node.getNodeType() == Node.ELEMENT_NODE ) {
                 Element parent = (Element) node;
-                String mark = parent.getAttribute( "processedMark");
+                String mark = parent.attribute( "processedMark");
                 truss=Truss.Find( mark );
             }
         }
@@ -86,7 +69,7 @@ public class Suspend extends MinderDom {
      */
     // Copied from Truss - refactor to Minder?
     public static Suspend Find( String mark ) {
-        for (MinderDom thingy : Drawable.List()) {
+        for (ElementalLister thingy : ElementalLister.List()) {
             if (Suspend.class.isInstance( thingy )) {
                 if (((Suspend) thingy).processedMark.equals( mark )) {
                     return (Suspend) thingy;
@@ -104,24 +87,24 @@ public class Suspend extends MinderDom {
                 location.z() - distance );
     }
 
+    public String ref() {
+        return refId;
+    }
+
     @Override
     public void verify() {
     }
 
-//    @Override
-//    public void drawPlan( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawSection( Graphics2D canvas ) {
-//    }
-//
-//    @Override
-//    public void drawFront( Graphics2D canvas ) {
-//    }
-
     @Override
     public void dom( Draw draw, View mode ) {
+//        switch (mode) {
+//            case TRUSS:
+//                return;
+//        }
+    }
+
+    public String toString() {
+      return "Suspend - refId: "+refId+" distance: "+distance+" processedMark: "+processedMark+" hangpoint: "+hangPoint+".";
     }
 
 }

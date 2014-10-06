@@ -27,31 +27,31 @@
 //     */
 //    private class Listed extends Lister {
 //
-//        public Listed( Element element ) throws InvalidXMLException {
-//            super( element );
+//        public Listed( Element elementOnPipe ) throws InvalidXMLException {
+//            super( elementOnPipe );
 //        }
 //    }
 //
 //    private static Draw draw = null;
-//    private Element element = null;
+//    private Element elementOnPipe = null;
 //
 //    public ListerTest() {
 //    }
 //
 //    @Test
 //    public void isElemental() throws Exception {
-//        Listed foo = new Listed( element );
+//        Listed stringValue = new Listed( elementOnPipe );
 //
-//        assert Elemental.class.isInstance( foo );
+//        assert Elemental.class.isInstance( stringValue );
 //    }
 //
 //    @Test
 //    public void stores() throws Exception {
-//        Listed foo = new Listed( element );
+//        Listed stringValue = new Listed( elementOnPipe );
 //        ArrayList<Minder> thing = Drawable.List();
 //        assertNotNull( thing, "List should exist" );
 //
-//        assert thing.contains( foo );
+//        assert thing.contains( stringValue );
 //    }
 //
 //    @Test(expectedExceptions = InvalidXMLException.class,
@@ -70,7 +70,7 @@
 //
 //    @BeforeMethod
 //    public void setUpMethod() throws Exception {
-//        element = new IIOMetadataNode( "bogus" );
+//        elementOnPipe = new IIOMetadataNode( "bogus" );
 //    }
 //
 //    @AfterMethod

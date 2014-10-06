@@ -1,6 +1,17 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+/*
+
+TODO: Upgrade notes...
+
+Look in CableRun for the latest & greatest in error reporting. If anything
+else uses something similar, that code should move to here.
+
+ */
 
 /**
  * Provides methods for parsing information from DOM elements.
@@ -20,6 +31,14 @@ public class Elemental {
      * the earliest opportunity.
      */
     public String id = null;
+
+    public Elemental( Element element) throws InvalidXMLException{
+
+        if (null == element) {
+            throw new InvalidXMLException( this.getClass().getSimpleName() + " element unexpectedly null!" );
+        }
+
+    }
 
     /**
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and convert it to an
@@ -43,6 +62,47 @@ public class Elemental {
     }
 
     /**
+     *
+     * @param element
+     * @param name
+     * @return
+     * @throws AttributeMissingException
+     * @throws InvalidXMLException
+     * @since 0.0.24
+     */
+    protected Integer getPositiveIntegerAttribute(Element element, String name)
+            throws AttributeMissingException, InvalidXMLException {
+        Integer value = getIntegerAttribute(element, name);
+        if (0 > value) {
+            throw new InvalidXMLException(this.getClass().getSimpleName(), id,
+                    "value for '" + name + "' attribute should not be negative");
+//            this.getClass().getSimpleName() + " \\(" + id + "\\) value for '" + name +
+//                    "' attribute should not be negative.");
+        }
+        if (0 == value) {
+            throw new InvalidXMLException(this.getClass().getSimpleName(), id,
+                    "value for '" + name + "' attribute should not be zero");
+        }
+        return value;
+    }
+
+    protected Double getPositiveDoubleAttribute(Element element, String name)
+            throws AttributeMissingException, InvalidXMLException {
+        Double value = getDoubleAttribute(element, name);
+        if (0 > value) {
+            throw new InvalidXMLException(this.getClass().getSimpleName(), id,
+                    "value for '" + name + "' attribute should not be negative");
+//            this.getClass().getSimpleName() + " \\(" + id + "\\) value for '" + name +
+//                    "' attribute should not be negative.");
+        }
+        if (0 == value) {
+            throw new InvalidXMLException(this.getClass().getSimpleName(), id,
+                    "value for '" + name + "' attribute should not be zero");
+        }
+        return value;
+    }
+
+    /**
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
      * convert it to an {@code Integer}.
      *
@@ -60,7 +120,45 @@ public class Elemental {
     }
 
     /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and convert it to a
+     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
+     * convert it to an {@code Integer}.
+     *
+     * @param element DOM Element defining a venue.
+     * @param name    name of attribute.
+     * @return Integer value of attribute - zero if attribute is not set
+     */
+    protected Double getDoubleAttribute( Element element, String name )
+            throws AttributeMissingException
+    {
+        String value = element.getAttribute( name );
+        if (value.isEmpty()) {
+            throw new AttributeMissingException(
+                    this.getClass().getSimpleName(), id, name );
+        }
+
+        return new Double( value );
+    }
+
+
+    /**
+     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
+     * convert it to an {@code Integer}.
+     *
+     * @param element DOM Element defining a venue.
+     * @param name    name of attribute.
+     * @return Integer value of attribute - zero if attribute is not set
+     */
+    protected Double getOptionalDoubleAttribute( Element element, String name ) {
+        String value = element.getAttribute( name );
+        if (value.isEmpty()) {
+            value = "0";
+        }
+
+        return new Double( value );
+    }
+
+    /**
+     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and return that
      * {@code String}.
      *
      * @param element DOM Element defining a venue.
@@ -89,6 +187,22 @@ public class Elemental {
      */
     protected String getOptionalStringAttribute( Element element, String name ) {
         String value = element.getAttribute( name );
+
+        return value;
+    }
+
+    /**
+     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present.
+     * If it is not present, return a null.
+     *
+     * @param element DOM Element defining a venue.
+     * @param name    name of attribute.
+     * @return String value of attribute - null {@code String} if attribute not set
+     */
+    protected String getOptionalStringAttributeOrNull( Element element, String name ) {
+        String value = element.getAttribute( name );
+
+        if ( "".equals( value ) ) { value = null; }
 
         return value;
     }

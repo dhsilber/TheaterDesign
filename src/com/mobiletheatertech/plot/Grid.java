@@ -17,25 +17,42 @@ import org.w3c.dom.Element;
  * @author dhs
  * @since 0.0.10
  */
-public class Grid {
+public class Grid extends MinderDom {
+
+    static final String CATEGORY = "grid";
+
+    public Grid( Element element ) throws InvalidXMLException{
+        super( element );
+
+        SvgElement.Offset( 48, 24 );
+
+        new Category( CATEGORY, this.getClass() );
+    }
+
+    @Override
+    public void verify() throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException {
+
+    }
 
     /**
      * Draw the grid.
      *
      * @param draw canvas / DOM manager
      */
-    public static void DOM( Draw draw ) throws ReferenceException {
+    @Override
+    public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
+
         Integer depth = Venue.Depth();
         Integer width = Venue.Width();
 
-        for (Integer x = 1; x <= Venue.Width(); x += 12) {
+        for (Integer x = 1; x <= Venue.Width(); x += 48) {
             String opacity = ((x % 120) == 1)
                              ? "0.2"
                              : "0.1";
             verticalLine( draw, depth, x, opacity );
 //            System.out.println( "V Line: "+ x+ ", Opacity: "+ opacity);
         }
-        for (Integer y = 1; y <= Venue.Depth(); y += 12) {
+        for (Integer y = 1; y <= Venue.Depth(); y += 48) {
             String opacity = ((y % 120) == 1)
                              ? "0.2"
                              : "0.1";
@@ -44,28 +61,28 @@ public class Grid {
         }
     }
 
-    private static void verticalLine( Draw draw, Integer end, Integer x, String opacity ) {
+    private void verticalLine( Draw draw, Integer end, Integer x, String opacity ) {
         line( draw, x, 0, x, end, opacity );
     }
 
     /*  */
-    private static void horizontalLine( Draw draw, Integer end, Integer y, String opacity ) {
+    private void horizontalLine( Draw draw, Integer end, Integer y, String opacity ) {
         line( draw, 0, y, end, y, opacity );
     }
 
     /* Generate the SVG XML for a line. */
-    private static void line( Draw draw, Integer x1, Integer y1, Integer x2, Integer y2,
+    private void line( Draw draw, Integer x1, Integer y1, Integer x2, Integer y2,
                               String opacity )
     {
-        Element line;
+        SvgElement line;
         line = draw.element( "line" );
-        line.setAttribute( "x1", x1.toString() );
-        line.setAttribute( "y1", y1.toString() );
-        line.setAttribute( "x2", x2.toString() );
-        line.setAttribute( "y2", y2.toString() );
+        line.attribute("x1", x1.toString());
+        line.attribute("y1", y1.toString());
+        line.attribute("x2", x2.toString());
+        line.attribute("y2", y2.toString());
 
-        line.setAttribute( "stroke", "blue" );
-        line.setAttribute( "stroke-opacity", opacity );
+        line.attribute("stroke", "blue");
+        line.attribute("stroke-opacity", opacity);
 
         draw.appendRootChild( line );
     }

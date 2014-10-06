@@ -7,6 +7,8 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
@@ -22,11 +24,14 @@ public class AirwallTest {
 
     Element element = null;
 
+    private Integer depth = 77;
+    Integer width = 350;
+
     @Test
-    public void isMinder() throws Exception {
+    public void isA() throws Exception {
         Airwall airwall = new Airwall( element );
 
-        assert Minder.class.isInstance( airwall );
+        assert MinderDom.class.isInstance( airwall );
     }
 
     @Test
@@ -50,6 +55,33 @@ public class AirwallTest {
         new Airwall( element );
     }
 
+    @Test
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
+        Airwall airwall = new Airwall( element );
+
+        NodeList existingRectangles = draw.root().getElementsByTagName("line");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        airwall.dom(draw, View.PLAN);
+
+        NodeList rectangles = draw.root().getElementsByTagName("line");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+        assertEquals(tableElement.getAttribute("x1"), "0" );
+        assertEquals(tableElement.getAttribute("y1"), depth.toString() );
+        assertEquals(tableElement.getAttribute("x2"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
+        assertEquals(tableElement.getAttribute("stroke-width"), "2");
+        assertEquals(tableElement.getAttribute("stroke"), Airwall.COLOR );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -62,13 +94,13 @@ public class AirwallTest {
     public void setUpMethod() throws Exception {
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
+        venueElement.setAttribute( "width", width.toString() );
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", "240" );
         new Venue( venueElement );
 
         element = new IIOMetadataNode( "airwall" );
-        element.setAttribute( "depth", "77" );
+        element.setAttribute( "depth", depth.toString() );
     }
 
     @AfterMethod

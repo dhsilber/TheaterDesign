@@ -12,8 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 /*
  * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:43 PM To change this template use
@@ -29,43 +28,71 @@ import static org.testng.Assert.assertNull;
 public class TableTest {
 
     Element element = null;
-    Element elementP = null;
 
-    public TableTest() {
+    private String tableName = "ID of table";
+    private Integer width = 60;
+    private Integer depth = 36;
+    private Integer height = 32;
+    private Integer x = 12;
+    private Integer y = 34;
+    private Integer z = 0;
+
+
+    @Test
+    public void isA() throws Exception {
+        Table table = new Table(element);
+
+        assert Stackable.class.isInstance(table);
     }
 
     @Test
-    public void isMinderDom() throws Exception {
-        Table table = new Table(element);
-
-        assert MinderDom.class.isInstance(table);
+    public void isLegendable() throws Exception {
+        Table table = new Table( element );
+        assert Legendable.class.isInstance( table );
     }
 
     @Test
     public void storesAttributes() throws Exception {
         Table table = new Table(element);
 
-        assertEquals(TestHelpers.accessInteger(table, "width"), (Integer) 288);
-        assertEquals(TestHelpers.accessInteger(table, "depth"), (Integer) 144);
-        assertEquals(TestHelpers.accessInteger(table, "x"), (Integer) 56);
-        assertEquals(TestHelpers.accessInteger(table, "y"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(table, "z"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(table, "height"), (Integer) 12);
+        assertEquals(TestHelpers.accessString(table, "id"), "");
+        assertEquals(TestHelpers.accessInteger(table, "width"), width );
+        assertEquals(TestHelpers.accessInteger(table, "depth"), depth );
+        assertEquals(TestHelpers.accessInteger(table, "height"), height );
+        assertEquals(TestHelpers.accessInteger(table, "x"), x );
+        assertEquals(TestHelpers.accessInteger(table, "y"), y );
+        assertEquals(TestHelpers.accessInteger(table, "z"), z );
     }
 
-    // Until such time as I properly implement this class' use of id.
     @Test
-    public void idUnused() throws Exception {
+    public void storesOptionalAttributes() throws Exception {
+        element.setAttribute("id", tableName);
+
         Table table = new Table(element);
 
-        assertNull(TestHelpers.accessString(table, "id"));
+        assertEquals(TestHelpers.accessString(table, "id"), tableName);
+        assertEquals(TestHelpers.accessInteger(table, "width"), width );
+        assertEquals(TestHelpers.accessInteger(table, "depth"), depth );
+        assertEquals(TestHelpers.accessInteger(table, "height"), height );
+        assertEquals(TestHelpers.accessInteger(table, "x"), x );
+        assertEquals(TestHelpers.accessInteger(table, "y"), y );
+        assertEquals(TestHelpers.accessInteger(table, "z"), z );
+    }
+
+    @Test
+    public void category() throws Exception {
+        assertNull(Category.Select(Table.CATEGORY));
+
+        new Table( element );
+
+        assertNotNull(Category.Select(Table.CATEGORY));
     }
 
     @Test
     public void storesSelf() throws Exception {
         Table table = new Table(element);
 
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains(table);
     }
@@ -124,7 +151,7 @@ public class TableTest {
             expectedExceptionsMessageRegExp =
                     "Table should not extend beyond the boundaries of the venue.")
     public void tooLargeWidth() throws Exception {
-        element.setAttribute("width", "495");
+        element.setAttribute("width", "539");
         new Table(element);
     }
 
@@ -140,7 +167,7 @@ public class TableTest {
             expectedExceptionsMessageRegExp =
                     "Table should not extend beyond the boundaries of the venue.")
     public void tooLargeX() throws Exception {
-        element.setAttribute("x", "263");
+        element.setAttribute("x", "491");
         new Table(element);
     }
 
@@ -156,7 +183,7 @@ public class TableTest {
             expectedExceptionsMessageRegExp =
                     "Table should not extend beyond the boundaries of the venue.")
     public void tooLargeZ() throws Exception {
-        element.setAttribute("z", "229");
+        element.setAttribute("z", "218");
         new Table(element);
     }
 
@@ -164,7 +191,7 @@ public class TableTest {
             expectedExceptionsMessageRegExp =
                     "Table should not extend beyond the boundaries of the venue.")
     public void tooLargeHeight() throws Exception {
-        element.setAttribute("height", "225");
+        element.setAttribute("height", "241");
         new Table(element);
     }
 
@@ -219,7 +246,9 @@ public class TableTest {
     @Test
     public void parse() throws Exception {
         String xml = "<plot>" +
+                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
                 "<table width=\"72\" depth=\"30\" x=\"3\" y=\"6\" z=\"0\" height=\"36\" />" +
+                "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream(xml.getBytes());
 
@@ -227,8 +256,8 @@ public class TableTest {
 
         new Parse(stream);
 
-        ArrayList<MinderDom> list = Drawable.List();
-        assertEquals(list.size(), 1);
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        assertEquals(list.size(), 2);
     }
 
     @Test
@@ -243,7 +272,7 @@ public class TableTest {
 
         new Parse(stream);
 
-        ArrayList<MinderDom> list = Drawable.List();
+        ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals(list.size(), 2);
     }
 
@@ -252,7 +281,7 @@ public class TableTest {
 
 //    @Test
 //    public void draw() throws Exception {
-//        Table table = new Table( element );
+//        Table table = new Table( elementOnPipe );
 //
 //        new Expectations() {
 //            {
@@ -267,7 +296,7 @@ public class TableTest {
     public void domPlan() throws Exception {
         Draw draw = new Draw();
 
-        draw.getRoot();
+        draw.establishRoot();
         Table table = new Table(element);
 
         NodeList existingGroups = draw.root().getElementsByTagName("rect");
@@ -285,10 +314,11 @@ public class TableTest {
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element tableElement = (Element) groupNode;
         assertEquals(tableElement.getAttribute("class"), Table.LAYERTAG);
-        assertEquals(tableElement.getAttribute("x"), "56");
-        assertEquals(tableElement.getAttribute("y"), "16");
-        assertEquals(tableElement.getAttribute("width"), "288");
-        assertEquals(tableElement.getAttribute("height"), "144");
+        assertEquals(tableElement.getAttribute("x"), x.toString() );
+        assertEquals(tableElement.getAttribute("y"), y.toString() );
+        assertEquals(tableElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), depth.toString() );
         assertEquals(tableElement.getAttribute("fill"), "none");
         assertEquals(tableElement.getAttribute("stroke"), "brown");
 
@@ -302,17 +332,17 @@ public class TableTest {
 //
 //        Node node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        Element element = (Element) node;
-//        assertEquals( element.getAttribute( "xlink:href" ), "#chair" );
-//        assertEquals( element.getAttribute( "x" ), expectedX );
-//        assertEquals( element.getAttribute( "y" ), expectedY );
+//        Element elementOnPipe = (Element) node;
+//        assertEquals( elementOnPipe.attribute( "xlink:href" ), "#chair" );
+//        assertEquals( elementOnPipe.attribute( "x" ), expectedX );
+//        assertEquals( elementOnPipe.attribute( "y" ), expectedY );
     }
 
     @Test
     public void domSectionUndrawn() throws Exception {
         Draw draw = new Draw();
 
-        draw.getRoot();
+        draw.establishRoot();
         Table table = new Table(element);
 
         NodeList existingGroups = draw.root().getElementsByTagName("rect");
@@ -328,7 +358,7 @@ public class TableTest {
     public void domFrontUndrawn() throws Exception {
         Draw draw = new Draw();
 
-        draw.getRoot();
+        draw.establishRoot();
         Table table = new Table(element);
 
         NodeList existingGroups = draw.root().getElementsByTagName("rect");
@@ -346,6 +376,43 @@ public class TableTest {
 //        throw new SkipException( "Table does not yet support multiples" );
 //    }
 
+    @Test
+    public void recallsNull() {
+        assertNull( Table.Select("bogus") );
+    }
+
+    @Test
+    public void recalls() throws Exception {
+        element.setAttribute("id", tableName);
+
+        Table listed = new Table( element );
+        assertSame( Table.Select( tableName ), listed );
+    }
+
+    @Test
+    public void locationPutsSolidOnTable() throws Exception {
+        Table surface = new Table( element );
+        Solid solid = new Solid( 3,4,5 );
+        Point place = surface.location( solid );
+
+        assertEquals( (Integer)place.x, x );
+        assertEquals( (Integer)place.y, y );
+        assertEquals( place.z, z+height );
+    }
+
+    // TODO: Allow for two devices on a surface.
+//    @Test
+//    public void locationPutsTwoSolidsOnTable() throws Exception {
+//        Table surface = new Table( diversionElement );
+//        Solid solid = new Solid( 3,4,5 );
+//        surface.location( solid );
+//        Point place = surface.location( solid );
+//
+//        assertEquals( (Integer)place.x, x );
+//        assertEquals( place.y, y+4 );
+//        assertEquals( place.z, z+height );
+//    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -356,6 +423,9 @@ public class TableTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.StackableReset();
+        TestResets.MinderDomReset();
+
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");
         venueElement.setAttribute("width", "550");
@@ -364,12 +434,12 @@ public class TableTest {
         new Venue(venueElement);
 
         element = new IIOMetadataNode("table");
-        element.setAttribute("width", "288");
-        element.setAttribute("depth", "144");
-        element.setAttribute("x", "56");
-        element.setAttribute("y", "16");
-        element.setAttribute("z", "16");
-        element.setAttribute("height", "12");
+        element.setAttribute("width", width.toString() );
+        element.setAttribute("depth", depth.toString() );
+        element.setAttribute("height", height.toString() );
+        element.setAttribute("x", x.toString() );
+        element.setAttribute("y", y.toString() );
+        element.setAttribute("z", z.toString() );
 
 //        elementP = new IIOMetadataNode( "table" );
 //        elementP.setAttribute( "proscenium-width", "330" );

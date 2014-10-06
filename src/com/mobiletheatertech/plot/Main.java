@@ -37,7 +37,7 @@ public class Main {
         try {
             new Read( args[0] );
 
-            new Write( args[0] );
+            new Write().init( args[0] );
         }
         catch ( Exception e ) {
             System.err.println( e.getMessage() );

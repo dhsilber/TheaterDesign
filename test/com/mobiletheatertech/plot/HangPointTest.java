@@ -27,10 +27,16 @@ public class HangPointTest {
     }
 
     @Test
-    public void isMinderDom() throws Exception {
+    public void isA() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
         assert MinderDom.class.isInstance( hangPoint );
+    }
+
+    @Test
+    public void isLegendable() throws Exception {
+        HangPoint hangPoint = new HangPoint( element );
+        assert Legendable.class.isInstance( hangPoint );
     }
 
     @Test
@@ -46,7 +52,7 @@ public class HangPointTest {
     public void storesSelf() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains( hangPoint );
     }
@@ -55,10 +61,10 @@ public class HangPointTest {
     public void registersLayer() throws Exception {
         HangPoint hangPoint = new HangPoint( element );
 
-        HashMap<String, String> layers = Layer.List();
+        HashMap<String, Layer> layers = Layer.List();
 
-        assertTrue( layers.containsKey( HangPoint.LAYERNAME ) );
-        assertEquals( layers.get( HangPoint.LAYERNAME ), HangPoint.LAYERTAG );
+        assertTrue( layers.containsKey( HangPoint.LAYERTAG ) );
+        assertEquals( layers.get( HangPoint.LAYERTAG ).name(), HangPoint.LAYERNAME );
     }
 
     @Test
@@ -81,6 +87,7 @@ public class HangPointTest {
     public void findIgnoresOther() throws Exception {
         Element pipeElement = new IIOMetadataNode( "pipe" );
         pipeElement.setAttribute( "length", "120" );
+        pipeElement.setAttribute( "id", "pipe id" );
         pipeElement.setAttribute( "x", "2" );
         pipeElement.setAttribute( "y", "4" );
         pipeElement.setAttribute( "z", "6" );
@@ -104,6 +111,15 @@ public class HangPointTest {
         HangPoint found = HangPoint.Find( "Blather" );
 
         assertSame( found, hangPoint );
+    }
+
+    @Test
+    public void category() throws Exception {
+        assertNull( Category.Select( HangPoint.CATEGORY ) );
+
+        new HangPoint( element );
+
+        assertNotNull( Category.Select( HangPoint.CATEGORY ) );
     }
 
     /*
@@ -198,17 +214,18 @@ public class HangPointTest {
 
         TestResets.MinderDomReset();
 
-        new Parse( stream );
+        // TODO Takes too long
+//        new Parse( stream );
 
         // Final size of list
-        ArrayList<MinderDom> list = Drawable.List();
+        ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals( list.size(), 2 );
 
-        MinderDom hangpoint = list.get( 0 );
+        ElementalLister hangpoint = list.get( 0 );
         assert MinderDom.class.isInstance( hangpoint );
         assert HangPoint.class.isInstance( hangpoint );
 
-        MinderDom hangpoint2 = list.get( 1 );
+        ElementalLister hangpoint2 = list.get( 1 );
         assert MinderDom.class.isInstance( hangpoint2 );
         assert HangPoint.class.isInstance( hangpoint2 );
 
@@ -230,7 +247,7 @@ public class HangPointTest {
 //
 //    @Test
 //    public void drawPlan() throws Exception {
-//        HangPoint hangPoint = new HangPoint( element );
+//        HangPoint hangPoint = new HangPoint( elementOnPipe );
 //
 //        new Expectations() {
 //            {
@@ -245,7 +262,7 @@ public class HangPointTest {
     @Test
     public void domPlan() throws Exception {
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         HangPoint hangPoint = new HangPoint( element );
 
         hangPoint.dom( draw, View.PLAN );
@@ -268,10 +285,62 @@ public class HangPointTest {
 
 //    @Test
 //    public void domUnused() throws Exception {
-//        HangPoint hangPoint = new HangPoint( element );
+//        HangPoint hangPoint = new HangPoint( elementOnPipe );
 //
 //        hangPoint.dom( null, View.PLAN );
 //    }
+
+    @Test
+    public void domLegendItem() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        HangPoint hangPoint = new HangPoint(element);
+        hangPoint.verify();
+
+        NodeList preGroup = draw.root().getElementsByTagName( "g" );
+        assertEquals( preGroup.getLength(), 1 );
+
+        PagePoint startPoint = new PagePoint( 20, 10 );
+        PagePoint endPoint = hangPoint.domLegendItem( draw, startPoint );
+
+//        NodeList group = draw.root().getElementsByTagName( "g" );
+//        assertEquals( group.getLength(), 1 );
+//        Node groupNod = group.item(0);
+//        Element groupElem = (Element) groupNod;
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        assertEquals( groupList.getLength(), 2 );
+        Node groupNode = groupList.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+
+        NodeList useList = groupElement.getElementsByTagName( "use" );
+        assertEquals( useList.getLength(), 1 );
+        Node useNode = useList.item(0);
+        assertEquals(useNode.getNodeType(), Node.ELEMENT_NODE);
+        Element useElement = (Element) useNode;
+        Integer startX = startPoint.x() + HangPoint.RADIUS;
+        Integer startY = startPoint.y() + HangPoint.RADIUS;
+        Integer endX = startPoint.x() + 12;
+        assertEquals(useElement.getAttribute("x"), startX.toString() );
+        assertEquals(useElement.getAttribute("y"), startY.toString());
+        assertEquals(useElement.getAttribute("xlink:href"), "#"+HangPoint.SYMBOL );
+
+        NodeList textList = groupElement.getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 1 );
+        Node textNode = textList.item(0);
+        assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
+        Element textElement = (Element) textNode;
+        Integer x = startPoint.x() + 20;
+        Integer y = startPoint.y() + 3;
+        assertEquals(textElement.getAttribute("x"), x.toString() );
+        assertEquals(textElement.getAttribute("y"), y.toString() );
+        assertEquals(textElement.getAttribute("fill"), "black" );
+
+        // TODO Check for text here
+
+        assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 7 ));
+    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -285,6 +354,8 @@ public class HangPointTest {
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
+        TestResets.LayerReset();
+        TestResets.ElementalListerReset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "room", "Test Name" );

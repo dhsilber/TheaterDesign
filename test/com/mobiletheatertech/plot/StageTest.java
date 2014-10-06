@@ -1,22 +1,20 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Expectations;
-import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 /**
  * Test {@code Stage}.
- *
+ *nstage
  * @author dhs
  * @since 0.0.3
  */
@@ -25,20 +23,52 @@ public class StageTest {
     Element element = null;
     Element elementP = null;
 
+    String stageID = "name";
+    Integer x = 56;
+    Integer y = 16;
+    Integer z = 12;
+    Integer width = 288;
+    Integer depth = 144;
+
+    String foldingRiser = "Folding riser";
+    Integer riserX = 34;
+    Integer riserY = 23;
+    Integer riserOrientation = 0;
+
     public StageTest() {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isA() throws Exception {
         Stage stage = new Stage(element);
 
-        assert Minder.class.isInstance(stage);
+        assert Stackable.class.isInstance(stage);
+    }
+
+    @Test
+    public void isLegendable() throws Exception {
+        Stage stage = new Stage( element );
+        assert Legendable.class.isInstance( stage );
     }
 
     @Test
     public void storesAttributes() throws Exception {
         Stage stage = new Stage(element);
 
+        assertEquals(TestHelpers.accessString(stage, "id"), "" );
+        assertEquals(TestHelpers.accessInteger(stage, "width"), (Integer) 288);
+        assertEquals(TestHelpers.accessInteger(stage, "depth"), (Integer) 144);
+        assertEquals(TestHelpers.accessInteger(stage, "x"), (Integer) 56);
+        assertEquals(TestHelpers.accessInteger(stage, "y"), (Integer) 16);
+        assertEquals(TestHelpers.accessInteger(stage, "z"), (Integer) 12);
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        element.setAttribute( "id", stageID );
+        Stage stage = new Stage(element);
+
+        assertEquals(TestHelpers.accessString(stage, "id"), stageID );
         assertEquals(TestHelpers.accessInteger(stage, "width"), (Integer) 288);
         assertEquals(TestHelpers.accessInteger(stage, "depth"), (Integer) 144);
         assertEquals(TestHelpers.accessInteger(stage, "x"), (Integer) 56);
@@ -57,26 +87,57 @@ public class StageTest {
 //        assertEquals( TestHelpers.accessInteger( stage, "apronWidth" ), (Integer) 16 );
 //    }
 
-    // Until such time as I properly implement this class' use of id.
-    @Test
-    public void idUnused() throws Exception {
-        Stage stage = new Stage(element);
+//    // Until such time as I properly implement this class' use of id.
+//    @Test
+//    public void idUnused() throws Exception {
+//        Stage stage = new Stage(element);
+//
+//        assertNull(TestHelpers.accessString(stage, "id"));
+//    }
 
-        assertNull(TestHelpers.accessString(stage, "id"));
+    @Test
+    public void category() throws Exception {
+        assertNull( Category.Select( Stage.CATEGORY ) );
+
+        new Stage( element );
+
+        assertNotNull( Category.Select( Stage.CATEGORY ) );
     }
 
     @Test
     public void storesSelf() throws Exception {
         Stage stage = new Stage(element);
 
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains(stage);
     }
 
+    @Test
+    public void findChildRiser() throws Exception {
+        Element displayElement = new IIOMetadataNode( "riser" );
+        displayElement.setAttribute( "type", foldingRiser );
+        displayElement.setAttribute( "x", riserX.toString() );
+        displayElement.setAttribute( "y", riserY.toString() );
+        displayElement.setAttribute( "orientation", riserOrientation.toString() );
+        element.appendChild( displayElement );
+
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Stage stage = new Stage(element);
+
+        ArrayList<Device> risers = stage.risers();
+
+        assertEquals( risers.size(), 1 );
+        Device stageRiser = risers.get( 0 );
+//        assertEquals(category.name(), name);
+        assertEquals( stageRiser.is(), foldingRiser );
+//        fail();
+    }
+
     /*
-     * This is to ensure that no exception is thrown if data is OK.
-     */
+         * This is to ensure that no exception is thrown if data is OK.
+         */
     @Test
     public void justFine() throws Exception {
         new Stage(element);
@@ -199,6 +260,7 @@ public class StageTest {
 
     @Test
     public void parse() throws Exception {
+//        fail();
         String xml = "<plot>" +
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
                 "</plot>";
@@ -208,12 +270,13 @@ public class StageTest {
 
         new Parse(stream);
 
-        ArrayList<MinderDom> list = Drawable.List();
+        ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals(list.size(), 1);
     }
 
     @Test
     public void parseMultiple() throws Exception {
+//        fail();
         String xml = "<plot>" +
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
                 "<stage width=\"12\" depth=\"65\" x=\"3\" y=\"6\" z=\"9\" />" +
@@ -224,31 +287,114 @@ public class StageTest {
 
         new Parse(stream);
 
-        ArrayList<MinderDom> list = Drawable.List();
+        ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals(list.size(), 2);
     }
 
-    @Mocked
-    Graphics2D mockCanvas;
+//    @Mocked
+//    Graphics2D mockCanvas;
+//
+//    @Test
+//    public void draw() throws Exception {
+//        Stage stage = new Stage(element);
+//
+//        new Expectations() {
+//            {
+//                mockCanvas.setPaint(Color.orange);
+//                mockCanvas.draw(new Rectangle(56, 16, 288, 144));
+//            }
+//        };
+//        stage.drawPlan(mockCanvas);
+//    }
+//
+//    @Test
+//    public void domUnused() throws Exception {
+//        Stage stage = new Stage(element);
+//
+//        stage.dom(null, View.PLAN);
+//    }
+
 
     @Test
-    public void draw() throws Exception {
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
         Stage stage = new Stage(element);
 
-        new Expectations() {
-            {
-                mockCanvas.setPaint(Color.orange);
-                mockCanvas.draw(new Rectangle(56, 16, 288, 144));
-            }
-        };
-        stage.drawPlan(mockCanvas);
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        stage.dom(draw, View.PLAN);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+        assertEquals(tableElement.getAttribute("x"), x.toString() );
+        assertEquals(tableElement.getAttribute("y"), y.toString() );
+        assertEquals(tableElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), depth.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "orange");
     }
 
     @Test
-    public void domUnused() throws Exception {
+    public void domFront() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
         Stage stage = new Stage(element);
 
-        stage.dom(null, View.PLAN);
+        NodeList existingLines = draw.root().getElementsByTagName("line");
+        assertEquals(existingLines.getLength(), 0);
+
+        stage.dom(draw, View.FRONT);
+
+        NodeList lines = draw.root().getElementsByTagName("line");
+        assertEquals(lines.getLength(), 3);
+        Node groupNode = lines.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+
+        assertEquals(tableElement.getAttribute("x1"), x.toString() );
+        assertEquals(tableElement.getAttribute("y1"), y.toString() );
+        assertEquals(tableElement.getAttribute("x2"), width.toString() );
+        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
+        assertEquals(tableElement.getAttribute("stroke-width"), "2");
+        assertEquals(tableElement.getAttribute("stroke"), "orange");
+    }
+
+    @Test
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
+        Stage stage = new Stage(element);
+
+        NodeList existingLines = draw.root().getElementsByTagName("line");
+        assertEquals(existingLines.getLength(), 0);
+
+        stage.dom(draw, View.SECTION);
+
+        NodeList lines = draw.root().getElementsByTagName("line");
+        assertEquals(lines.getLength(), 3);
+        Node groupNode = lines.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+
+        assertEquals(tableElement.getAttribute("x1"), x.toString() );
+        assertEquals(tableElement.getAttribute("y1"), y.toString() );
+        assertEquals(tableElement.getAttribute("x2"), width.toString() );
+        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
+        assertEquals(tableElement.getAttribute("stroke-width"), "2");
+        assertEquals(tableElement.getAttribute("stroke"), "orange");
     }
 
 //    @Test
@@ -267,6 +413,8 @@ public class StageTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.ElementalListerReset();
+
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");
         venueElement.setAttribute("width", "550");
@@ -275,11 +423,11 @@ public class StageTest {
         new Venue(venueElement);
 
         element = new IIOMetadataNode("stage");
-        element.setAttribute("width", "288");
-        element.setAttribute("depth", "144");
-        element.setAttribute("x", "56");
-        element.setAttribute("y", "16");
-        element.setAttribute("z", "12");
+        element.setAttribute("width", width.toString() );
+        element.setAttribute("depth", depth.toString() );
+        element.setAttribute("x", x.toString() );
+        element.setAttribute("y", y.toString() );
+        element.setAttribute("z", z.toString() );
 
 //        elementP = new IIOMetadataNode( "stage" );
 //        elementP.setAttribute( "proscenium-width", "330" );

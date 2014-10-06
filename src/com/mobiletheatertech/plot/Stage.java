@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 /**
  * Defines a stage.
@@ -17,7 +18,7 @@ import java.awt.geom.Line2D;
  * @author dhs
  * @since 0.0.3
  */
-public class Stage extends Minder {
+public class Stage extends Stackable implements Legendable {
 
     private Integer width = null;
     private Integer depth = null;
@@ -25,30 +26,14 @@ public class Stage extends Minder {
     private Integer y = null;
     private Integer z = null;
 
-    /**
-     * Extract the stage description element from a list of XML nodes.
-     *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the stage is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
-     */
-
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException
-    {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
-
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new Stage( element );
-            }
-
-        }
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        return null;
     }
+
+    private final static String COLOR = "orange";
+
+    static final String CATEGORY = "stage";
 
     /**
      * Creates a {@code Stage}.
@@ -86,52 +71,74 @@ public class Stage extends Minder {
             throw new LocationException(
                     "Stage should not extend beyond the boundaries of the venue." );
         }
+
+        new Category( CATEGORY, this.getClass() );
+    }
+
+    public ArrayList<Device> risers() {
+        return null;
     }
 
     @Override
     public void verify() throws InvalidXMLException {
     }
-
     /**
-     * Draw a {@code Stage} onto the provided plan canvas.
+     * Find a place for the shape given to fit on this table.
      *
-     * @param canvas drawing space.
+     * @param shape
+     * @return
      */
-    @Override
-    public void drawPlan( Graphics2D canvas ) {
-        canvas.setPaint( Color.ORANGE );
-        canvas.draw( new Rectangle( x, y, width, depth ) );
+    public Point location( Solid shape ) {
+        int ex = x;
+        int wy = y;
+        int ze = z;
+
+        Double lastWidth = 0.0;
+
+        for ( Thing item : things ) {
+            ex = Math.max( ex, item.point.x() );
+            wy = Math.max( wy, item.point.y() );
+            ze = Math.max( ze, item.point.z() );
+
+            lastWidth = item.solid.getWidth();
+        }
+        Thing thing = new Thing();
+        thing.point = new Point( x, wy + lastWidth.intValue(), z );
+        thing.solid = shape;
+
+        things.add( thing );
+
+        return thing.point;
     }
 
-    /**
-     * Draw a {@code Stage} onto the provided section canvas.
-     *
-     * @param canvas drawing space.
-     */
     @Override
-    public void drawSection( Graphics2D canvas ) throws ReferenceException {
+    public void dom( Draw draw, View mode ) throws ReferenceException {
+        SvgElement element = null;
         int bottom = Venue.Height();
-        canvas.setPaint( Color.ORANGE );
-        canvas.draw( new Line2D.Float( y, bottom, y, bottom - z ) );
-        canvas.draw( new Line2D.Float( y, bottom - z, y + depth, bottom - z ) );
-        canvas.draw( new Line2D.Float( y + depth, bottom - z, y + depth, bottom ) );
-    }
 
-    /**
-     * Draw a {@code Stage} onto the provided front canvas.
-     *
-     * @param canvas drawing space.
-     */
-    @Override
-    public void drawFront( Graphics2D canvas ) throws ReferenceException {
-        int bottom = Venue.Height();
-        canvas.setPaint( Color.ORANGE );
-        canvas.draw( new Line2D.Float( x, bottom, x, bottom - z ) );
-        canvas.draw( new Line2D.Float( x, bottom - z, x + width, bottom - z ) );
-        canvas.draw( new Line2D.Float( x + width, bottom - z, x + width, bottom ) );
-    }
-
-    @Override
-    public void dom( Draw draw, View mode ) {
+        switch (mode) {
+            case PLAN:
+                element = draw.rectangle( draw, x, y, width, depth, COLOR );
+//                draw.appendRootChild( element );
+                break;
+            case SECTION:
+                element = draw.line( draw, y, bottom, y, bottom - z, COLOR );
+//                draw.appendRootChild( element );
+                element = draw.line( draw, y, bottom - z, y + depth, bottom - z, COLOR );
+//                draw.appendRootChild( element );
+                element = draw.line( draw, y + depth, bottom - z, y + depth, bottom, COLOR );
+//                draw.appendRootChild( element );
+                break;
+            case FRONT:
+                element = draw.line( draw, x, bottom, x, bottom - z, COLOR );
+//                draw.appendRootChild( element );
+                element = draw.line( draw, x, bottom - z, x + width, bottom - z, COLOR );
+//                draw.appendRootChild( element );
+                element = draw.line( draw, x + width, bottom - z, x + width, bottom, COLOR );
+//                draw.appendRootChild( element );
+                break;
+            case TRUSS:
+                break;
+        }
     }
 }

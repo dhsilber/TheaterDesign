@@ -17,12 +17,18 @@ import java.util.TreeMap;
  */
 public class Legend {
 
+    public static final String TEXTCOLOR = "black";
+
     private static TreeMap<Integer, Legendable> LEGENDLIST = new TreeMap<>();
     private static Integer HEIGHT = 0;
     private static Integer WIDEST = 0;
 
     private static PagePoint INITIAL;
     private static Draw DRAW;
+
+    static final String CATEGORY = "legend";
+
+    static final Integer TEXTOFFSET = 20;
 
     /**
      * Register a callback function that will draw an individual legend entry
@@ -47,17 +53,17 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw ) throws ReferenceException {
+    public static void Startup( Draw draw, View mode, Integer start, Integer width ) throws ReferenceException {
         DRAW = draw;
 
         Element group = draw.document().createElement( "g" );
         group.setAttribute( "class", "legend" );
         draw.appendRootChild( group );
 
-        Integer x = Venue.Width() + 5;
+        Integer x = start;
         Integer y = 17;
 
-        Integer center = x + (Width() / 2);
+        Integer center = x + (width / 2);
         headerText( draw, group, center, y, Event.Name() );
         y += 17;
         headerText( draw, group, center, y, Venue.Building() );
@@ -65,14 +71,14 @@ public class Legend {
         headerText( draw, group, center, y, Venue.Name() );
         y += 17;
 
-        INITIAL = new PagePoint( Venue.Width() + 20, y );
+        INITIAL = new PagePoint( start + 20, y );
         Integer boxHeight = y + HEIGHT;
 
         Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
         box.setAttribute( "x", x.toString() );
         box.setAttribute( "y", "0" );
-        box.setAttribute( "width", Width().toString() );
+        box.setAttribute( "width", width.toString() );
         box.setAttribute( "height", boxHeight.toString() );
 
         group.appendChild( box );
@@ -83,12 +89,12 @@ public class Legend {
             throws ReferenceException
     {
         Text textNode = draw.document().createTextNode( text );
-        Element element = draw.element( "text" );
-        element.setAttribute( "class", "heading" );
-        element.setAttribute( "x", center.toString() );
-        element.setAttribute( "y", y.toString() );
+        SvgElement element = draw.element("text");
+        element.attribute( "class", "heading" );
+        element.attribute( "x", center.toString() );
+        element.attribute( "y", y.toString() );
         element.appendChild( textNode );
-        parent.appendChild( element );
+        parent.appendChild( element.element() );
     }
 
     /**
@@ -101,7 +107,7 @@ public class Legend {
         return WIDEST;
     }
 
-    public static Integer Width() throws ReferenceException {
+    public static Integer PlanWidth() throws ReferenceException {
         Double widthAvailable = (Venue.Depth() * 1.54) - Venue.Width() - 5;
         Integer width = widthAvailable.intValue();
 

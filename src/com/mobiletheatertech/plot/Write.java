@@ -7,6 +7,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
+
+
 /**
  * <code>Write</code> deals with output file issues and relies on {@link Draw Draw} to generate SVG
  * content.
@@ -34,11 +40,13 @@ public class Write {
      * <p/>
      * The non-drawing updates to the generated SVG document have to be done after all of the
      * drawing is completed. Because of this, {@code Write} needs to interact with {@link Draw} and
-     * {@link Minder} methods in a very specific order.
+     * {@ link Minder} methods in a very specific order.
      *
-     * @param basename basename of the file to be written.
+     * @param basename
+     * @throws MountingException
+     * @throws ReferenceException
      */
-    public Write(String basename) throws MountingException, ReferenceException {
+    public void init( String basename ) throws MountingException, ReferenceException {
         home = System.getProperty("user.home");
 //        if (null == home) {
 //            // throw exception
@@ -46,25 +54,100 @@ public class Write {
 
         String pathname = home + "/Dropbox/Plot/out/" + basename;
 
-        writeDirectory(pathname);
-        writeIndex(pathname);
-        writeStyles(pathname);
-        writePlan(pathname);
-        writeSection(pathname);
-        writeFront(pathname);
+        writeDirectory( pathname );
+        writeFile(pathname, "index.html", generateIndex() );
+        writeFile(pathname, "designer.html", generateDesigner() );
+        writeFile(pathname, "styles.css", CSS);
+        // TODO factor out heading generation for these:
+        drawPlan().create( pathname + "/plan.svg" );
+        drawSection().create( pathname + "/section.svg" );
+        drawFront().create( pathname + "/front.svg" );
+        drawTruss().create( pathname + "/truss.svg" );
+        writeDrawings( pathname );
+        writeSpreadsheet( pathname + "/gear.ods" );
+
+//        for (ElementalLister item : ElementalLister.List() ) {
+//            if (DeviceTemplate.class.isInstance( item )) {
+//                System.out.println( ((DeviceTemplate) item).toString() );
+//            }
+//            if (Box.class.isInstance( item )) {
+//                System.out.println( ((Box) item).toString() );
+//            }
+//        }
+
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
         File directory = new File(basename);
-        Boolean dir = directory.mkdir();
-        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
+        /*Boolean dir =*/ directory.mkdir();
+//        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
     }
 
-    private void writeIndex(String basename) throws ReferenceException {
-        String filename = basename + "/index.html";
-        File file = new File(filename);
+    public String generateIndex() throws ReferenceException {
+        Integer width = Venue.Width() + Legend.PlanWidth();
+        width += width / 100 + 5;
 
-        Integer width = Venue.Width() + Legend.Width();
+        String output = "" +
+                "<!DOCTYPE html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"styles.css\" type=\"text/css\">\n" +
+                "<title>Arisia '15 Tech Room Drawings</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<h1>Arisia '15 Tech Room Drawings</h1>\n" +
+                "<h2>Generated Drawings</h2>\n" +
+                "<p>\n" +
+                "Here are drawings generated for the hotel resume.\n" +
+                "Please review them and let me know what changes need to be made " +
+                "and what additional drawings should be created.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "I can be contacted at " +
+                "<a href=\"mailto:theater@davidsilber.name\">theater@davidsilber.name</a> " +
+                "or at 240-997-6646.\n" +
+                "</p>\n" +
+                generateHTMLDrawingList() +
+                "<h2>Designers' View</h2>\n" +
+                "<p>\n" +
+                "The Designers' View allows users to turn off selected layers " +
+                "to focus in on the details that matter to them at the moment.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "<a href=\"designer.html\">Designers' View</a>\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "Note that the javascript for the Designers' View does not currently function in Firefox or Chrome.\n" +
+                "It does work just fine in Safari and Rekonq.\n" +
+                "</p>\n" +
+                "</body>\n" +
+                "</html>\n";
+
+        return output;
+    }
+
+    private String generateHTMLDrawingList()  {
+//        System.out.println();
+//        System.out.println( "In writeDrawings." );
+        StringBuilder generated = new StringBuilder( "<p>" );
+
+        for (ElementalLister thingy : MinderDom.List() ) {
+//            System.out.println( "Found a thing of type: "+ thingy.getClass().getCanonicalName() );
+            if ( Drawing.class.isInstance( thingy ) ) {
+                Drawing drawing = (Drawing) thingy;
+//                System.out.println( "About to write drawing for "+drawing.filename() );
+//                writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
+                generated.append( "<a href=\"" + drawing.filename + ".svg\">" + drawing.id + "</a><br/>\n" );
+            }
+        }
+//        System.out.println();
+
+        generated.append( "</p>" );
+
+        return generated.toString();
+    }
+
+    public String generateDesigner() throws ReferenceException {
+        Integer width = Venue.Width() + Legend.PlanWidth();
         width += width / 100 + 5;
 
         String output = "" +
@@ -94,11 +177,7 @@ public class Write {
 //                "  else\n" +
 //                "    hide( \"chairblock\" );\n" +
 //                "}\n" +
-                HTML.SelectFunction(ChairBlock.LAYERTAG) +
-                HTML.SelectFunction(HangPoint.LAYERTAG) +
-                HTML.SelectFunction(Luminaire.LAYERTAG) +
-                HTML.SelectFunction(Pipe.LAYERTAG) +
-                HTML.SelectFunction(Zone.LAYERTAG) +
+                HTML.SelectFunctions(Layer.List()) +
 
 //                "function selectLayer()\n" +
 //                "{\n" +
@@ -131,10 +210,10 @@ public class Write {
                 "<body>\n" +
                 "<div class=\"noprint\" >\n" +
                 "<form name=\"configure\" >\n" +
-                Setup.List() +
+//                Setup.List() +
                 HTML.Checkboxes(Layer.List()) +
 //                "<input type=\"checkbox\" onclick=\"parent.process();\" name=\"show chairs\"" +
-//                " id=\"process\" checked=\"checked\" /> Show Chairs\n" +
+//                " id=\"process\" checked=\"checked\" /> Session Chairs\n" +
                 "</form>\n" +
                 "</div>\n" +
                 "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + Venue.Depth() + "\" width=\"" +
@@ -143,6 +222,133 @@ public class Write {
                 width + "\" ></iframe>\n" +
                 "</body>\n" +
                 "</html>\n";
+
+        return output;
+    }
+
+    private Draw drawPlan() throws MountingException, ReferenceException {
+//        System.out.println( "drawPlan: About to start.");
+        Draw draw = startFile();
+
+
+//        Grid.DOM(draw);
+
+        Legend.Startup(draw, View.PLAN, Venue.Width() + 5, Legend.PlanWidth() );
+
+//        System.out.println( "drawPlan: About to MinderDom.DomAllPlan.");
+
+        MinderDom.DomAllPlan(draw);
+
+//        System.out.println( "drawPlan: About to Hack.Dom.");
+        Hack.Dom(draw, View.PLAN );
+
+//        System.out.println( "drawPlan: About to Legend.Callback.");
+        Legend.Callback();
+
+//        String pathname = basename + "/plan.svg";
+//
+//        draw.create(pathname);
+//        System.out.println( "drawPlan: done.");
+        return draw;
+    }
+
+    private Draw startFile() throws ReferenceException {
+        Draw draw = new Draw();
+
+//        Minder.DrawAllPlan(draw.canvas());
+
+//        Hack.Draw(draw.canvas());
+
+        draw.establishRoot();
+
+        // Specify the size of the generated SVG so that when it is larger than the display area,
+        // scrollbars will be provided.
+        Element rootElement = draw.root();
+        Integer width = Venue.Width() + Legend.PlanWidth();
+        width += width / 100;
+        rootElement.setAttribute("width", width.toString());
+        Integer height = Venue.Depth();
+        height += height / 100;
+        rootElement.setAttribute("height", height.toString());
+//        rootElement.setAttribute( "overflow", "visible" );
+
+        Text textNode = draw.document().createCDATASection(CSS);
+//                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
+        SvgElement style = draw.element("style");
+        style.attribute("type", "text/css");
+        style.appendChild(textNode);
+        rootElement.appendChild(style.element());
+
+        return draw;
+    }
+
+    private Draw drawSection() throws MountingException, ReferenceException {
+        Draw draw = new Draw();
+
+//        Minder.DrawAllSection(draw.canvas());
+
+//        Hack.Draw( drawPlan.canvas() );
+
+        draw.establishRoot();
+
+//        Minder.DomAllSection(draw);
+
+        Hack.Dom(draw, View.SECTION);
+
+        return draw;
+    }
+
+    private Draw drawFront() throws MountingException, ReferenceException {
+        Draw draw = new Draw();
+
+//        Minder.DrawAllFront(draw.canvas());
+
+//        Hack.Draw( drawPlan.canvas() );
+
+        draw.establishRoot();
+
+//        Minder.DomAllFront(draw);
+
+        Hack.Dom(draw, View.FRONT);
+
+//        String pathname = basename + "/front.svg";
+//
+//        draw.create(pathname);
+
+        return draw;
+    }
+
+    private Draw drawTruss() throws MountingException, ReferenceException {
+//        System.out.println( "writeTruss: About to start.");
+        Draw draw = startFile();
+
+
+//        Grid.DOM(draw);
+
+        // Hardcoded values here are for Arisia '14 flying truss.
+        Legend.Startup(draw, View.TRUSS, 700, 300 );
+
+//        System.out.println( "writeTruss: About to MinderDom.DomAllTruss.");
+
+        MinderDom.DomAllTruss(draw);
+
+//        System.out.println( "writeTruss: About to Hack.Dom.");
+        Hack.Dom(draw, View.TRUSS);
+
+//        System.out.println( "writeTruss: About to Legend.Callback.");
+        Legend.Callback();
+
+//        String pathname = basename + "/truss.svg";
+//
+//        draw.create(pathname);
+//        System.out.println( "writeTruss: done.");
+
+        return draw;
+    }
+
+    private void writeFile(String basename, String filename, String output) {
+        String pathname = basename + "/" + filename;
+        File file = new File(pathname);
 
         try (FileOutputStream stream = new FileOutputStream(file)) {
             if (!file.exists()) {
@@ -158,103 +364,111 @@ public class Write {
         }
     }
 
-    private void writeStyles(String basename) throws ReferenceException {
-        String filename = basename + "/styles.css";
-        File file = new File(filename);
-
-
-        try (FileOutputStream stream = new FileOutputStream(file)) {
-            if (!file.exists()) {
-                file.createNewFile();
+    private void writeDrawings( String pathname ) throws MountingException, ReferenceException {
+//        System.out.println();
+//        System.out.println( "In writeDrawings." );
+        for (ElementalLister thingy : MinderDom.List() ) {
+//            System.out.println( "Found a thing of type: "+ thingy.getClass().getCanonicalName() );
+            if ( Drawing.class.isInstance( thingy ) ) {
+                Drawing drawing = (Drawing) thingy;
+//                System.out.println( "About to write drawing for "+drawing.filename() );
+                writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
             }
-            byte[] bytes = CSS.getBytes();
+        }
+//        System.out.println();
+    }
 
-            stream.write(bytes);
-            stream.flush();
-            stream.close();
-        } catch (IOException e) {
+    private Draw writeIndividualDrawing( Drawing drawing )
+            throws MountingException, ReferenceException {
+//        System.out.println( "writeIndividualDrawing: About to start.");
+        Draw draw = startFile();
+
+
+//        Grid.DOM(draw);
+
+        HangPoint.SYMBOLGENERATED = false;
+
+        System.err.println();
+        for ( String category : drawing.displayList ) {
+            System.err.println( "For " + drawing.filename() +", " + category + " requested." );
+            if ( category.equals( Legend.CATEGORY )) {
+                System.err.println( "For " + drawing.filename() +", special-case Legend processing." );
+                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
+                Legend.Callback();
+                continue;
+            }
+            Class requested = Category.Select( category );
+            if ( null == requested) {
+                System.err.println( "For " + drawing.filename() +", " + category + " is not a Category." );
+                continue;
+            }
+            System.err.println( "For " + drawing.filename() +", " + category + " processing." );
+            for ( Object thing : MinderDom.List() ) {
+                if ( requested.equals( thing.getClass() ) ) {
+                    System.err.println( "For " + drawing.filename() +", found a " + category + " to process." );
+                    MinderDom item = (MinderDom) thing;
+                    item.dom( draw, View.PLAN );
+                }
+            }
+        }
+
+//        for ( Object thing : MinderDom.List() ) {
+//            if ( Wall.class.isInstance( thing )) {
+//                Wall wall = (Wall) thing;
+//                wall.dom( draw, View.PLAN );
+//            }
+//        }
+//        for ( Object thing : MinderDom.List() ) {
+//            if ( HangPoint.class.isInstance( thing )) {
+//                HangPoint hangPoint = (HangPoint) thing;
+//                hangPoint.dom( draw, View.PLAN );
+//            }
+//        }
+//        for ( Object thing : MinderDom.List() ) {
+//            if ( Truss.class.isInstance( thing )) {
+//                Truss truss = (Truss) thing;
+//                truss.dom( draw, View.PLAN );
+//            }
+//        }
+
+        return draw;
+
+    }
+
+    private void writeSpreadsheet( String pathname) {
+        // Create the data to save.
+        final Object[][] data = GearList.Report();
+//        new Object[6][2];
+//        data[0] = new Object[] { "January", 1 };
+//        data[1] = new Object[] { "February", 3 };
+//        data[2] = new Object[] { "March", 8 };
+//        data[3] = new Object[] { "April", 10 };
+//        data[4] = new Object[] { "May", 15 };
+//        data[5] = new Object[] { "June", 18 };
+
+        if ( 0 == data.length ) {
+            System.err.println( "No data in GearList, not generating spreadsheet.");
+            return;
+        }
+
+        String[] columns = new String[] { "Item", "Quantity" };
+
+        TableModel model = new DefaultTableModel(data, columns);
+
+        // Save the data to an ODS file and open it.
+        final File file = new File( pathname );
+
+        try {
+        SpreadSheet.createEmpty(model).saveAs(file);
+
+//        OOUtils.open(file);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    private void writePlan(String basename) throws MountingException, ReferenceException {
-        Draw draw = new Draw();
-
-        Minder.DrawAllPlan(draw.canvas());
-
-        Hack.Draw(draw.canvas());
-
-        draw.getRoot();
-
-        // Specify the size of the generated SVG so that when it is larger than the display area,
-        // scrollbars will be provided.
-        Element rootElement = draw.root();
-        Integer width = Venue.Width() + Legend.Width();
-        width += width / 100;
-        rootElement.setAttribute("width", width.toString());
-        Integer height = Venue.Depth();
-        height += height / 100;
-        rootElement.setAttribute("height", height.toString());
-//        rootElement.setAttribute( "overflow", "visible" );
-
-        Text textNode = draw.document().createCDATASection(CSS);
-//                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
-        Element style = draw.element("style");
-        style.setAttribute("type", "text/css");
-        style.appendChild(textNode);
-        rootElement.appendChild(style);
-
-
-        Grid.DOM(draw);
-
-        Legend.Startup(draw);
-
-        Minder.DomAllPlan(draw);
-
-        Hack.Dom(draw);
-
-        Legend.Callback();
-
-        String pathname = basename + "/plan.svg";
-
-        draw.create(pathname);
-    }
-
-    private void writeSection(String basename) throws MountingException, ReferenceException {
-        Draw draw = new Draw();
-
-        Minder.DrawAllSection(draw.canvas());
-
-//        Hack.Draw( drawPlan.canvas() );
-
-        draw.getRoot();
-
-        Minder.DomAllSection(draw);
-
-        Hack.Dom(draw);
-
-        String pathname = basename + "/section.svg";
-
-        draw.create(pathname);
-    }
-
-    private void writeFront(String basename) throws MountingException, ReferenceException {
-        Draw draw = new Draw();
-
-        Minder.DrawAllFront(draw.canvas());
-
-//        Hack.Draw( drawPlan.canvas() );
-
-        draw.getRoot();
-
-        Minder.DomAllFront(draw);
-
-        Hack.Dom(draw);
-
-        String pathname = basename + "/front.svg";
-
-        draw.create(pathname);
-    }
 //
 //    private String checkboxes( HashMap<String,String> data){
 //        return "";

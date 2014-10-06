@@ -24,9 +24,11 @@ public class Opening extends Elemental {
     private Integer start = null;
 
     public Opening( Element element ) throws AttributeMissingException, InvalidXMLException {
-        if (null == element) {
-            throw new InvalidXMLException( "Element unexpectedly null!" );
-        }
+        super( element );
+
+//        if (null == element) {
+//            throw new InvalidXMLException( "Element unexpectedly null!" );
+//        }
 
         height = getIntegerAttribute( element, "height" );
         width = getIntegerAttribute( element, "width" );

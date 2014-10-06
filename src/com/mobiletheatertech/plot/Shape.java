@@ -78,12 +78,12 @@ public class Shape {
 
 //            points[pointIndex]    =        new Coordinate(x,y);
 
-            System.out.println("Found x: " + x + ", y: " + y);
+//            System.out.println("Found x: " + x + ", y: " + y);
 //            vertices.add(new Point(x, y,0));
         }
 
         polygon = new Polygon(xPoints, yPoints, pointCount);
-        System.err.println(polygon.toString());
+//        System.err.println(polygon.toString());
 //        area=new Area(polygon);
 //        System.out.println( area.toString() );
 

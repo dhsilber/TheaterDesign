@@ -3,6 +3,7 @@ package com.mobiletheatertech.plot;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 9/18/13 Time: 7:49 AM To change this template use
@@ -15,6 +16,45 @@ public class TestResets {
         field.setAccessible( true );
         boolean generated = field.getBoolean( ChairBlock.class );
         field.set( generated, false );
+    }
+
+    public static void DeviceTemplateReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = DeviceTemplate.class.getDeclaredField( "DEVICELIST" );
+        field.setAccessible( true );
+        ArrayList<DeviceTemplate> deviceTemplateList =
+                (ArrayList<DeviceTemplate>) field.get( DeviceTemplate.class );
+        deviceTemplateList.clear();
+    }
+
+    public static void CategoryReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Category.class.getDeclaredField( "CATEGORYLIST" );
+        field.setAccessible( true );
+        HashMap<String, Class> categoryList =
+                (HashMap<String, Class>) field.get( Category.class );
+        categoryList.clear();
+    }
+
+    public static void DeviceReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Device.class.getDeclaredField( "DEVICELIST" );
+        field.setAccessible( true );
+        ArrayList<Device> deviceList = (ArrayList<Device>) field.get( Device.class );
+        deviceList.clear();
+    }
+
+    public static void CableDiversionReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = CableDiversion.class.getDeclaredField( "DIVERSIONLIST" );
+        field.setAccessible( true );
+        ArrayList<CableDiversion> cableDiversionArrayList =
+                (ArrayList<CableDiversion>) field.get( CableDiversion.class );
+        cableDiversionArrayList.clear();
     }
 
     public static void EventReset() throws NoSuchFieldException, IllegalAccessException {
@@ -50,8 +90,8 @@ public class TestResets {
     {
         Field field = Legend.class.getDeclaredField( "LEGENDLIST" );
         field.setAccessible( true );
-        ArrayList<Legendable> legendList =
-                (ArrayList<Legendable>) field.get( Legend.class );
+        TreeMap<Integer, Legendable> legendList =
+                (TreeMap<Integer, Legendable>) field.get( Legend.class );
         legendList.clear();
     }
 
@@ -73,30 +113,79 @@ public class TestResets {
     }
 
     /**
-     * Reset the LIST maintained by {@link Minder} to its initial empty state.
+     * Reset the GEARS array maintained by {@link GearList} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code LIST} field isn't there.
+     * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
+     */
+    public static void GearListReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = GearList.class.getDeclaredField( "GEARS" );
+        field.setAccessible( true );
+        ArrayList<String> list = (ArrayList<String>) field.get( GearList.class );
+        list.clear();
+    }
+
+    /**
+     * Reset the LIST maintained by {@link ElementalLister} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code LIST} field isn't there.
+     * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
+     */
+    public static void ElementalListerReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = ElementalLister.class.getDeclaredField( "LIST" );
+        field.setAccessible( true );
+        ArrayList<ElementalLister> list = (ArrayList<ElementalLister>) field.get( ElementalLister.class );
+        list.clear();
+    }
+
+    /**
+     * Reset the LIST maintained by {@link ElementalLister} to its initial empty state.
      *
      * @throws NoSuchFieldException   if the {@code LIST} field isn't there.
      * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
      */
     public static void MinderDomReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = MinderDom.class.getDeclaredField( "LIST" );
-        field.setAccessible( true );
-        ArrayList<MinderDom> list = (ArrayList<MinderDom>) field.get( MinderDom.class );
-        list.clear();
+        ElementalListerReset();
     }
 
     /**
-     * Reset the PIPELIST maintained by {@link Pipe} to its initial empty state.
+     * Reset the MOUNTABLELIST maintained by {@link Mountable} to its initial empty state.
      *
-     * @throws NoSuchFieldException   if the {@code PIPELIST} field isn't there.
-     * @throws IllegalAccessException if the {@code PIPELIST} field cannot be accessed.
+     * @throws NoSuchFieldException   if the {@code MOUNTABLELIST} field isn't there.
+     * @throws IllegalAccessException if the {@code MOUNTABLELIST} field cannot be accessed.
      */
-    public static void PipeReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Pipe.class.getDeclaredField( "PIPELIST" );
+    public static void MountableReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Mountable.class.getDeclaredField( "MOUNTABLELIST" );
         field.setAccessible( true );
-        ArrayList<Pipe> pipelist = (ArrayList<Pipe>) field.get( Pipe.class );
-        pipelist.clear();
+        ArrayList<Mountable> mountableList = (ArrayList<Mountable>) field.get( Mountable.class );
+        mountableList.clear();
     }
+
+    /**
+     * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code STACKABLELIST} field isn't there.
+     * @throws IllegalAccessException if the {@code STACKABLELIST} field cannot be accessed.
+     */
+    public static void StackableReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Stackable.class.getDeclaredField( "STACKABLELIST" );
+        field.setAccessible( true );
+        ArrayList<Stackable> stackableList = (ArrayList<Stackable>) field.get( Stackable.class );
+        stackableList.clear();
+    }
+
+//    /**
+//     * Reset the PIPELIST maintained by {@link Pipe} to its initial empty state.
+//     *
+//     * @throws NoSuchFieldException   if the {@code PIPELIST} field isn't there.
+//     * @throws IllegalAccessException if the {@code PIPELIST} field cannot be accessed.
+//     */
+//    public static void PipeReset() throws NoSuchFieldException, IllegalAccessException {
+//        Field field = Pipe.class.getDeclaredField( "PIPELIST" );
+//        field.setAccessible( true );
+//        ArrayList<Pipe> pipelist = (ArrayList<Pipe>) field.get( Pipe.class );
+//        pipelist.clear();
+//    }
 
     /**
      * Reset {@link Point} to its initial state.
@@ -171,7 +260,6 @@ public class TestResets {
         field.set( staticVenue, null );
     }
 
-
     /**
      * Reach into the specified class and zero out the specified static int.
      *
@@ -188,5 +276,13 @@ public class TestResets {
         field.setInt( clazz, 0 );
     }
 
+    public static void WallReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Wall.class.getDeclaredField( "WallList" );
+        field.setAccessible( true );
+        ArrayList<Wall> wallList = (ArrayList<Wall>) field.get( Wall.class );
+        wallList.clear();
+    }
 
 }

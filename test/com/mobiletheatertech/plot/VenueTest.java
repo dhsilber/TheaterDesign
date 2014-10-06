@@ -1,15 +1,16 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Expectations;
-import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.awt.*;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Test {@code Venue}.
@@ -23,14 +24,19 @@ public class VenueTest {
     String building = "Building Name";
     String room = "Room Name";
 
+    Integer width = 1296;
+    Integer depth = 1320;
+    Integer height = 240;
+
+
     public VenueTest() {
     }
 
     @Test
-    public void isMinder() throws Exception {
+    public void isA() throws Exception {
         Venue venue = new Venue( element );
 
-        assert Minder.class.isInstance( venue );
+        assert MinderDom.class.isInstance( venue );
     }
 
     @Test
@@ -49,7 +55,7 @@ public class VenueTest {
 
     @Test
     public void storesAttributes() throws Exception {
-//        element.removeAttribute( "circuiting" );
+//        elementOnPipe.removeAttribute( "circuiting" );
         element.removeAttribute( "building" );
 
         Venue venue = new Venue( element );
@@ -87,7 +93,7 @@ public class VenueTest {
     @Test
     public void storesSelf() throws Exception {
         Venue venue = new Venue( element );
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
 
         assert thing.contains( venue );
     }
@@ -96,8 +102,8 @@ public class VenueTest {
            expectedExceptionsMessageRegExp = "Venue is not defined." )
     public void noVenueContains() throws Exception {
         Point point = new Point( 1, 2, 3 );
-        Box box = new Box( point, 4, 5, 6 );
-        Venue.Contains( box );
+        Space space = new Space( point, 4, 5, 6 );
+        Venue.Contains( space );
     }
 
     @Test( expectedExceptions = ReferenceException.class,
@@ -218,36 +224,36 @@ public class VenueTest {
     public void containsBoxFits() throws Exception {
         new Venue( element );
         Point point = new Point( 2, 4, 6 );
-        Box box = new Box( point, 33, 55, 11 );
+        Space space = new Space( point, 33, 55, 11 );
 
-        assertTrue( Venue.Contains( box ) );
+        assertTrue( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxTooWide() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
-        Box box = new Box( point, 1296, 55, 11 );
+        Space space = new Space( point, 1296, 55, 11 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxTooDeep() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
-        Box box = new Box( point, 33, 1320, 11 );
+        Space space = new Space( point, 33, 1320, 11 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxTooTall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 1 );
-        Box box = new Box( point, 33, 55, 240 );
+        Space space = new Space( point, 33, 55, 240 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
 
@@ -255,54 +261,54 @@ public class VenueTest {
     public void containsBoxOriginXTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( -1, 1, 1 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxOriginXTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1297, 1, 1 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxOriginYTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, -1, 1 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxOriginYTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1321, 1 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxOriginZTooSmall() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, -1 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
     public void containsBoxOriginZTooLarge() throws Exception {
         new Venue( element );
         Point point = new Point( 1, 1, 241 );
-        Box box = new Box( point, 1, 1, 1 );
+        Space space = new Space( point, 1, 1, 1 );
 
-        assertFalse( Venue.Contains( box ) );
+        assertFalse( Venue.Contains( space ) );
     }
 
     @Test
@@ -426,52 +432,127 @@ public class VenueTest {
         new Venue( element );
     }
 
-    @Mocked
-    Graphics2D mockCanvas;
+//    @Mocked
+//    Graphics2D mockCanvas;
+//
+//    @Test
+//    public void drawPlan() throws Exception {
+//        Venue venue = new Venue( element );
+//
+//        new Expectations() {
+//            {
+//                mockCanvas.setPaint( Color.BLACK );
+//                mockCanvas.draw( new Rectangle( 0, 0, 1296, 1320 ) );
+//            }
+//        };
+//        venue.drawPlan( mockCanvas );
+//    }
+//
+//    @Test
+//    public void drawSection() throws Exception {
+//        Venue venue = new Venue( element );
+//
+//        new Expectations() {
+//            {
+//                mockCanvas.setPaint( Color.BLACK );
+//                mockCanvas.draw( new Rectangle( 0, 0, 1320, 240 ) );
+//            }
+//        };
+//        venue.drawSection( mockCanvas );
+//    }
+//
+//    @Test
+//    public void drawFront() throws Exception {
+//        Venue venue = new Venue( element );
+//
+//        new Expectations() {
+//            {
+//                mockCanvas.setPaint( Color.BLACK );
+//                mockCanvas.draw( new Rectangle( 0, 0, 1296, 240 ) );
+//            }
+//        };
+//        venue.drawFront( mockCanvas );
+//    }
+
 
     @Test
-    public void drawPlan() throws Exception {
+    public void domPlan() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
         Venue venue = new Venue( element );
 
-        new Expectations() {
-            {
-                mockCanvas.setPaint( Color.BLACK );
-                mockCanvas.draw( new Rectangle( 0, 0, 1296, 1320 ) );
-            }
-        };
-        venue.drawPlan( mockCanvas );
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        venue.dom(draw, View.PLAN);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+        assertEquals(tableElement.getAttribute("x"), "0" );
+        assertEquals(tableElement.getAttribute("y"), "0" );
+        assertEquals(tableElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), depth.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "black");
     }
 
     @Test
-    public void drawSection() throws Exception {
+    public void domFront() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
         Venue venue = new Venue( element );
 
-        new Expectations() {
-            {
-                mockCanvas.setPaint( Color.BLACK );
-                mockCanvas.draw( new Rectangle( 0, 0, 1320, 240 ) );
-            }
-        };
-        venue.drawSection( mockCanvas );
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        venue.dom(draw, View.FRONT);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+        assertEquals(tableElement.getAttribute("x"), "0" );
+        assertEquals(tableElement.getAttribute("y"), "0" );
+        assertEquals(tableElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), height.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "black");
     }
 
     @Test
-    public void drawFront() throws Exception {
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
         Venue venue = new Venue( element );
 
-        new Expectations() {
-            {
-                mockCanvas.setPaint( Color.BLACK );
-                mockCanvas.draw( new Rectangle( 0, 0, 1296, 240 ) );
-            }
-        };
-        venue.drawFront( mockCanvas );
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        venue.dom(draw, View.SECTION);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+        assertEquals(tableElement.getAttribute("x"), "0" );
+        assertEquals(tableElement.getAttribute("y"), "0" );
+        assertEquals(tableElement.getAttribute("width"), depth.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), height.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "black");
     }
 
-    @Test
-    public void parseXML() {
-        // See ParseTest.createsVenue*()
-    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -488,9 +569,9 @@ public class VenueTest {
         element = new IIOMetadataNode();
         element.setAttribute( "building", building );
         element.setAttribute( "room", room );
-        element.setAttribute( "width", "1296" );
-        element.setAttribute( "depth", "1320" );
-        element.setAttribute( "height", "240" );
+        element.setAttribute( "width", width.toString() );
+        element.setAttribute( "depth", depth.toString() );
+        element.setAttribute( "height", height.toString() );
     }
 
     @AfterMethod

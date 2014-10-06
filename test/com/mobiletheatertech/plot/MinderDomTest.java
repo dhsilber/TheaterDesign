@@ -7,6 +7,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 /**
  * Test {@code MinderDom}
@@ -17,7 +19,7 @@ import static org.testng.Assert.assertNotNull;
 public class MinderDomTest {
 
     /**
-     * Extended {@code Minder} so that there is a concrete class to test with.
+     * Extended {@code MinderDom} so that there is a concrete class to test with.
      */
     private class MindedDom extends MinderDom {
 
@@ -32,42 +34,50 @@ public class MinderDomTest {
 
         @Override
         public void dom( Draw draw, View mode ) {
-            throw new UnsupportedOperationException(
-                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+
+//            throw new UnsupportedOperationException(
+//                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
     }
 
-    private static Draw draw = null;
     private Element element = null;
 
-    public MinderDomTest() {
-    }
-
     @Test
-    public void isElemental() throws Exception {
+    public void isa() throws Exception {
         MindedDom foo = new MindedDom( element );
 
         assert Elemental.class.isInstance( foo );
+        assert ElementalLister.class.isInstance( foo );
+        assert Verifier.class.isInstance( foo );
+        assert MinderDom.class.isInstance( foo );
     }
 
     @Test
     public void stores() throws Exception {
         MindedDom foo = new MindedDom( element );
-        ArrayList<MinderDom> thing = Drawable.List();
+        ArrayList<ElementalLister> thing = ElementalLister.List();
         assertNotNull( thing, "List should exist" );
 
         assert thing.contains( foo );
     }
 
+    /*
+    This is to some extent redundant with ElementalTest/nullElement()
+    but as MinderDom is also a building-block class, it seems appropriate
+    to test here as well?
+     */
     @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "Element unexpectedly null!" )
-    public void NullElement() throws Exception {
+           expectedExceptionsMessageRegExp = "MindedDom element unexpectedly null!" )
+    public void nullElement() throws Exception {
         new MindedDom( null );
     }
 
+    // TODO: tests for DomAllPlan, DomAllSection, DomAllFront, DomAllTruss
+    // They should all invoke the appropriate methods and skip anything that isn't a MinderDom
+
     @BeforeClass
     public static void setUpClass() throws Exception {
-        draw = new Draw();
+//        draw = new Draw();
     }
 
     @AfterClass

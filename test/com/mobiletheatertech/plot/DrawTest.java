@@ -81,7 +81,7 @@ public class DrawTest {
     @Test
     public void storesRootAfterGetRoot() throws Exception {
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
 
         Object root = TestHelpers.accessObject( draw, "root" );
         assertNotNull( root );
@@ -100,7 +100,7 @@ public class DrawTest {
     @Test
     public void rootAfterGetRoot() throws Exception {
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
 
         Object root = TestHelpers.accessObject( draw, "root" );
         assertSame( draw.root(), root );
@@ -113,11 +113,11 @@ public class DrawTest {
 
         String namespace = TestHelpers.accessString( draw, "namespace" );
         String tag = "defs";
-        Element element = draw.element( tag );
+        SvgElement element = draw.element(tag);
         assert Element.class.isInstance( element );
-        assertEquals( element.getTagName(), tag );
-        assertEquals( element.getNamespaceURI(), namespace );
-        assertEquals( element.getOwnerDocument(), draw.document() );
+        assertEquals( element.element().getTagName(), tag );
+        assertEquals( element.element().getNamespaceURI(), namespace );
+        assertEquals( element.element().getOwnerDocument(), draw.document() );
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -130,7 +130,7 @@ public class DrawTest {
     @Test
     public void setDocumentTitleAfterGetRoot() {
         Draw draw = new Draw();
-        draw.getRoot();
+        draw.establishRoot();
         String title = "Follow The Rabbit";
         draw.setDocumentTitle( title );
 
@@ -151,8 +151,8 @@ public class DrawTest {
     @Test
     public void insertRootChildAfterGetRoot() {
         Draw draw = new Draw();
-        draw.getRoot();
-        Element element = draw.element( "type" );
+        draw.establishRoot();
+        SvgElement element = draw.element("type");
         draw.insertRootChild( element );
         Element root = draw.root();
         Node second = root.getFirstChild().getNextSibling();
@@ -168,8 +168,8 @@ public class DrawTest {
     @Test
     public void appendRootChildAfterGetRoot() {
         Draw draw = new Draw();
-        draw.getRoot();
-        Element element = draw.element( "type" );
+        draw.establishRoot();
+        SvgElement element = draw.element("type");
         draw.appendRootChild( element );
         Element root = draw.root();
         Node last = root.getLastChild();

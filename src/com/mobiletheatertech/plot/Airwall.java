@@ -15,35 +15,11 @@ import java.awt.geom.Line2D;
  * @author dhs
  * @since 0.0.8
  */
-public class Airwall extends Minder {
+public class Airwall extends MinderDom {
 
     Integer depth = null;
 
-    /**
-     * Create an {@code Airwall} for each element in a list of XML nodes.
-     *
-     * @param list List of XML nodes
-     * @throws AttributeMissingException If a required attribute is missing.
-     * @throws LocationException         If the airwall is outside the {@code Venue}.
-     * @throws SizeException             If a length attribute is too short.
-     */
-
-    // This seems to be generic - refactor it into Minder
-    public static void ParseXML( NodeList list )
-            throws AttributeMissingException, InvalidXMLException, LocationException,
-            ReferenceException, SizeException
-    {
-        int length = list.getLength();
-        for (int index = 0; index < length; index++) {
-            Node node = list.item( index );
-
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                new Airwall( element );
-            }
-
-        }
-    }
+    static final String COLOR = "dark gray";
 
     /**
      * Construct an {@code Airwall} from an XML element.
@@ -73,23 +49,41 @@ public class Airwall extends Minder {
     public void verify() throws InvalidXMLException, LocationException {
     }
 
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) throws MountingException, ReferenceException {
+//        int width = Venue.Width();
+//
+//        canvas.setPaint( Color.ORANGE );
+//        canvas.draw( new Line2D.Float( 0, depth, width, depth ) );
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) throws MountingException {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) throws MountingException {
+//    }
+
     @Override
-    public void drawPlan( Graphics2D canvas ) throws MountingException, ReferenceException {
+    public void dom( Draw draw, View mode ) throws ReferenceException {
+        SvgElement element = null;
         int width = Venue.Width();
 
-        canvas.setPaint( Color.ORANGE );
-        canvas.draw( new Line2D.Float( 0, depth, width, depth ) );
-    }
-
-    @Override
-    public void drawSection( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void drawFront( Graphics2D canvas ) throws MountingException {
-    }
-
-    @Override
-    public void dom( Draw draw, View mode ) throws MountingException {
+        switch (mode) {
+            case PLAN:
+                element = draw.line( draw, 0, depth, width, depth, COLOR )
+// TODO Add stroke-width
+//                        .lineWidth( 2 )
+                ;
+//                draw.appendRootChild( element );
+                break;
+            case SECTION:
+                break;
+            case FRONT:
+                break;
+            case TRUSS:
+                break;
+        }
     }
 }
