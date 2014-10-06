@@ -45,7 +45,7 @@ public class LayerTest {
 
 ////    @Test
 ////    public void finds() throws Exception {
-////        Layer layer = new Layer( elementOnPipe );
+////        Layer layer = new Layer( element );
 ////
 ////        HangPoint found = HangPoint.Find( "Blather" );
 ////

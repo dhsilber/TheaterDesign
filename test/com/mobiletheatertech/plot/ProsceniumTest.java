@@ -278,7 +278,7 @@ public class ProsceniumTest {
 
 //    @Test
 //    public void draw() throws Exception {
-//        Proscenium proscenium = new Proscenium( elementOnPipe );
+//        Proscenium proscenium = new Proscenium( element );
 //
 //        new Expectations() {
 //            {
@@ -291,7 +291,7 @@ public class ProsceniumTest {
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Proscenium proscenium = new Proscenium( elementOnPipe );
+//        Proscenium proscenium = new Proscenium( element );
 //
 //        proscenium.dom( null );
 //    }

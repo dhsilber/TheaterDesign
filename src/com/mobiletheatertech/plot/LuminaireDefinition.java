@@ -114,16 +114,6 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
         }
     }
 
-    public Integer height() {
-        return legendHeight;
-    }
-
-    public Integer width() {
-        return   ((width < length)
-                  ? length
-                  : width);
-    }
-
     @Override
     public void verify() {
     }

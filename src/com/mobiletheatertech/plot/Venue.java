@@ -82,7 +82,7 @@ public class Venue extends Minder implements Legendable {
 
         StaticVenue = this;
 
-//        Legend.Register( this, room.length() * 9, 12, LegendOrder.Room );
+        Legend.Register( this, room.length() * 9, 12, LegendOrder.Room );
     }
 
     /**
@@ -258,10 +258,6 @@ public class Venue extends Minder implements Legendable {
      */
     @Override
     public void dom( Draw draw, View mode ) {
-        switch (mode) {
-            case TRUSS:
-                return;
-        }
     }
 
     /**
@@ -291,14 +287,5 @@ public class Venue extends Minder implements Legendable {
         text.appendChild( foo );
 
         return new PagePoint( start.x(), start.y() + 12 );
-    }
-
-    public String toString() {
-        return building+room+"\nWidth: "+width+
-                ", Depth: "+depth+", Height: "+height;
-    }
-
-    public static String ToString() {
-        return StaticVenue.toString();
     }
 }

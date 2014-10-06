@@ -41,7 +41,7 @@ public class Parse {
      */
     public Parse( InputStream stream )
             throws AttributeMissingException, DataException, FeatureException, InvalidXMLException,
-            KindException, LocationException, MountingException,
+            KindException, LocationException,
             ReferenceException, SizeException
     {
         DocumentBuilderFactory builderFactory =
@@ -77,9 +77,6 @@ public class Parse {
 
         NodeList wall = root.getElementsByTagName( "wall" );
         Wall.ParseXML( wall );
-
-        NodeList balcony = root.getElementsByTagName( "balcony" );
-        Balcony.ParseXML( balcony );
 
         NodeList proscenium = root.getElementsByTagName( "proscenium" );
         Proscenium.ParseXML( proscenium );
@@ -122,7 +119,7 @@ public class Parse {
             Luminaire.ParseXML( luminaire );
         }
 
-        MinderDom.VerifyAll();
+        Minder.VerifyAll();
 
         NodeList setup = root.getElementsByTagName( "setup" );
         Setup.ParseXML( setup );

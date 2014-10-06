@@ -17,7 +17,7 @@ import static org.testng.Assert.assertNotNull;
 public class MinderDomTest {
 
     /**
-     * Extended {@code MinderDom} so that there is a concrete class to test with.
+     * Extended {@code Minder} so that there is a concrete class to test with.
      */
     private class MindedDom extends MinderDom {
 
@@ -37,7 +37,7 @@ public class MinderDomTest {
         }
     }
 
-//    private static Draw draw = null;
+    private static Draw draw = null;
     private Element element = null;
 
     public MinderDomTest() {
@@ -59,20 +59,15 @@ public class MinderDomTest {
         assert thing.contains( foo );
     }
 
-    /*
-    This is to some extent redundant with ElementalTest/nullElement()
-    but as MinderDom is also a building-block class, it seems appropriate
-    to test here as well?
-     */
     @Test( expectedExceptions = InvalidXMLException.class,
-           expectedExceptionsMessageRegExp = "MindedDom element unexpectedly null!" )
-    public void nullElement() throws Exception {
+           expectedExceptionsMessageRegExp = "Element unexpectedly null!" )
+    public void NullElement() throws Exception {
         new MindedDom( null );
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-//        draw = new Draw();
+        draw = new Draw();
     }
 
     @AfterClass

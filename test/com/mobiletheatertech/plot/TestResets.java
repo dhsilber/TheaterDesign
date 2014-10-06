@@ -86,30 +86,17 @@ public class TestResets {
     }
 
     /**
-     * Reset the MOUNTABLELIST maintained by {@link Mountable} to its initial empty state.
+     * Reset the PIPELIST maintained by {@link Pipe} to its initial empty state.
      *
-     * @throws NoSuchFieldException   if the {@code MOUNTABLELIST} field isn't there.
-     * @throws IllegalAccessException if the {@code MOUNTABLELIST} field cannot be accessed.
+     * @throws NoSuchFieldException   if the {@code PIPELIST} field isn't there.
+     * @throws IllegalAccessException if the {@code PIPELIST} field cannot be accessed.
      */
-    public static void MountableReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Mountable.class.getDeclaredField( "MOUNTABLELIST" );
+    public static void PipeReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Pipe.class.getDeclaredField( "PIPELIST" );
         field.setAccessible( true );
-        ArrayList<Mountable> mountableList = (ArrayList<Mountable>) field.get( Mountable.class );
-        mountableList.clear();
+        ArrayList<Pipe> pipelist = (ArrayList<Pipe>) field.get( Pipe.class );
+        pipelist.clear();
     }
-
-//    /**
-//     * Reset the PIPELIST maintained by {@link Pipe} to its initial empty state.
-//     *
-//     * @throws NoSuchFieldException   if the {@code PIPELIST} field isn't there.
-//     * @throws IllegalAccessException if the {@code PIPELIST} field cannot be accessed.
-//     */
-//    public static void PipeReset() throws NoSuchFieldException, IllegalAccessException {
-//        Field field = Pipe.class.getDeclaredField( "PIPELIST" );
-//        field.setAccessible( true );
-//        ArrayList<Pipe> pipelist = (ArrayList<Pipe>) field.get( Pipe.class );
-//        pipelist.clear();
-//    }
 
     /**
      * Reset {@link Point} to its initial state.

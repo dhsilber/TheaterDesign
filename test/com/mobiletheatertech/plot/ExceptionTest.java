@@ -92,42 +92,6 @@ public class ExceptionTest {
     }
 
     /**
-     * For when a required attribute is missing and an ID is set.
-     *
-     * @since 0.0.2
-     */
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp =
-                    "Foo \\(sam\\) is missing required 'thingy' attribute.")
-    public void invalidXMLExceptionWithID() throws Exception {
-        throw new InvalidXMLException("Foo", "sam", "is missing required 'thingy' attribute");
-    }
-
-    /**
-     * For when a required attribute is missing and no ID is known.
-     *
-     * @since 0.0.2
-     */
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp =
-                    "Foo instance is missing required 'thingy' attribute.")
-    public void invalidXMLExceptionWithoutID() throws Exception {
-        throw new InvalidXMLException("Foo", "", "is missing required 'thingy' attribute");
-    }
-
-    /**
-     * For when a required attribute is missing and ID is not set.
-     *
-     * @since 0.0.2
-     */
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp =
-                    "Foo instance is missing required 'thingy' attribute.")
-    public void invalidXMLExceptionNullID() throws Exception {
-        throw new InvalidXMLException("Foo", null, "is missing required 'thingy' attribute");
-    }
-
-    /**
      * For locations that cannot be.
      *
      * @since 0.0.3

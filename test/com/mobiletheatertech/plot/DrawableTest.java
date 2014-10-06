@@ -73,11 +73,11 @@ public class DrawableTest {
 //        pipeElement.setAttribute( "y2", "40" );
 //        new Pipe( pipeElement );
 //
-//        elementOnPipe = new IIOMetadataNode( "wall" );
-//        elementOnPipe.setAttribute( "height", height.toString() );
-//        elementOnPipe.setAttribute( "width", width.toString() );
-//        elementOnPipe.setAttribute( "x2", x2.toString() );
-//        elementOnPipe.setAttribute( "y2", y2.toString() );
+//        element = new IIOMetadataNode( "wall" );
+//        element.setAttribute( "height", height.toString() );
+//        element.setAttribute( "width", width.toString() );
+//        element.setAttribute( "x2", x2.toString() );
+//        element.setAttribute( "y2", y2.toString() );
     }
 
     @AfterMethod

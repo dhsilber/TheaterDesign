@@ -4,17 +4,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
+
 /**
  * Generic pipe.
  * <p/>
- * XML tag is 'pipe'. Required attributes are 'length', 'x', 'y', and 'z'.
- * Coordinates are relative
+ * XML tag is 'pipe'. Required attributes are 'length', 'x', 'y', and 'z'. Coordinates are relative
  * to the {@code Proscenium} origin, if any, otherwise relative to the page origin.
  *
  * @author dhs
  * @since 0.0.6
  */
-public class Pipe extends Mountable {
+public class Pipe extends MinderDom {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -31,7 +32,7 @@ public class Pipe extends Mountable {
      */
     public static final Integer DIAMETER = 2;
 
-//    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
+    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
 
     /**
      * Length of pipe. I'm using inches so that the line thickness isn't ridiculous, but that isn't
@@ -49,10 +50,6 @@ public class Pipe extends Mountable {
      */
     private Point boxOrigin = null;
 
-    private Double orientation = null;
-
-    private Integer offsetX = null;
-
     /**
      * Construct a {@code Pipe} for each element in a list of XML nodes.
      *
@@ -66,36 +63,37 @@ public class Pipe extends Mountable {
     This ends up copied to each thing that inherits from
      *                                   Minder. There needs to be a factory somewhere.
      */
-    public static void ParseXML(NodeList list)
-            throws AttributeMissingException, InvalidXMLException, SizeException {
+    public static void ParseXML( NodeList list )
+            throws AttributeMissingException, InvalidXMLException, SizeException
+    {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
-            Node node = list.item(index);
+            Node node = list.item( index );
 
             // Much of this copied to Suspend.Suspend - refactor
             if (null != node) {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    new Pipe(element);
+                    new Pipe( element );
                 }
             }
         }
     }
-//
-//    /**
-//     * Find a specific {@code Pipe} from all that have been constructed.
-//     *
-//     * @param id of {@code Pipe} to find
-//     * @return {@code Pipe}, or {@code null} if not found
-//     */
-//    public static Pipe Select( String id ) {
-//        for (Pipe selection : PIPELIST) {
-//            if (selection.id.equals( id )) {
-//                return selection;
-//            }
-//        }
-//        return null;
-//    }
+
+    /**
+     * Find a specific {@code Pipe} from all that have been constructed.
+     *
+     * @param id of {@code Pipe} to find
+     * @return {@code Pipe}, or {@code null} if not found
+     */
+    public static Pipe Select( String id ) {
+        for (Pipe selection : PIPELIST) {
+            if (selection.id.equals( id )) {
+                return selection;
+            }
+        }
+        return null;
+    }
 
     /**
      * Construct a {@code Pipe} from an XML Element.
@@ -111,26 +109,68 @@ public class Pipe extends Mountable {
     A natural origin of a pipe is the center of one end. To position
      its drawing box in space, a small start has to be applied.
      */
-    public Pipe(Element element)
-            throws AttributeMissingException, InvalidXMLException, SizeException {
-        super(element);
+    public Pipe( Element element )
+            throws AttributeMissingException, InvalidXMLException, SizeException
+    {
+        super( element );
 
-//        id = element.getAttribute( "id" );
-        length = getIntegerAttribute(element, "length");
-        Integer x = getIntegerAttribute(element, "x");
-        Integer y = getIntegerAttribute(element, "y");
-        Integer z = getIntegerAttribute(element, "z");
-        start = new Point(x, y, z);
+        id = element.getAttribute( "id" );
+        length = getIntegerAttribute( element, "length" );
+        Integer x = getIntegerAttribute( element, "x" );
+        Integer y = getIntegerAttribute( element, "y" );
+        Integer z = getIntegerAttribute( element, "z" );
+        start = new Point( x, y, z );
 
-        if (0 >= length) {
-            Mountable.Remove(this);
-            throw new SizeException(this.toString(), "length");
+        if (0 >= length) throw new SizeException( this.toString(), "length" );
+
+        PIPELIST.add( this );
+
+        new Layer( LAYERNAME, LAYERTAG );
+    }
+
+    /**
+     * Provide the drawing location of a point along this {@code Pipe}.
+     *
+     * @param offset in the x dimension
+     * @return drawing location
+     * @throws MountingException if location will be beyond the edge of the pipe
+     */
+    public Point location( Integer offset ) throws MountingException {
+        Point point;
+        if (Proscenium.Active()) {
+            if ((start.x() < 0) && (start.x() + length > 0)) {
+                // Given a pipe that crosses the centerline, the offset is from the centerline.
+                point = Proscenium.Locate( new Point( offset,
+                                                      start.y() - 1,
+                                                      start.z() - 1 ) );
+
+                if ((offset < start.x()) || (start.x() + length < offset)) {
+                    throw new MountingException( "beyond the end of Pipe" );
+                }
+            }
+
+            else {
+                // For a pipe that doesn't cross the centerline, the offset is relative to the
+                // start of the pipe.
+                point = Proscenium.Locate( new Point( start.x() /*- (length / 2)*/ + offset,
+                                                      start.y() - 1,
+                                                      start.z() - 1 ) );
+                if ((offset < 0) || (length < offset)) {
+                    throw new MountingException( "beyond the end of Pipe" );
+                }
+            }
         }
 
-        orientation = getOptionalDoubleAttribute(element, "orientation");
-        offsetX = getOptionalIntegerAttribute(element, "offsetx");
-
-        new Layer(LAYERNAME, LAYERTAG);
+        else {
+            // When there is no proscenium
+            point = new Point( start.x() + offset, start.y(), start.z() );
+            if ((offset < 0) || (length < offset)) {
+                throw new MountingException( "beyond the end of Pipe" );
+            }
+        }
+//        System.out.println(
+//                "Pipe.location(): " + point.toString() + " Start: " + start.toString() );
+        return point;
     }
 
     /**
@@ -140,125 +180,44 @@ public class Pipe extends Mountable {
      */
     @Override
     public void verify() throws LocationException, ReferenceException {
-        String identity = (id.equals(""))
-                ? this.toString()
-                : "Pipe (" + id + ")";
-
+        String identity = (id.equals( "" ))
+                          ? this.toString()
+                          : "Pipe (" + id + ")";
 
         if (Proscenium.Active()) {
-            if (90.0 == orientation) {
-                boxOrigin = Proscenium.Locate(new Point(start.x() - 1, start.y(), start.z() - 1));
-
-                Box box = new Box(boxOrigin, DIAMETER, length, DIAMETER);
-
-                if (!Venue.Contains(box)) {
-                    Point end = new Point(start.x() - 1 + DIAMETER, start.y() + length, start.z() - 1 + DIAMETER);
-                    Mountable.Remove(this);
-                    throw new LocationException(
-                            identity + " should not extend beyond the boundaries of the venue.\n" +
-                                    "Start: " + boxOrigin.toString() + "\n" +
-                                    "End  : " + end.toString() + "\n" +
-                                    "Venue: " + Venue.ToString()
-                    );
-                }
-            } else {
 //            Integer depth = Venue.Depth();
 //            Point origin = Proscenium.Origin();
 //            boxOrigin = new Point( origin.x() + start.x() - length / 2,
 //                                   origin.y() - start.y() - 1,
 //                                   origin.z() + start.z() - 1 );
-                boxOrigin = Proscenium.Locate(new Point(start.x(),// - length / 2,
-                        start.y() - 1,
-                        start.z() - 1));
+            boxOrigin = Proscenium.Locate( new Point( start.x(),// - length / 2,
+                                                      start.y() - 1,
+                                                      start.z() - 1 ) );
 
-                Box box = new Box(boxOrigin, length, DIAMETER, DIAMETER);
+            Box box = new Box( boxOrigin, length, DIAMETER, DIAMETER );
 
-                if (!Venue.Contains(box)) {
-                    Mountable.Remove(this);
-                    throw new LocationException(
-                            identity + " should not extend beyond the boundaries of the venue.");
-                }
+            if (!Venue.Contains( box )) {
+                PIPELIST.remove( this );
+                throw new LocationException(
+                        identity +
+                                " should not extend beyond the boundaries of the venue." );
             }
-        } else {
-            if (90.0 == orientation) {
-                throw new ReferenceException("90-degree oriented only implemented with proscenium.");
-            } else {
+        }
+        else {
+            boxOrigin = new Point( start.x(), start.y() - 1, start.z() - 1 );
 
-                boxOrigin = new Point(start.x(), start.y() - 1, start.z() - 1);
+            Box box = new Box( boxOrigin, length, DIAMETER, DIAMETER );
 
-                Box box = new Box(boxOrigin, length, DIAMETER, DIAMETER);
-
-                if (!Venue.Contains(box)) {
-                    Mountable.Remove(this);
-                    throw new LocationException(
-                            identity + " should not extend beyond the boundaries of the venue.");
-                }
+            if (!Venue.Contains( box )) {
+                PIPELIST.remove( this );
+                throw new LocationException(
+                        identity +
+                                " should not extend beyond the boundaries of the venue." );
             }
         }
     }
 
-    /**
-     * Provide the drawing location of a point along this {@code Pipe}.
-     *
-     * @param location in the x dimension
-     * @return drawing location
-     * @throws MountingException if location will be beyond the edge of the pipe
-     */
-    public Point location(String location) throws InvalidXMLException, MountingException {
-        Integer offset;
-        try {
-            offset = new Integer(location);
-        } catch (NumberFormatException exception) {
-            throw new InvalidXMLException("Pipe (" + id + ") location is not a number.");
-        }
-
-        Point point;
-        if (Proscenium.Active()) {
-            if (90 == orientation) {
-                point = Proscenium.Locate(new Point(start.x() + offsetX, start.y() - offset, start.z()));
-                if ((offset < 0) || (length < offset)) {
-                    throw new MountingException("beyond the end of (proscenium, perpendicular) Pipe");
-                }
-            } else {
-                if ((start.x() < 0) && (start.x() + length > 0)) {
-                    // Given a pipe that crosses the centerline, the offset is from the centerline.
-                    point = Proscenium.Locate(new Point(offset,
-                            start.y() - 1,
-                            start.z() - 1));
-
-                    if ((offset < start.x()) || (start.x() + length < offset)) {
-                        throw new MountingException("beyond the end of (proscenium, crosses center) Pipe");
-                    }
-                } else {
-                    // For a pipe that doesn't cross the centerline, the offset is relative to the
-                    // start of the pipe.
-                    point = Proscenium.Locate(new Point(start.x() /*- (length / 2)*/ + offset,
-                            start.y() - 1,
-                            start.z() - 1));
-                    if ((offset < 0) || (length < offset)) {
-                        throw new MountingException("beyond the end of (proscenium, off-center) Pipe");
-                    }
-                }
-            }
-        } else {
-            // When there is no proscenium
-            point = new Point(start.x() + offset, start.y(), start.z());
-            if ((offset < 0) || (length < offset)) {
-                throw new MountingException("beyond the end of (non-proscenium) Pipe");
-            }
-        }
-//        System.out.println(
-//                "Pipe.location(): " + point.toString() + " Start: " + start.toString() );
-        return point;
-    }
-
-    @Override
-    public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
-        // Pipes are not yet able to be rotated, so this just passes through to location().
-        return new Place(location(location), boxOrigin, 0.0);
-    }
-
-    //    @Override
+//    @Override
 //    public void drawPlan( Graphics2D canvas ) {
 //    }
 //
@@ -278,51 +237,34 @@ public class Pipe extends Mountable {
      * @throws ReferenceException
      */
     @Override
-    public void dom(Draw draw, View mode) throws ReferenceException {
-        switch (mode) {
-            case TRUSS:
-                return;
-        }
-
+    public void dom( Draw draw, View mode ) throws ReferenceException {
         Integer height = Venue.Height() - boxOrigin.z();
 
-        Point drawBox = new Point(boxOrigin.x() + offsetX, boxOrigin.y(), boxOrigin.z());
 
-        Element group = draw.element("g");
-        group.setAttribute("class", LAYERTAG);
-        draw.appendRootChild(group);
+        Element group = draw.element( "g" );
+        group.setAttribute( "class", LAYERTAG );
+        draw.appendRootChild( group );
 
-        Element pipeRectangle = draw.element("rect");
-        pipeRectangle.setAttribute("fill", "none");
-        pipeRectangle.setAttribute("stroke-width", "1");
-        pipeRectangle.setAttribute("stroke-opacity", "0.5");
-        group.appendChild(pipeRectangle);
+        Element dimmerRectangle = draw.element( "rect" );
+        dimmerRectangle.setAttribute( "height", DIAMETER.toString() );
+        dimmerRectangle.setAttribute( "fill", "none" );
+        group.appendChild( dimmerRectangle );
 
         switch (mode) {
             case PLAN:
-                if (90.0 == orientation) {
-                    pipeRectangle.setAttribute("x", drawBox.x().toString());
-                    pipeRectangle.setAttribute("y", drawBox.y().toString());
-                    pipeRectangle.setAttribute("width", DIAMETER.toString());
-                    pipeRectangle.setAttribute("height", length.toString());
-                } else {
-                    pipeRectangle.setAttribute("x", drawBox.x().toString());
-                    pipeRectangle.setAttribute("y", drawBox.y().toString());
-                    pipeRectangle.setAttribute("width", length.toString());
-                    pipeRectangle.setAttribute("height", DIAMETER.toString());
-                }
+                dimmerRectangle.setAttribute( "x", boxOrigin.x().toString() );
+                dimmerRectangle.setAttribute( "y", boxOrigin.y().toString() );
+                dimmerRectangle.setAttribute( "width", length.toString() );
                 break;
             case SECTION:
-                pipeRectangle.setAttribute("x", drawBox.y().toString());
-                pipeRectangle.setAttribute("y", height.toString());
-                pipeRectangle.setAttribute("width", DIAMETER.toString());
-                pipeRectangle.setAttribute("height", DIAMETER.toString());
+                dimmerRectangle.setAttribute( "x", boxOrigin.y().toString() );
+                dimmerRectangle.setAttribute( "y", height.toString() );
+                dimmerRectangle.setAttribute( "width", DIAMETER.toString() );
                 break;
             case FRONT:
-                pipeRectangle.setAttribute("x", drawBox.x().toString());
-                pipeRectangle.setAttribute("y", height.toString());
-                pipeRectangle.setAttribute("width", length.toString());
-                pipeRectangle.setAttribute("height", DIAMETER.toString());
+                dimmerRectangle.setAttribute( "x", boxOrigin.x().toString() );
+                dimmerRectangle.setAttribute( "y", height.toString() );
+                dimmerRectangle.setAttribute( "width", length.toString() );
                 break;
             default:
 

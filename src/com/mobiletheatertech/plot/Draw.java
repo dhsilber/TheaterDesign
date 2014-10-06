@@ -99,7 +99,7 @@ public class Draw {
             svgGenerator.stream( root, out );//, useCSS );
         }
         catch ( Exception e ) {
-//            System.err.println( e.toString() );
+            System.err.println( e.toString() );
         }
     }
 

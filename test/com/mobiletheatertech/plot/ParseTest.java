@@ -200,7 +200,7 @@ public class ParseTest {
     public void createsVenueAndPipe() throws Exception {
         String xml = "<plot>" +
                 "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
-                "<pipe id=\"fred\" length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
+                "<pipe length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -223,63 +223,11 @@ public class ParseTest {
     }
 
     @Test
-    public void createsVenueAndWall() throws Exception {
-        String xml = "<plot>" +
-                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
-                "<wall x1=\"24\" y1=\"20\" x2=\"30\" y2=\"34\" />" +
-                "</venue>" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-
-        TestResets.MinderDomReset();
-
-        new Parse( stream );
-
-        // Final size of list
-        ArrayList<MinderDom> list = Drawable.List();
-        assertEquals( list.size(), 2 );
-
-        MinderDom venue = list.get( 0 );
-        assert Minder.class.isInstance( venue );
-        assert Venue.class.isInstance( venue );
-
-        MinderDom wall = list.get( 1 );
-        assert MinderDom.class.isInstance( wall );
-        assert Wall.class.isInstance( wall );
-    }
-
-    @Test
-    public void createsVenueAndBalcony() throws Exception {
-        String xml = "<plot>" +
-                "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
-                "<balcony floor-height=\"24\" under-height=\"20\" wall-height=\"30\" rail-height=\"34\" />" +
-                "</venue>" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-
-        TestResets.MinderDomReset();
-
-        new Parse( stream );
-
-        // Final size of list
-        ArrayList<MinderDom> list = Drawable.List();
-        assertEquals( list.size(), 2 );
-
-        MinderDom venue = list.get( 0 );
-        assert Minder.class.isInstance( venue );
-        assert Venue.class.isInstance( venue );
-
-        MinderDom balcony = list.get( 1 );
-        assert MinderDom.class.isInstance( balcony );
-        assert Balcony.class.isInstance( balcony );
-    }
-
-    @Test
     public void createsVenueAndTwoPipe() throws Exception {
         String xml = "<plot>" +
                 "<venue room=\"Bogus name\" width=\"330\" depth=\"132\" height=\"90\" >" +
-                "<pipe id=\"james\" length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
-                "<pipe id=\"martha\" length=\"24\" x=\"25\" y=\"35\" z=\"34\" />" +
+                "<pipe length=\"24\" x=\"20\" y=\"30\" z=\"34\" />" +
+                "<pipe length=\"24\" x=\"25\" y=\"35\" z=\"34\" />" +
                 "</venue>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -307,27 +255,26 @@ public class ParseTest {
         assertNotSame( pipe, pipe2 );
     }
 
-    // TODO: commented out 2014-04-22 as it was hanging the whole test run.
-//    @Test
-//    public void createsLuminaire() throws Exception {
-//        String xml = "<plot>" +
-//                "<luminaire type=\"6x9\" on=\"lineset 4\" location=\"12\" target=\"DSC\" />" +
-//                "</plot>";
-//        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-//
-//        // Initial size of list
-//        ArrayList<MinderDom> list = Drawable.List();
-//        int size = list.size();
-//
-//        new Parse( stream );
-//
-//        // Final size of list
-//        assertEquals( list.size(), size + 1 );
-//        MinderDom thing = list.get( list.size() - 1 );
-//
-//        assert MinderDom.class.isInstance( thing );
-//        assert Luminaire.class.isInstance( thing );
-//    }
+    @Test
+    public void createsLuminaire() throws Exception {
+        String xml = "<plot>" +
+                "<luminaire type=\"6x9\" on=\"lineset 4\" location=\"12\" target=\"DSC\" />" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+        // Initial size of list
+        ArrayList<MinderDom> list = Drawable.List();
+        int size = list.size();
+
+        new Parse( stream );
+
+        // Final size of list
+        assertEquals( list.size(), size + 1 );
+        MinderDom thing = list.get( list.size() - 1 );
+
+        assert MinderDom.class.isInstance( thing );
+        assert Luminaire.class.isInstance( thing );
+    }
 
     @Test
     public void createsSetup() throws Exception {
@@ -376,7 +323,7 @@ public class ParseTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.MinderDomReset();
-        TestResets.MountableReset();
+        TestResets.PipeReset();
         TestResets.ProsceniumReset();
     }
 

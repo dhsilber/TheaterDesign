@@ -28,14 +28,14 @@ public class Grid {
         Integer depth = Venue.Depth();
         Integer width = Venue.Width();
 
-        for (Integer x = 1; x <= Venue.Width(); x += 48) {
+        for (Integer x = 1; x <= Venue.Width(); x += 12) {
             String opacity = ((x % 120) == 1)
                              ? "0.2"
                              : "0.1";
             verticalLine( draw, depth, x, opacity );
 //            System.out.println( "V Line: "+ x+ ", Opacity: "+ opacity);
         }
-        for (Integer y = 1; y <= Venue.Depth(); y += 48) {
+        for (Integer y = 1; y <= Venue.Depth(); y += 12) {
             String opacity = ((y % 120) == 1)
                              ? "0.2"
                              : "0.1";

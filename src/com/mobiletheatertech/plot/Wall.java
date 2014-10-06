@@ -106,6 +106,18 @@ public class Wall extends MinderDom {
         }
     }
 
+//    @Override
+//    public void drawPlan( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawSection( Graphics2D canvas ) {
+//    }
+//
+//    @Override
+//    public void drawFront( Graphics2D canvas ) {
+//    }
+
     /**
      * Draw the wall.
      *
@@ -114,10 +126,6 @@ public class Wall extends MinderDom {
      */
     @Override
     public void dom( Draw draw, View mode ) {
-        switch (mode) {
-            case TRUSS:
-                return;
-        }
         if (mode != View.PLAN) {
             return;
         }

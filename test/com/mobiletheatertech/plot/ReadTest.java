@@ -23,25 +23,24 @@ public class ReadTest {
         new Read( "bogus file name" );
     }
 
-    // TODO: commented out 2014-04-22 as it was hanging the whole test run.
-//    @Test
-//    public void reads() throws Exception {
-//        TestResets.MinderDomReset();
-//
-//        new Read( "tutorial" );
-//        assertEquals( Drawable.List().size(), 18 );
-//    }
+    @Test
+    public void reads() throws Exception {
+        TestResets.MinderDomReset();
+
+        new Read( "tutorial" );
+        assertEquals( Drawable.List().size(), 18 );
+    }
 
     @Test
     public void test() {
         fail( "Test that read opens, parses, and closes specified file." );
     }
 
-//        @Mocked System stringValue;
+//        @Mocked System foo;
 //        @Mocked FileInputStream bar;
 //        @Mocked Parse baz;
 //    @Test
-////    public void opensDirectory( @Mocked System stringValue ) {
+////    public void opensDirectory( @Mocked System foo ) {
 //    public void opensDirectory() throws FileNotFoundException {
 //        
 ////        @Mocked(stubOutClassInitialization = true) final System; unused = null);
@@ -50,7 +49,7 @@ public class ReadTest {
 //         */
 ////        new Expectations() {
 //        {
-//            stringValue.getProperty( "user.home");
+//            foo.getProperty( "user.home");
 //            InputStream stream = new FileInputStream( "fajdflkj");
 //            new Parse(stream);
 //        }
@@ -63,7 +62,7 @@ public class ReadTest {
          * 
          */
 //        new Expectations() {
-//            System.getProperty( "stringValue");
+//            System.getProperty( "foo");
 //        }
         fail( "Test that Read gets the user's home directory from System.getProperty(\"user.home\"), then attempts to open the named file from <user.home>/Plot/plotfiles/" );
     }

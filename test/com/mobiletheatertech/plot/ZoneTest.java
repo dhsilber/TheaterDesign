@@ -108,8 +108,8 @@ public class ZoneTest {
 //    @Test( expectedExceptions = AttributeMissingException.class,
 //           expectedExceptionsMessageRegExp = "Zone \\("+id+"\\) is missing required 'z' attribute." )
 //    public void noZ() throws Exception {
-//        elementOnPipe.removeAttribute( "z" );
-//        new Zone( elementOnPipe );
+//        element.removeAttribute( "z" );
+//        new Zone( element );
 //    }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -403,7 +403,7 @@ public class ZoneTest {
         element.setAttribute( "id", id );
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
-//        elementOnPipe.setAttribute( "z", z.toString() );
+//        element.setAttribute( "z", z.toString() );
         element.setAttribute( "r", r.toString() );
     }
 

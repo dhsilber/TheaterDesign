@@ -60,11 +60,6 @@ public class TestHelpers {
         return (Integer) field.get( thingy );
     }
 
-    public static Double accessDouble( Object thingy, String name ) throws Exception {
-        Field field = accessField( thingy, name );
-        return (Double) field.get( thingy );
-    }
-
     public static String accessString( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
         return (String) field.get( thingy );
@@ -76,7 +71,7 @@ public class TestHelpers {
     }
 
     /**
-     * Get the text from an elementOnPipe in the DOM with a unique tag
+     * Get the text from an element in the DOM with a unique tag
      *
      * @param draw
      * @param title

@@ -57,7 +57,7 @@ public class LegendTest {
         Draw draw = new Draw();
         draw.getRoot();
 
-        Legend.Startup( draw, View.PLAN, 100, 100 );
+        Legend.Startup( draw );
 //        TestHelpers.setStaticObject(
 //                "com.mobiletheatertech.plot.Legend", "INITIAL", new PagePoint( 1, 2 ) );
 

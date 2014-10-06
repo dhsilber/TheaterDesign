@@ -230,7 +230,7 @@ public class HangPointTest {
 //
 //    @Test
 //    public void drawPlan() throws Exception {
-//        HangPoint hangPoint = new HangPoint( elementOnPipe );
+//        HangPoint hangPoint = new HangPoint( element );
 //
 //        new Expectations() {
 //            {
@@ -268,7 +268,7 @@ public class HangPointTest {
 
 //    @Test
 //    public void domUnused() throws Exception {
-//        HangPoint hangPoint = new HangPoint( elementOnPipe );
+//        HangPoint hangPoint = new HangPoint( element );
 //
 //        hangPoint.dom( null, View.PLAN );
 //    }

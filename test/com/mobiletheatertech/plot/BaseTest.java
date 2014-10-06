@@ -19,7 +19,7 @@
 //*/
 //public class BaseTest {
 //
-//    Element elementOnPipe = null;
+//    Element element = null;
 //    Truss truss = null;
 //
 //    public BaseTest() {
@@ -27,14 +27,14 @@
 //
 //    @Test
 //    public void isMinder() throws Exception {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        assert Minder.class.isInstance( base );
 //    }
 //
 //    @Test
 //    public void storesAttributes() throws Exception {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        assertEquals( TestHelpers.accessInteger( base, "x" ), 12 );
 //        assertEquals( TestHelpers.accessInteger( base, "y" ), 32 );
@@ -43,7 +43,7 @@
 //    // Until such time as I properly implement this class' use of id.
 //    @Test
 //    public void idUnused() throws Exception {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        assertNull( TestHelpers.accessString( base, "id" ) );
 //    }
@@ -52,7 +52,7 @@
 //    @Test
 //    public void storesSelf() throws Exception
 //    {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        ArrayList<Minder> thing = Drawable.List();
 //        assertNotNull( thing, "List should exist" );
@@ -67,21 +67,21 @@
 //     */
 //    @Test
 //    public void justFine() throws Exception {
-//        new Base( elementOnPipe );
+//        new Base( element );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "Base instance is missing required 'x' attribute.")
 //    public void noX() throws Exception {
-//        elementOnPipe.removeAttribute( "x" );
-//        new Base( elementOnPipe );
+//        element.removeAttribute( "x" );
+//        new Base( element );
 //    }
 //
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //          expectedExceptionsMessageRegExp = "Base instance is missing required 'y' attribute.")
 //    public void noY() throws Exception {
-//        elementOnPipe.removeAttribute( "y" );
-//        new Base( elementOnPipe );
+//        element.removeAttribute( "y" );
+//        new Base( element );
 //    }
 //
 //    @Test
@@ -108,7 +108,7 @@
 //
 //    @Test
 //    public void locate() throws Exception {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        Point location = base.locate();
 //
@@ -119,14 +119,14 @@
 //
 //    @Test
 //    public void drawUnused() throws Exception {
-//        new Base( elementOnPipe );
+//        new Base( element );
 //
 ////        base.drawPlan( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Base base = new Base( elementOnPipe );
+//        Base base = new Base( element );
 //
 //        base.dom( null, View.PLAN );
 //    }
@@ -162,14 +162,14 @@
 //        otherBase.setAttribute( "ref", "jane" );
 //        otherBase.setAttribute( "distance", "200" );
 //
-//        elementOnPipe = new IIOMetadataNode( "base" );
-//        elementOnPipe.setAttribute( "x", "12" );
-//        elementOnPipe.setAttribute( "y", "32" );
+//        element = new IIOMetadataNode( "base" );
+//        element.setAttribute( "x", "12" );
+//        element.setAttribute( "y", "32" );
 //
 //        Element truss1 = new IIOMetadataNode( "truss" );
 //        truss1.setAttribute( "size", "12" );
 //        truss1.setAttribute( "length", "320" );
-//        truss1.appendChild( elementOnPipe );
+//        truss1.appendChild( element );
 //        truss1.appendChild( otherBase );
 //        truss = new Truss( truss1 );
 //    }

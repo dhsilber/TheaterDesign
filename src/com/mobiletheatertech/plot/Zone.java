@@ -163,11 +163,6 @@ public class Zone extends MinderDom {
      */
     @Override
     public void dom(Draw draw, View mode) throws MountingException {
-        switch (mode) {
-            case TRUSS:
-            case PLAN:
-                return;
-        }
         if (View.PLAN != mode) {
             return;
         }

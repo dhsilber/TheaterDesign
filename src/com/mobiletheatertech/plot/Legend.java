@@ -47,17 +47,17 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw, View mode, Integer start, Integer width ) throws ReferenceException {
+    public static void Startup( Draw draw ) throws ReferenceException {
         DRAW = draw;
 
         Element group = draw.document().createElement( "g" );
         group.setAttribute( "class", "legend" );
         draw.appendRootChild( group );
 
-        Integer x = start;
+        Integer x = Venue.Width() + 5;
         Integer y = 17;
 
-        Integer center = x + (width / 2);
+        Integer center = x + (Width() / 2);
         headerText( draw, group, center, y, Event.Name() );
         y += 17;
         headerText( draw, group, center, y, Venue.Building() );
@@ -65,14 +65,14 @@ public class Legend {
         headerText( draw, group, center, y, Venue.Name() );
         y += 17;
 
-        INITIAL = new PagePoint( start + 20, y );
+        INITIAL = new PagePoint( Venue.Width() + 20, y );
         Integer boxHeight = y + HEIGHT;
 
         Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
         box.setAttribute( "x", x.toString() );
         box.setAttribute( "y", "0" );
-        box.setAttribute( "width", width.toString() );
+        box.setAttribute( "width", Width().toString() );
         box.setAttribute( "height", boxHeight.toString() );
 
         group.appendChild( box );
@@ -101,7 +101,7 @@ public class Legend {
         return WIDEST;
     }
 
-    public static Integer PlanWidth() throws ReferenceException {
+    public static Integer Width() throws ReferenceException {
         Double widthAvailable = (Venue.Depth() * 1.54) - Venue.Width() - 5;
         Integer width = widthAvailable.intValue();
 
