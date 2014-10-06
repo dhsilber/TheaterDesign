@@ -23,6 +23,7 @@ public class WriteTest {
     }
 
     @Test
+    // TODO Is it even possible for this to happen?
 //        ( expectedExceptions=SystemDataMissingException.class,
 //        expectedExceptionsMessageRegExp = "User has no home directory")
     public void noHome() throws Exception

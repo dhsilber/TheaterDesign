@@ -48,6 +48,8 @@ public class Write {
      */
     public void init( String basename ) throws MountingException, ReferenceException {
         home = System.getProperty("user.home");
+
+        // TODO Is it even possible for this to happen?
 //        if (null == home) {
 //            // throw exception
 //        }
@@ -65,16 +67,6 @@ public class Write {
         drawTruss().create( pathname + "/truss.svg" );
         writeDrawings( pathname );
         writeSpreadsheet( pathname + "/gear.ods" );
-
-//        for (ElementalLister item : ElementalLister.List() ) {
-//            if (DeviceTemplate.class.isInstance( item )) {
-//                System.out.println( ((DeviceTemplate) item).toString() );
-//            }
-//            if (Box.class.isInstance( item )) {
-//                System.out.println( ((Box) item).toString() );
-//            }
-//        }
-
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {

@@ -72,7 +72,9 @@ public class Legend {
         y += 17;
 
         INITIAL = new PagePoint( start + 20, y );
-        Integer boxHeight = y + HEIGHT;
+
+        // TODO Adding the Y offset to the box height is really cheating
+        Integer boxHeight = y + HEIGHT + SvgElement.OffsetY();
 
         Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
@@ -84,6 +86,16 @@ public class Legend {
         group.appendChild( box );
     }
 
+    /**
+     * Draw a centered heading for the Legend
+     *
+     * @param draw
+     * @param parent
+     * @param center
+     * @param y
+     * @param text
+     * @throws ReferenceException
+     */
     public static void headerText(
             Draw draw, Element parent, Integer center, Integer y, String text )
             throws ReferenceException
@@ -107,6 +119,13 @@ public class Legend {
         return WIDEST;
     }
 
+    /**
+     * Provide a width for the Legend box which will give the completed
+     * drawing the proportions of 11" x 17" paper.
+     *
+     * @return
+     * @throws ReferenceException
+     */
     public static Integer PlanWidth() throws ReferenceException {
         Double widthAvailable = (Venue.Depth() * 1.54) - Venue.Width() - 5;
         Integer width = widthAvailable.intValue();
