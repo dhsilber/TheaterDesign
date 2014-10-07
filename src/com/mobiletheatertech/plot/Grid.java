@@ -24,7 +24,7 @@ public class Grid extends MinderDom {
     public Grid( Element element ) throws InvalidXMLException{
         super( element );
 
-        SvgElement.Offset( 48, 24 );
+        SvgElement.Offset( 19, 19 );
 
         new Category( CATEGORY, this.getClass() );
     }
@@ -41,10 +41,13 @@ public class Grid extends MinderDom {
     @Override
     public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
 
+        Point start = new Point( SvgElement.OffsetX(), SvgElement.OffsetY(), 0 );
+        draw.scaleLine( draw, start, Venue.Width(), Venue.Depth() );
+
         Integer depth = Venue.Depth();
         Integer width = Venue.Width();
 
-        for (Integer x = 1; x <= Venue.Width(); x += 48) {
+        for (Integer x = -119; x <= Venue.Width(); x += 48) {
             String opacity = ((x % 120) == 1)
                              ? "0.2"
                              : "0.1";

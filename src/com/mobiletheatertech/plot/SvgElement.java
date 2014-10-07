@@ -4,6 +4,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import java.awt.geom.Point2D;
+
 /**
  * Created by dhs on 9/21/14.
  */
@@ -56,6 +58,10 @@ class SvgElement {
         this.element().appendChild( element );
     }
 
+    public String tag() {
+        return element.getTagName();
+    }
+
     public SvgElement svgClass( String name ) {
         this.attribute("class", name);
 
@@ -99,16 +105,19 @@ class SvgElement {
             y2Set += yOffset;
         }
 
+        return lineAbsolute(draw, x1Set, y1Set, x2Set, y2Set, color );
+    }
+
+    SvgElement lineAbsolute(Draw draw, Integer x1, Integer y1, Integer x2, Integer y2, String color ) {
         SvgElement element = draw.element("line");
-        element.attribute("x1", x1Set.toString());
-        element.attribute("y1", y1Set.toString());
-        element.attribute("x2", x2Set.toString());
-        element.attribute("y2", y2Set.toString());
+        element.attribute("x1", x1.toString());
+        element.attribute("y1", y1.toString());
+        element.attribute("x2", x2.toString());
+        element.attribute("y2", y2.toString());
         element.attribute("stroke", color);
 //        element.attribute( "stroke-width", "2" );
 
         this.appendChild( element );
-
         return element;
     }
 
@@ -149,6 +158,119 @@ class SvgElement {
         return element;
     }
 
+    public SvgElement scaleLine( Draw draw, Point start, Integer width, Integer height ){
+        String color = "blue";
+        Integer thickness = 19;
+                
+        SvgElement scale = draw.element( "g" );
+        scale.attribute( "class", "scale" );
+
+        SvgElement top = scale.lineAbsolute( draw,
+                thickness - 3,
+                thickness - 3,
+                width + thickness + 3,
+                thickness - 3,
+                color );
+        top.attribute( "stroke-width", "3" );
+
+        SvgElement topBumps = scale.lineAbsolute( draw,
+                thickness - 6,
+                thickness - 6,
+                width + thickness + 6,
+                thickness - 6,
+                color );
+        topBumps.attribute( "stroke-width", "3" );
+        topBumps.attribute( "stroke-dasharray", "48" );
+        topBumps.attribute( "stroke-dashoffset", "66" );
+
+        Integer incrementX = 120;
+        for( Integer place = 24; place < width; place += 48 ) {
+            Integer value = (place - incrementX) / 12;
+            SvgElement number =
+                    scale.textAbsolute( draw, value.toString(), place + thickness, 8, color);
+            number.attribute( "text-anchor", "middle" );
+        }
+
+        SvgElement bottom = scale.lineAbsolute( draw,
+                thickness - 3,
+                height + thickness + 3,
+                width + thickness + 3,
+                height + thickness + 3,
+                color );
+        bottom.attribute( "stroke-width", "3" );
+
+        SvgElement bottomBumps = scale.lineAbsolute( draw,
+                thickness - 6,
+                height + thickness + 6,
+                width + thickness + 6,
+                height + thickness + 6,
+                color );
+        bottomBumps.attribute( "stroke-width", "3" );
+        bottomBumps.attribute( "stroke-dasharray", "48" );
+        bottomBumps.attribute( "stroke-dashoffset", "66" );
+
+        for( Integer place = 24; place < width; place += 48 ) {
+            Integer value = (place - incrementX) / 12;
+            SvgElement number =
+                    scale.textAbsolute( draw, value.toString(), place + thickness, thickness + height + 15, color);
+            number.attribute( "text-anchor", "middle" );
+        }
+
+        SvgElement left = scale.lineAbsolute( draw,
+                thickness - 3,
+                thickness - 3,
+                thickness - 3,
+                height + thickness + 3,
+                color );
+        left.attribute( "stroke-width", "3" );
+
+        SvgElement leftBumps = scale.lineAbsolute( draw,
+                thickness - 6,
+                thickness - 6,
+                thickness - 6,
+                height + thickness + 6,
+                color );
+        leftBumps.attribute( "stroke-width", "3" );
+        leftBumps.attribute( "stroke-dasharray", "48" );
+        leftBumps.attribute( "stroke-dashoffset", "90" );
+
+        for( Integer place = 0; place < width; place += 48 ) {
+            Integer value = place / 12;
+            SvgElement number = scale.textAbsolute( draw, value.toString(), 1, place + thickness, color);
+            number.attribute( "dominant-baseline", "central" );
+            number.attribute( "text-anchor", "left" );
+        }
+
+        SvgElement right = scale.lineAbsolute( draw,
+                width + thickness + 3,
+                thickness - 3,
+                width + thickness + 3,
+                height + thickness + 3,
+                color );
+        right.attribute( "stroke-width", "3" );
+
+        SvgElement rightBumps = scale.lineAbsolute( draw,
+                width + thickness + 6,
+                thickness - 6,
+                width + thickness + 6,
+                height + thickness + 6,
+                color );
+        rightBumps.attribute( "stroke-width", "3" );
+        rightBumps.attribute( "stroke-dasharray", "48" );
+        rightBumps.attribute( "stroke-dashoffset", "90" );
+
+        for( Integer place = 0; place < width; place += 48 ) {
+            Integer value = place / 12;
+            SvgElement number = scale.textAbsolute( draw, value.toString(), width + thickness + 10, place + thickness, color);
+            number.attribute( "dominant-baseline", "central" );
+            number.attribute( "text-anchor", "right" );
+        }
+
+        this.appendChild( scale );
+
+        return scale;
+    }
+
     public SvgElement symbol( Draw draw, String id ) {
         SvgElement element = draw.element("symbol");
         element.attribute("id", id);
@@ -170,10 +292,16 @@ class SvgElement {
             ySet += yOffset;
         }
 
+        SvgElement element = textAbsolute(draw, text, xSet, ySet, color );
+
+        return element;
+    }
+
+    SvgElement textAbsolute ( Draw draw, String text, Integer x, Integer y, String color ) {
         SvgElement element = draw.element("text");
 
-        element.attribute( "x", xSet.toString() );
-        element.attribute( "y", ySet.toString() );
+        element.attribute( "x", x.toString() );
+        element.attribute( "y", y.toString() );
         element.attribute( "fill", color );
         element.attribute( "stroke", "none" );
         element.attribute( "font-family", "serif" );
@@ -183,7 +311,6 @@ class SvgElement {
         element.appendChild( foo );
 
         this.appendChild( element );
-
         return element;
     }
 

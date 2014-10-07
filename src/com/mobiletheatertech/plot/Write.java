@@ -76,9 +76,6 @@ public class Write {
     }
 
     public String generateIndex() throws ReferenceException {
-        Integer width = Venue.Width() + Legend.PlanWidth();
-        width += width / 100 + 5;
-
         String output = "" +
                 "<!DOCTYPE html>\n" +
                 "<head>\n" +
@@ -139,8 +136,11 @@ public class Write {
     }
 
     public String generateDesigner() throws ReferenceException {
-        Integer width = Venue.Width() + Legend.PlanWidth();
+        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
         width += width / 100 + 5;
+
+        Integer height = Venue.Depth();
+        height += SvgElement.OffsetY() * 2 + height / 100;
 
         String output = "" +
                 "<!DOCTYPE html>\n" +
@@ -208,7 +208,7 @@ public class Write {
 //                " id=\"process\" checked=\"checked\" /> Session Chairs\n" +
                 "</form>\n" +
                 "</div>\n" +
-                "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + Venue.Depth() + "\" width=\"" +
+                "<iframe id=\"plan\" src=\"plan.svg\" height=\"" + height + "\" width=\"" +
 //                Venue.Width() + "\" ></iframe>\n" +
 //                "<iframe id=\"plan\" src=\"legend.html\" height=\"" + Venue.Depth() + "\" width=\"" +
                 width + "\" ></iframe>\n" +
@@ -246,26 +246,23 @@ public class Write {
 
     private Draw startFile() throws ReferenceException {
         Draw draw = new Draw();
-
-//        Minder.DrawAllPlan(draw.canvas());
-
-//        Hack.Draw(draw.canvas());
-
         draw.establishRoot();
 
         // Specify the size of the generated SVG so that when it is larger than the display area,
         // scrollbars will be provided.
         Element rootElement = draw.root();
-        Integer width = Venue.Width() + Legend.PlanWidth();
-        width += width / 100;
+
+        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
+        width += width / 100 + 5;
         rootElement.setAttribute("width", width.toString());
+
         Integer height = Venue.Depth();
-        height += height / 100;
+        height += SvgElement.OffsetY() * 2 + height / 100;
         rootElement.setAttribute("height", height.toString());
+
 //        rootElement.setAttribute( "overflow", "visible" );
 
         Text textNode = draw.document().createCDATASection(CSS);
-//                .createTextNode( "\\<![CDATA[" +CSS+"]]\\>");
         SvgElement style = draw.element("style");
         style.attribute("type", "text/css");
         style.appendChild(textNode);

@@ -3,8 +3,11 @@ package com.mobiletheatertech.plot;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
+
+import java.awt.geom.Point2D;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -63,6 +66,7 @@ public class SvgElementTest {
     String path = "Path here";
     String pathOffset = "Path with offset corrections here";
     String color = "blue";
+    String group = "g";
 
     @Test
     public void hasElement() {
@@ -335,6 +339,53 @@ public class SvgElementTest {
 
         baseRectangle(draw, symbol);
     }
+
+
+    @Test
+    public void scaleLine() {
+        Draw draw = new Draw();
+        SvgElement parent = draw.element("defs");
+
+        Point start = new Point( x1, y1, 0 );
+        SvgElement result = parent.scaleLine(draw, start, width, height );
+
+        assertEquals(result.tag(), group);
+        assertEquals(result.attribute("class"), "scale");
+
+        cycle(result.element());
+
+        Node childNode = parent.element().getLastChild();
+        assert( childNode.isSameNode( result.element() ) );
+    }
+
+    private void cycle( Element group ) {
+        NodeList list = group.getChildNodes();
+
+        assertEquals( list.getLength(), 8 );
+        for( int index = 0; index < 4; index++ ){
+            Node node = list.item( index );
+            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+
+                each( element );
+            }
+        }
+        for( int index = 4; index < 8; index++ ) {
+            Node node = list.item(index);
+            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+
+                assertEquals(element.getAttribute("stroke-dasharray"), "48");
+                assertEquals(element.getAttribute("stroke-dashoffset"), "90");
+            }
+        }
+    }
+
+    private void each( Element element ) {
+        assertEquals( element.getTagName(), "line" );
+        assertEquals( element.getAttribute("stroke-width"), "3");
+    }
+
 
     @Test
     public void svgSymbol() throws InvalidXMLException {
