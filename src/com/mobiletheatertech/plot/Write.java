@@ -105,8 +105,11 @@ public class Write {
                 "<a href=\"designer.html\">Designers' View</a>\n" +
                 "</p>\n" +
                 "<p>\n" +
-                "Note that the javascript for the Designers' View does not currently function in Firefox or Chrome.\n" +
-                "It does work just fine in Safari and Rekonq.\n" +
+                "Thanks to Peter & Mary O., the javascript for the Designers' View now works in Firefox and Chrome " +
+                "as well as Safari and Rekonq.\n" +
+                "</p>\n" +
+                "<p>\n" +
+                "I have noticed that Rekonq does not properly display dashed lines.\n" +
                 "</p>\n" +
                 "</body>\n" +
                 "</html>\n";
@@ -150,14 +153,18 @@ public class Write {
                 "<script>\n" +
                 "function show( victim )\n" +
                 "{\n" +
-                "  var links = plan.document.getElementsByClassName( victim );\n" +
+                "  var links = plan.contentDocument ? " +
+                "plan.contentDocument.getElementsByClassName( victim ) : " +
+                "plan.document.getElementsByClassName( victim );\n" +
                 "  for (var i=0; i < links.length; i++) {\n" +
                 "      links[i].setAttribute(\"visibility\", \"visible\");\n" +
                 "  } \n" +
                 "}\n" +
                 "function hide( victim )\n" +
                 "{\n" +
-                "  var links = plan.document.getElementsByClassName( victim );\n" +
+                "  var links = plan.contentDocument ? " +
+                "plan.contentDocument.getElementsByClassName( victim ) : " +
+                "plan.document.getElementsByClassName( victim );\n" +
                 "  for (var i=0; i < links.length; i++) {\n" +
                 "      links[i].setAttribute(\"visibility\", \"hidden\");\n" +
                 "  } \n" +
