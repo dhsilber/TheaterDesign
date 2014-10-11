@@ -53,7 +53,8 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw, View mode, Integer start, Integer width ) throws ReferenceException {
+    public static void Startup( Draw draw, View mode, Integer start, Integer width )
+            throws ReferenceException {
         DRAW = draw;
 
         Element group = draw.document().createElement( "g" );
@@ -127,7 +128,21 @@ public class Legend {
      * @throws ReferenceException
      */
     public static Integer PlanWidth() throws ReferenceException {
-        Double widthAvailable = (Venue.Depth() * 1.54) - Venue.Width() - 5;
+        Double widthAvailable;
+        if ( Venue.Depth() < Venue.Width() ) {
+            widthAvailable = (Venue.Depth() * 1.54)
+                    - Venue.Width() - SvgElement.OffsetX() * 2 - 5 - 2;
+        }
+        else {
+            widthAvailable = (Venue.Depth() * 0.65)
+                    - Venue.Width() - SvgElement.OffsetX() * 2 - 5 - 2;
+        }
+
+        if (widthAvailable < 0 ) {
+            widthAvailable = (Venue.Depth() * 1.54)
+                    - Venue.Width() - SvgElement.OffsetX() * 2 - 5 - 2;
+        }
+
         Integer width = widthAvailable.intValue();
 
         return width;

@@ -270,7 +270,8 @@ public class Venue extends MinderDom implements Legendable {
 
         switch (mode) {
             case PLAN:
-                element = draw.rectangle( draw, 0, 0, width, depth, COLOR );
+                // Don't actually need this. It just muddies up the drawing.
+//                element = draw.rectangle( draw, 0, 0, width, depth, COLOR );
 //                draw.appendRootChild( element );
                 break;
             case SECTION:

@@ -21,10 +21,18 @@ public class Grid extends MinderDom {
 
     static final String CATEGORY = "grid";
 
-    public Grid( Element element ) throws InvalidXMLException{
+    static final Integer SCALETHICKNESS = 19;
+
+    Integer startx = null;
+    Integer starty = null;
+
+    public Grid( Element element ) throws AttributeMissingException, InvalidXMLException{
         super( element );
 
-        SvgElement.Offset( 19, 19 );
+        startx = getOptionalIntegerAttribute( element, "startx" );
+        starty = getOptionalIntegerAttribute( element, "starty" );
+
+        SvgElement.Offset( SCALETHICKNESS + startx, SCALETHICKNESS + starty );
 
         new Category( CATEGORY, this.getClass() );
     }
@@ -41,52 +49,44 @@ public class Grid extends MinderDom {
     @Override
     public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
 
-        Point start = new Point( SvgElement.OffsetX(), SvgElement.OffsetY(), 0 );
-        draw.scaleLine( draw, start, Venue.Width(), Venue.Depth() );
+        Point start = new Point( startx, starty, 0 );
+        Integer width = Venue.Width() + SCALETHICKNESS + startx;
+        Integer depth = Venue.Depth() + SCALETHICKNESS + starty;
+        draw.scaleLine( draw, start, width, depth );
 
-        Integer depth = Venue.Depth();
-        Integer width = Venue.Width();
-
-        for (Integer x = -119; x <= Venue.Width(); x += 48) {
+        Integer startX = SCALETHICKNESS + startx % 48;
+        for (Integer x = startX; x <= width; x += 48) {
             String opacity = ((x % 120) == 1)
-                             ? "0.2"
-                             : "0.1";
+                    ? "0.2"
+                    : "0.1";
             verticalLine( draw, depth, x, opacity );
-//            System.out.println( "V Line: "+ x+ ", Opacity: "+ opacity);
         }
-        for (Integer y = 1; y <= Venue.Depth(); y += 48) {
+
+        Integer startY = SCALETHICKNESS + starty % 48;
+        for (Integer y = startY; y <= depth; y += 48) {
             String opacity = ((y % 120) == 1)
-                             ? "0.2"
-                             : "0.1";
+                    ? "0.2"
+                    : "0.1";
             horizontalLine( draw, width, y, opacity );
-//            System.out.println( "H Line: "+ y+ ", Opacity: "+ opacity );
         }
     }
 
     private void verticalLine( Draw draw, Integer end, Integer x, String opacity ) {
-        line( draw, x, 0, x, end, opacity );
+        line( draw, x, SCALETHICKNESS, x, SCALETHICKNESS + end, opacity );
     }
 
     /*  */
     private void horizontalLine( Draw draw, Integer end, Integer y, String opacity ) {
-        line( draw, 0, y, end, y, opacity );
+        line( draw, SCALETHICKNESS, y, SCALETHICKNESS + end, y, opacity );
     }
 
     /* Generate the SVG XML for a line. */
     private void line( Draw draw, Integer x1, Integer y1, Integer x2, Integer y2,
                               String opacity )
     {
-        SvgElement line = draw.line( draw, x1, y1, x2, y2, "blue" );
-//        line = draw.element( "line" );
-//        line.attribute("x1", x1.toString());
-//        line.attribute("y1", y1.toString());
-//        line.attribute("x2", x2.toString());
-//        line.attribute("y2", y2.toString());
-//
-//        line.attribute("stroke", "blue");
-        line.attribute("stroke-opacity", opacity);
+        SvgElement line = draw.lineAbsolute( draw, x1, y1, x2, y2, "blue" );
 
-//        draw.appendRootChild( line );
+        line.attribute("stroke-opacity", opacity);
     }
 
 }

@@ -139,7 +139,8 @@ public class Write {
     }
 
     public String generateDesigner() throws ReferenceException {
-        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
+//        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
+        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 7;
         width += width / 100 + 5;
 
         Integer height = Venue.Depth();
@@ -226,16 +227,10 @@ public class Write {
     }
 
     private Draw drawPlan() throws MountingException, ReferenceException {
-//        System.out.println( "drawPlan: About to start.");
         Draw draw = startFile();
-
-
-//        Grid.DOM(draw);
-
-        Legend.Startup(draw, View.PLAN, Venue.Width() + 5, Legend.PlanWidth() );
-
-//        System.out.println( "drawPlan: About to MinderDom.DomAllPlan.");
-
+        Legend.Startup(draw, View.PLAN,
+                Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                Legend.PlanWidth() );
         MinderDom.DomAllPlan(draw);
 
 //        System.out.println( "drawPlan: About to Hack.Dom.");
@@ -259,7 +254,7 @@ public class Write {
         // scrollbars will be provided.
         Element rootElement = draw.root();
 
-        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
+        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 5;
         width += width / 100 + 5;
         rootElement.setAttribute("width", width.toString());
 

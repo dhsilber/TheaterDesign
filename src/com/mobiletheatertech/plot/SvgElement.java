@@ -161,107 +161,113 @@ class SvgElement {
     public SvgElement scaleLine( Draw draw, Point start, Integer width, Integer height ){
         String color = "blue";
         Integer thickness = 19;
+        Integer lineSpacer = 3;
+        Integer dashSpacer = 6;
                 
         SvgElement scale = draw.element( "g" );
         scale.attribute( "class", "scale" );
 
         SvgElement top = scale.lineAbsolute( draw,
-                thickness - 3,
-                thickness - 3,
-                width + thickness + 3,
-                thickness - 3,
+                thickness - lineSpacer,
+                thickness - lineSpacer,
+                width + thickness + lineSpacer,
+                thickness - lineSpacer,
                 color );
         top.attribute( "stroke-width", "3" );
 
         SvgElement topBumps = scale.lineAbsolute( draw,
-                thickness - 6,
-                thickness - 6,
-                width + thickness + 6,
-                thickness - 6,
+                thickness - dashSpacer,
+                thickness - dashSpacer,
+                width + thickness + dashSpacer,
+                thickness - dashSpacer,
                 color );
         topBumps.attribute( "stroke-width", "3" );
         topBumps.attribute( "stroke-dasharray", "48" );
-        topBumps.attribute( "stroke-dashoffset", "66" );
+        Integer dashOffsetX = start.x() % 48 - dashSpacer;
+        topBumps.attribute( "stroke-dashoffset", dashOffsetX.toString() );
 
-        Integer incrementX = 120;
-        for( Integer place = 24; place < width; place += 48 ) {
-            Integer value = (place - incrementX) / 12;
+        Integer incrementX = start.x();
+//    System.out.println( "IncrementX: "+ incrementX);
+        for( Integer place = thickness + start.x() % 48; place < width; place += 48 ) {
+            Integer value = (place - thickness - start.x()) / 12;
             SvgElement number =
-                    scale.textAbsolute( draw, value.toString(), place + thickness, 8, color);
+                    scale.textAbsolute( draw, value.toString(), place, 8, color);
             number.attribute( "text-anchor", "middle" );
         }
 
         SvgElement bottom = scale.lineAbsolute( draw,
-                thickness - 3,
-                height + thickness + 3,
-                width + thickness + 3,
-                height + thickness + 3,
+                thickness - lineSpacer,
+                height + thickness + lineSpacer,
+                width + thickness + lineSpacer,
+                height + thickness + lineSpacer,
                 color );
         bottom.attribute( "stroke-width", "3" );
 
         SvgElement bottomBumps = scale.lineAbsolute( draw,
-                thickness - 6,
-                height + thickness + 6,
-                width + thickness + 6,
-                height + thickness + 6,
+                thickness - dashSpacer,
+                height + thickness + dashSpacer,
+                width + thickness + dashSpacer,
+                height + thickness + dashSpacer,
                 color );
         bottomBumps.attribute( "stroke-width", "3" );
         bottomBumps.attribute( "stroke-dasharray", "48" );
-        bottomBumps.attribute( "stroke-dashoffset", "66" );
+        bottomBumps.attribute( "stroke-dashoffset", dashOffsetX.toString() );
 
-        for( Integer place = 24; place < width; place += 48 ) {
-            Integer value = (place - incrementX) / 12;
+        for( Integer place = thickness + start.x() % 48; place < width; place += 48 ) {
+            Integer value = (place - thickness - start.x()) / 12;
             SvgElement number =
-                    scale.textAbsolute( draw, value.toString(), place + thickness, thickness + height + 15, color);
+                    scale.textAbsolute( draw, value.toString(), place, thickness + height + 16, color);
             number.attribute( "text-anchor", "middle" );
         }
 
         SvgElement left = scale.lineAbsolute( draw,
-                thickness - 3,
-                thickness - 3,
-                thickness - 3,
-                height + thickness + 3,
+                thickness - lineSpacer,
+                thickness - lineSpacer,
+                thickness - lineSpacer,
+                height + thickness + lineSpacer,
                 color );
         left.attribute( "stroke-width", "3" );
 
         SvgElement leftBumps = scale.lineAbsolute( draw,
-                thickness - 6,
-                thickness - 6,
-                thickness - 6,
-                height + thickness + 6,
+                thickness - dashSpacer,
+                thickness - dashSpacer,
+                thickness - dashSpacer,
+                height + thickness + dashSpacer,
                 color );
         leftBumps.attribute( "stroke-width", "3" );
         leftBumps.attribute( "stroke-dasharray", "48" );
-        leftBumps.attribute( "stroke-dashoffset", "90" );
+        Integer dashOffsetY = start.y() % 48 - dashSpacer;
+        leftBumps.attribute( "stroke-dashoffset", dashOffsetY.toString() );
 
-        for( Integer place = 0; place < width; place += 48 ) {
-            Integer value = place / 12;
-            SvgElement number = scale.textAbsolute( draw, value.toString(), 1, place + thickness, color);
+        for( Integer place = thickness + start.y() % 48; place < height; place += 48 ) {
+            Integer value = (place - thickness - start.y()) / 12;
+            SvgElement number = scale.textAbsolute( draw, value.toString(), 1, place, color);
             number.attribute( "dominant-baseline", "central" );
             number.attribute( "text-anchor", "left" );
         }
 
         SvgElement right = scale.lineAbsolute( draw,
-                width + thickness + 3,
-                thickness - 3,
-                width + thickness + 3,
-                height + thickness + 3,
+                width + thickness + lineSpacer,
+                thickness - lineSpacer,
+                width + thickness + lineSpacer,
+                height + thickness + lineSpacer,
                 color );
         right.attribute( "stroke-width", "3" );
 
         SvgElement rightBumps = scale.lineAbsolute( draw,
-                width + thickness + 6,
-                thickness - 6,
-                width + thickness + 6,
-                height + thickness + 6,
+                width + thickness + dashSpacer,
+                thickness - dashSpacer,
+                width + thickness + dashSpacer,
+                height + thickness + dashSpacer,
                 color );
         rightBumps.attribute( "stroke-width", "3" );
         rightBumps.attribute( "stroke-dasharray", "48" );
-        rightBumps.attribute( "stroke-dashoffset", "90" );
+        Integer foo = -dashSpacer;
+        rightBumps.attribute( "stroke-dashoffset", foo.toString() );
 
-        for( Integer place = 0; place < width; place += 48 ) {
-            Integer value = place / 12;
-            SvgElement number = scale.textAbsolute( draw, value.toString(), width + thickness + 10, place + thickness, color);
+        for( Integer place = thickness + start.y() % 48; place < height; place += 48 ) {
+            Integer value = (place - thickness - start.y())/ 12;
+            SvgElement number = scale.textAbsolute( draw, value.toString(), width + thickness + 10, place, color);
             number.attribute( "dominant-baseline", "central" );
             number.attribute( "text-anchor", "right" );
         }
