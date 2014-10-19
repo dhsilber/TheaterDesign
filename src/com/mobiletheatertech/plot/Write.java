@@ -381,9 +381,9 @@ public class Write {
         HangPoint.SYMBOLGENERATED = false;
 
         System.err.println();
-        for ( String category : drawing.displayList ) {
-            System.err.println( "For " + drawing.filename() +", " + category + " requested." );
-            if ( category.equals( Legend.CATEGORY )) {
+        for ( String categoryName : drawing.displayList ) {
+            System.err.println( "For " + drawing.filename() +", " + categoryName + " requested." );
+            if ( categoryName.equals( Legend.CATEGORY )) {
                 System.err.println( "For " + drawing.filename() +", special-case Legend processing." );
 //                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
                 Legend.Startup(draw, View.PLAN,
@@ -392,17 +392,29 @@ public class Write {
                 Legend.Callback();
                 continue;
             }
-            Class requested = Category.Select( category );
-            if ( null == requested) {
-                System.err.println( "For " + drawing.filename() +", " + category + " is not a Category." );
+            System.err.println( "For " + drawing.filename() +", regular processing." );
+            Category category = Category.Select( categoryName );
+            if ( null == category ) {
+                System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
                 continue;
             }
-            System.err.println( "For " + drawing.filename() +", " + category + " processing." );
+            Class requested = category.clazz();
+            String layer = category.layer();
+            System.err.println( "For " + drawing.filename() +", " + categoryName + " processing." );
             for ( Object thing : MinderDom.List() ) {
                 if ( requested.equals( thing.getClass() ) ) {
-                    System.err.println( "For " + drawing.filename() +", found a " + category + " to process." );
+                    System.err.println( "For " + drawing.filename() +", found a " + categoryName + " to process." );
                     MinderDom item = (MinderDom) thing;
-                    item.dom( draw, View.PLAN );
+                    if( Device.class.isInstance( item ) )
+                    {
+                        Device device = (Device) item;
+                        if ( null != layer && layer.equals( device.layer() ) ) {
+                            device.dom( draw, View.PLAN );
+                        }
+                    }
+                    else {
+                        item.dom(draw, View.PLAN);
+                    }
                 }
             }
         }

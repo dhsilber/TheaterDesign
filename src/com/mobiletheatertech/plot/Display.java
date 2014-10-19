@@ -13,6 +13,7 @@ public class Display extends Elemental {
         super( element );
 
         category = getStringAttribute( element, "category" );
+        new Category( category, Device.class, category );
     }
 
     public String category() {

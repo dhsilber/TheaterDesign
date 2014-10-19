@@ -9,23 +9,30 @@ import java.util.HashMap;
  * Created by dhs on 9/9/14.
  */
 public class Category {
-    private static HashMap<String, Class> CATEGORYLIST = new HashMap<>();
+    private static HashMap<String, Category> CATEGORYLIST = new HashMap<>();
 
     private String name = null;
+    private Class clazz = null;
+    private String layer = null;
 
-    public Category( String name, Class clazz  ) {
-        this.name = name;
-
-        CATEGORYLIST.put( name, clazz );
+    public Category( String name, Class clazz ) {
+        init(name, clazz);
     }
 
-    public static Class Select( String name ) {
-//        for( String key : CATEGORYLIST.keySet() ) {
-//            if (key.equals( name )) {
-                return CATEGORYLIST.get( name );
-//            }
-//        }
-//        return null;
+    public Category( String name, Class clazz, String layer ) {
+        this.layer = layer;
+        init( name, clazz );
+    }
+
+    void init(String name, Class clazz) {
+        this.name = name;
+        this.clazz = clazz;
+
+        CATEGORYLIST.put(name, this);
+    }
+
+    public static Category Select( String name ) {
+        return CATEGORYLIST.get( name );
     }
 
     static int size() {
@@ -33,10 +40,18 @@ public class Category {
     }
 
     static Boolean Contains (Class clazz) {
-        return CATEGORYLIST.containsValue( clazz );
+        return CATEGORYLIST.containsValue(clazz);
     }
 
     public String name() {
         return name;
+    }
+
+    public Class clazz() {
+        return clazz;
+    }
+
+    public String layer() {
+        return layer;
     }
 }
