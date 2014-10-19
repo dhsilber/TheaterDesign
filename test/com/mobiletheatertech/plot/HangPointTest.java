@@ -23,6 +23,9 @@ public class HangPointTest {
 
     Element element = null;
 
+    Double x = 296.0;
+    Double y = 320.0;
+
     public HangPointTest() {
     }
 
@@ -44,8 +47,8 @@ public class HangPointTest {
         HangPoint hangPoint = new HangPoint( element );
 
         assertEquals( TestHelpers.accessString( hangPoint, "id" ), "Blather" );
-        assertEquals( TestHelpers.accessInteger( hangPoint, "x" ), (Integer) 296 );
-        assertEquals( TestHelpers.accessInteger( hangPoint, "y" ), (Integer) 320 );
+        assertEquals( TestHelpers.accessDouble( hangPoint, "x" ), x );
+        assertEquals( TestHelpers.accessDouble( hangPoint, "y" ), y );
     }
 
     @Test
@@ -300,7 +303,7 @@ public class HangPointTest {
         NodeList preGroup = draw.root().getElementsByTagName( "g" );
         assertEquals( preGroup.getLength(), 1 );
 
-        PagePoint startPoint = new PagePoint( 20, 10 );
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
         PagePoint endPoint = hangPoint.domLegendItem( draw, startPoint );
 
 //        NodeList group = draw.root().getElementsByTagName( "g" );
@@ -319,9 +322,9 @@ public class HangPointTest {
         Node useNode = useList.item(0);
         assertEquals(useNode.getNodeType(), Node.ELEMENT_NODE);
         Element useElement = (Element) useNode;
-        Integer startX = startPoint.x() + HangPoint.RADIUS;
-        Integer startY = startPoint.y() + HangPoint.RADIUS;
-        Integer endX = startPoint.x() + 12;
+        Double startX = startPoint.x() + HangPoint.RADIUS;
+        Double startY = startPoint.y() + HangPoint.RADIUS;
+        Integer endX = startPoint.x().intValue() + 12;
         assertEquals(useElement.getAttribute("x"), startX.toString() );
         assertEquals(useElement.getAttribute("y"), startY.toString());
         assertEquals(useElement.getAttribute("xlink:href"), "#"+HangPoint.SYMBOL );
@@ -331,8 +334,8 @@ public class HangPointTest {
         Node textNode = textList.item(0);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
         Element textElement = (Element) textNode;
-        Integer x = startPoint.x() + 20;
-        Integer y = startPoint.y() + 3;
+        Double x = startPoint.x() + 20;
+        Double y = startPoint.y() + 3;
         assertEquals(textElement.getAttribute("x"), x.toString() );
         assertEquals(textElement.getAttribute("y"), y.toString() );
         assertEquals(textElement.getAttribute("fill"), "black" );
@@ -366,8 +369,8 @@ public class HangPointTest {
 
         element = new IIOMetadataNode( "hangpoint" );
         element.setAttribute( "id", "Blather" );
-        element.setAttribute( "x", "296" );
-        element.setAttribute( "y", "320" );
+        element.setAttribute( "x", x.toString() );
+        element.setAttribute( "y", y.toString() );
     }
 
     @AfterMethod

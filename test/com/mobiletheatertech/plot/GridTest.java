@@ -85,10 +85,10 @@ public class GridTest {
         NodeList list = draw.root().getElementsByTagName( "line" );
 //        assertEquals( list.getLength(), 17 );
 
-        Integer x1 = 1 + SvgElement.OffsetX();
-        Integer y1 = SvgElement.OffsetY();
-        Integer x2 = 1 + SvgElement.OffsetX();
-        Integer y2 = 401 + SvgElement.OffsetY();
+        Double x1 = 1 + SvgElement.OffsetX();
+        Double y1 = SvgElement.OffsetY();
+        Double x2 = 1 + SvgElement.OffsetX();
+        Double y2 = 401 + SvgElement.OffsetY();
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;

@@ -149,13 +149,13 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
 //        use.setAttribute( "x", start.x().toString() );
 //        use.setAttribute( "y", start.y().toString() );
         if (length > width) {
-            Integer transformX = start.x() + SvgElement.OffsetX();
-            Integer transformY = start.y() + SvgElement.OffsetY();
+            Double transformX = start.x() + SvgElement.OffsetX();
+            Double transformY = start.y() + SvgElement.OffsetY();
             use.attribute( "transform", "rotate(-90," + transformX + "," + transformY + ")" );
         }
 
-        Integer x = start.x() + Legend.TEXTOFFSET;
-        Integer y = start.y() + 3;
+        Double x = start.x() + Legend.TEXTOFFSET;
+        Double y = start.y() + 3;
         SvgElement text = draw.text( draw, id, x, y, COLOR );
 //        draw.element("text");
 //        text.setAttribute( "x", x.toString() );

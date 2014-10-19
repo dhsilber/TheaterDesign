@@ -112,6 +112,7 @@ public abstract class MinderDom extends Verifier {
      */
     public abstract void dom( Draw draw, View mode ) throws MountingException, ReferenceException;
 
+    // TODO Move this to SvgElement
     public static SvgElement svgClassGroup( Draw draw,
                                     String className ) {
         SvgElement element = draw.element("g");

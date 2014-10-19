@@ -99,7 +99,7 @@ public class ChairBlock extends MinderDom {
             depth = perimeterShape.depth();
         }
 
-        new Layer(LAYERTAG, LAYERNAME);
+        new Layer(LAYERTAG, LAYERNAME, COLOR );
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ChairBlock extends MinderDom {
                     continue;
                 }
 
-                SvgElement use = group.use( draw, CHAIR, xValue.intValue(), yValue.intValue() );
+                SvgElement use = group.use( draw, CHAIR, xValue, yValue );
 //                draw.element("use");
 //                use.setAttribute("xlink:href", "#chair");
 ////                System.err.println( "x: "+x+", columnIndex: "+columnIndex+", xValue: "+xValue );

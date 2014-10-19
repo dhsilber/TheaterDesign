@@ -34,13 +34,15 @@ public class Zone extends MinderDom {
      */
     public static final String LAYERTAG = "zone";
 
-    private Integer x;
-    private Integer y;
-    //    private Integer z;
-    private Integer r;
+    static final String COLORDEFAULT = "teal";
 
-    private Integer xDraw;
-    private Integer yDraw;
+    private Double x;
+    private Double y;
+    //    private Integer z;
+    private Double r;
+
+    private Double xDraw;
+    private Double yDraw;
     //    private Integer zDraw;
 //    private Integer rDraw;
     private String color;
@@ -77,16 +79,16 @@ public class Zone extends MinderDom {
         super(element);
 
         id = getStringAttribute(element, "id");
-        x = getIntegerAttribute(element, "x");
-        y = getIntegerAttribute(element, "y");
+        x = getDoubleAttribute(element, "x");
+        y = getDoubleAttribute(element, "y");
 //        z=getIntegerAttribute( element, "z" );
-        r = getIntegerAttribute(element, "r");
+        r = getDoubleAttribute(element, "r");
         color = getOptionalStringAttribute(element, "color");
         if (color.equals("")) {
-            color = "teal";
+            color = COLORDEFAULT;
         }
 
-        new Layer(LAYERTAG, LAYERNAME);
+        new Layer(LAYERTAG, LAYERNAME, COLORDEFAULT );
     }
 
     /**
@@ -94,7 +96,7 @@ public class Zone extends MinderDom {
      *
      * @return x drawing coordinate
      */
-    public Integer drawX() {
+    public Double drawX() {
         return xDraw;
     }
 
@@ -103,7 +105,7 @@ public class Zone extends MinderDom {
      *
      * @return y drawing coordinate
      */
-    public Integer drawY() {
+    public Double drawY() {
         return yDraw;
     }
 
@@ -114,7 +116,7 @@ public class Zone extends MinderDom {
     @Override
     public void verify() {
         if (Proscenium.Active()) {
-            Point point = Proscenium.Locate(new Point(x, y, 48));
+            Point point = Proscenium.Locate(new Point(x, y, 48.0));
             xDraw = point.x();
             yDraw = point.y();
         } else {
@@ -161,8 +163,8 @@ public class Zone extends MinderDom {
 //        group.appendChild(circle);
 
 
-        Integer textX = xDraw - (r / 5);
-        Integer textY = yDraw + (r / 5);
+        Double textX = xDraw - (r / 5);
+        Double textY = yDraw + (r / 5);
         SvgElement text = group.text( draw, id, textX, textY, color );
 //        draw.element("text");
 //        text.setAttribute("x", textX.toString());

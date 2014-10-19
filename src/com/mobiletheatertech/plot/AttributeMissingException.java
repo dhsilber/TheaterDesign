@@ -34,4 +34,13 @@ public class AttributeMissingException extends Exception {
     public AttributeMissingException( StringBuilder message ) {
         super( message.toString() );
     }
+
+    /**
+     * Constructs an instance of <code>AttributeMissingException</code> with a specified message.
+     *
+     * @param message   pre-constructed message
+     */
+    public AttributeMissingException( String message ) {
+        super( message.toString() );
+    }
 }

@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 public class UserLayer extends ElementalLister {
 
     private String name = null;
+    private String color = null;
 
 //    /**
 //     * Extract the Layer elements from a list of XML nodes and create {@code
@@ -46,8 +47,9 @@ public class UserLayer extends ElementalLister {
 
         id = getStringAttribute( element, "id" );
         name = getStringAttribute( element, "name" );
+        color = getStringAttribute( element, "color" );
 
-        new Layer( id, name );
+        new Layer( id, name, color );
     }
 
 //    @Override

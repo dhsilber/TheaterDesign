@@ -7,6 +7,8 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 
 /**
+ * Provides a generic item that can describe a real-world device.
+ *
  * Abstract superclass for all of the represented types of components.
  * <p>
  * The <code>*Template</code> classes each describe a prototype for devices

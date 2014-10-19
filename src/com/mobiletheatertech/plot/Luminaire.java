@@ -124,8 +124,8 @@ public class Luminaire extends MinderDom {
             rotation = new Double(rotate);
         }
 
-        new Layer(LAYERTAG, LAYERNAME);
-        new Layer(INFOLAYERTAG, INFOLAYERNAME);
+        new Layer(LAYERTAG, LAYERNAME, COLOR );
+        new Layer(INFOLAYERTAG, INFOLAYERNAME, COLOR );
 
         GearList.Add(type);
     }
@@ -175,8 +175,8 @@ public class Luminaire extends MinderDom {
         if (null == zone) {
             return 0;
         }
-        int oppositeLength = point.y() - zone.drawY();
-        int adjacentLength = point.x() - zone.drawX();
+        Double oppositeLength = point.y() - zone.drawY();
+        Double adjacentLength = point.x() - zone.drawX();
         Double angle = Math.atan2(oppositeLength, adjacentLength);
         angle = Math.toDegrees(angle);
 
@@ -202,10 +202,10 @@ public class Luminaire extends MinderDom {
         Truss truss = null;
 
 //        System.out.println( "Luminaire.dom: About to draw id: "+id+" type: "+type+" on: "+ on+" location: "+location+".");
-        Integer x;
-        Integer y;
+        Double x;
+        Double y;
 
-        Integer z = Venue.Height() - point.z();
+        Double z = Venue.Height() - point.z();
 
         SvgElement group = svgClassGroup( draw, LAYERTAG );
 //        draw.element("g");
@@ -231,8 +231,8 @@ public class Luminaire extends MinderDom {
                 // See verify() for the transform that rotates the position of the luminaire to
                 // keep it with a truss that has been rotated.
                 String transform;
-                Integer transformX = point.x() + SvgElement.OffsetX();
-                Integer transformY = point.y() + SvgElement.OffsetY();
+                Double transformX = point.x() + SvgElement.OffsetX();
+                Double transformY = point.y() + SvgElement.OffsetY();
                 if ( !target.equals("") ) {
                     // With this I lose the alignment with zones. :-(
                     Integer rotation = alignWithZone(point);
@@ -340,27 +340,27 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
         boolean farSide = (null != truss && truss.farSide( location ) );
 
         int direction = 1;
-        int hexagonYOffset = 0;
-        int rectangleYOffset = 0;
-        int circleYOffset = 0;
-        int dimmerTextYOffset = 0;
-        int channelTextYOffset = 0;
+        Double hexagonYOffset = 0.0;
+        Double rectangleYOffset = 0.0;
+        Double circleYOffset = 0.0;
+        Double dimmerTextYOffset = 0.0;
+        Double channelTextYOffset = 0.0;
         if (View.TRUSS == mode && farSide ) {
             direction = -1;
-            hexagonYOffset = 7;
-            rectangleYOffset = 12;
-            dimmerTextYOffset = -4;
-            circleYOffset = 6;
+            hexagonYOffset = 7.0;
+            rectangleYOffset = 12.0;
+            dimmerTextYOffset = -4.0;
+            circleYOffset = 6.0;
         }
 
-        Integer dimmerTextY;
-        Integer dimmerRectangleY;
-        Integer channelCircleY;
-        Integer channelTextY;
-        Integer dimmerTextX;
-        Integer circuitTextX=0;
-        Integer circuitTextY=0;
-        Integer dimmerRectangleWidth;
+        Double dimmerTextY;
+        Double dimmerRectangleY;
+        Double channelCircleY;
+        Double channelTextY;
+        Double dimmerTextX;
+        Double circuitTextX=0.0;
+        Double circuitTextY=0.0;
+        Double dimmerRectangleWidth;
         Integer unitTextX;
         Integer unitTextY;
         Integer colorTextX;
@@ -432,7 +432,7 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
 
         // Rectangle for dimmer
         x = point.x() - 9;
-        dimmerRectangleWidth = 18;
+        dimmerRectangleWidth = 18.0;
 //        if (3 < textDimmer.getLength()) {
 //            dimmerRectangleWidth = 30;
 //            x -= 4;
@@ -464,7 +464,7 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
 //        channelCircle.setAttribute("cy", channelCircleY.toString());
 //        infogroup.appendChild(channelCircle);
 
-        Integer channelTextX = point.x();
+        Double channelTextX = point.x();
 //        channelText.setAttribute("x", channelTextX.toString());
 //        channelText.setAttribute("y", channelTextY.toString());
 //        infogroup.appendChild(channelText);
@@ -670,7 +670,7 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
         }
 
         SvgElement dimmerRectangle = infogroup.rectangle(
-                draw, x, dimmerRectangleY, dimmerRectangleWidth, 11, COLOR );
+                draw, x, dimmerRectangleY, dimmerRectangleWidth, 11.0, COLOR );
 //        infogroup.appendChild(dimmerRectangle);
         SvgElement dimmerText;
         switch (Venue.Circuiting()) {
@@ -686,7 +686,7 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
         }
 //        infogroup.appendChild(dimmerText);
 
-        SvgElement channelCircle = infogroup.circle( draw, x, channelCircleY, 8, COLOR );
+        SvgElement channelCircle = infogroup.circle( draw, x, channelCircleY, 8.0, COLOR );
 //        infogroup.appendChild(channelCircle);
         SvgElement channelText =
                 infogroup.text( draw, channel, channelTextX, channelTextY, COLOR );

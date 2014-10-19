@@ -30,12 +30,12 @@ public class TableTest {
     Element element = null;
 
     private String tableName = "ID of table";
-    private Integer width = 60;
-    private Integer depth = 36;
-    private Integer height = 32;
-    private Integer x = 12;
-    private Integer y = 34;
-    private Integer z = 0;
+    private Double width = 60.0;
+    private Double depth = 36.0;
+    private Double height = 32.0;
+    private Double x = 12.0;
+    private Double y = 34.0;
+    private Double z = 0.0;
 
 
     @Test
@@ -395,8 +395,8 @@ public class TableTest {
         Solid solid = new Solid( 3,4,5 );
         Point place = surface.location( solid );
 
-        assertEquals( (Integer)place.x, x );
-        assertEquals( (Integer)place.y, y );
+        assertEquals( place.x, x );
+        assertEquals( place.y, y );
         assertEquals( place.z, z+height );
     }
 

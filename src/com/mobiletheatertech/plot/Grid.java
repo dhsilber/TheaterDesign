@@ -21,16 +21,16 @@ public class Grid extends MinderDom {
 
     static final String CATEGORY = "grid";
 
-    static final Integer SCALETHICKNESS = 19;
+    static final Double SCALETHICKNESS = 19.0;
 
-    Integer startx = null;
-    Integer starty = null;
+    Double startx = null;
+    Double starty = null;
 
     public Grid( Element element ) throws AttributeMissingException, InvalidXMLException{
         super( element );
 
-        startx = getOptionalIntegerAttribute( element, "startx" );
-        starty = getOptionalIntegerAttribute( element, "starty" );
+        startx = getOptionalDoubleAttribute( element, "startx" );
+        starty = getOptionalDoubleAttribute( element, "starty" );
 
         SvgElement.Offset( SCALETHICKNESS + startx, SCALETHICKNESS + starty );
 
@@ -49,21 +49,21 @@ public class Grid extends MinderDom {
     @Override
     public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
 
-        Point start = new Point( startx, starty, 0 );
-        Integer width = Venue.Width() + SCALETHICKNESS + startx;
-        Integer depth = Venue.Depth() + SCALETHICKNESS + starty;
+        Point start = new Point( startx, starty, 0.0 );
+        Double width = Venue.Width() + SCALETHICKNESS + startx.intValue();
+        Double depth = Venue.Depth() + SCALETHICKNESS + starty;
         draw.scaleLine( draw, start, width, depth );
 
-        Integer startX = SCALETHICKNESS + startx % 48;
-        for (Integer x = startX; x <= width; x += 48) {
+        Double startX = SCALETHICKNESS + startx % 48;
+        for (Double x = startX; x <= width; x += 48) {
             String opacity = ((x % 120) == 1)
                     ? "0.2"
                     : "0.1";
             verticalLine( draw, depth, x, opacity );
         }
 
-        Integer startY = SCALETHICKNESS + starty % 48;
-        for (Integer y = startY; y <= depth; y += 48) {
+        Double startY = SCALETHICKNESS + starty % 48;
+        for (Double y = startY; y <= depth; y += 48) {
             String opacity = ((y % 120) == 1)
                     ? "0.2"
                     : "0.1";
@@ -71,17 +71,17 @@ public class Grid extends MinderDom {
         }
     }
 
-    private void verticalLine( Draw draw, Integer end, Integer x, String opacity ) {
+    private void verticalLine( Draw draw, Double end, Double x, String opacity ) {
         line( draw, x, SCALETHICKNESS, x, SCALETHICKNESS + end, opacity );
     }
 
     /*  */
-    private void horizontalLine( Draw draw, Integer end, Integer y, String opacity ) {
+    private void horizontalLine( Draw draw, Double end, Double y, String opacity ) {
         line( draw, SCALETHICKNESS, y, SCALETHICKNESS + end, y, opacity );
     }
 
     /* Generate the SVG XML for a line. */
-    private void line( Draw draw, Integer x1, Integer y1, Integer x2, Integer y2,
+    private void line( Draw draw, Double x1, Double y1, Double x2, Double y2,
                               String opacity )
     {
         SvgElement line = draw.lineAbsolute( draw, x1, y1, x2, y2, "blue" );

@@ -196,12 +196,12 @@ public class TestResets {
      * @throws IllegalAccessException if one of the fields cannot be accessed.
      */
     public static void PointReset() throws NoSuchFieldException, IllegalAccessException {
-        TestResets.ZeroInt( Point.class, "SmallX" );
-        TestResets.ZeroInt( Point.class, "SmallY" );
-        TestResets.ZeroInt( Point.class, "SmallZ" );
-        TestResets.ZeroInt( Point.class, "LargeX" );
-        TestResets.ZeroInt( Point.class, "LargeY" );
-        TestResets.ZeroInt( Point.class, "LargeZ" );
+        TestResets.ZeroDouble(Point.class, "SmallX");
+        TestResets.ZeroDouble(Point.class, "SmallY");
+        TestResets.ZeroDouble(Point.class, "SmallZ");
+        TestResets.ZeroDouble(Point.class, "LargeX");
+        TestResets.ZeroDouble(Point.class, "LargeY");
+        TestResets.ZeroDouble(Point.class, "LargeZ");
     }
 
     public static void ProsceniumReset() throws NoSuchFieldException, IllegalAccessException {
@@ -271,9 +271,17 @@ public class TestResets {
     private static void ZeroInt( Class clazz, String fieldName )
             throws NoSuchFieldException, IllegalAccessException
     {
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible( true );
+        field.setInt(clazz, 0);
+    }
+
+    private static void ZeroDouble( Class clazz, String fieldName )
+            throws NoSuchFieldException, IllegalAccessException
+    {
         Field field = clazz.getDeclaredField( fieldName );
         field.setAccessible( true );
-        field.setInt( clazz, 0 );
+        field.set( clazz, new Double( 0.0 ) );
     }
 
     public static void WallReset()

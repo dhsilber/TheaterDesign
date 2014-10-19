@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * <p/>
  * Initially this will be {@code Table} objects.
  * <p/>
- * The id attribute is not requiired, but if one is not provided, the
+ * The id attribute is not required, but if one is not provided, the
  * resulting Stackable cannot be searched for or stacked on.
  *
  * Created by dhs on 7/3/14.
@@ -21,7 +21,7 @@ public abstract class Stackable extends MinderDom {
     static ArrayList<Stackable> STACKABLELIST = new ArrayList<>();
 
     // List of things on a Stackable instance.
-    ArrayList<Thing> things = new ArrayList<Thing>();
+    ArrayList<Thing> thingsOnThis = new ArrayList<Thing>();
 
     /**
      * Find a specific {@code Stackable} from all that have been constructed.

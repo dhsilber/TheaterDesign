@@ -26,7 +26,7 @@ public class LegendTest {
         @Override
         public PagePoint domLegendItem( Draw draw, PagePoint start ) {
             calledBack++;
-            return new PagePoint( 12, 13 );
+            return new PagePoint( 12.0, 13.0 );
         }
     }
 
@@ -59,7 +59,7 @@ public class LegendTest {
         Draw draw = new Draw();
         draw.establishRoot();
 
-        Legend.Startup( draw, View.PLAN, 100, 100 );
+        Legend.Startup( draw, View.PLAN, 100.0, 100 );
 //        TestHelpers.setStaticObject(
 //                "com.mobiletheatertech.plot.Legend", "INITIAL", new PagePoint( 1, 2 ) );
 

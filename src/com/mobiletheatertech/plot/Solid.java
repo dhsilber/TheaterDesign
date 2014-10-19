@@ -13,17 +13,17 @@ public class Solid
 		this.depth = depth;
 	}
 	
-	public Double getHeight()
+	public Double height()
 	{
 		return height;
 	}
 	
-	public Double getWidth()
+	public Double width()
 	{
 		return width;
 	}
 	
-	public Double getDepth()
+	public Double depth()
 	{
 		return depth;
 	}

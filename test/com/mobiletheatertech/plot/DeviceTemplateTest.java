@@ -21,6 +21,7 @@ public class DeviceTemplateTest {
     private final Double depth = 4.7;
     private final Double height = 2.3;
     private final String layerTag = "Device_Layer";
+    private final String layerColor = "color";
 
 //    private Solid solid = null;
 
@@ -114,26 +115,26 @@ public class DeviceTemplateTest {
     public void solidWidth() throws Exception {
         DeviceTemplate deviceTemplate=new DeviceTemplate( element );
         Solid solid = deviceTemplate.getSolid();
-        assertEquals(solid.getWidth(), width);
+        assertEquals(solid.width(), width);
     }
 
     @Test
     public void solidDepth() throws Exception {
         DeviceTemplate deviceTemplate=new DeviceTemplate( element );
         Solid solid = deviceTemplate.getSolid();
-        assertEquals(solid.getDepth(), depth);
+        assertEquals(solid.depth(), depth);
     }
 
     @Test
     public void solidHeight() throws Exception {
         DeviceTemplate deviceTemplate=new DeviceTemplate( element );
         Solid solid = deviceTemplate.getSolid();
-        assertEquals( solid.getHeight(), height );
+        assertEquals( solid.height(), height );
     }
 
     @Test
     public void layerDefined() throws Exception {
-        new Layer( layerTag, "whatever" );
+        new Layer( layerTag, "whatever", layerColor );
         element.setAttribute( "layer", layerTag );
 
         DeviceTemplate deviceTemplate=new DeviceTemplate( element );
@@ -141,7 +142,7 @@ public class DeviceTemplateTest {
 
 //TODO        this should check that the layer is activated
         Solid solid = deviceTemplate.getSolid();
-        assertEquals( solid.getHeight(), height );
+        assertEquals( solid.height(), height );
     }
 
     @Test
@@ -154,7 +155,7 @@ public class DeviceTemplateTest {
         deviceTemplate.verify();
 
         Solid solid = deviceTemplate.getSolid();
-        assertEquals( solid.getHeight(), height );
+        assertEquals( solid.height(), height );
     }
 
     @Test

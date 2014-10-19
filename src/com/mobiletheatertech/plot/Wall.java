@@ -28,10 +28,10 @@ public class Wall extends MinderDom {
 
     private static final String COLOR = "black";
 
-    private Integer x1 = null;
-    private Integer y1 = null;
-    private Integer x2 = null;
-    private Integer y2 = null;
+    private Double x1 = null;
+    private Double y1 = null;
+    private Double x2 = null;
+    private Double y2 = null;
 
     // keep a pair of references to adjacent walls
     private Wall next = null;
@@ -57,10 +57,10 @@ public class Wall extends MinderDom {
     public Wall( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        x1 = getIntegerAttribute( element, "x1" );
-        y1 = getIntegerAttribute( element, "y1" );
-        x2 = getIntegerAttribute( element, "x2" );
-        y2 = getIntegerAttribute( element, "y2" );
+        x1 = getDoubleAttribute( element, "x1" );
+        y1 = getDoubleAttribute( element, "y1" );
+        x2 = getDoubleAttribute( element, "x2" );
+        y2 = getDoubleAttribute( element, "y2" );
 
         WallList.add( this );
 
@@ -215,7 +215,7 @@ public class Wall extends MinderDom {
         Wall previousWall  = null;
         for( Wall wall : WallList ){
             Point closestPoint = Point.GetClosestPointOnSegment(
-                    wall.x1, wall.y1, wall.x2, wall.y2, point.x(), point.y() );
+                    wall.x1 * 1.0, wall.y1, wall.x2 * 1.0, wall.y2, point.x(), point.y() );
             double distance = closestPoint.distance( point );
             if( distance < previousDistance ) {
                 previousDistance = distance;
@@ -233,8 +233,8 @@ public class Wall extends MinderDom {
     public Point nearestPointNearWall( Point point ) throws ReferenceException {
         Point found = Point.GetClosestPointOnSegment( x1, y1, x2, y2, point.x(), point.y() );
 
-        int centerX = Venue.Width() / 2;
-        int centerY = Venue.Depth() / 2;
+        Double centerX = Venue.Width() / 2;
+        Double centerY = Venue.Depth() / 2;
         if ( x1.equals( x2 )) {
             if ( centerX > found.x() ) {
                 return new Point( found.x() + space, found.y(), found.z() );
@@ -268,16 +268,16 @@ public class Wall extends MinderDom {
             }
         }
 
-        int centerX = Venue.Width() / 2;
-        int centerY = Venue.Depth() / 2;
+        Double centerX = Venue.Width() / 2;
+        Double centerY = Venue.Depth() / 2;
 
         for( Wall wall : WallList ) {
             if ( this == wall ) { continue; }
 
 //System.out.println("Wall.verify(): " + this.toString() + ": " + wall.toString());
 
-            Integer x = null;
-            Integer y = null;
+            Double x = null;
+            Double y = null;
 
             if ( this.x1.equals( wall.x1 ) && this.y1.equals( wall.y1 ) ) {
                 previous = wall;
@@ -287,7 +287,7 @@ public class Wall extends MinderDom {
                 y = (centerY > y1)
                         ? y1 + space
                         : y1 - space;
-                previousCornerPoint = new Point( x, y, 0 );
+                previousCornerPoint = new Point( x, y, 0.0 );
             }
             else if ( this.x1.equals( wall.x2 ) && this.y1.equals( wall.y2 ) ) {
                 previous = wall;
@@ -297,7 +297,7 @@ public class Wall extends MinderDom {
                 y = (centerY > y1)
                         ? y1 + space
                         : y1 - space;
-                previousCornerPoint = new Point( x, y, 0 );
+                previousCornerPoint = new Point( x, y, 0.0 );
             }
 
             if ( this.x2.equals( wall.x1 ) && this.y2.equals( wall.y1 ) ) {
@@ -308,7 +308,7 @@ public class Wall extends MinderDom {
                 y = (centerY > y2)
                         ? y2 + space
                         : y2 - space;
-                nextCornerPoint = new Point( x, y, 0 );
+                nextCornerPoint = new Point( x, y, 0.0 );
             }
             else if ( this.x2.equals( wall.x2 ) && this.y2.equals( wall.y2 ) ) {
                 next = wall;
@@ -318,7 +318,7 @@ public class Wall extends MinderDom {
                 y = (centerY > y2)
                         ? y2 + space
                         : y2 - space;
-                nextCornerPoint = new Point( x, y, 0 );
+                nextCornerPoint = new Point( x, y, 0.0 );
             }
         }
 //        System.out.print("Wall.verify() Done.  " + this.toString());
@@ -348,8 +348,8 @@ public class Wall extends MinderDom {
 
         {
             if (x1.equals( x2 )) {
-                Integer yOne = y1;
-                Integer yTwo;
+                Double yOne = y1;
+                Double yTwo;
                 while (iterator.hasNext()) {
                     Opening opening = iterator.next();
                     yTwo = y1 + opening.start();
@@ -381,8 +381,8 @@ public class Wall extends MinderDom {
 //                draw.appendRootChild( line );
             }
             else {
-                Integer xOne = x1;
-                Integer xTwo;
+                Double xOne = x1;
+                Double xTwo;
                 while (iterator.hasNext()) {
                     Opening opening = iterator.next();
                     xTwo = x1 + opening.start();

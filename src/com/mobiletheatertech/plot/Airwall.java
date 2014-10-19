@@ -17,7 +17,7 @@ import java.awt.geom.Line2D;
  */
 public class Airwall extends MinderDom {
 
-    Integer depth = null;
+    Double depth = null;
 
     static final String COLOR = "dark gray";
 
@@ -33,7 +33,7 @@ public class Airwall extends MinderDom {
     {
         super( element );
 
-        depth = getIntegerAttribute( element, "depth" );
+        depth = getDoubleAttribute( element, "depth" );
 
         if (depth <= 0) {
             throw new LocationException( "Airwall instance is at too small a depth" );
@@ -68,11 +68,11 @@ public class Airwall extends MinderDom {
     @Override
     public void dom( Draw draw, View mode ) throws ReferenceException {
         SvgElement element = null;
-        int width = Venue.Width();
+        Double width = Venue.Width();
 
         switch (mode) {
             case PLAN:
-                element = draw.line( draw, 0, depth, width, depth, COLOR )
+                element = draw.line( draw, 0.0, depth, width * 1.0, depth, COLOR )
 // TODO Add stroke-width
 //                        .lineWidth( 2 )
                 ;

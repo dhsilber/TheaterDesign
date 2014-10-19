@@ -1,11 +1,8 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 /**
@@ -20,11 +17,11 @@ import java.util.ArrayList;
  */
 public class Stage extends Stackable implements Legendable {
 
-    private Integer width = null;
-    private Integer depth = null;
-    private Integer x = null;
-    private Integer y = null;
-    private Integer z = null;
+    private Double width = null;
+    private Double depth = null;
+    private Double x = null;
+    private Double y = null;
+    private Double z = null;
 
     @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
@@ -49,17 +46,17 @@ public class Stage extends Stackable implements Legendable {
     {
         super( element );
 
-        width = getIntegerAttribute( element, "width" );
-        depth = getIntegerAttribute( element, "depth" );
-        x = getIntegerAttribute( element, "x" );
-        y = getIntegerAttribute( element, "y" );
-        z = getIntegerAttribute( element, "z" );
+        width = getDoubleAttribute(element, "width");
+        depth = getDoubleAttribute(element, "depth");
+        x = getDoubleAttribute(element, "x");
+        y = getDoubleAttribute(element, "y");
+        z = getDoubleAttribute(element, "z");
 
         if (0 >= width) throw new SizeException( "Stage", "width" );
         if (0 >= depth) throw new SizeException( "Stage", "depth" );
 
 
-        if (!Venue.Contains2D( new Rectangle( x, y, width, depth ) )) {
+        if (!Venue.Contains2D( new Rectangle( x.intValue(), y.intValue(), width.intValue(), depth.intValue() ) )) {
             throw new LocationException(
                     "Stage should not extend beyond the boundaries of the venue." );
         }
@@ -82,6 +79,7 @@ public class Stage extends Stackable implements Legendable {
     @Override
     public void verify() throws InvalidXMLException {
     }
+
     /**
      * Find a place for the shape given to fit on this table.
      *
@@ -89,53 +87,45 @@ public class Stage extends Stackable implements Legendable {
      * @return
      */
     public Point location( Solid shape ) {
-        int ex = x;
-        int wy = y;
-        int ze = z;
+        Double ex = x;
+        Double wy = y;
+        Double ze = z;
 
         Double lastWidth = 0.0;
 
-        for ( Thing item : things ) {
+        for ( Thing item : thingsOnThis) {
             ex = Math.max( ex, item.point.x() );
             wy = Math.max( wy, item.point.y() );
             ze = Math.max( ze, item.point.z() );
 
-            lastWidth = item.solid.getWidth();
+            lastWidth = item.solid.width();
         }
         Thing thing = new Thing();
-        thing.point = new Point( x, wy + lastWidth.intValue(), z );
+        thing.point = new Point( x, wy + lastWidth, z );
         thing.solid = shape;
 
-        things.add( thing );
+        thingsOnThis.add( thing );
 
         return thing.point;
     }
 
     @Override
     public void dom( Draw draw, View mode ) throws ReferenceException {
-        SvgElement element = null;
-        int bottom = Venue.Height();
+        Double bottom = Venue.Height();
 
         switch (mode) {
             case PLAN:
-                element = draw.rectangle( draw, x, y, width, depth, COLOR );
-//                draw.appendRootChild( element );
+                draw.rectangle( draw, x, y, width, depth, COLOR );
                 break;
             case SECTION:
-                element = draw.line( draw, y, bottom, y, bottom - z, COLOR );
-//                draw.appendRootChild( element );
-                element = draw.line( draw, y, bottom - z, y + depth, bottom - z, COLOR );
-//                draw.appendRootChild( element );
-                element = draw.line( draw, y + depth, bottom - z, y + depth, bottom, COLOR );
-//                draw.appendRootChild( element );
+                draw.line( draw, y, bottom, y, bottom - z, COLOR );
+                draw.line( draw, y, bottom - z, y + depth, bottom - z, COLOR );
+                draw.line( draw, y + depth, bottom - z, y + depth, bottom, COLOR );
                 break;
             case FRONT:
-                element = draw.line( draw, x, bottom, x, bottom - z, COLOR );
-//                draw.appendRootChild( element );
-                element = draw.line( draw, x, bottom - z, x + width, bottom - z, COLOR );
-//                draw.appendRootChild( element );
-                element = draw.line( draw, x + width, bottom - z, x + width, bottom, COLOR );
-//                draw.appendRootChild( element );
+                draw.line( draw, x, bottom, x, bottom - z, COLOR );
+                draw.line( draw, x, bottom - z, x + width, bottom - z, COLOR );
+                draw.line( draw, x + width, bottom - z, x + width, bottom, COLOR );
                 break;
             case TRUSS:
                 break;

@@ -12,7 +12,7 @@ public class SolidTest
         double height = 11.4;
 		Solid solid = new Solid( 12.9, 12.4, height );
 		
-		assertEquals( height, solid.getHeight(), 0.0 );
+		assertEquals( height, solid.height(), 0.0 );
 	}
 
 	@Test
@@ -21,7 +21,7 @@ public class SolidTest
         double width = 11.4f;
 		Solid solid = new Solid( width, 12.4, 12.9 );
 		
-		assertEquals( width, solid.getWidth(), 0.0 );
+		assertEquals( width, solid.width(), 0.0 );
 	}
 
 	@Test
@@ -30,6 +30,6 @@ public class SolidTest
         double depth = 11.4f;
 		Solid solid = new Solid( 12.4, depth, 12.9 );
 		
-		assertEquals( depth, solid.getDepth(), 0.0 );
+		assertEquals( depth, solid.depth(), 0.0 );
 	}
 }

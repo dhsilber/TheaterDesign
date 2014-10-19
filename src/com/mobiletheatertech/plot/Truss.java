@@ -31,12 +31,12 @@ public class Truss extends Mountable implements Legendable {
 
     static final String CATEGORY = "truss";
 
-    private static int TrussCount = 0;
-    private int trussCounted = Integer.MIN_VALUE;
+    private static Double TrussCount = 0.0;
+    private Double trussCounted = Double.MIN_VALUE;
 
     private String color = "dark blue";
-    private Integer size = null;
-    private Integer length = null;
+    private Double size = null;
+    private Double length = null;
     private Suspend suspend1 = null;
     private Suspend suspend2 = null;
     //    private String processedMark = null;
@@ -48,7 +48,7 @@ public class Truss extends Mountable implements Legendable {
     Point point1 = null;
     Point point2 = null;
     Double rotation = null;
-    Integer overHang = null;
+    Double overHang = null;
     Point startA = null;
 
 
@@ -69,14 +69,10 @@ public class Truss extends Mountable implements Legendable {
         }
 
         this.element = element;
-        size = getIntegerAttribute(element, "size");
-        length = getIntegerAttribute(element, "length");
+        size = getDoubleAttribute(element, "size");
+        length = getDoubleAttribute(element, "length");
 
-        switch (size) {
-            case 12:
-            case 20:
-                break;
-            default:
+        if( 12.0 != size && 20.5 != size ) {
                 throw new KindException("Truss", size);
         }
 
@@ -115,7 +111,7 @@ public class Truss extends Mountable implements Legendable {
 
         point1 = suspend1.locate();
         point2 = suspend2.locate();
-        Float slope = slope(point1, point2);
+        Double slope = slope(point1, point2);
         rotation = Math.toDegrees(Math.atan(slope));
 //        Tan-1 (Slope Percent/100).
 //        System.err.println("Slope: " + slope + "   Rotation:" + rotation);
@@ -150,14 +146,14 @@ public class Truss extends Mountable implements Legendable {
     }
 
     // Totally untested. Yar!
-    private float slope(Point point1, Point point2) {
-        int x1 = point1.x();
-        int y1 = point1.y();
-        int x2 = point2.x();
-        int y2 = point2.y();
+    private Double slope(Point point1, Point point2) {
+        Double x1 = point1.x();
+        Double y1 = point1.y();
+        Double x2 = point2.x();
+        Double y2 = point2.y();
 
-        float changeInX = x1 - x2;
-        float changeInY = y1 - y2;
+        Double changeInX = x1 - x2;
+        Double changeInY = y1 - y2;
 
         return changeInY / changeInX;
     }
@@ -170,7 +166,7 @@ public class Truss extends Mountable implements Legendable {
     @Override
     public Point location(String location) throws InvalidXMLException, MountingException, ReferenceException {
         Character vertex = location.charAt(0);
-        int offset = size / 2;
+        Double offset = size / 2;
         switch (vertex) {
             case 'a':
             case 'c':
@@ -207,11 +203,11 @@ public class Truss extends Mountable implements Legendable {
     Used only by Luminaire.dom() in View.TRUSS mode.
      */
     public Point relocate( String location ) throws MountingException{
-        Integer y;
+        Double y;
 
         Character vertex = location.charAt(0);
 //        System.out.println("relocate(): Count "+TrussCount );
-        int offset = size / 2;
+        Double offset = size / 2;
         switch (vertex) {
             case 'a':
                 offset *= -1;
@@ -228,9 +224,9 @@ public class Truss extends Mountable implements Legendable {
         }
 
         String distanceString = location.substring(1);
-        Integer distance;
+        Double distance;
         try {
-            distance = new Integer(distanceString.trim());
+            distance = new Double(distanceString.trim());
         } catch (NumberFormatException exception) {
             throw new MountingException("Truss (" + id + ") location not correctly formatted.");
         }
@@ -239,7 +235,7 @@ public class Truss extends Mountable implements Legendable {
             throw new MountingException("Truss (" + id + ") does not include location " + distance.toString() + ".");
         }
 
-        Point result = new Point (size + distance, y + offset, 0  );
+        Point result = new Point (size + distance, y + offset, 0.0  );
 
         return result;
     }
@@ -269,8 +265,8 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     @Override
     public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
 
-        Integer transformX = point1.x() + SvgElement.OffsetX();
-        Integer transformY = point1.y() + SvgElement.OffsetY();
+        Double transformX = point1.x() + SvgElement.OffsetX();
+        Double transformY = point1.y() + SvgElement.OffsetY();
         Point origin = new Point( transformX, transformY, point1.z() );
         return new Place(location(location), origin, rotation);
     }
@@ -425,14 +421,14 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
         // Separate details:
         switch (mode) {
             case PLAN:
-                Integer x1 = point1.x();// + MinderDom.OffsetX();
-                Integer y1 = point1.y();// + MinderDom.OffsetY();
-                Integer xPlan = x1 - overHang;
-                Integer yPlan = y1 - size / 2;
+                Double x1 = point1.x();// + MinderDom.OffsetX();
+                Double y1 = point1.y();// + MinderDom.OffsetY();
+                Double xPlan = x1 - overHang;
+                Double yPlan = y1 - size / 2;
 
                 trussRectangle = group.rectangle( draw, xPlan, yPlan, length, size, color );
-                Integer transformX = x1 + SvgElement.OffsetX();
-                Integer transformY = y1 + SvgElement.OffsetY();
+                Double transformX = x1 + SvgElement.OffsetX();
+                Double transformY = y1 + SvgElement.OffsetY();
                 trussRectangle.attribute("transform",
                         "rotate(" + rotation + "," + transformX + "," + transformY + ")");
 //                trussRectangle.setAttribute("x", xPlan.toString());
@@ -440,13 +436,13 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                group.appendChild(trussRectangle);
                 break;
             case TRUSS:
-                Integer yTruss1 = TrussCount * 320 + 80;
+                Double yTruss1 = TrussCount * 320 + 80;
                 trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
 //                trussRectangle.setAttribute("x", size.toString());
 //                trussRectangle.setAttribute("y", yTruss1.toString());
 
 //                System.out.println( "dom() Count: "+TrussCount);
-                Integer yTruss2 = TrussCount * 320 + 220;
+                Double yTruss2 = TrussCount * 320 + 220;
 //                draw.element("rect");
 //                group.appendChild(trussRectangle);
 
@@ -464,12 +460,12 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                trussRectangle2.setAttribute("x", size.toString());
 //                trussRectangle2.setAttribute("y", yTruss2.toString());
 
-                Integer hangOneX = size + overHang;
-                Integer hangOneY = yTruss1 + size / 2;
+                Double hangOneX = size + overHang;
+                Double hangOneY = yTruss1 + size / 2;
                 HangPoint.Draw( draw, hangOneX, hangOneY, hangOneX, hangOneY + size+ size, suspend1.ref() );
 
-                Integer hangTwoX = size + length - overHang;
-                Integer hangTwoY = yTruss1 + size / 2;
+                Double hangTwoX = size + length - overHang;
+                Double hangTwoY = yTruss1 + size / 2;
                 HangPoint.Draw( draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size+size, suspend2.ref() );
 
 //                Integer hangThreeX = size + overHang;
@@ -480,8 +476,8 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                Integer hangFourY = yTruss2 - size / 2;
 //                HangPoint.Draw( draw, hangFourX, hangFourY, hangFourX, hangFourY + size, suspend1.id );
 
-                Integer textX=size *2 + length;
-                Integer textY = yTruss1;
+                Double textX=size *2 + length;
+                Double textY = yTruss1;
                 SvgElement idText = group.text( draw, id + " top layer", textX, textY, color );
 //                draw.element("text");
 //                idText.setAttribute( "x", textX.toString() );
@@ -497,8 +493,8 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                Text textId = draw.document().createTextNode( id + " top layer" );
 //                idText.appendChild( textId );
 
-                Integer textX2=size *2 + length;
-                Integer textY2 = yTruss2;
+                Double textX2=size *2 + length;
+                Double textY2 = yTruss2;
                 SvgElement idText2 = group.text(draw, id + " bottom layer", textX2, textY2, color);
 //                draw.element("text");
 //                idText2.setAttribute("x", textX2.toString());

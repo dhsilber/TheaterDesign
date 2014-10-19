@@ -11,8 +11,8 @@ package com.mobiletheatertech.plot;
  */
 public class PagePoint {
 
-    int x;
-    int y;
+    Double x;
+    Double y;
 
 //    static int SmallX;
 //    static int SmallY;
@@ -26,7 +26,7 @@ public class PagePoint {
      * @param x X-coordinate
      * @param y Y-coordinate
      */
-    public PagePoint( int x, int y ) {
+    public PagePoint( Double x, Double y ) {
         this.x = x;
         this.y = y;
 
@@ -50,7 +50,7 @@ public class PagePoint {
      *
      * @return X-coordinate
      */
-    public Integer x() {
+    public Double x() {
         return x;
     }
 
@@ -59,7 +59,7 @@ public class PagePoint {
      *
      * @return Y-coordinate
      */
-    public Integer y() {
+    public Double y() {
         return y;
     }
 
@@ -129,7 +129,7 @@ public class PagePoint {
         if (getClass() != other.getClass()) return false;
 
         PagePoint point = (PagePoint) other;
-        return (x == point.x() && y == point.y());
+        return (x.equals( point.x() ) && y.equals( point.y() ) );
     }
 
     @Override

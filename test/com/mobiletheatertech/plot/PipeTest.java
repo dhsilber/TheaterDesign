@@ -23,11 +23,10 @@ public class PipeTest {
     Element element = null;
     Element prosceniumElement = null;
 
-    Integer x = 12;
-    Integer y = 23;
-    Integer z = 34;
-    Integer lengthInt = 120;
-    String length = "120";   // 10' pipe.
+    Double x = 12.0;
+    Double y = 23.0;
+    Double z = 34.0;
+    Double length = 120.0;   // 10' pipe.
 
     Integer prosceniumX = 200;
     Integer prosceniumY = 144;
@@ -65,13 +64,13 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
-        assertEquals( TestHelpers.accessInteger( pipe, "length" ), lengthInt );
+        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
 //        assertEquals( TestHelpers.accessString( pipe, "x" ), x.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "y" ), y.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
         assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
-        assertEquals( TestHelpers.accessInteger( pipe, "offsetX" ), (Integer)0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), (Integer)0 );
     }
 //    @Test
 //    public void storesAttributes() throws Exception {
@@ -91,14 +90,14 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
-        assertEquals( TestHelpers.accessInteger( pipe, "length" ), lengthInt );
+        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
 //        assertEquals( TestHelpers.accessInteger( pipe, "length" ), length );
 //        assertEquals( TestHelpers.accessString( pipe, "x" ), x.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "y" ), y.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
         assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), -90.0 );
-        assertEquals( TestHelpers.accessInteger( pipe, "offsetX" ), (Integer)(-50) );
+        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50 );
     }
 
     @Test
@@ -523,8 +522,8 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer ex = prosceniumX + x;
-        Integer wy = prosceniumY - (y - 1);
+        Double ex = prosceniumX + x;
+        Double wy = prosceniumY - (y - 1);
         assertEquals(element.getAttribute("x"), ex.toString());
         assertEquals(element.getAttribute("y"), wy.toString());
     }
@@ -544,7 +543,7 @@ public class PipeTest {
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
         assertEquals(element.getAttribute("x"), x.toString());
-        assertEquals(element.getAttribute("y"), ((Integer) (y - 1)).toString());
+        assertEquals(element.getAttribute("y"), ((Double) (y - 1)).toString());
     }
 
     @Test
@@ -588,8 +587,8 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer wye = prosceniumY - (y - 1);
-        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        Double wye = prosceniumY - (y - 1);
+        Double zee = Venue.Height() - (prosceniumZ + z - 1);
         assertEquals(element.getAttribute("x"), wye.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -608,8 +607,8 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer wye = y - 1;
-        Integer zee = Venue.Height() - (z - 1);
+        Double wye = y - 1;
+        Double zee = Venue.Height() - (z - 1);
         assertEquals(element.getAttribute("x"), wye.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -655,8 +654,8 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer exe = prosceniumX + x;
-        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        Double exe = prosceniumX + x;
+        Double zee = Venue.Height() - (prosceniumZ + z - 1);
         assertEquals(element.getAttribute("x"), exe.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -675,7 +674,7 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer zee = Venue.Height() - (z - 1);
+        Double zee = Venue.Height() - (z - 1);
         assertEquals(element.getAttribute("x"), x.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -712,7 +711,7 @@ public class PipeTest {
 
         element = new IIOMetadataNode("pipe");
         element.setAttribute("id", pipeId);
-        element.setAttribute("length", length);
+        element.setAttribute("length", length.toString());
         element.setAttribute("x", x.toString());
         element.setAttribute("y", y.toString());
         element.setAttribute("z", z.toString());

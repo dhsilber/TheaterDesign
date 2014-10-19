@@ -14,9 +14,9 @@ public class CableDiversionPointTest {
 
     Element element = null;
 
-    Integer x = 12;
-    Integer y = 24;
-    Integer z = 48;
+    Double x = 12.0;
+    Double y = 24.0;
+    Double z = 48.0;
 
     Point point = new Point( x, y, z );
 //    String category = "Name of Category";

@@ -22,21 +22,28 @@ public class Layer {
     }
 
     private String name = null;
+    private String color = null;
     private Boolean active = false;
 
-    public Layer( String tag, String name ) throws DataException {
+    public Layer( String tag, String name, String color ) throws DataException {
         if ( LIST.containsKey( tag ) ) {
             if ( ! LIST.get( tag ).name().equals( name ) ) {
                 throw new DataException("Layer " + tag + " is already defined.");
             }
+            if ( ! LIST.get( tag ).color().equals( color ) ) {
+                throw new DataException("Layer " + tag + " is already defined.");
+            }
         }
         this.name = name;
+        this.color = color;
         LIST.put( tag, this );
     }
 
     public String name() {
         return name;
     }
+
+    public String color() { return color; }
 
     public Boolean active() {
         return active;

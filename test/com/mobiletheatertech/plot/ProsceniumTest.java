@@ -22,6 +22,13 @@ public class ProsceniumTest {
 
     Element element = null;
 
+    Double width = 330.0;
+    Double depth = 22.0;
+    Double height = 250.0;
+    Double x = 250.0;
+    Double y = 144.0;
+    Double z = 12.0;
+
     public ProsceniumTest() {
     }
 
@@ -36,12 +43,12 @@ public class ProsceniumTest {
     public void storesAttributes() throws Exception {
         Proscenium proscenium = new Proscenium( element );
 
-        assertEquals( TestHelpers.accessInteger( proscenium, "width" ), (Integer) 330 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "depth" ), (Integer) 22 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "height" ), (Integer) 250 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "x" ), (Integer) 250 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "y" ), (Integer) 144 );
-        assertEquals( TestHelpers.accessInteger( proscenium, "z" ), (Integer) 12 );
+        assertEquals( TestHelpers.accessDouble( proscenium, "width" ), width );
+        assertEquals( TestHelpers.accessDouble( proscenium, "depth" ), depth );
+        assertEquals( TestHelpers.accessDouble( proscenium, "height" ), height );
+        assertEquals( TestHelpers.accessDouble( proscenium, "x" ), x );
+        assertEquals( TestHelpers.accessDouble( proscenium, "y" ), y );
+        assertEquals( TestHelpers.accessDouble( proscenium, "z" ), z );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -377,12 +384,12 @@ public class ProsceniumTest {
         new Venue( venueElement );
 
         element = new IIOMetadataNode( "proscenium" );
-        element.setAttribute( "width", "330" );
-        element.setAttribute( "height", "250" );
-        element.setAttribute( "depth", "22" );
-        element.setAttribute( "x", "250" );
-        element.setAttribute( "y", "144" );
-        element.setAttribute( "z", "12" );
+        element.setAttribute( "width", width.toString() );
+        element.setAttribute( "height", height.toString() );
+        element.setAttribute( "depth", depth.toString() );
+        element.setAttribute( "x", x.toString() );
+        element.setAttribute( "y", y.toString() );
+        element.setAttribute( "z", z.toString() );
     }
 
     @AfterMethod

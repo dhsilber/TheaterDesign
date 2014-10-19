@@ -1,11 +1,8 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:42 PM To change this template use
@@ -39,12 +36,12 @@ public class Table extends Stackable implements Legendable {
      */
     public static final String LAYERTAG = "table";
 
-    private Integer width = null;
-    private Integer depth = null;
-    private Integer height = null;
-    private Integer x = null;
-    private Integer y = null;
-    private Integer z = null;
+    private Double width = null;
+    private Double depth = null;
+    private Double height = null;
+    private Double x = null;
+    private Double y = null;
+    private Double z = null;
 
     static final String CATEGORY = "table";
 
@@ -63,19 +60,19 @@ public class Table extends Stackable implements Legendable {
 
         id = getOptionalStringAttribute(element, "id");
 
-        width = getIntegerAttribute(element, "width");
-        depth = getIntegerAttribute(element, "depth");
-        height = getIntegerAttribute(element, "height");
-        x = getIntegerAttribute(element, "x");
-        y = getIntegerAttribute(element, "y");
-        z = getIntegerAttribute(element, "z");
+        width = getDoubleAttribute(element, "width");
+        depth = getDoubleAttribute(element, "depth");
+        height = getDoubleAttribute(element, "height");
+        x = getDoubleAttribute(element, "x");
+        y = getDoubleAttribute(element, "y");
+        z = getDoubleAttribute(element, "z");
 
         if (0 >= width) throw new SizeException("Table", "width");
         if (0 >= depth) throw new SizeException("Table", "depth");
         if (0 >= height) throw new SizeException("Table", "height");
 
 
-        if (!Venue.Contains2D(new Rectangle(x, y, width, depth))) {
+        if (!Venue.Contains2D(new Rectangle(x.intValue(), y.intValue(), width.intValue(), depth.intValue()))) {
             throw new LocationException(
                     "Table should not extend beyond the boundaries of the venue.");
         }
@@ -119,24 +116,24 @@ public class Table extends Stackable implements Legendable {
      * @return
      */
     public Point location( Solid shape ) {
-        int ex = x;
-        int wy = y;
-        int ze = z;
+        Double ex = x;
+        Double wy = y;
+        Double ze = z;
 
         Double lastWidth = 0.0;
 
-        for ( Thing item : things ) {
-            ex = Math.max( ex, item.point.x() );
+        for ( Thing item : thingsOnThis) {
+            ex = Math.max( ex, item.point.x().intValue() );
             wy = Math.max( wy, item.point.y() );
             ze = Math.max( ze, item.point.z() );
 
-            lastWidth = item.solid.getWidth();
+            lastWidth = item.solid.width();
         }
         Thing thing = new Thing();
-        thing.point = new Point( x, wy + lastWidth.intValue(), z + height );
+        thing.point = new Point( x, wy + lastWidth, z + height );
         thing.solid = shape;
 
-        things.add( thing );
+        thingsOnThis.add( thing );
 
         return thing.point;
     }

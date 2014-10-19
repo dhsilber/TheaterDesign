@@ -8,9 +8,9 @@ package com.mobiletheatertech.plot;
  */
 public class Space {
     private Point origin = null;
-    private int width = 0;
-    private int depth = 0;
-    private int height = 0;
+    private Double width = 0.0;
+    private Double depth = 0.0;
+    private Double height = 0.0;
 
     /**
      * Construct a {@code Space}.
@@ -20,11 +20,18 @@ public class Space {
      * @param depth  Depth of the {@code Space}.
      * @param height Height of the {@code Space}.
      */
-    public Space( Point origin, int width, int depth, int height ) {
+    public Space( Point origin, Double width, Double depth, Double height ) {
         this.origin = origin;
         this.width = width;
         this.depth = depth;
         this.height = height;
+    }
+
+    public Space( Point origin, Integer width, Integer depth, Integer height ) {
+        this.origin = origin;
+        this.width = width.doubleValue();
+        this.depth = depth.doubleValue();
+        this.height = height.doubleValue();
     }
 
     /**

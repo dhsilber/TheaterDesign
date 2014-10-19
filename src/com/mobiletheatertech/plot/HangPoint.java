@@ -33,14 +33,14 @@ public class HangPoint extends MinderDom implements Legendable {
     // This is public to allow for a terrible, terrible hack in MinderDom.DomAllTruss().
     public static Boolean SYMBOLGENERATED = false;
 
-    private Integer x = null;
-    private Integer y = null;
+    private Double x = null;
+    private Double y = null;
 
     static final String CATEGORY = SYMBOL;
 
     private static final String COLOR = "light blue";
 
-    static final Integer RADIUS = 6;
+    static final Double RADIUS = 6.0;
 
     private static Boolean Legended = false;
 
@@ -62,10 +62,10 @@ public class HangPoint extends MinderDom implements Legendable {
         super( element );
 
         id = getOptionalStringAttribute( element, "id" );
-        x = getIntegerAttribute( element, "x" );
-        y = getIntegerAttribute( element, "y" );
+        x = getDoubleAttribute( element, "x" );
+        y = getDoubleAttribute( element, "y" );
 
-        int outcode = Venue.Contains2D( x, y );
+        int outcode = Venue.Contains2D( x.intValue(), y.intValue() );
         switch (outcode) {
             case Rectangle.OUT_LEFT:
             case Rectangle.OUT_RIGHT:
@@ -77,7 +77,7 @@ public class HangPoint extends MinderDom implements Legendable {
                         "HangPoint y value outside boundary of the venue" );
         }
 
-        new Layer( LAYERTAG, LAYERNAME );
+        new Layer( LAYERTAG, LAYERNAME, COLOR );
 
         new Category( CATEGORY, this.getClass() );
 
@@ -105,7 +105,7 @@ public class HangPoint extends MinderDom implements Legendable {
         return null;
     }
 
-    public static void Draw( Draw draw, Integer x, Integer y, Integer textX, Integer textY, String id ) {
+    public static void Draw( Draw draw, Double x, Double y, Double textX, Double textY, String id ) {
 //System.out.println( "HangPoint.Draw( "+x.toString()+", "+ y.toString()+", "+ textX.toString()+", "+ textY.toString()+", "+ id+" )" );
 
         SvgElement group = svgClassGroup(draw, LAYERTAG);
@@ -171,7 +171,7 @@ public class HangPoint extends MinderDom implements Legendable {
 ////            symbol.setAttribute( "overflow", "visible" );
 //            defs.appendChild( symbol );
 
-            SvgElement circle = symbol.circle( draw, 0, 0, 4, COLOR );
+            SvgElement circle = symbol.circle( draw, 0.0, 0.0, 4.0, COLOR );
 ////            draw.element("circle");
 ////            circle.setAttribute( "fill", "none" );
 ////            circle.setAttribute( "stroke", color );
@@ -181,7 +181,7 @@ public class HangPoint extends MinderDom implements Legendable {
 ////            circle.setAttribute( "r", "4" );
 //            symbol.appendChild( circle );
 
-            SvgElement line = symbol.line( draw, 0, -RADIUS, 0, RADIUS, COLOR );
+            SvgElement line = symbol.line( draw, 0.0, -RADIUS, 0.0, RADIUS, COLOR );
 //                    draw.element("line");
 //            line.setAttribute( "x1", "0" );
 //            line.setAttribute( "y1", "-6" );
@@ -191,7 +191,7 @@ public class HangPoint extends MinderDom implements Legendable {
 //            line.setAttribute( "stroke-width", "1" );
 //            symbol.appendChild( line );
 
-            SvgElement line2 = symbol.line(draw, -RADIUS, 0, RADIUS, 0, COLOR);
+            SvgElement line2 = symbol.line(draw, -RADIUS, 0.0, RADIUS, 0.0, COLOR);
 //            draw.element("line");
 //            line2.setAttribute( "x1", "-6" );
 //            line2.setAttribute( "y1", "0" );
@@ -208,20 +208,20 @@ public class HangPoint extends MinderDom implements Legendable {
             return;
         }
 
-        Integer unitTextX = x + RADIUS * 2;
-        Integer unitTextY = y + RADIUS;
+        Double unitTextX = x.intValue() + RADIUS * 2;
+        Double unitTextY = y + RADIUS;
 
         Draw( draw, x, y, unitTextX, unitTextY, id );
     }
 
     @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        Integer unitTextX = x + RADIUS * 2;
-        Integer unitTextY = y + RADIUS;
+        Double unitTextX = x.intValue() + RADIUS * 2;
+        Double unitTextY = y + RADIUS;
 
 //        Draw( draw, x, y, unitTextX, unitTextY, id );
 
-        SvgElement use = draw.use( draw, SYMBOL, start.x()+RADIUS, start.y()+RADIUS );
+        SvgElement use = draw.use( draw, SYMBOL, start.x() + RADIUS, start.y() + RADIUS );
 //        draw.appendRootChild( use );
 //        SvgElement circle = svgCircle( draw, start.x()+RADIUS, start.y()+RADIUS, 4, COLOR );
 //        draw.appendRootChild( circle );
@@ -232,8 +232,8 @@ public class HangPoint extends MinderDom implements Legendable {
 //        SvgElement line2 = svgLine(draw, start.x(), start.y()+RADIUS, start.x()+RADIUS*2, start.y()+RADIUS, COLOR);
 //        draw.appendRootChild( line2 );
 
-        Integer x = start.x() + Legend.TEXTOFFSET;
-        Integer y = start.y() + RADIUS * 3 / 2;
+        Double x = start.x() + Legend.TEXTOFFSET;
+        Double y = start.y() + RADIUS * 3 / 2;
 
         SvgElement text = draw.text( draw, "Hangpoint", x, y, COLOR );
 //        draw.appendRootChild( text );

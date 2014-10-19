@@ -19,8 +19,9 @@ public class HTMLTest {
     public void checkbox() throws Exception {
         String name = "name_of_thing";
         String tag = "tag_for_thing";
+        String color = "color_for_thing";
         HashMap<String, Layer> thing = new HashMap<>();
-        thing.put( tag, new Layer(tag, name) );
+        thing.put( tag, new Layer(tag, name, color ) );
 
         String result = HTML.Checkboxes( thing );
 
@@ -35,11 +36,13 @@ public class HTMLTest {
     public void twoCheckboxes() throws Exception {
         String name = "name_of_first_thing";
         String tag = "tag_for_first_thing";
+        String color = "color_for_first_thing";
         String name2 = "name_of_second_thing";
         String tag2 = "tag_for_second_thing";
+        String color2 = "color_for_second_thing";
         HashMap<String, Layer> thing = new HashMap<>();
-        thing.put( tag, new Layer(tag, name) );
-        thing.put( tag2, new Layer(tag2, name2) );
+        thing.put( tag, new Layer(tag, name, color ) );
+        thing.put( tag2, new Layer(tag2, name2, color2 ) );
 
         String result = HTML.Checkboxes( thing );
 
@@ -60,8 +63,9 @@ public class HTMLTest {
     public void selectFunction() throws Exception {
         String name = "name_of_thing";
         String tag = "tag_for_thing";
+        String color = "color_for_thing";
         HashMap<String, Layer> thing = new HashMap<>();
-        thing.put( tag, new Layer(tag, name) );
+        thing.put( tag, new Layer(tag, name, color ) );
 
         String result = HTML.SelectFunctions( thing );
 
@@ -80,11 +84,13 @@ public class HTMLTest {
     public void twoSelectFunctions() throws Exception {
         String name = "name_of_first_thing";
         String tag = "tag_for_first_thing";
+        String color = "color_for_first_thing";
         String name2 = "name_of_second_thing";
         String tag2 = "tag_for_second_thing";
+        String color2 = "color_for_second_thing";
         HashMap<String, Layer> thing = new HashMap<>();
-        thing.put( tag, new Layer(tag, name) );
-        thing.put( tag2, new Layer(tag2, name2) );
+        thing.put( tag, new Layer(tag, name, color ) );
+        thing.put( tag2, new Layer(tag2, name2, color2 ) );
 
         String result = HTML.SelectFunctions( thing );
 

@@ -254,7 +254,7 @@ Integer size = 12;
         assertNotNull( TestHelpers.accessObject(truss, "suspend2"));
 
         Point point = truss.location( "a 17");
-        assertEquals( point, new Point(77,194,239));
+        assertEquals( point, new Point(77, 194, 239));
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -327,7 +327,7 @@ Integer size = 12;
         assertEquals( place.origin(), TestHelpers.accessPoint( truss, "point1"));
         assertNotNull( TestHelpers.accessDouble(truss, "rotation"));
         assertEquals( place.rotation(), -0.0);
-        assertEquals( place.location(), new Point(83,206,239));
+        assertEquals( place.location(), new Point(83, 206, 239));
     }
 
     @Test

@@ -24,19 +24,19 @@ public class BalconyTest {
     Element element = null;
     Element prosceniumElement = null;
 
-    Integer x = 12;
-    Integer y = 23;
-    Integer z = 34;
-    Integer floorHeight = 194;
-    Integer underHeight = 100;
-    Integer wallHeight = 37;
-    Integer railHeight = 9;
+    Double x = 12.0;
+    Double y = 23.0;
+    Double z = 34.0;
+    Double floorHeight = 194.0;
+    Double underHeight = 100.0;
+    Double wallHeight = 37.0;
+    Double railHeight = 9.0;
 
-    String length = "120";   // 10' pipe.
+    Double length = 120.0;   // 10' pipe.
 
-    Integer prosceniumX = 200;
-    Integer prosceniumY = 144;
-    Integer prosceniumZ = 12;
+    Double prosceniumX = 200.0;
+    Double prosceniumY = 144.0;
+    Double prosceniumZ = 12.0;
 //    final String balconyId = "balconyId";
 
     @Test
@@ -268,8 +268,8 @@ public class BalconyTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer ex = prosceniumX + x;
-        Integer wy = prosceniumY - (y - 1);
+        Double ex = prosceniumX + x;
+        Double wy = prosceniumY - (y - 1);
         assertEquals(element.getAttribute("x"), ex.toString());
         assertEquals(element.getAttribute("y"), wy.toString());
     }
@@ -289,7 +289,7 @@ public class BalconyTest {
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
         assertEquals(element.getAttribute("x"), x.toString());
-        assertEquals(element.getAttribute("y"), ((Integer) (y - 1)).toString());
+        assertEquals(element.getAttribute("y"), ((Double) (y - 1)).toString());
     }
 
     @Test
@@ -333,8 +333,8 @@ public class BalconyTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer wye = prosceniumY - (y - 1);
-        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        Double wye = prosceniumY - (y - 1);
+        Double zee = Venue.Height() - (prosceniumZ + z - 1);
         assertEquals(element.getAttribute("x"), wye.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -353,8 +353,8 @@ public class BalconyTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer wye = y - 1;
-        Integer zee = Venue.Height() - (z - 1);
+        Double wye = y - 1;
+        Double zee = Venue.Height() - (z - 1);
         assertEquals(element.getAttribute("x"), wye.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -400,8 +400,8 @@ public class BalconyTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer exe = prosceniumX + x;
-        Integer zee = Venue.Height() - (prosceniumZ + z - 1);
+        Double exe = prosceniumX + x;
+        Double zee = Venue.Height() - (prosceniumZ + z - 1);
         assertEquals(element.getAttribute("x"), exe.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }
@@ -420,7 +420,7 @@ public class BalconyTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        Integer zee = Venue.Height() - (z - 1);
+        Double zee = Venue.Height() - (z - 1);
         assertEquals(element.getAttribute("x"), x.toString());
         assertEquals(element.getAttribute("y"), zee.toString());
     }

@@ -29,12 +29,12 @@ public class WallTest {
     Element wallElement = null;
     Element wallElement2 = null;
     Element wallElement3 = null;
-    Integer x1 = 12;
-    Integer y1 = 34;
-    Integer x2 = 16;
-    Integer y2 = 56;
-    Integer x3 = 78;
-    Integer y3 = 89;
+    Double x1 = 12.0;
+    Double y1 = 34.0;
+    Double x2 = 16.0;
+    Double y2 = 56.0;
+    Double x3 = 78.0;
+    Double y3 = 89.0;
 
 
 
@@ -235,7 +235,7 @@ public class WallTest {
 
         Point start = new Point( 18, 40, 0 );
         Point destination = new Point( 46, 70, 0 );
-        Point corner = new Point( x2 + 2, y2 + 2, 0 );
+        Point corner = new Point( x2 + 2.0, y2 + 2, 0.0 );
 
         Point result = wall1.nextCorner( start, destination, wall2 );
 
@@ -254,7 +254,7 @@ public class WallTest {
 
         Point start = new Point( 18, 40, 0 );
         Point destination = new Point( 46, 70, 0 );
-        Point corner = new Point( x2 + 2, y2 + 2, 0 );
+        Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
 
         Point result = wall2.nextCorner( corner, destination, wall2 );
 
@@ -273,7 +273,7 @@ public class WallTest {
 
         Point start = new Point( 46, 70, 0 );
         Point destination = new Point( 18, 40, 0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0 );
+        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = wall2.nextCorner( start, destination, wall2 );
 
@@ -292,7 +292,7 @@ public class WallTest {
 
         Point start = new Point( 46, 70, 0 );
         Point destination = new Point( 18, 40, 0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0 );
+        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = wall2.nextCorner( corner, destination, wall2 );
 

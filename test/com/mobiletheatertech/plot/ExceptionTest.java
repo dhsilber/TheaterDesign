@@ -146,7 +146,7 @@ public class ExceptionTest {
     @Test(expectedExceptions = KindException.class,
             expectedExceptionsMessageRegExp = "Foo of size 42 not supported. Try 12 or 20.")
     public void kindException() throws Exception {
-        throw new KindException("Foo", 42);
+        throw new KindException("Foo", 42.0);
     }
 
     /**

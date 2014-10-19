@@ -10,17 +10,17 @@ package com.mobiletheatertech.plot;
  */
 public class Point {
 
-    int x;
-    int y;
-    int z;
+    Double x;
+    Double y;
+    Double z;
 
-    static int SmallX;
-    static int SmallY;
-    static int SmallZ;
+    static Double SmallX = Double.MAX_VALUE;
+    static Double SmallY = Double.MAX_VALUE;
+    static Double SmallZ = Double.MAX_VALUE;
 
-    static int LargeX;
-    static int LargeY;
-    static int LargeZ;
+    static Double LargeX = Double.MIN_VALUE;
+    static Double LargeY = Double.MIN_VALUE;
+    static Double LargeZ = Double.MIN_VALUE;
 
     /**
      * Construct a point at the specified coordinates.
@@ -29,11 +29,23 @@ public class Point {
      * @param y Y-coordinate
      * @param z Z-Coordinate
      */
-    public Point( int x, int y, int z ) {
+    public Point( Double x, Double y, Double z ) {
         this.x = x;
         this.y = y;
         this.z = z;
 
+        keepExtent();
+    }
+
+    public Point( Integer x, Integer y, Integer z ) {
+        this.x = x.doubleValue();
+        this.y = y.doubleValue();
+        this.z = z.doubleValue();
+
+        keepExtent();
+    }
+
+    void keepExtent() {
         SmallX = this.x < SmallX
                  ? this.x
                  : SmallX;
@@ -60,7 +72,7 @@ public class Point {
      *
      * @return X-coordinate
      */
-    public Integer x() {
+    public Double x() {
         return x;
     }
 
@@ -69,7 +81,7 @@ public class Point {
      *
      * @return Y-coordinate
      */
-    public Integer y() {
+    public Double y() {
         return y;
     }
 
@@ -78,7 +90,7 @@ public class Point {
      *
      * @return Z-coordinate
      */
-    public Integer z() {
+    public Double z() {
         return z;
     }
 
@@ -87,7 +99,7 @@ public class Point {
      *
      * @return X-coordinate
      */
-    public static int LargeX() {
+    public static Double LargeX() {
         return LargeX;
     }
 
@@ -96,7 +108,7 @@ public class Point {
      *
      * @return Y-coordinate
      */
-    public static int LargeY() {
+    public static Double LargeY() {
         return LargeY;
     }
 
@@ -105,7 +117,7 @@ public class Point {
      *
      * @return Z-coordinate
      */
-    public static int LargeZ() {
+    public static Double LargeZ() {
         return LargeZ;
     }
 
@@ -114,7 +126,7 @@ public class Point {
      *
      * @return X-coordinate
      */
-    public static int SmallX() {
+    public static Double SmallX() {
         return SmallX;
     }
 
@@ -123,7 +135,7 @@ public class Point {
      *
      * @return Y-coordinate
      */
-    public static int SmallY() {
+    public static Double SmallY() {
         return SmallY;
     }
 
@@ -132,7 +144,7 @@ public class Point {
      *
      * @return Z-coordinate
      */
-    public static int SmallZ() {
+    public static Double SmallZ() {
         return SmallZ;
     }
 
@@ -189,7 +201,9 @@ public class Point {
      *            point y coord
      * @return closets point on segment to point
      */
-    public static Point GetClosestPointOnSegment(int sx1, int sy1, int sx2, int sy2, int px, int py)
+    public static Point GetClosestPointOnSegment( Double sx1, Double sy1,
+                                                  Double sx2, Double sy2,
+                                                  Double px, Double py)
     {
         double xDelta = sx2 - sx1;
         double yDelta = sy2 - sy1;
@@ -199,20 +213,21 @@ public class Point {
             throw new IllegalArgumentException("Segment start equals segment end");
         }
 
-        double u = ((px - sx1) * xDelta + (py - sy1) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
+        double u = ((px - sx1) * xDelta + (py - sy1) * yDelta) /
+                (xDelta * xDelta + yDelta * yDelta);
 
         final Point closestPoint;
         if (u < 0)
         {
-            closestPoint = new Point(sx1, sy1, 0);
+            closestPoint = new Point(sx1, sy1, 0.0);
         }
         else if (u > 1)
         {
-            closestPoint = new Point(sx2, sy2, 0);
+            closestPoint = new Point(sx2, sy2, 0.0);
         }
         else
         {
-            closestPoint = new Point((int) Math.round(sx1 + u * xDelta), (int) Math.round(sy1 + u * yDelta), 0);
+            closestPoint = new Point( sx1 + u * xDelta, sy1 + u * yDelta, 0.0);
         }
 
         return closestPoint;
@@ -235,7 +250,7 @@ public class Point {
         if (getClass() != other.getClass()) return false;
 
         Point point = (Point) other;
-        boolean same = (x == point.x() && y == point.y() && z == point.z());
+        boolean same = ( x.equals( point.x() ) && y.equals( point.y() ) && z.equals( point.z() ) );
         if (!same) {
 //            System.out.println( "X: "+x+", "+point.x()+
 //                    " Y: "+y+", "+point.y()+

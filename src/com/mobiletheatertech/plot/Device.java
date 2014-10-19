@@ -1,19 +1,32 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
- * Provides a generic item that can describe a real-world device.
+ * Represents a specific instance of a device described by a {@code DeviceTemplate}.
+ *
+ * Positioning is flexible:
+ *
+ * An arbitrary position can be set with x, y, and z attributes, if no
+ * 'on' attribute is specified.
+ *
+ * The 'on' attribute stacks a {@code Device} on top of some other
+ * appropriate item. If x and y attributes are set, they position the
+ * device relative to what it is stacked on. No z attribute may be set.
+ *
+ * An orientation may be specified to rotate the device horizontally.
+ *
+ * A layer attribute may optionally be specified.
+ *
  *
  * Created by dhs on 7/2/14.
  */
-public class Device extends MinderDom
+/*
+If I need it, implement 'inclination' for vertical rotation.
+ */
+public class Device extends Stackable
 {
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
@@ -25,10 +38,17 @@ public class Device extends MinderDom
 
     Solid shape = null;
     Point place = null;
-    String layer = null;
+    String layerName = null;
+    String color = "black";
+    Double x = null;
+    Double y = null;
+    Double z = null;
+    Double orientation = null;
+    Double width = null;
+    Double height = null;
 
-    private static final String COLOR = "black";
-    private static final String FILLCOLOR = "grey";
+//    private static final String COLOR = "black";
+//    private static final String FILLCOLOR = "grey";
 
 
     /**
@@ -43,7 +63,16 @@ public class Device extends MinderDom
 
         id = getStringAttribute(element, "id");
         is = getStringAttribute(element, "is");
-        on = getStringAttribute(element, "on");
+        on = getOptionalStringAttribute(element, "on");
+        x = getOptionalDoubleAttribute(element, "x");
+        y = getOptionalDoubleAttribute(element, "y");
+        z = getOptionalDoubleAttribute(element, "z");
+        orientation = getOptionalDoubleAttribute(element, "orientation");
+
+        if( "".equals( on ) && ( x.equals( 0.0 ) || y.equals( 0.0 ) ) ) {
+            throw new AttributeMissingException( "Device (" + id +
+                    ") needs either the 'on' attribute or the set of x, y, and z coordinates." );
+        }
 
         GearList.Add( is );
 
@@ -60,7 +89,7 @@ public class Device extends MinderDom
     }
 
     public String layer() {
-        return layer;
+        return layerName;
     }
 
     public String is() {
@@ -82,63 +111,79 @@ public class Device extends MinderDom
                     "'is' reference ("+is+") does not exist" );
         }
 
-        surface = Stackable.Select(on);
-        if( null == surface ){
-            throw new InvalidXMLException( "Device", id,
-                    "'on' reference ("+on+") does not exist" );
-        }
-
         // Get what needs to be drawn from 'is'.
         shape = template.getSolid();
 
-        // Give the what to 'on' to find out where
-        place = surface.location( shape );
+        if( 90.0 == orientation ){
+            width  = shape.depth();
+            height = shape.width();
+        }
+        else {
+            width  = shape.width();
+            height = shape.depth();
+        }
 
-        layer = template.layer();
+        if( "".equals( on ) ) {
+            place = new Point( x - width / 2, y - height / 2, z );
+        }
+        else {
+            surface = Stackable.Select(on);
+            if( null == surface ) {
+                throw new InvalidXMLException( "Device", id,
+                        "'on' reference ("+on+") does not exist" );
+            }
+
+            // Give the what to 'on' to find out where
+            place = surface.location(shape);
+        }
+
+        layerName = template.layer();
+
+        Layer layer = Layer.List().get( layerName );
+        if( null != layer ) {
+            color = layer.color();
+        }
     }
 
     @Override
     public void dom(Draw draw, View mode)
             throws MountingException, ReferenceException
     {
-        SvgElement group = svgClassGroup( draw, layer );
-//        draw.element("g");
-//        group.setAttribute("class", layer);
+        SvgElement group = svgClassGroup( draw, layerName);
         draw.appendRootChild(group);
 
-        Integer width = shape.getWidth().intValue();
-        Integer height = shape.getDepth().intValue();
-        SvgElement tableElement = group.rectangle( draw, place.x(), place.y(), width, height, COLOR );
-//        draw.element("rect");
-//        tableElement.setAttribute("x", place.x().toString());
-//        tableElement.setAttribute("y", place.y().toString());
-//        tableElement.setAttribute("width", shape.getWidth().toString());
-//        // Plot attribute is 'depth'. SVG attribute is 'height'.
-//        tableElement.setAttribute("height", shape.getDepth().toString());
-        tableElement.attribute("fill", FILLCOLOR );
-//        tableElement.setAttribute("stroke", "black");
+        SvgElement tableElement = group.rectangle( draw, place.x(), place.y(), width, height, color );
+        tableElement.attribute( "fill", color );
+        tableElement.attribute( "fill-opacity", "0.1" );
 
-//        group.appendChild(tableElement);
-
-
-        Integer y = place.y() + shape.getDepth().intValue() + 9;
-        SvgElement idText = group.text( draw, id, place.x(), y, COLOR );
-//        draw.element("text");
-//        idText.setAttribute( "x", place.x().toString() );
-//        idText.setAttribute( "y", y.toString() );
-//        idText.setAttribute( "fill", "black" );
-//        idText.setAttribute( "stroke", "none" );
-//        idText.setAttribute( "font-family", "sans-serif" );
-//        idText.setAttribute( "font-weight", "100" );
-//        idText.setAttribute( "font-size", "7pt" );
+        Double x = place.x() + 3;
+        Double y = place.y() + height - 4;
+        SvgElement idText = group.text( draw, id, place.x(), y, color );
         idText.attribute( "text-anchor", "left" );
+    }
 
-//        group.appendChild( idText );
+    @Override
+    public Point location( Solid shape ) {
+        Double ex = x;
+        Double wy = y;
+        Double ze = z;
 
+        Double lastWidth = 0.0;
 
-//        Text textId = draw.document().createTextNode( id );
-//        idText.appendChild( textId );
+        for ( Thing item : thingsOnThis) {
+            ex = Math.max( ex, item.point.x().intValue() );
+            wy = Math.max( wy, item.point.y() );
+            ze = Math.max( ze, item.point.z() );
 
+            lastWidth = item.solid.width();
+        }
+        Thing thing = new Thing();
+        thing.point = new Point( x, wy + lastWidth, z + height );
+        thing.solid = shape;
+
+        thingsOnThis.add( thing );
+
+        return thing.point;
     }
 
     public String toString(){

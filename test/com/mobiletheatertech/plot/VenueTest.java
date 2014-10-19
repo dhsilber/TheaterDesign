@@ -24,9 +24,9 @@ public class VenueTest {
     String building = "Building Name";
     String room = "Room Name";
 
-    Integer width = 1296;
-    Integer depth = 1320;
-    Integer height = 240;
+    Double width = 1296.0;
+    Double depth = 1320.0;
+    Double height = 240.0;
 
 
     public VenueTest() {

@@ -20,6 +20,7 @@ public class UserLayerTest {
 
     private final String id = "Layer_ID";
     private final String name = "Layer name";
+    private final String color = "Layer color";
 
     public UserLayerTest() {
     }
@@ -37,6 +38,7 @@ public class UserLayerTest {
 
         assertEquals( TestHelpers.accessString(userLayer, "id"), id );
         assertEquals( TestHelpers.accessString(userLayer, "name"), name );
+        assertEquals( TestHelpers.accessString(userLayer, "color"), color );
     }
 
     @Test
@@ -47,6 +49,7 @@ public class UserLayerTest {
 
         assertTrue( thing.containsKey( id ) );
         assertEquals( thing.get( id ).name(), name );
+        assertEquals( thing.get( id ).color(), color );
     }
 
     /*
@@ -71,13 +74,20 @@ public class UserLayerTest {
         new UserLayer( element );
     }
 
+    @Test( expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "UserLayer \\("+id+"\\) is missing required 'color' attribute." )
+    public void noColor() throws Exception {
+        element.removeAttribute( "color" );
+        new UserLayer( element );
+    }
+
     @Test
     public void noLayerNoCheckbox() throws Exception {
         Write writer = new Write();
-        String output = writer.generateIndex();
+//        String output = writer.generateIndex();
         CharSequence chars = "checkbox";
 
-        assertFalse(output.contains(chars));
+//        assertFalse(output.contains(chars));
     }
 
     @Test
@@ -107,6 +117,7 @@ public class UserLayerTest {
         element = new IIOMetadataNode( "layer" );
         element.setAttribute( "id", id );
         element.setAttribute( "name", name );
+        element.setAttribute( "color", color );
     }
 
     @AfterMethod

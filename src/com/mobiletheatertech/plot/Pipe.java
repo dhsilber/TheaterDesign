@@ -29,7 +29,7 @@ public class Pipe extends Mountable {
     /**
      * Diameter of a generic pipe.
      */
-    public static final Integer DIAMETER = 2;
+    public static final Double DIAMETER = 2.0;
 
 //    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class Pipe extends Mountable {
      * Length of pipe. I'm using inches so that the line thickness isn't ridiculous, but that isn't
      * enforced.
      */
-    private Integer length = null;
+    private Double length = null;
 
     /**
      * Start of pipe.
@@ -51,7 +51,7 @@ public class Pipe extends Mountable {
 
     private Double orientation = null;
 
-    private Integer offsetX = null;
+    private Double offsetX = null;
 
     private static final String COLOR = "black";
 
@@ -93,10 +93,10 @@ public class Pipe extends Mountable {
         super(element);
 
 //        id = element.attribute( "id" );
-        length = getIntegerAttribute(element, "length");
-        Integer x = getIntegerAttribute(element, "x");
-        Integer y = getIntegerAttribute(element, "y");
-        Integer z = getIntegerAttribute(element, "z");
+        length = getDoubleAttribute(element, "length");
+        Double x = getDoubleAttribute(element, "x");
+        Double y = getDoubleAttribute(element, "y");
+        Double z = getDoubleAttribute(element, "z");
         start = new Point(x, y, z);
 
         if (0 >= length) {
@@ -105,9 +105,9 @@ public class Pipe extends Mountable {
         }
 
         orientation = getOptionalDoubleAttribute(element, "orientation");
-        offsetX = getOptionalIntegerAttribute(element, "offsetx");
+        offsetX = getOptionalDoubleAttribute(element, "offsetx");
 
-        new Layer(LAYERTAG, LAYERNAME);
+        new Layer(LAYERTAG, LAYERNAME, COLOR );
     }
 
     /**
@@ -199,7 +199,7 @@ public class Pipe extends Mountable {
             } else {
                 if ((start.x() < 0) && (start.x() + length > 0)) {
                     // Given a pipe that crosses the centerline, the offset is from the centerline.
-                    point = Proscenium.Locate(new Point(offset,
+                    point = Proscenium.Locate(new Point(offset.doubleValue(),
                             start.y() - 1,
                             start.z() - 1));
 
@@ -250,50 +250,26 @@ public class Pipe extends Mountable {
                 return;
         }
 
-        Integer height = Venue.Height() - boxOrigin.z();
+        Double height = Venue.Height() - boxOrigin.z();
 
         Point drawBox = new Point(boxOrigin.x() + offsetX, boxOrigin.y(), boxOrigin.z());
 
         SvgElement group = svgClassGroup( draw, LAYERTAG );
-//        draw.element("g");
-//        group.setAttribute("class", LAYERTAG);
         draw.appendRootChild(group);
-
-        SvgElement pipeRectangle = null;
-//        draw.element("rect");
-//        pipeRectangle.setAttribute("fill", "none");
-//        pipeRectangle.setAttribute("stroke-width", "1");
-//        pipeRectangle.setAttribute("stroke-opacity", "0.5");
 
         switch (mode) {
             case PLAN:
                 if (90.0 == orientation) {
-                    pipeRectangle = group.rectangle( draw, drawBox.x(), drawBox.y(), DIAMETER, length, COLOR );
-//                    pipeRectangle.setAttribute("x", drawBox.x().toString());
-//                    pipeRectangle.setAttribute("y", drawBox.y().toString());
-//                    pipeRectangle.setAttribute("width", DIAMETER.toString());
-//                    pipeRectangle.setAttribute("height", length.toString());
+                    group.rectangle( draw, drawBox.x(), drawBox.y(), DIAMETER, length, COLOR );
                 } else {
-                    pipeRectangle = group.rectangle( draw, drawBox.x(), drawBox.y(), length, DIAMETER, COLOR );
-//                    pipeRectangle.setAttribute("x", drawBox.x().toString());
-//                    pipeRectangle.setAttribute("y", drawBox.y().toString());
-//                    pipeRectangle.setAttribute("width", length.toString());
-//                    pipeRectangle.setAttribute("height", DIAMETER.toString());
+                    group.rectangle( draw, drawBox.x(), drawBox.y(), length, DIAMETER, COLOR );
                 }
                 break;
             case SECTION:
-                pipeRectangle = group.rectangle( draw, drawBox.y(), height, DIAMETER, DIAMETER, COLOR );
-//                pipeRectangle.setAttribute("x", drawBox.y().toString());
-//                pipeRectangle.setAttribute("y", height.toString());
-//                pipeRectangle.setAttribute("width", DIAMETER.toString());
-//                pipeRectangle.setAttribute("height", DIAMETER.toString());
+                group.rectangle( draw, drawBox.y(), height, DIAMETER, DIAMETER, COLOR );
                 break;
             case FRONT:
-                pipeRectangle = group.rectangle( draw, drawBox.x(), height, length, DIAMETER, COLOR );
-//                pipeRectangle.setAttribute("x", drawBox.x().toString());
-//                pipeRectangle.setAttribute("y", height.toString());
-//                pipeRectangle.setAttribute("width", length.toString());
-//                pipeRectangle.setAttribute("height", DIAMETER.toString());
+                group.rectangle( draw, drawBox.x(), height, length, DIAMETER, COLOR );
                 break;
             default:
         }

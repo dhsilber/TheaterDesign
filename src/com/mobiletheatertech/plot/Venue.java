@@ -48,9 +48,9 @@ public class Venue extends MinderDom implements Legendable {
 
     private static Venue StaticVenue = null;
     private String room = null;
-    private Integer width = null;
-    private Integer depth = null;
-    private Integer height = null;
+    private Double width = null;
+    private Double depth = null;
+    private Double height = null;
     private String circuiting;
     private String building;
 
@@ -67,9 +67,9 @@ public class Venue extends MinderDom implements Legendable {
         super( element );
 
         room = getStringAttribute( element, "room" );
-        width = getIntegerAttribute( element, "width" );
-        depth = getIntegerAttribute( element, "depth" );
-        height = getIntegerAttribute( element, "height" );
+        width = getDoubleAttribute( element, "width" );
+        depth = getDoubleAttribute( element, "depth" );
+        height = getDoubleAttribute( element, "height" );
         building = getOptionalStringAttribute( element, "building" );
         circuiting = getOptionalStringAttribute( element, "circuiting" );
         switch (circuiting) {
@@ -105,7 +105,7 @@ public class Venue extends MinderDom implements Legendable {
             throw new ReferenceException( "Venue is not defined." );
         }
 
-        Space room = new Space( new Point( 0, 0, 0 ), StaticVenue.width, StaticVenue.depth,
+        Space room = new Space( new Point( 0.0, 0.0, 0.0 ), StaticVenue.width, StaticVenue.depth,
                             StaticVenue.height );
         return room.contains( space );
     }
@@ -122,7 +122,7 @@ public class Venue extends MinderDom implements Legendable {
             throw new ReferenceException( "Venue is not defined." );
         }
 
-        Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
+        Rectangle area = new Rectangle( 0, 0, StaticVenue.width.intValue(), StaticVenue.depth.intValue() );
 
         return area.contains( rectangle );
     }
@@ -139,7 +139,7 @@ public class Venue extends MinderDom implements Legendable {
             throw new ReferenceException( "Venue is not defined." );
         }
 
-        Rectangle area = new Rectangle( 0, 0, StaticVenue.width, StaticVenue.depth );
+        Rectangle area = new Rectangle( 0, 0, StaticVenue.width.intValue(), StaticVenue.depth.intValue() );
 
         return area.outcode( x, y );
     }
@@ -162,7 +162,7 @@ public class Venue extends MinderDom implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Width() throws ReferenceException {
+    public static Double Width() throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
         }
@@ -175,7 +175,7 @@ public class Venue extends MinderDom implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Depth() throws ReferenceException {
+    public static Double Depth() throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
         }
@@ -188,7 +188,7 @@ public class Venue extends MinderDom implements Legendable {
      *
      * @return height of the venue
      */
-    public static int Height() throws ReferenceException {
+    public static Double Height() throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
         }
@@ -275,11 +275,11 @@ public class Venue extends MinderDom implements Legendable {
 //                draw.appendRootChild( element );
                 break;
             case SECTION:
-                element = draw.rectangle(draw, 0, 0, depth, height, COLOR);
+                element = draw.rectangle(draw, 0.0, 0.0, depth, height, COLOR);
 //                draw.appendRootChild( element );
                 break;
             case FRONT:
-                element = draw.rectangle(draw, 0, 0, width, height, COLOR);
+                element = draw.rectangle(draw, 0.0, 0.0, width, height, COLOR);
 //                draw.appendRootChild( element );
                 break;
             case TRUSS:
@@ -299,7 +299,7 @@ public class Venue extends MinderDom implements Legendable {
      */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        Integer x = start.x() + 10;
+        Double x = start.x() + 10;
         SvgElement text = draw.text( draw, room, x, start.y(), Legend.TEXTCOLOR );
 //        draw.element("text");
 //        text.setAttribute( "x", x.toString() );

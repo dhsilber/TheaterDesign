@@ -120,7 +120,7 @@ public class CableDiversion extends Elemental {
     }
 
     private static Rectangle MakeRectangle( Point point ) {
-        return new Rectangle( point.x() - 5, point.y() - 5, 11, 11 );
+        return new Rectangle( point.x().intValue() - 5, point.y().intValue() - 5, 11, 11 );
     }
 
     private static ArrayList<Point> ReverseList( ArrayList<Point> list ) {

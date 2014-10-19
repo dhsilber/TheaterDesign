@@ -20,22 +20,22 @@ public class PagePointTest {
 
     @Test
     public void storesCoordinates() {
-        PagePoint point = new PagePoint( 1, 2 );
+        PagePoint point = new PagePoint( 1.0, 2.0 );
 
-        assertEquals( point.x(), (Integer) 1 );
-        assertEquals( point.y(), (Integer) 2 );
+        assertEquals( point.x(), 1 );
+        assertEquals( point.y(), 2 );
     }
 
     @Test
     public void storesMultipleCoordinates() {
-        PagePoint point1 = new PagePoint( 1, 2 );
-        PagePoint point2 = new PagePoint( 4, 5 );
+        PagePoint point1 = new PagePoint( 1.0, 2.0 );
+        PagePoint point2 = new PagePoint( 4.0, 5.0 );
 
-        assertEquals( point1.x(), (Integer) 1 );
-        assertEquals( point1.y(), (Integer) 2 );
+        assertEquals( point1.x(), 1 );
+        assertEquals( point1.y(), 2 );
 
-        assertEquals( point2.x(), (Integer) 4 );
-        assertEquals( point2.y(), (Integer) 5 );
+        assertEquals( point2.x(), 4 );
+        assertEquals( point2.y(), 5 );
     }
 
 //    @Test
@@ -189,8 +189,8 @@ public class PagePointTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        point1 = new PagePoint( 22, 33 );
-        point2 = new PagePoint( 22, 34 );
+        point1 = new PagePoint( 22.0, 33.0 );
+        point2 = new PagePoint( 22.0, 34.0 );
     }
 
     @AfterMethod

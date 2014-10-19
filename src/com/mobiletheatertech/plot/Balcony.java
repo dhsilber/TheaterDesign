@@ -85,7 +85,7 @@ public class Balcony extends MinderDom{
 //            }
 //        }
 
-        new Layer(LAYERTAG, LAYERNAME);
+        new Layer( LAYERTAG, LAYERNAME, "none" );
     }
 
     @Override

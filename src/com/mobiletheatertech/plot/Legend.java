@@ -53,7 +53,7 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw, View mode, Integer start, Integer width )
+    public static void Startup( Draw draw, View mode, Double start, Integer width )
             throws ReferenceException {
         DRAW = draw;
 
@@ -61,10 +61,10 @@ public class Legend {
         group.setAttribute( "class", "legend" );
         draw.appendRootChild( group );
 
-        Integer x = start;
-        Integer y = 17;
+        Double x = start;
+        Double y = 17.0;
 
-        Integer center = x + (width / 2);
+        Double center = x + (width / 2);
         headerText( draw, group, center, y, Event.Name() );
         y += 17;
         headerText( draw, group, center, y, Venue.Building() );
@@ -75,7 +75,7 @@ public class Legend {
         INITIAL = new PagePoint( start + 20, y );
 
         // TODO Adding the Y offset to the box height is really cheating
-        Integer boxHeight = y + HEIGHT + SvgElement.OffsetY();
+        Double boxHeight = y + HEIGHT + SvgElement.OffsetY();
 
         Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
@@ -98,7 +98,7 @@ public class Legend {
      * @throws ReferenceException
      */
     public static void headerText(
-            Draw draw, Element parent, Integer center, Integer y, String text )
+            Draw draw, Element parent, Double center, Double y, String text )
             throws ReferenceException
     {
         Text textNode = draw.document().createTextNode( text );

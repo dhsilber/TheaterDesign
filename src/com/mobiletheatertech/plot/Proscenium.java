@@ -31,12 +31,12 @@ public class Proscenium extends MinderDom {
     private static boolean ACTIVE = false;
     private static Point ORIGIN = null;
 
-    private Integer width = null;
-    private Integer depth = null;
-    private Integer height = null;
-    private Integer x = null;
-    private Integer y = null;
-    private Integer z = null;
+    private Double width = null;
+    private Double depth = null;
+    private Double height = null;
+    private Double x = null;
+    private Double y = null;
+    private Double z = null;
 
     private static final String COLOR = "black";
     private static final String FADEDCOLOR = "gray";
@@ -93,19 +93,21 @@ public class Proscenium extends MinderDom {
             throw new InvalidXMLException("Multiple Prosceniums are not currently supported.");
         }
 
-        width = getIntegerAttribute(element, "width");
-        depth = getIntegerAttribute(element, "depth");
-        height = getIntegerAttribute(element, "height");
-        x = getIntegerAttribute(element, "x");
-        y = getIntegerAttribute(element, "y");
-        z = getIntegerAttribute(element, "z");
+        width = getDoubleAttribute(element, "width");
+        depth = getDoubleAttribute(element, "depth");
+        height = getDoubleAttribute(element, "height");
+        x = getDoubleAttribute(element, "x");
+        y = getDoubleAttribute(element, "y");
+        z = getDoubleAttribute(element, "z");
 
         if (0 >= width) throw new SizeException("Proscenium", "width");
         if (0 >= depth) throw new SizeException("Proscenium", "depth");
         if (0 >= height) throw new SizeException("Proscenium", "height");
 
 
-        if (!Venue.Contains2D(new Rectangle(x - width / 2, y, width, depth))) {
+        if (!Venue.Contains2D(new Rectangle(
+                x.intValue() - width.intValue() / 2, y.intValue(),
+                width.intValue(), depth.intValue()))) {
             throw new LocationException(
                     "Proscenium should not extend beyond the boundaries of the venue.");
         }
@@ -212,10 +214,10 @@ public class Proscenium extends MinderDom {
             case TRUSS:
                 return;
             case PLAN:
-                Integer startX = x - width / 2;
-                Integer startY = y;
-                Integer endX = x + width / 2;
-                Integer endY = y + depth;
+                Double startX = x - width / 2;
+                Double startY = y;
+                Double endX = x + width / 2;
+                Double endY = y + depth;
 
                 // SR end of proscenium arch
                 SvgElement line = draw.line( draw, startX, startY, startX, endY, COLOR );

@@ -57,9 +57,9 @@ public class Write {
         String pathname = home + "/Dropbox/Plot/out/" + basename;
 
         writeDirectory( pathname );
-        writeFile(pathname, "index.html", generateIndex() );
+        writeFile(pathname, "drawings.html", generateHTMLDrawingList( basename ) );
         writeFile(pathname, "designer.html", generateDesigner() );
-        writeFile(pathname, "styles.css", CSS);
+        writeFile(pathname, "styles.css", CSS );
         // TODO factor out heading generation for these:
         drawPlan().create( pathname + "/plan.svg" );
         drawSection().create( pathname + "/section.svg" );
@@ -75,7 +75,7 @@ public class Write {
 //        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
     }
 
-    public String generateIndex() throws ReferenceException {
+    public String OLDgenerateIndex( String basename ) throws ReferenceException {
         String output = "" +
                 "<!DOCTYPE html>\n" +
                 "<head>\n" +
@@ -95,7 +95,7 @@ public class Write {
                 "<a href=\"mailto:theater@davidsilber.name\">theater@davidsilber.name</a> " +
                 "or at 240-997-6646.\n" +
                 "</p>\n" +
-                generateHTMLDrawingList() +
+                generateHTMLDrawingList( basename ) +
                 "<h2>Designers' View</h2>\n" +
                 "<p>\n" +
                 "The Designers' View allows users to turn off selected layers " +
@@ -117,7 +117,7 @@ public class Write {
         return output;
     }
 
-    private String generateHTMLDrawingList()  {
+    private String generateHTMLDrawingList( String basename ) throws ReferenceException {
 //        System.out.println();
 //        System.out.println( "In writeDrawings." );
         StringBuilder generated = new StringBuilder( "<p>" );
@@ -128,7 +128,8 @@ public class Write {
                 Drawing drawing = (Drawing) thingy;
 //                System.out.println( "About to write drawing for "+drawing.filename() );
 //                writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
-                generated.append( "<a href=\"" + drawing.filename + ".svg\">" + drawing.id + "</a><br/>\n" );
+                generated.append( "<a href=\"" + basename + "/" + drawing.filename + ".svg\">" +
+                        Venue.Name() + ": " + drawing.id + "</a><br/>\n" );
             }
         }
 //        System.out.println();
@@ -140,11 +141,11 @@ public class Write {
 
     public String generateDesigner() throws ReferenceException {
 //        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX();
-        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 7;
+        Double width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 7;
         width += width / 100 + 5;
 
-        Integer height = Venue.Depth();
-        height += SvgElement.OffsetY() * 2 + height / 100;
+        Double height = Venue.Depth();
+        height += SvgElement.OffsetY().intValue() * 2 + height / 100;
 
         String output = "" +
                 "<!DOCTYPE html>\n" +
@@ -254,12 +255,12 @@ public class Write {
         // scrollbars will be provided.
         Element rootElement = draw.root();
 
-        Integer width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 5;
+        Double width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 5;
         width += width / 100 + 5;
         rootElement.setAttribute("width", width.toString());
 
-        Integer height = Venue.Depth();
-        height += SvgElement.OffsetY() * 2 + height / 100;
+        Double height = Venue.Depth();
+        height += SvgElement.OffsetY().intValue() * 2 + height / 100;
         rootElement.setAttribute("height", height.toString());
 
 //        rootElement.setAttribute( "overflow", "visible" );
@@ -317,7 +318,7 @@ public class Write {
 //        Grid.DOM(draw);
 
         // Hardcoded values here are for Arisia '14 flying truss.
-        Legend.Startup(draw, View.TRUSS, 700, 300 );
+        Legend.Startup(draw, View.TRUSS, 700.0, 300 );
 
 //        System.out.println( "writeTruss: About to MinderDom.DomAllTruss.");
 
@@ -384,7 +385,10 @@ public class Write {
             System.err.println( "For " + drawing.filename() +", " + category + " requested." );
             if ( category.equals( Legend.CATEGORY )) {
                 System.err.println( "For " + drawing.filename() +", special-case Legend processing." );
-                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
+//                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
+                Legend.Startup(draw, View.PLAN,
+                        Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                        Legend.PlanWidth() );
                 Legend.Callback();
                 continue;
             }

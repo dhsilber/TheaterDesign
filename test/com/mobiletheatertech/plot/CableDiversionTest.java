@@ -17,12 +17,12 @@ public class CableDiversionTest {
     Element point1Element = null;
     Element pointLastElement = null;
 
-    Integer x1 = 60;
-    Integer y1 = 18;
-    Integer z1 = 0;
-    Integer xLast = 152;
-    Integer yLast = 70;
-    Integer zLast = 0;
+    Double x1 = 60.0;
+    Double y1 = 18.0;
+    Double z1 = 0.0;
+    Double xLast = 152.0;
+    Double yLast = 70.0;
+    Double zLast = 0.0;
 
     ArrayList<Point> vertices = null;
 

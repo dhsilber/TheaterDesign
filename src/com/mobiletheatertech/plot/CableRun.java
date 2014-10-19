@@ -1,7 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -85,10 +84,10 @@ public class CableRun extends MinderDom implements Legendable {
                 message.append( "of " ).append( signal ).append( " " );
             }
             if ( ! source.isEmpty() ) {
-                message.append( "from " + source + " " );
+                message.append( "from " ).append( source ).append( " " );
             }
             if ( ! sink.isEmpty() ) {
-                message.append( "to " + sink + " " );
+                message.append( "to " ).append( sink ).append( " " );
             }
             message.append( "is missing required" );
 
@@ -160,20 +159,20 @@ public class CableRun extends MinderDom implements Legendable {
         if( null == sourceDevice || null == sinkDevice ){
             StringBuilder message = new StringBuilder( "CableRun of " + signal );
             if ( null != sourceDevice ) {
-                message.append( " from " + source );
+                message.append( " from " ).append( source );
             }
             if ( null != sinkDevice ) {
-                message.append( " to " + sink );
+                message.append( " to " ).append( sink );
             }
             message.append( " references unknown " );
             if ( null == sourceDevice ) {
-                message.append( "source '" + source + "'" );
+                message.append( "source '" ).append( source ).append( "'" );
             }
             if( null == sourceDevice && null == sinkDevice ) {
                 message.append( " and " );
             }
             if ( null == sinkDevice ) {
-                message.append( "sink '" + sink + "'" );
+                message.append( "sink '" ).append( sink ).append( "'" );
             }
             message.append( "." );
             throw new InvalidXMLException( message.toString() );
@@ -206,7 +205,7 @@ public class CableRun extends MinderDom implements Legendable {
         ArrayList<Point> vertices = findPath( sourcePoint, sinkPoint );
         CableDiversion.InsertDiversion( vertices );
 
-//System.err.println("Drawing CableRun "+ this.toString() +".");
+System.err.println("Drawing CableRun "+ this.toString() +".");
 
         SvgElement group = draw.element("g");
         group.attribute("class", "CableRun" );
@@ -214,9 +213,9 @@ public class CableRun extends MinderDom implements Legendable {
         draw.appendRootChild(group);
 
         Point previous = sourcePoint;
+System.err.println("... previous point:  "+ previous.toString() +".");
         for( Point point : vertices ) {
-//System.err.println("... previous point:  "+ previous.toString() +".");
-//System.err.println("... next point: "+ point.toString() +".");
+System.err.println("... next point: "+ point.toString() +".");
 
             appendLineSegment( draw, group, previous, point );
             previous = point;
@@ -225,26 +224,29 @@ public class CableRun extends MinderDom implements Legendable {
 
     ArrayList<Point> findPath( Point sourcePoint, Point sinkPoint )
             throws ReferenceException {
-        ArrayList<Point> list = new ArrayList<>();
+        ArrayList<Point> list = new ArrayList<>(20);
 
         // Not every cable run needs to go to the floor. Check here for
         // sinkPoint being nearer than ground.
-        if( sourcePoint.distance( sinkPoint ) > sourcePoint.z()
+        if(     sourcePoint.distance( sinkPoint ) > sourcePoint.z()
                 && ! DIRECT.equals( routing )
                 ) {
 
             // If not a direct run, go first to the ground
-            Point sourceGround = new Point( sourcePoint.x(), sourcePoint.y(), 0 );
+            Point sourceGround = new Point( sourcePoint.x(), sourcePoint.y(), 0.0 );
             list.add( sourceGround );
 
             // ... and then to the wall.
             Wall sourceWall = Wall.WallNearestPoint(sourceGround);
             Point sourceWallPoint = sourceWall.nearestPointNearWall( sourceGround );
+
+System.err.println("\nsourceWallPoint: "+ sourceWallPoint.toString() +".");
+
             list.add( sourceWallPoint );
 
             // Find point on some wall nearest sink. We'll be using this as
             // a destination as we work our way around the room.
-            Point sinkGround = new Point( sinkPoint.x(), sinkPoint.y(), 0 );
+            Point sinkGround = new Point( sinkPoint.x(), sinkPoint.y(), 0.0 );
             Wall sinkWall = Wall.WallNearestPoint(sinkGround);
             Point sinkWallPoint = sinkWall.nearestPointNearWall( sinkGround );
 
@@ -260,6 +262,10 @@ public class CableRun extends MinderDom implements Legendable {
                     break;
                 }
 
+//                if( currentPoint.equals( ))
+
+System.err.println("... nextCorner: "+ nextCorner.toString() +".");
+
                 // draw line to that corner
                 list.add( nextCorner );
                 // find another wall that shares that corner and make it be current wall
@@ -270,27 +276,20 @@ public class CableRun extends MinderDom implements Legendable {
 
             // Now that we've found any intermediate points, finish up by adding
             // the last two points before the sink device.
+System.err.println("... sinkWallPoint: "+ sinkWallPoint.toString() +".");
             list.add( sinkWallPoint );
+System.err.println("... sinkGround: "+ sinkGround.toString() +".");
             list.add( sinkGround );
         }
 
+System.err.println("... sinkPoint: "+ sinkPoint.toString() +".");
         list.add( sinkPoint );
 
         return list;
     }
 
     void appendLineSegment( Draw draw, SvgElement group, Point one, Point two ) {
-
-//        SvgElement line = draw.element("line");
-//        line.attribute( "x1", one.x().toString() );
-//        line.attribute( "y1", one.y().toString());
-//        line.attribute( "x2", two.x().toString() );
-//        line.attribute( "y2", two.y().toString());
-//        line.attribute( "stroke", "green" );
-//        line.attribute( "stroke-width", "1" );
-//        group.appendChild(line);
-
-        draw.line( draw, one.x(), one.y(), two.x(), two.y(), "green" );
+        group.line( draw, one.x(), one.y(), two.x(), two.y(), "green" );
     }
 
 
@@ -308,17 +307,14 @@ public class CableRun extends MinderDom implements Legendable {
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
 
-        Integer endLine = start.x() + 12;
+        Double endLine = start.x() + 12;
 
-        SvgElement line = draw.line( draw, start.x(), start.y(), endLine, start.y(), COLOR );
+        draw.line( draw, start.x(), start.y(), endLine, start.y(), COLOR );
 
         String words = sourceDevice.layer() + " cable run";
-        Integer x = start.x() + Legend.TEXTOFFSET;
-        Integer y = start.y() + 3;
-        SvgElement text = draw.text( draw, words, x, y, Legend.TEXTCOLOR );
-
-//        draw.appendRootChild( line );
-//        draw.appendRootChild( text );
+        Double x = start.x() + Legend.TEXTOFFSET;
+        Double y = start.y() + 3;
+        draw.text( draw, words, x, y, Legend.TEXTCOLOR );
 
         return new PagePoint( start.x(), start.y() + 7 );
     }

@@ -15,7 +15,7 @@ public class KindException extends Exception {
      * @param type  Kind of Plot thingy
      * @param value Size
      */
-    public KindException( String type, int value ) {
-        super( type + " of size " + value + " not supported. Try 12 or 20." );
+    public KindException( String type, Double value ) {
+        super( type + " of size " + value + " not supported. Try 12.0 or 20.5." );
     }
 }
