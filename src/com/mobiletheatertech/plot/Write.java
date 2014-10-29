@@ -47,6 +47,7 @@ public class Write {
      * @throws ReferenceException
      */
     public void init( String basename ) throws MountingException, ReferenceException {
+        System.out.println( "Write.init()");
         home = System.getProperty("user.home");
 
         // TODO Is it even possible for this to happen?
@@ -228,6 +229,7 @@ public class Write {
     }
 
     private Draw drawPlan() throws MountingException, ReferenceException {
+System.out.println( "Write.drawPlan()");
         Draw draw = startFile();
         Legend.Startup(draw, View.PLAN,
                 Venue.Width() + SvgElement.OffsetX() * 2 + 5,
@@ -275,18 +277,22 @@ public class Write {
     }
 
     private Draw drawSection() throws MountingException, ReferenceException {
-        Draw draw = new Draw();
+        Draw draw = startFile();
+        Legend.Startup(draw, View.SECTION,
+                Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                Legend.PlanWidth() );
+        MinderDom.DomAllSection(draw);
 
-//        Minder.DrawAllSection(draw.canvas());
+//        System.out.println( "drawPlan: About to Hack.Dom.");
+        Hack.Dom(draw, View.SECTION );
 
-//        Hack.Draw( drawPlan.canvas() );
+//        System.out.println( "drawPlan: About to Legend.Callback.");
+        Legend.Callback();
 
-        draw.establishRoot();
-
-//        Minder.DomAllSection(draw);
-
-        Hack.Dom(draw, View.SECTION);
-
+//        String pathname = basename + "/plan.svg";
+//
+//        draw.create(pathname);
+//        System.out.println( "drawPlan: done.");
         return draw;
     }
 

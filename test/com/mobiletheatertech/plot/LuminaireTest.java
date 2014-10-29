@@ -194,7 +194,8 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
     }
-     @Test
+
+    @Test
     public void verifyRecordsLocation() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
 

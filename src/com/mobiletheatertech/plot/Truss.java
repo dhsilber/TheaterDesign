@@ -196,7 +196,20 @@ public class Truss extends Mountable implements Legendable {
         }
         Point point = suspend1.locate();
 
-        return new Point(point.x() - overHang + distance, point.y() + offset, point.z());
+        Double verticalOffset = 0.0;
+        switch (vertex) {
+            case 'a':
+            case 'b':
+                break;
+            case 'c':
+            case 'd':
+                verticalOffset += size;
+                break;
+            default:
+                throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+        }
+
+        return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
     }
 
     /*

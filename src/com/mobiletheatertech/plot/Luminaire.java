@@ -515,6 +515,7 @@ System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transfo
 //
 //        if (View.PLAN == mode ) {
 //
+        // TODO Keep this until I resolve how Luminaire knows what type it is.
 //            LuminaireDefinition definition = LuminaireDefinition.Select( type );
 //            if( null == definition ) {
 //                throw new    ReferenceException( "Unable to find definition for "+ type );

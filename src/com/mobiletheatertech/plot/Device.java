@@ -44,8 +44,13 @@ public class Device extends Stackable
     Double y = null;
     Double z = null;
     Double orientation = null;
+
+    // device dimensions
     Double width = null;
-    Double height = null;
+    Double depth = 0.0;
+
+    Boolean verified = false;
+
 
 //    private static final String COLOR = "black";
 //    private static final String FILLCOLOR = "grey";
@@ -60,7 +65,7 @@ public class Device extends Stackable
      */
     public Device( Element element ) throws AttributeMissingException, InvalidXMLException {
         super(element);
-
+System.out.println( "Constructing Device");
         id = getStringAttribute(element, "id");
         is = getStringAttribute(element, "is");
         on = getOptionalStringAttribute(element, "on");
@@ -74,7 +79,9 @@ public class Device extends Stackable
                     ") needs either the 'on' attribute or the set of x, y, and z coordinates." );
         }
 
-        GearList.Add( is );
+        System.out.println( this.toString() );
+
+        GearList.Add(is);
 
         DEVICELIST.add( this );
     }
@@ -105,6 +112,7 @@ public class Device extends Stackable
             throws FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException
     {
+        System.out.println( "verifying Device " + this.toString() );
         template = DeviceTemplate.Select( is );
         if( null == template ){
             throw new InvalidXMLException( "Device", id,
@@ -115,16 +123,16 @@ public class Device extends Stackable
         shape = template.getSolid();
 
         if( 90.0 == orientation ){
-            width  = shape.depth();
-            height = shape.width();
+            width = shape.depth();
+            depth = shape.width();
         }
         else {
-            width  = shape.width();
-            height = shape.depth();
+            width = shape.width();
+            depth = shape.depth();
         }
 
         if( "".equals( on ) ) {
-            place = new Point( x - width / 2, y - height / 2, z );
+            place = new Point( x - width / 2, y - depth / 2, z );
         }
         else {
             surface = Stackable.Select(on);
@@ -143,50 +151,163 @@ public class Device extends Stackable
         if( null != layer ) {
             color = layer.color();
         }
+
+        verified = true;
     }
 
     @Override
     public void dom(Draw draw, View mode)
             throws MountingException, ReferenceException
     {
-        SvgElement group = svgClassGroup( draw, layerName);
-        draw.appendRootChild(group);
+        SvgElement group = null;
+        SvgElement element = null;
 
-        SvgElement tableElement = group.rectangle( draw, place.x(), place.y(), width, height, color );
-        tableElement.attribute( "fill", color );
-        tableElement.attribute( "fill-opacity", "0.1" );
+        switch (mode) {
+            case PLAN:
+                group = svgClassGroup( draw, layerName);
+                draw.appendRootChild(group);
 
-        Double x = place.x() + 3;
-        Double y = place.y() + height - 4;
-        SvgElement idText = group.text( draw, id, place.x(), y, color );
-        idText.attribute( "text-anchor", "left" );
+                element = group.rectangle( draw, place.x(), place.y(), width, depth, color );
+                element.attribute("fill", color);
+                element.attribute("fill-opacity", "0.1");
+
+                Double x = place.x() + 3;
+                Double y = place.y() + depth - 4;
+                SvgElement idText = group.text( draw, id, place.x(), y, color );
+                idText.attribute( "text-anchor", "left" );
+                break;
+            case SECTION:
+                Double bottom = Venue.Height();
+
+                group = svgClassGroup( draw, layerName);
+                draw.appendRootChild(group);
+
+                Double height = shape.height();
+
+                element = group.rectangle( draw, place.y(), bottom - height, depth, height, color );
+                element.attribute("fill", color);
+                element.attribute("fill-opacity", "0.1");
+
+                break;
+            case FRONT:
+                break;
+            case TRUSS:
+                break;
+        }
+
     }
 
+    /**
+     * Provide the location to stack a specified Solid on this Device.
+     *
+     * @param shape
+     * @return
+     */
+    /*
+    This needs verify() to have been run. If it hasn't been, run verify() when invoked.
+     */
     @Override
-    public Point location( Solid shape ) {
+    public Point location( Solid shape ) throws FeatureException, InvalidXMLException,
+            LocationException, MountingException, ReferenceException {
+
+        if ( ! verified ) { this.verify(); }
+
+        System.out.println( "providing location for " + this.toString() );
+        if ( null == x ) {
+            throw new Error ("Found null x for "+ this.toString() );
+        }
+        if ( null == y ) {
+            throw new Error ("Found null y for "+ this.toString() );
+        }
+        if ( null == z ) {
+            throw new Error ("Found null z for "+ this.toString() );
+        }
         Double ex = x;
         Double wy = y;
         Double ze = z;
+        System.out.println( "Found coordinates "+ex+", "+wy+", "+ze+" for " + this.toString() );
 
         Double lastWidth = 0.0;
+        System.out.println( "Set lastWidth to "+lastWidth+" for " + this.toString() );
+
+        if ( null == thingsOnThis ) {
+            throw new Error ("Found null thingsOnThis." );
+        }
+        System.out.println( "Size of thinsOnThis: "+thingsOnThis.size() );
 
         for ( Thing item : thingsOnThis) {
-            ex = Math.max( ex, item.point.x().intValue() );
+            if( null == item ) {
+                throw new Error ("Found null item for "+ this.toString() );
+            }
+
+            if( null == item.point ) {
+                throw new Error ("Found null item.point for "+ this.toString() );
+            }
+            if( null == item.solid ) {
+                throw new Error ("Found null item.solid for "+ this.toString() );
+            }
+            System.out.println( "Found Thing at: "+item.point.toString()+", Solid: "+item.solid.toString()+", " + this.toString() );
+            ex = Math.max( ex, item.point.x() );
             wy = Math.max( wy, item.point.y() );
             ze = Math.max( ze, item.point.z() );
 
             lastWidth = item.solid.width();
         }
         Thing thing = new Thing();
-        thing.point = new Point( x, wy + lastWidth, z + height );
+        if ( null == depth) {
+            throw new Error ( "height is null for "+ this.toString() );
+        }
+        thing.point = new Point( x - width / 2, wy + lastWidth - depth / 2, z );
+
+        if( null == shape ) {
+            throw new Error ("Solid is null for "+ this.toString() );
+        }
         thing.solid = shape;
 
-        thingsOnThis.add( thing );
+        thingsOnThis.add(thing);
+        System.out.println( "location for " + this.toString() + " is " + thing.point.toString() );
 
         return thing.point;
     }
 
     public String toString(){
-        return "Device: "+id+", is: "+is+", on: "+on+".";
+        StringBuilder result = new StringBuilder( "Device: " );
+        if ( null == id ) {
+            result.append( "id is null" );
+        } else {
+            result.append( id );
+        }
+        result.append( ", is: " );
+        if ( null == is ) {
+            result.append( "is is null" );
+        } else {
+            result.append( is );
+        }
+        result.append( ", on: " );
+        if ( null == on ) {
+            result.append( "on is null" );
+        } else {
+            result.append( on );
+        }
+        result.append( ", at: " );
+        if ( null == x ) {
+            result.append( "x is null" );
+        } else {
+            result.append( x );
+        }
+        result.append( ", " );
+        if ( null == y ) {
+            result.append( "y is null" );
+        } else {
+            result.append( y );
+        }
+        result.append( ", " );
+        if ( null == z ) {
+            result.append( "z is null" );
+        } else {
+            result.append( z );
+        }
+        result.append( "." );
+        return result.toString();
     }
 }

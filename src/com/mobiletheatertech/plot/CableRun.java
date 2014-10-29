@@ -199,6 +199,15 @@ public class CableRun extends MinderDom implements Legendable {
     @Override
     public void dom( Draw draw, View mode ) throws ReferenceException {
 
+        switch (mode) {
+            case PLAN:
+                break;
+            case SECTION:
+            case FRONT:
+            case TRUSS:
+                return;
+        }
+
         Point sourcePoint = sourceDevice.location();
         Point sinkPoint = sinkDevice.location();
 

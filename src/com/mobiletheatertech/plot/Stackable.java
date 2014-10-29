@@ -56,8 +56,8 @@ public abstract class Stackable extends MinderDom {
 //    public abstract Point location( String location )
 //            throws InvalidXMLException, MountingException, ReferenceException;
 
-    public abstract Point location( Solid shape )
-//            throws InvalidXMLException, MountingException, ReferenceException
+    public abstract Point location( Solid shape ) throws FeatureException, InvalidXMLException,
+            LocationException, MountingException, ReferenceException
             ;
 
 }

@@ -22,6 +22,8 @@ public class DeviceTest {
     Element layeredTemplateElement = null;
     Element element = null;
     Element layeredElement = null;
+    Element stackedElement = null;
+    Element stackedTemplateElement = null;
 
     final String deviceName = "Intercom base station";
     final String tableName = "control table";
@@ -29,6 +31,7 @@ public class DeviceTest {
     final String layeredTemplateName = "Clear-Com RS-100A";
     final String layerTag = "intercom";
     final String layerColor = "green";
+    String stackedTemplateName = "Stacked tempolate";
 
     Double tableWidth = 1.0;
     Double tableDepth = 2.0;
@@ -45,6 +48,13 @@ public class DeviceTest {
     Double z = 87.0;
     Double orientation = 90.0;
     Double zero = 0.0;
+
+    Double stackedWidth = 1.0;
+    Double stackedDepth = 2.0;
+    Double stackedHeight = 3.0;
+    Double stackedX = 2.0;
+    Double stackedY = 2.3;
+    Double stackedZ = 1.2;
 
     @Test
     public void isA() throws Exception {
@@ -304,6 +314,23 @@ public class DeviceTest {
     }
 
     @Test
+    public void locationOnDevice() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate(templateElement);
+        Device device = new Device( element );
+        new DeviceTemplate( stackedTemplateElement );
+        Device stacked = new Device( stackedElement );
+        device.verify();
+        stacked.verify();
+
+        Point place = stacked.location();
+
+        assertEquals( place.y, tableY + stackedY );
+        assertEquals( place.x, tableX + stackedX );
+        assertEquals( place.z, tableZ + tableHeight + height );
+    }
+
+    @Test
     public void domPlanOn() throws Exception {
         DeviceTemplate deviceTemplate =  new DeviceTemplate(templateElement);
         Table table = new Table( tableElement );
@@ -336,8 +363,8 @@ public class DeviceTest {
         // Plot attribute is 'depth'. SVG attribute is 'height'.\
         Double height = deviceTemplateShape.depth();
         assertEquals(deviceElement.getAttribute("height"), height.toString() );
-        assertEquals(deviceElement.getAttribute("fill"), "grey");
-        assertEquals(deviceElement.getAttribute("stroke"), "black");
+        assertEquals(deviceElement.getAttribute("fill"), "black" );
+        assertEquals(deviceElement.getAttribute("stroke"), "black" );
     }
 
     @Test
@@ -375,7 +402,7 @@ public class DeviceTest {
         // Plot attribute is 'depth'. SVG attribute is 'height'.\
         Double height = deviceTemplateShape.depth();
         assertEquals(deviceElement.getAttribute("height"), height.toString() );
-        assertEquals(deviceElement.getAttribute("fill"), "grey");
+        assertEquals(deviceElement.getAttribute("fill"), "black");
         assertEquals(deviceElement.getAttribute("stroke"), "black");
     }
 
@@ -415,7 +442,7 @@ public class DeviceTest {
         assertEquals(deviceElement.getAttribute("width"), width.toString());
         Double height = deviceTemplateShape.width();
         assertEquals(deviceElement.getAttribute("height"), height.toString() );
-        assertEquals(deviceElement.getAttribute("fill"), "grey");
+        assertEquals(deviceElement.getAttribute("fill"), "black");
         assertEquals(deviceElement.getAttribute("stroke"), "black");
     }
 
@@ -463,6 +490,12 @@ public class DeviceTest {
         templateElement.setAttribute("width", width.toString() );
         templateElement.setAttribute("depth", depth.toString() );
         templateElement.setAttribute("height", height.toString() );
+        
+        stackedTemplateElement = new IIOMetadataNode("device-stackedTemplate");
+        stackedTemplateElement.setAttribute("type", stackedTemplateName );
+        stackedTemplateElement.setAttribute("width", stackedWidth.toString() );
+        stackedTemplateElement.setAttribute("depth", stackedDepth.toString() );
+        stackedTemplateElement.setAttribute("height", stackedHeight.toString() );
 
         layeredTemplateElement = new IIOMetadataNode("device-template");
         layeredTemplateElement.setAttribute("type", layeredTemplateName );
@@ -483,6 +516,14 @@ public class DeviceTest {
         layeredElement.setAttribute( "id", deviceName );
         layeredElement.setAttribute( "on", tableName );
         layeredElement.setAttribute( "is", layeredTemplateName );
+
+        stackedElement = new IIOMetadataNode( "device" );
+        stackedElement.setAttribute( "id", deviceName );
+        stackedElement.setAttribute( "on", tableName );
+        stackedElement.setAttribute( "is", stackedTemplateName );
+        stackedElement.setAttribute( "x", stackedX.toString() );
+        stackedElement.setAttribute("y", stackedY.toString());
+        stackedElement.setAttribute("z", stackedZ.toString());
     }
 
     @AfterMethod

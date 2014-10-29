@@ -26,11 +26,12 @@ public class TrussTest {
     Element suspendElement2 = null;
 //    Element baseElement = null;
     final String id = "trussID";
-Integer size = 12;
-    Integer length = 160;
-    Integer x1 = 100;
-    Integer y1 = 200;
-    Integer x2 = 180;
+    Double size = 12.0;
+    String sizeIntegerString = "12";
+    Double length = 160.0;
+    Double x1 = 100.0;
+    Double yBoth = 200.0;
+    Double x2 = 180.0;
 
     public TrussTest() {
     }
@@ -52,8 +53,8 @@ Integer size = 12;
     public void storesAttributes() throws Exception {
         Truss truss = new Truss( element );
 
-        assertEquals( TestHelpers.accessInteger( truss, "size" ), size );
-        assertEquals( TestHelpers.accessInteger( truss, "length" ), length );
+        assertEquals( TestHelpers.accessDouble( truss, "size" ), size );
+        assertEquals( TestHelpers.accessDouble( truss, "length" ), length );
     }
 
 //    @Test
@@ -199,8 +200,17 @@ Integer size = 12;
      * This is to ensure that no exception is thrown if data is OK.
      */
     @Test
+    public void justFineSize12Integer() throws Exception {
+        element.setAttribute( "size", sizeIntegerString );
+        new Truss( element );
+    }
+
+    /*
+     * This is to ensure that no exception is thrown if data is OK.
+     */
+    @Test
     public void justFineSize20() throws Exception {
-        element.setAttribute( "size", "20" );
+        element.setAttribute( "size", "20.5" );
         new Truss( element );
     }
 
@@ -220,7 +230,7 @@ Integer size = 12;
 
     @Test(expectedExceptions = KindException.class,
           expectedExceptionsMessageRegExp =
-                  "Truss of size 302 not supported. Try 12 or 20.")
+                  "Truss of size 302.0 not supported. Try 12.0 or 20.5.")
     public void unsupportedSize() throws Exception {
         element.setAttribute( "size", "302" );
         new Truss( element );
@@ -255,6 +265,19 @@ Integer size = 12;
 
         Point point = truss.location( "a 17");
         assertEquals( point, new Point(77, 194, 239));
+    }
+
+    @Test
+    public void locationVertexC() throws Exception {
+        Truss truss = new Truss( element );
+        new Suspend( suspendElement1 );
+        new Suspend( suspendElement2 );
+        truss.verify();
+        assertNotNull( TestHelpers.accessObject(truss, "suspend1"));
+        assertNotNull( TestHelpers.accessObject(truss, "suspend2"));
+
+        Point point = truss.location( "c 17");
+        assertEquals( point, new Point(77, 194, 227));
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -357,11 +380,11 @@ Integer size = 12;
         assertEquals(element.getAttribute("height"), size.toString());
         assertEquals(element.getAttribute("fill"), "none");
         assertEquals(element.getAttribute("stroke"), "dark blue");
-        Integer x = x1 - (length - (x2 - x1)) / 2;
+        Double x = x1 - (length - (x2 - x1)) / 2;
         assertEquals(element.getAttribute("x"), x.toString());
-        Integer y = y1 - size / 2;
+        Double y = yBoth - size / 2;
         assertEquals(element.getAttribute("y"), y.toString());
-        assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + y1.toString() + ")");
+        assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + yBoth.toString() + ")");
     }
 
 //    @Test
@@ -555,13 +578,13 @@ Integer size = 12;
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
         hangPoint1.setAttribute( "id", "jim" );
         hangPoint1.setAttribute("x", x1.toString());
-        hangPoint1.setAttribute("y", y1.toString());
+        hangPoint1.setAttribute("y", yBoth.toString());
         hanger1 = new HangPoint( hangPoint1 );
 
         Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
         hangPoint2.setAttribute( "id", "joan" );
         hangPoint2.setAttribute("x", x2.toString());
-        hangPoint2.setAttribute( "y", "200" );
+        hangPoint2.setAttribute( "y", yBoth.toString());
         hanger2 = new HangPoint( hangPoint2 );
 
         suspendElement1 = new IIOMetadataNode( "suspend" );
@@ -570,7 +593,7 @@ Integer size = 12;
 
         suspendElement2 = new IIOMetadataNode( "suspend" );
         suspendElement2.setAttribute( "ref", "joan" );
-        suspendElement2.setAttribute( "distance", "2" );
+        suspendElement2.setAttribute( "distance", "1" );
 
 //        baseElement = new IIOMetadataNode( "base" );
 //        baseElement.setAttribute( "x", "1" );

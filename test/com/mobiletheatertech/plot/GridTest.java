@@ -27,8 +27,9 @@ public class GridTest {
 
     Element element = null;
 
-    Integer startx = 17;
-    Integer starty = -65;
+    Double startx = 17.0;
+    Double starty = -65.0;
+    Double startz = 7.0;
 
     @Test
     public void isA() throws Exception {
@@ -46,19 +47,22 @@ public class GridTest {
     public void storesAttributes() throws Exception {
         Grid grid = new Grid( element );
 
-        assertEquals( TestHelpers.accessInteger(grid, "startx"), (Integer)0 );
-        assertEquals( TestHelpers.accessInteger( grid, "starty" ), (Integer)0 );
+        assertEquals( TestHelpers.accessDouble(grid, "startx"), 0.0 );
+        assertEquals( TestHelpers.accessDouble( grid, "starty" ), 0.0 );
+        assertEquals( TestHelpers.accessDouble( grid, "startz" ), 0.0 );
     }
 
     @Test
     public void storesOptionalAttributes() throws Exception {
         element.setAttribute( "startx", startx.toString() );
         element.setAttribute( "starty", starty.toString() );
+        element.setAttribute( "startz", startz.toString() );
 
         Grid grid = new Grid( element );
 
-        assertEquals( TestHelpers.accessInteger( grid, "startx" ), startx );
-        assertEquals( TestHelpers.accessInteger( grid, "starty" ), starty );
+        assertEquals( TestHelpers.accessDouble( grid, "startx" ), startx );
+        assertEquals( TestHelpers.accessDouble( grid, "starty" ), starty );
+        assertEquals( TestHelpers.accessDouble( grid, "startz" ), startz );
     }
 
     @Test

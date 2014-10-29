@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
 /**
  * Draw the grid that underlays the drawing.
  * <p/>
- * I'm drawing faint grid lines every 12 units, with every tenth one being slightly less faint. This
+ * I'm drawing faint grid lines every 48 units. This
  * makes sense if one is working with inches. Should anyone want to use this software with other
  * metrics, an attribute to specify grid spacing will need to be implemented.
  *
@@ -25,12 +25,14 @@ public class Grid extends MinderDom {
 
     Double startx = null;
     Double starty = null;
+    Double startz = null;
 
     public Grid( Element element ) throws AttributeMissingException, InvalidXMLException{
         super( element );
 
         startx = getOptionalDoubleAttribute( element, "startx" );
         starty = getOptionalDoubleAttribute( element, "starty" );
+        startz = getOptionalDoubleAttribute( element, "startz" );
 
         SvgElement.Offset( SCALETHICKNESS + startx, SCALETHICKNESS + starty );
 
@@ -49,26 +51,46 @@ public class Grid extends MinderDom {
     @Override
     public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
 
-        Point start = new Point( startx, starty, 0.0 );
-        Double width = Venue.Width() + SCALETHICKNESS + startx.intValue();
-        Double depth = Venue.Depth() + SCALETHICKNESS + starty;
-        draw.scaleLine( draw, start, width, depth );
+        Point start   = null;
+
+        // Display coordinates
+        Double width  = null;
+        Double height = null;
+
+        switch (mode) {
+            case PLAN:
+                start = new Point( startx, starty, 0.0 );
+                width = Venue.Width() + SCALETHICKNESS + startx;
+                height = Venue.Depth() + SCALETHICKNESS + starty;
+                break;
+            case SECTION:
+                start  = new Point( starty, startz, 0.0 );
+                width  = Venue.Depth()  + SCALETHICKNESS + starty * 2;
+                height = Venue.Height() + SCALETHICKNESS + startz * 2;
+                break;
+            case FRONT:
+            case TRUSS:
+                return;
+        }
+
+        draw.scaleLine( draw, start, width, height );
 
         Double startX = SCALETHICKNESS + startx % 48;
         for (Double x = startX; x <= width; x += 48) {
-            String opacity = ((x % 120) == 1)
-                    ? "0.2"
-                    : "0.1";
-            verticalLine( draw, depth, x, opacity );
+            String opacity = /*((x % 120) == 1)
+                    ?*/ "0.2"
+                    /*: "0.1"*/;
+            verticalLine( draw, height, x, opacity );
         }
 
         Double startY = SCALETHICKNESS + starty % 48;
-        for (Double y = startY; y <= depth; y += 48) {
-            String opacity = ((y % 120) == 1)
-                    ? "0.2"
-                    : "0.1";
+        for (Double y = startY; y <= height; y += 48) {
+            String opacity = /*((y % 120) == 1)
+                    ?*/ "0.2"
+                    /*: "0.1"*/;
             horizontalLine( draw, width, y, opacity );
         }
+
     }
 
     private void verticalLine( Draw draw, Double end, Double x, String opacity ) {

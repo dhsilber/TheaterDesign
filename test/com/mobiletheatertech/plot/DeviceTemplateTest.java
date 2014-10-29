@@ -101,13 +101,24 @@ public class DeviceTemplateTest {
     }
 
     @Test
+    public void storesSVG() throws Exception {
+        Element svgElement = new IIOMetadataNode( "svg" );
+        element.appendChild( svgElement );
+
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+
+        Object svgStored = TestHelpers.accessObject( deviceTemplate, "svg" );
+        assertNotNull( svgStored );
+    }
+
+    @Test
     public void recallsNull() {
         assertNull(DeviceTemplate.Select("bogus"));
     }
 
     @Test
     public void recalls() throws Exception {
-        DeviceTemplate deviceTemplate=new DeviceTemplate( element );
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
         assertSame(DeviceTemplate.Select(name), deviceTemplate);
     }
 

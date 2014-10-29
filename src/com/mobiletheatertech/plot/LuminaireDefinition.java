@@ -29,7 +29,8 @@ import java.util.ArrayList;
  */
 public class LuminaireDefinition extends MinderDom implements Legendable {
 
-    private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
+    // TODO Keep this until I resolve how Luminaire knows what type it is.
+//    private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
 
     //    private String id;
     private Boolean complete;
@@ -46,14 +47,15 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
      * @param id of {@code LuminaireDefinition} to find
      * @return {@code LuminaireDefinition}, or {@code null} if not found
      */
-    public static LuminaireDefinition Select( String id ) {
-        for (LuminaireDefinition selection : LUMINAIRELIST) {
-            if (selection.id.equals( id )) {
-                return selection;
-            }
-        }
-        return null;
-    }
+    // TODO Keep this until I resolve how Luminaire knows what type it is.
+//    public static LuminaireDefinition Select( String id ) {
+//        for (LuminaireDefinition selection : LUMINAIRELIST) {
+//            if (selection.id.equals( id )) {
+//                return selection;
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Construct a {@code LuminaireDefinition} from an XML element.
@@ -82,7 +84,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             svg = (Element) svgNode;
         }
 
-        LUMINAIRELIST.add( this );
+//        LUMINAIRELIST.add( this );
 
         legendHeight = 2 + ((width > length)
                             ? length

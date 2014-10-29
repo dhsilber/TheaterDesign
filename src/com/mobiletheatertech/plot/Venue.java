@@ -266,20 +266,19 @@ public class Venue extends MinderDom implements Legendable {
      */
     @Override
     public void dom( Draw draw, View mode ) {
-        SvgElement element = null;
 
         switch (mode) {
             case PLAN:
                 // Don't actually need this. It just muddies up the drawing.
-//                element = draw.rectangle( draw, 0, 0, width, depth, COLOR );
+//                draw.rectangle( draw, 0, 0, width, depth, COLOR );
 //                draw.appendRootChild( element );
                 break;
             case SECTION:
-                element = draw.rectangle(draw, 0.0, 0.0, depth, height, COLOR);
+                draw.rectangle(draw, 0.0, 0.0, depth, height, COLOR);
 //                draw.appendRootChild( element );
                 break;
             case FRONT:
-                element = draw.rectangle(draw, 0.0, 0.0, width, height, COLOR);
+                draw.rectangle(draw, 0.0, 0.0, width, height, COLOR);
 //                draw.appendRootChild( element );
                 break;
             case TRUSS:

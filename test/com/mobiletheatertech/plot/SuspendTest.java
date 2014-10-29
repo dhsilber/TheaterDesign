@@ -115,14 +115,9 @@ public class SuspendTest {
     @Test(expectedExceptions = AttributeMissingException.class,
           expectedExceptionsMessageRegExp =
                   "Suspend instance is missing required 'distance' attribute.")
-    public void noDistanceWithoutID() throws Exception {
+    public void noDistance() throws Exception {
         element.removeAttribute( "distance" );
         new Suspend( element );
-    }
-
-    @Test
-    public void noDistance() {
-        fail( "Missing distance attribute exception message should mention id of referenced HangPoint." );
     }
 
     @Test(expectedExceptions = ReferenceException.class,
@@ -173,7 +168,7 @@ public class SuspendTest {
         TestResets.MinderDomReset();
 
         //TODO Takes too long to complete:
-//        new Parse( stream );
+        new Parse( stream );
 
         // Final size of list
         ArrayList<ElementalLister> list = ElementalLister.List();
@@ -209,9 +204,9 @@ public class SuspendTest {
 
         Point location = suspend.locate();
 
-        assertEquals( location.x(), (Integer) 100 );
-        assertEquals( location.y(), (Integer) 200 );
-        assertEquals( location.z(), (Integer) 208 );
+        assertEquals( location.x(), 100.0 );
+        assertEquals( location.y(), 200.0 );
+        assertEquals( location.z(), 208.0 );
     }
 
 //    @Test

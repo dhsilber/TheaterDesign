@@ -31,9 +31,9 @@ public class Read {
     public Read(String basename) throws Exception {
 
         ReadPlotfile( basename );
-        ReadInferenceSpreadsheet();
-        ReadEventSpreadsheet( basename );
-//        Inference.Dump();
+//        ReadInferenceSpreadsheet();
+//        ReadEventSpreadsheet( basename );
+////        Inference.Dump();
     }
 
     public static void ReadPlotfile(String basename) throws Exception {

@@ -19,9 +19,9 @@ import org.w3c.dom.Element;
  */
 public class Opening extends Elemental {
 
-    private Integer height = null;
-    private Integer width = null;
-    private Integer start = null;
+    private Double height = null;
+    private Double width = null;
+    private Double start = null;
 
     public Opening( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
@@ -30,9 +30,9 @@ public class Opening extends Elemental {
 //            throw new InvalidXMLException( "Element unexpectedly null!" );
 //        }
 
-        height = getIntegerAttribute( element, "height" );
-        width = getIntegerAttribute( element, "width" );
-        start = getIntegerAttribute( element, "start" );
+        height = getDoubleAttribute( element, "height" );
+        width = getDoubleAttribute( element, "width" );
+        start = getDoubleAttribute( element, "start" );
     }
 
     /**
@@ -40,7 +40,7 @@ public class Opening extends Elemental {
      *
      * @return start
      */
-    public Integer start() {
+    public Double start() {
         return start;
     }
 
@@ -49,7 +49,7 @@ public class Opening extends Elemental {
      *
      * @return width
      */
-    public Integer width() {
+    public Double width() {
         return width;
     }
 //
