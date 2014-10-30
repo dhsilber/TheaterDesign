@@ -180,8 +180,6 @@ public class Luminaire extends MinderDom {
         Double angle = Math.atan2(oppositeLength, adjacentLength);
         angle = Math.toDegrees(angle);
 
-//        System.err.println(
-//                "Angle: " + angle + "  al: " + adjacentLength + "  oL: " + oppositeLength );
         return angle.intValue() + 90;
     }
 
@@ -245,7 +243,7 @@ public class Luminaire extends MinderDom {
 //                    transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
                 }
 //                use.setAttribute("transform", "rotate(" + rotation + "," + point.x() + "," + point.y() + ")" );
-System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transform );
+//System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transform );
                 use.attribute("transform", transform );
 
                 break;

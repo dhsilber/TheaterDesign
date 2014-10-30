@@ -187,7 +187,6 @@ class SvgElement {
         topBumps.attribute( "stroke-dashoffset", dashOffsetX.toString() );
 
         Integer incrementX = start.x().intValue();
-//    System.out.println( "IncrementX: "+ incrementX);
         for( Double place = thickness + start.x() % 48; place < width; place += 48 ) {
             Integer value = (place.intValue() - thickness.intValue() - start.x().intValue()) / 12;
             SvgElement number =
@@ -326,8 +325,6 @@ class SvgElement {
         Double xSet = x;
         Double ySet = y;
         if( ! descendantOf( "symbol" )) {
-//        if( ! "symbol".equals( element.getTagName() )) {
-            System.out.println( "In use, "+ id + " is a descendant of symbol.");
             xSet += xOffset;
             ySet += yOffset;
         }
@@ -349,10 +346,8 @@ class SvgElement {
     private boolean descendantOf( String tag ) {
         Element root = element.getOwnerDocument().getDocumentElement();
 
-        System.out.println( "Looking for "+ tag );
         Element checkElement = element;
         do {
-            System.out.println( checkElement.toString() );
             if( tag.equals( checkElement.getTagName() ) ) {
                 return true;
             }

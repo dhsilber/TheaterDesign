@@ -63,7 +63,6 @@ public class Truss extends Mountable implements Legendable {
             throws AttributeMissingException, InvalidXMLException, KindException {
         super(element);
 
-//        System.out.println("Starting location: "+Proscenium.Active().toString() );
         if (Proscenium.Active()) {
             throw new InvalidXMLException("Truss not yet supported with Proscenium.");
         }
@@ -89,59 +88,37 @@ public class Truss extends Mountable implements Legendable {
 
         NodeList suspendList = element.getElementsByTagName("suspend");
 
-//        if (2 != suspendList.getLength() && 1 != baseList.getLength()) {
-//            System.err.println( "Found " + suspendList.getLength() + " suspend child nodes" );
-//            System.err.println( "Found " + baseList.getLength() + " base child nodes" );
-//            throw new InvalidXMLException( "Truss must have exactly two suspend children" );
-//        }
-
         if (2 != suspendList.getLength()) {
             System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
             throw new InvalidXMLException("Truss (" + id + ") must have exactly two suspend children");
         }
 
         suspend1 = findSuspend(0, suspendList);
-//        if(null==suspend1) {
-//            throw new InvalidXMLException("Verify: suspend1 is null");
-//        }
         suspend2 = findSuspend(1, suspendList);
-//        if(null==suspend2) {
-//            throw new InvalidXMLException("Verify: suspend2 is null");
-//        }
 
         point1 = suspend1.locate();
         point2 = suspend2.locate();
         Double slope = slope(point1, point2);
         rotation = Math.toDegrees(Math.atan(slope));
-//        Tan-1 (Slope Percent/100).
-//        System.err.println("Slope: " + slope + "   Rotation:" + rotation);
 
         Double supportSpan = point1.distance(point2);
         Long span = Math.round(supportSpan);
         overHang = (length - span.intValue()) / 2;
-//        System.out.println("verify() span: " + span + " overHang: " + overHang + ".");
         // Given suspend1 and the slope, find where the start of the truss will end up.
     }
 
     private Suspend findSuspend(int item, NodeList suspendList) {
-//        System.out.println("findSuspend item: " + item + ".");
         Node node = suspendList.item(item);
-//        System.out.println("findSuspend node: " + node + ".");
         // Much of this code is copied from HangPoint.ParseXML - refactor
         if (null != node) {
-//            System.out.println("findSuspend node is not null.");
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-//                System.out.println("findSuspend node is an element.");
                 Element parent = (Element) node;
                 String mark = parent.getAttribute("processedMark");
-//                System.out.println("findSuspend mark: " + mark + ".");
                 Suspend found = Suspend.Find(mark);
-//                System.out.println("findSuspend found: " + found + ".");
 
                 return found;
             }
         }
-//        System.out.println("findSuspend fell out bottom. Returning null.");
         return null;
     }
 
@@ -219,7 +196,6 @@ public class Truss extends Mountable implements Legendable {
         Double y;
 
         Character vertex = location.charAt(0);
-//        System.out.println("relocate(): Count "+TrussCount );
         Double offset = size / 2;
         switch (vertex) {
             case 'a':
@@ -259,7 +235,6 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     public boolean farSide( String location ) throws MountingException{
 
         Character vertex = location.charAt(0);
-//        System.out.println("relocate(): Count "+TrussCount );
         switch (vertex) {
             case 'a':
             case 'c':

@@ -44,6 +44,7 @@ public class Device extends Stackable
     Double y = null;
     Double z = null;
     Double orientation = null;
+    String layer = null;
 
     // device dimensions
     Double width = null;
@@ -65,7 +66,6 @@ public class Device extends Stackable
      */
     public Device( Element element ) throws AttributeMissingException, InvalidXMLException {
         super(element);
-System.out.println( "Constructing Device");
         id = getStringAttribute(element, "id");
         is = getStringAttribute(element, "is");
         on = getOptionalStringAttribute(element, "on");
@@ -73,13 +73,12 @@ System.out.println( "Constructing Device");
         y = getOptionalDoubleAttribute(element, "y");
         z = getOptionalDoubleAttribute(element, "z");
         orientation = getOptionalDoubleAttribute(element, "orientation");
+        layer = getOptionalStringAttribute( element, "layer" );
 
         if( "".equals( on ) && ( x.equals( 0.0 ) || y.equals( 0.0 ) ) ) {
             throw new AttributeMissingException( "Device (" + id +
                     ") needs either the 'on' attribute or the set of x, y, and z coordinates." );
         }
-
-        System.out.println( this.toString() );
 
         GearList.Add(is);
 
@@ -112,7 +111,6 @@ System.out.println( "Constructing Device");
             throws FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException
     {
-        System.out.println( "verifying Device " + this.toString() );
         template = DeviceTemplate.Select( is );
         if( null == template ){
             throw new InvalidXMLException( "Device", id,
@@ -145,7 +143,7 @@ System.out.println( "Constructing Device");
             place = surface.location(shape);
         }
 
-        layerName = template.layer();
+        layerName = ( ! "".equals( layer ) ) ? layer : template.layer();
 
         Layer layer = Layer.List().get( layerName );
         if( null != layer ) {
@@ -212,7 +210,6 @@ System.out.println( "Constructing Device");
 
         if ( ! verified ) { this.verify(); }
 
-        System.out.println( "providing location for " + this.toString() );
         if ( null == x ) {
             throw new Error ("Found null x for "+ this.toString() );
         }
@@ -225,15 +222,12 @@ System.out.println( "Constructing Device");
         Double ex = x;
         Double wy = y;
         Double ze = z;
-        System.out.println( "Found coordinates "+ex+", "+wy+", "+ze+" for " + this.toString() );
 
         Double lastWidth = 0.0;
-        System.out.println( "Set lastWidth to "+lastWidth+" for " + this.toString() );
 
         if ( null == thingsOnThis ) {
             throw new Error ("Found null thingsOnThis." );
         }
-        System.out.println( "Size of thinsOnThis: "+thingsOnThis.size() );
 
         for ( Thing item : thingsOnThis) {
             if( null == item ) {
@@ -246,7 +240,6 @@ System.out.println( "Constructing Device");
             if( null == item.solid ) {
                 throw new Error ("Found null item.solid for "+ this.toString() );
             }
-            System.out.println( "Found Thing at: "+item.point.toString()+", Solid: "+item.solid.toString()+", " + this.toString() );
             ex = Math.max( ex, item.point.x() );
             wy = Math.max( wy, item.point.y() );
             ze = Math.max( ze, item.point.z() );
@@ -265,7 +258,6 @@ System.out.println( "Constructing Device");
         thing.solid = shape;
 
         thingsOnThis.add(thing);
-        System.out.println( "location for " + this.toString() + " is " + thing.point.toString() );
 
         return thing.point;
     }

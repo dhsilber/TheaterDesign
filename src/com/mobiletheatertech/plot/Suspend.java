@@ -32,15 +32,11 @@ public class Suspend extends MinderDom {
         refId = getStringAttribute( element, "ref" );
         distance = getIntegerAttribute( element, "distance" );
 
-//        System.out.println( "Suspend refId: " + refId );
         hangPoint = HangPoint.Find( refId );
         if (null == hangPoint) {
             throw new ReferenceException(
                     "Cannot suspend from unknown hangpoint ref " + refId + "." );
         }
-//        else {
-//            System.out.println( "References " + hangPoint.toString() );
-//        }
 
         processedMark = Mark.Generate();
         element.setAttribute( "processedMark", processedMark );

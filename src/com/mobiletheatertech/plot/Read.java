@@ -79,11 +79,6 @@ public class Read {
         Integer rows = sheet.getRowCount();
         Integer columns = sheet.getColumnCount();
 
-//        System.out.println( "First: " + first +
-//                ".  Rows: "+ rows+
-//                ".  Columns: "+ columns+
-//                ".  Technical starts with column "+technicalColumn);
-
         int eventColumn=0;
         for (int index=1; index< rows; index++ ) {
             String sessionName = sheet.getCellAt( eventColumn, index).getValue().toString();
@@ -104,10 +99,7 @@ public class Read {
                 if (!requirement.isEmpty()) {
                     session.needs( requirement );
                 }
-
-//                System.out.print( requirement + ", " );
             }
-//            System.out.println();
         }
 
         // Change date.
@@ -135,15 +127,10 @@ public class Read {
 
         String pathname = home + "/Dropbox/Plot/plotfiles/inference.ods";
 
-//        System.out.println("About to open "+pathname );
-
         // Load the file.
         File file = new File( pathname );
 
-
-//        System.out.println("Got file");
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet(0);
-//        System.out.println("Got spreadsheet");
 
         String requirementsTitle = sheet.getCellAt(0,0).getValue().toString();
         if ( !requirementsTitle.equals( "Requirement")) {
@@ -160,9 +147,6 @@ public class Read {
         Integer rows = sheet.getRowCount();
         Integer columns = sheet.getColumnCount();
 
-//        System.out.println( "Rows: "+ rows+
-//                ".  Columns: "+ columns );
-
         int requirementColumn=0;
         int impliesColumn=1;
         for (int index=1; index< rows; index++ ) {
@@ -175,7 +159,6 @@ public class Read {
                 break;
             }
             Inference.Add(requirement,implication);
-//            System.out.println(requirement+"/"+implication);
         }
 
         // Change date.

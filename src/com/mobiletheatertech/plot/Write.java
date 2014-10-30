@@ -47,7 +47,6 @@ public class Write {
      * @throws ReferenceException
      */
     public void init( String basename ) throws MountingException, ReferenceException {
-        System.out.println( "Write.init()");
         home = System.getProperty("user.home");
 
         // TODO Is it even possible for this to happen?
@@ -119,21 +118,15 @@ public class Write {
     }
 
     private String generateHTMLDrawingList( String basename ) throws ReferenceException {
-//        System.out.println();
-//        System.out.println( "In writeDrawings." );
         StringBuilder generated = new StringBuilder( "<p>" );
 
         for (ElementalLister thingy : MinderDom.List() ) {
-//            System.out.println( "Found a thing of type: "+ thingy.getClass().getCanonicalName() );
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
-//                System.out.println( "About to write drawing for "+drawing.filename() );
-//                writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
                 generated.append( "<a href=\"" + basename + "/" + drawing.filename + ".svg\">" +
                         Venue.Name() + ": " + drawing.id + "</a><br/>\n" );
             }
         }
-//        System.out.println();
 
         generated.append( "</p>" );
 
@@ -229,23 +222,19 @@ public class Write {
     }
 
     private Draw drawPlan() throws MountingException, ReferenceException {
-System.out.println( "Write.drawPlan()");
         Draw draw = startFile();
         Legend.Startup(draw, View.PLAN,
                 Venue.Width() + SvgElement.OffsetX() * 2 + 5,
                 Legend.PlanWidth() );
         MinderDom.DomAllPlan(draw);
 
-//        System.out.println( "drawPlan: About to Hack.Dom.");
         Hack.Dom(draw, View.PLAN );
 
-//        System.out.println( "drawPlan: About to Legend.Callback.");
         Legend.Callback();
 
 //        String pathname = basename + "/plan.svg";
 //
 //        draw.create(pathname);
-//        System.out.println( "drawPlan: done.");
         return draw;
     }
 
@@ -283,16 +272,13 @@ System.out.println( "Write.drawPlan()");
                 Legend.PlanWidth() );
         MinderDom.DomAllSection(draw);
 
-//        System.out.println( "drawPlan: About to Hack.Dom.");
         Hack.Dom(draw, View.SECTION );
 
-//        System.out.println( "drawPlan: About to Legend.Callback.");
         Legend.Callback();
 
 //        String pathname = basename + "/plan.svg";
 //
 //        draw.create(pathname);
-//        System.out.println( "drawPlan: done.");
         return draw;
     }
 
@@ -317,7 +303,6 @@ System.out.println( "Write.drawPlan()");
     }
 
     private Draw drawTruss() throws MountingException, ReferenceException {
-//        System.out.println( "writeTruss: About to start.");
         Draw draw = startFile();
 
 
@@ -326,20 +311,15 @@ System.out.println( "Write.drawPlan()");
         // Hardcoded values here are for Arisia '14 flying truss.
         Legend.Startup(draw, View.TRUSS, 700.0, 300 );
 
-//        System.out.println( "writeTruss: About to MinderDom.DomAllTruss.");
-
         MinderDom.DomAllTruss(draw);
 
-//        System.out.println( "writeTruss: About to Hack.Dom.");
         Hack.Dom(draw, View.TRUSS);
 
-//        System.out.println( "writeTruss: About to Legend.Callback.");
         Legend.Callback();
 
 //        String pathname = basename + "/truss.svg";
 //
 //        draw.create(pathname);
-//        System.out.println( "writeTruss: done.");
 
         return draw;
     }
@@ -363,22 +343,16 @@ System.out.println( "Write.drawPlan()");
     }
 
     private void writeDrawings( String pathname ) throws MountingException, ReferenceException {
-//        System.out.println();
-//        System.out.println( "In writeDrawings." );
         for (ElementalLister thingy : MinderDom.List() ) {
-//            System.out.println( "Found a thing of type: "+ thingy.getClass().getCanonicalName() );
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
-//                System.out.println( "About to write drawing for "+drawing.filename() );
                 writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
             }
         }
-//        System.out.println();
     }
 
     private Draw writeIndividualDrawing( Drawing drawing )
             throws MountingException, ReferenceException {
-//        System.out.println( "writeIndividualDrawing: About to start.");
         Draw draw = startFile();
 
 
@@ -386,11 +360,8 @@ System.out.println( "Write.drawPlan()");
 
         HangPoint.SYMBOLGENERATED = false;
 
-        System.err.println();
         for ( String categoryName : drawing.displayList ) {
-            System.err.println( "For " + drawing.filename() +", " + categoryName + " requested." );
             if ( categoryName.equals( Legend.CATEGORY )) {
-                System.err.println( "For " + drawing.filename() +", special-case Legend processing." );
 //                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
                 Legend.Startup(draw, View.PLAN,
                         Venue.Width() + SvgElement.OffsetX() * 2 + 5,
@@ -398,7 +369,6 @@ System.out.println( "Write.drawPlan()");
                 Legend.Callback();
                 continue;
             }
-            System.err.println( "For " + drawing.filename() +", regular processing." );
             Category category = Category.Select( categoryName );
             if ( null == category ) {
                 System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
@@ -406,10 +376,8 @@ System.out.println( "Write.drawPlan()");
             }
             Class requested = category.clazz();
             String layer = category.layer();
-            System.err.println( "For " + drawing.filename() +", " + categoryName + " processing." );
             for ( Object thing : MinderDom.List() ) {
                 if ( requested.equals( thing.getClass() ) ) {
-                    System.err.println( "For " + drawing.filename() +", found a " + categoryName + " to process." );
                     MinderDom item = (MinderDom) thing;
                     if( Device.class.isInstance( item ) )
                     {

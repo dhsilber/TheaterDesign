@@ -75,97 +75,29 @@ public class Parse {
         }
 
         parseXML( Drawing.class, "drawing" );
-
-//        NodeList layer = root.getElementsByTagName( "layer" );
         parseXML( UserLayer.class, "layer" );
-//        UserLayer.ParseXML( layer );
-
         parseXML( Grid.class, "grid" );
-
         parseXML( CableDiversion.class, "cable-diversion" );
-
         parseXML( LuminaireDefinition.class, "luminaire-definition");
-//        NodeList luminaireDefinition = root.getElementsByTagName( "luminaire-definition" );
-//        LuminaireDefinition.ParseXML( luminaireDefinition );
-
         parseXML( DeviceTemplate.class, "device-template");
-//        NodeList deviceTemplate = root.getElementsByTagName( "device-template" );
-//        DeviceTemplate.ParseXML( deviceTemplate );
-
         parseXML( Venue.class, "venue");
-//        NodeList venue = root.getElementsByTagName( "venue" );
-//        Venue.ParseXML( venue );
-
         parseXML( Wall.class, "wall");
-//        NodeList wall = root.getElementsByTagName( "wall" );
-//        Wall.ParseXML( wall );
-
         parseXML( Balcony.class, "balcony");
-//        NodeList balcony = root.getElementsByTagName( "balcony" );
-//        Balcony.ParseXML( balcony );
-
         parseXML( Proscenium.class, "proscenium");
-//        NodeList proscenium = root.getElementsByTagName( "proscenium" );
-//        Proscenium.ParseXML( proscenium );
-
-        parseXML(Airwall.class, "airwall");
-//        NodeList airwall = root.getElementsByTagName( "airwall" );
-//        Airwall.ParseXML( airwall );
-
+        parseXML( Airwall.class, "airwall");
         parseXML( Stage.class, "stage" );
-//        NodeList stage = root.getElementsByTagName( "stage" );
-//        Stage.ParseXML( stage );
-
         parseXML( Table.class, "table" );
-//        NodeList tables = root.getElementsByTagName("table");
-//        Table.ParseXML(tables);
-
         parseXML( ChairBlock.class, "chairblock" );
-//        NodeList chairs = root.getElementsByTagNamJe( "chairblock" );
-//        ChairBlock.ParseXML( chairs );
-
         parseXML( HangPoint.class, "hangpoint" );
-//        NodeList hangpoints = root.getElementsByTagName( "hangpoint" );
-//        HangPoint.ParseXML( hangpoints );
-
         parseXML( Event.class, "event" );
-//        NodeList events = root.getElementsByTagName( "event" );
-//        Event.ParseXML( events );
-
         parseXML( Truss.class, "truss" );
-//        NodeList truss = root.getElementsByTagName( "truss" );
-//        Truss.ParseXML( truss );
-
         parseXML( Suspend.class, "suspend" );
-//        NodeList suspend = root.getElementsByTagName( "suspend" );
-//        Suspend.ParseXML( suspend );
-
-//        parseXML( Base.class, "base" );
-////        NodeList base = root.getElementsByTagName( "base" );
-////        Base.ParseXML( base );
-
         parseXML( Pipe.class, "pipe" );
-//        NodeList pipe = root.getElementsByTagName( "pipe" );
-//        Pipe.ParseXML( pipe );
-
         parseXML( Zone.class, "zone" );
-//        NodeList zone = root.getElementsByTagName( "zone" );
-//        Zone.ParseXML( zone );
-
         parseXML( Luminaire.class, "luminaire" );
-//        NodeList luminaire = root.getElementsByTagName( "luminaire" );
-//        if (luminaire.getLength() > 0) {
-//            Luminaire.ParseXML( luminaire );
-//        }
-
         parseXML( Device.class, "device" );
-//        NodeList devices = root.getElementsByTagName( "device" );
-//        Device.ParseXML( devices );
-
         parseXML( CableRun.class, "cable-run" );
-//        NodeList cableRuns = root.getElementsByTagName( "cable-run" );
-//        CableRun.ParseXML( cableRuns );
-//
+
         MinderDom.VerifyAll();
 
         NodeList setup = root.getElementsByTagName( "setup" );

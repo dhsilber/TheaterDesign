@@ -32,6 +32,9 @@ public class DeviceTest {
     final String layerTag = "intercom";
     final String layerColor = "green";
     String stackedTemplateName = "Stacked tempolate";
+    String stackedDeviceName = "Stacked device";
+    final String otherLayerTag = "risers";
+    final String otherLayerColor = "amber";
 
     Double tableWidth = 1.0;
     Double tableDepth = 2.0;
@@ -133,6 +136,25 @@ public class DeviceTest {
         assertEquals( TestHelpers.accessDouble(device, "y"), y );
         assertEquals( TestHelpers.accessDouble(device, "z"), z );
         assertEquals( TestHelpers.accessDouble(device, "orientation"), orientation );
+    }
+
+    @Test
+    public void storesOptionalLayerAttribute() throws Exception {
+        element.removeAttribute( "on" );
+        element.setAttribute("x", x.toString());
+        element.setAttribute("y", y.toString() );
+        element.setAttribute("z", z.toString() );
+        element.setAttribute("layer", otherLayerTag.toString() );
+
+        Device device = new Device( element );
+
+        assertEquals( TestHelpers.accessString( device, "id" ), deviceName );
+        assertEquals( TestHelpers.accessString( device, "on" ), "" );
+        assertEquals( TestHelpers.accessString( device, "is" ), templateName );
+        assertEquals( TestHelpers.accessDouble(device, "x"), x );
+        assertEquals( TestHelpers.accessDouble(device, "y"), y );
+        assertEquals( TestHelpers.accessDouble(device, "z"), z );
+        assertEquals( TestHelpers.accessString(device, "layer"), otherLayerTag );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -270,13 +292,24 @@ public class DeviceTest {
     }
 
     @Test
-    public void layer() throws Exception {
+    public void templateLayer() throws Exception {
         new Table( tableElement );
         new DeviceTemplate( layeredTemplateElement );
         Device device = new Device( layeredElement );
         device.verify();
 
         assertEquals(device.layer(), layerTag);
+    }
+
+    @Test
+    public void layer() throws Exception {
+        new Table( tableElement );
+        new DeviceTemplate( layeredTemplateElement );
+        layeredElement.setAttribute( "layer", otherLayerTag );
+        Device device = new Device( layeredElement );
+        device.verify();
+
+        assertEquals(device.layer(), otherLayerTag );
     }
 
     @Test
@@ -325,8 +358,8 @@ public class DeviceTest {
 
         Point place = stacked.location();
 
-        assertEquals( place.y, tableY + stackedY );
         assertEquals( place.x, tableX + stackedX );
+        assertEquals( place.y, tableY + stackedY );
         assertEquals( place.z, tableZ + tableHeight + height );
     }
 
@@ -431,7 +464,7 @@ public class DeviceTest {
         Node groupNode = rectangles.item(0);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element deviceElement = (Element) groupNode;
-//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+//        assertEquals( tableElement.getAttribute("class"), layerTag );
 
         Solid deviceTemplateShape = deviceTemplate.getSolid();
 
@@ -470,11 +503,17 @@ public class DeviceTest {
         venueElement.setAttribute("height", "240");
         new Venue(venueElement);
 
-        Element layerElement = new IIOMetadataNode();
+        Element layerElement = new IIOMetadataNode("layer");
         layerElement.setAttribute("id", layerTag);
         layerElement.setAttribute("name", "Layer Description" );
         layerElement.setAttribute("color", layerColor );
         new UserLayer( layerElement );
+
+        Element otherlayerElement = new IIOMetadataNode("layer");
+        otherlayerElement.setAttribute("id", otherLayerTag);
+        otherlayerElement.setAttribute("name", "Otherlayer Description" );
+        otherlayerElement.setAttribute("color", otherLayerColor );
+        new UserLayer( otherlayerElement );
 
         tableElement = new IIOMetadataNode("table");
         tableElement.setAttribute("id", tableName);
@@ -518,7 +557,7 @@ public class DeviceTest {
         layeredElement.setAttribute( "is", layeredTemplateName );
 
         stackedElement = new IIOMetadataNode( "device" );
-        stackedElement.setAttribute( "id", deviceName );
+        stackedElement.setAttribute( "id", stackedDeviceName );
         stackedElement.setAttribute( "on", tableName );
         stackedElement.setAttribute( "is", stackedTemplateName );
         stackedElement.setAttribute( "x", stackedX.toString() );

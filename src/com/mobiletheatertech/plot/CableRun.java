@@ -214,7 +214,7 @@ public class CableRun extends MinderDom implements Legendable {
         ArrayList<Point> vertices = findPath( sourcePoint, sinkPoint );
         CableDiversion.InsertDiversion( vertices );
 
-System.err.println("Drawing CableRun "+ this.toString() +".");
+//System.err.println("Drawing CableRun "+ this.toString() +".");
 
         SvgElement group = draw.element("g");
         group.attribute("class", "CableRun" );
@@ -222,9 +222,9 @@ System.err.println("Drawing CableRun "+ this.toString() +".");
         draw.appendRootChild(group);
 
         Point previous = sourcePoint;
-System.err.println("... previous point:  "+ previous.toString() +".");
+//System.err.println("... previous point:  "+ previous.toString() +".");
         for( Point point : vertices ) {
-System.err.println("... next point: "+ point.toString() +".");
+//System.err.println("... next point: "+ point.toString() +".");
 
             appendLineSegment( draw, group, previous, point );
             previous = point;
@@ -249,7 +249,7 @@ System.err.println("... next point: "+ point.toString() +".");
             Wall sourceWall = Wall.WallNearestPoint(sourceGround);
             Point sourceWallPoint = sourceWall.nearestPointNearWall( sourceGround );
 
-System.err.println("\nsourceWallPoint: "+ sourceWallPoint.toString() +".");
+//System.err.println("\nsourceWallPoint: "+ sourceWallPoint.toString() +".");
 
             list.add( sourceWallPoint );
 
@@ -273,7 +273,7 @@ System.err.println("\nsourceWallPoint: "+ sourceWallPoint.toString() +".");
 
 //                if( currentPoint.equals( ))
 
-System.err.println("... nextCorner: "+ nextCorner.toString() +".");
+//System.err.println("... nextCorner: "+ nextCorner.toString() +".");
 
                 // draw line to that corner
                 list.add( nextCorner );
@@ -285,13 +285,13 @@ System.err.println("... nextCorner: "+ nextCorner.toString() +".");
 
             // Now that we've found any intermediate points, finish up by adding
             // the last two points before the sink device.
-System.err.println("... sinkWallPoint: "+ sinkWallPoint.toString() +".");
+//System.err.println("... sinkWallPoint: "+ sinkWallPoint.toString() +".");
             list.add( sinkWallPoint );
-System.err.println("... sinkGround: "+ sinkGround.toString() +".");
+//System.err.println("... sinkGround: "+ sinkGround.toString() +".");
             list.add( sinkGround );
         }
 
-System.err.println("... sinkPoint: "+ sinkPoint.toString() +".");
+//System.err.println("... sinkPoint: "+ sinkPoint.toString() +".");
         list.add( sinkPoint );
 
         return list;

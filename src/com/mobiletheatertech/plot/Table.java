@@ -123,7 +123,7 @@ public class Table extends Stackable implements Legendable {
         Double lastWidth = 0.0;
 
         for ( Thing item : thingsOnThis) {
-            ex = Math.max( ex, item.point.x().intValue() );
+            ex = Math.max( ex, item.point.x() );
             wy = Math.max( wy, item.point.y() );
             ze = Math.max( ze, item.point.z() );
 
