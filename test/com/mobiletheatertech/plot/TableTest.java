@@ -281,7 +281,7 @@ public class TableTest {
 
 //    @Test
 //    public void draw() throws Exception {
-//        Table table = new Table( elementOnPipe );
+//        Table table = new Table( baseElement );
 //
 //        new Expectations() {
 //            {
@@ -332,10 +332,10 @@ public class TableTest {
 //
 //        Node node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        Element elementOnPipe = (Element) node;
-//        assertEquals( elementOnPipe.attribute( "xlink:href" ), "#chair" );
-//        assertEquals( elementOnPipe.attribute( "x" ), expectedX );
-//        assertEquals( elementOnPipe.attribute( "y" ), expectedY );
+//        Element baseElement = (Element) node;
+//        assertEquals( baseElement.attribute( "xlink:href" ), "#chair" );
+//        assertEquals( baseElement.attribute( "x" ), expectedX );
+//        assertEquals( baseElement.attribute( "y" ), expectedY );
     }
 
     @Test

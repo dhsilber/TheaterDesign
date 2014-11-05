@@ -148,10 +148,28 @@ public class Elemental {
      * @param name    name of attribute.
      * @return Integer value of attribute - zero if attribute is not set
      */
-    protected Double getOptionalDoubleAttribute( Element element, String name ) {
+    protected Double getOptionalDoubleAttributeOrNull( Element element, String name ) {
         String value = element.getAttribute( name );
         if (value.isEmpty()) {
-            value = "0";
+            return null;
+        }
+
+        return new Double( value );
+    }
+
+
+    /**
+     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
+     * convert it to an {@code Integer}.
+     *
+     * @param element DOM Element defining a venue.
+     * @param name    name of attribute.
+     * @return Integer value of attribute - zero if attribute is not set
+     */
+    protected Double getOptionalDoubleAttributeOrZero( Element element, String name ) {
+        String value = element.getAttribute( name );
+        if (value.isEmpty()) {
+            return 0.0;
         }
 
         return new Double( value );

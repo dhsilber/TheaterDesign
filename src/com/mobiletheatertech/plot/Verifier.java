@@ -18,12 +18,15 @@ public abstract class Verifier extends ElementalLister {
     public static void VerifyAll()
             throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException
     {
-        for (ElementalLister item : LIST) {
+        for ( ElementalLister item : LIST ) {
             if ( Verifier.class.isInstance( item )) {
+System.err.print( "Verifying: " );
+System.err.println( item.toString() );
                 Verifier thing = (Verifier) item;
                 thing.verify();
             }
         }
+System.err.println( "Verifying done." );
     }
 
     /**

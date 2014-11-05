@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
  * @since 0.0.5
  */
 
-// Should extend Lister rather than MinderDom
+// Should extend ElementalLister rather than MinderDom
 
 public class Suspend extends MinderDom {
 
@@ -40,21 +40,6 @@ public class Suspend extends MinderDom {
 
         processedMark = Mark.Generate();
         element.setAttribute( "processedMark", processedMark );
-
-/*
-        // Find the Truss which is suspended by this.
-        Node node = element.getParentNode();
-
-        // Much of this code is copied from HangPoint.ParseXML - refactor
-        if ( null != node ) {
-            if ( node.getNodeType() == Node.ELEMENT_NODE ) {
-                Element parent = (Element) node;
-                String mark = parent.attribute( "processedMark");
-                truss=Truss.Find( mark );
-            }
-        }
-*/
-
     }
 
     /**

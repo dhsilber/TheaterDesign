@@ -90,6 +90,7 @@ public class Parse {
         parseXML( ChairBlock.class, "chairblock" );
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
+        parseXML( Base.class, "base" );
         parseXML( Truss.class, "truss" );
         parseXML( Suspend.class, "suspend" );
         parseXML( Pipe.class, "pipe" );

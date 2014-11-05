@@ -90,7 +90,7 @@ public class LuminaireTest {
     // Until such time as I properly implement this class' use of id.
 //    @Test
 //    public void idUnused() throws Exception {
-//        Luminaire luminaire = new Luminaire(elementOnPipe);
+//        Luminaire luminaire = new Luminaire(baseElement);
 //
 //        assertNull(TestHelpers.accessString(luminaire, "id"));
 //    }
@@ -166,7 +166,7 @@ public class LuminaireTest {
     public void badLocationOtherType() throws Exception {
         elementOnPipe.setAttribute("type", "floob");
         elementOnPipe.setAttribute("on", "bloorglew");
-//        new Luminaire( elementOnPipe );
+//        new Luminaire( baseElement );
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.location();
     }
@@ -249,13 +249,13 @@ public class LuminaireTest {
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = groupElement.getElementsByTagName( "circle" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = groupElement.getElementsByTagName( "text" );
         assertEquals( list.getLength(), 5 );
@@ -318,13 +318,13 @@ public class LuminaireTest {
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = draw.root().getElementsByTagName( "circle" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = draw.root().getElementsByTagName( "text" );
         assertEquals( list.getLength(), 4 );
@@ -378,13 +378,13 @@ public class LuminaireTest {
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = draw.root().getElementsByTagName( "circle" );
         assertEquals( list.getLength(), 1 );
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
+//        baseElement = (Element) node;
 
         list = draw.root().getElementsByTagName( "text" );
         assertEquals( list.getLength(), 4 );
@@ -494,18 +494,18 @@ public class LuminaireTest {
 //        assertEquals( list.getLength(), 1 );
 //        node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
-//        assertEquals( elementOnPipe.attribute( "x" ), "15" );
-//        assertEquals( elementOnPipe.attribute( "y" ), "9" );
-//        assertEquals( elementOnPipe.attribute( "width" ), "18" );
-//        assertEquals( elementOnPipe.attribute( "height" ), "12" );
-//        assertEquals( elementOnPipe.attribute( "fill" ), "none" );
-//        assertEquals( elementOnPipe.attribute( "stroke" ), "black" );
-//        assertEquals( elementOnPipe.attribute( "stroke-width" ), "1" );
-//        assertEquals( elementOnPipe.attribute( "d" ),
+//        baseElement = (Element) node;
+//        assertEquals( baseElement.attribute( "x" ), "15" );
+//        assertEquals( baseElement.attribute( "y" ), "9" );
+//        assertEquals( baseElement.attribute( "width" ), "18" );
+//        assertEquals( baseElement.attribute( "height" ), "12" );
+//        assertEquals( baseElement.attribute( "fill" ), "none" );
+//        assertEquals( baseElement.attribute( "stroke" ), "black" );
+//        assertEquals( baseElement.attribute( "stroke-width" ), "1" );
+//        assertEquals( baseElement.attribute( "d" ),
 //                      "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
 //
-//        assertEquals( elementOnPipe.attribute( "d" ),
+//        assertEquals( baseElement.attribute( "d" ),
 //                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
     }
 
@@ -532,18 +532,18 @@ public class LuminaireTest {
 //        assertEquals( list.getLength(), 1 );
 //        node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        elementOnPipe = (Element) node;
-//        assertEquals( elementOnPipe.attribute( "x" ), "15" );
-//        assertEquals( elementOnPipe.attribute( "y" ), "9" );
-//        assertEquals( elementOnPipe.attribute( "width" ), "18" );
-//        assertEquals( elementOnPipe.attribute( "height" ), "12" );
-//        assertEquals( elementOnPipe.attribute( "fill" ), "none" );
-//        assertEquals( elementOnPipe.attribute( "stroke" ), "black" );
-//        assertEquals( elementOnPipe.attribute( "stroke-width" ), "1" );
-//        assertEquals( elementOnPipe.attribute( "d" ),
+//        baseElement = (Element) node;
+//        assertEquals( baseElement.attribute( "x" ), "15" );
+//        assertEquals( baseElement.attribute( "y" ), "9" );
+//        assertEquals( baseElement.attribute( "width" ), "18" );
+//        assertEquals( baseElement.attribute( "height" ), "12" );
+//        assertEquals( baseElement.attribute( "fill" ), "none" );
+//        assertEquals( baseElement.attribute( "stroke" ), "black" );
+//        assertEquals( baseElement.attribute( "stroke-width" ), "1" );
+//        assertEquals( baseElement.attribute( "d" ),
 //                      "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
 //
-//        assertEquals( elementOnPipe.attribute( "d" ),
+//        assertEquals( baseElement.attribute( "d" ),
 //                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
     }
 

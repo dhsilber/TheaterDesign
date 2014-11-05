@@ -55,7 +55,7 @@ public class VenueTest {
 
     @Test
     public void storesAttributes() throws Exception {
-//        elementOnPipe.removeAttribute( "circuiting" );
+//        baseElement.removeAttribute( "circuiting" );
         element.removeAttribute( "building" );
 
         Venue venue = new Venue( element );

@@ -27,27 +27,27 @@
 //     */
 //    private class Listed extends Lister {
 //
-//        public Listed( Element elementOnPipe ) throws InvalidXMLException {
-//            super( elementOnPipe );
+//        public Listed( Element baseElement ) throws InvalidXMLException {
+//            super( baseElement );
 //        }
 //    }
 //
 //    private static Draw draw = null;
-//    private Element elementOnPipe = null;
+//    private Element baseElement = null;
 //
 //    public ListerTest() {
 //    }
 //
 //    @Test
 //    public void isElemental() throws Exception {
-//        Listed stringValue = new Listed( elementOnPipe );
+//        Listed stringValue = new Listed( baseElement );
 //
 //        assert Elemental.class.isInstance( stringValue );
 //    }
 //
 //    @Test
 //    public void stores() throws Exception {
-//        Listed stringValue = new Listed( elementOnPipe );
+//        Listed stringValue = new Listed( baseElement );
 //        ArrayList<Minder> thing = Drawable.List();
 //        assertNotNull( thing, "List should exist" );
 //
@@ -70,7 +70,7 @@
 //
 //    @BeforeMethod
 //    public void setUpMethod() throws Exception {
-//        elementOnPipe = new IIOMetadataNode( "bogus" );
+//        baseElement = new IIOMetadataNode( "bogus" );
 //    }
 //
 //    @AfterMethod

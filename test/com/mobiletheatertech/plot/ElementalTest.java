@@ -26,9 +26,14 @@ public class ElementalTest {
         Integer unset;
         Integer empty;
         Integer used;
-        Double twiceUnset;
-        Double twiceEmpty;
-        Double twiceUsed;
+        Double twiceUnsetZero;
+        Double twiceEmptyZero;
+        Double twiceUsedZero;
+        Double twiceZeroZero;
+        Double twiceUnsetNull;
+        Double twiceEmptyNull;
+        Double twiceUsedNull;
+        Double twiceZeroNull;
         String stringNull;
         String stringNotNull;
         String stringEmpty;
@@ -44,9 +49,14 @@ public class ElementalTest {
             used = getOptionalIntegerAttribute(element, "used");
             integerValue = getIntegerAttribute(element, "integerValue");
             positiveIntegerValue=getPositiveIntegerAttribute(element, "positiveIntegerValue");
-            twiceUnset = getOptionalDoubleAttribute(element, "twiceUnset");
-            twiceEmpty = getOptionalDoubleAttribute(element, "twiceEmpty");
-            twiceUsed = getOptionalDoubleAttribute(element, "twiceUsed");
+            twiceUnsetZero = getOptionalDoubleAttributeOrZero(element, "twiceUnset");
+            twiceEmptyZero = getOptionalDoubleAttributeOrZero(element, "twiceEmpty");
+            twiceUsedZero = getOptionalDoubleAttributeOrZero(element, "twiceUsed");
+            twiceZeroZero = getOptionalDoubleAttributeOrZero( element, "twiceZero" );
+            twiceUnsetNull = getOptionalDoubleAttributeOrNull(element, "twiceUnset");
+            twiceEmptyNull = getOptionalDoubleAttributeOrNull(element, "twiceEmpty");
+            twiceUsedNull = getOptionalDoubleAttributeOrNull(element, "twiceUsed");
+            twiceZeroNull = getOptionalDoubleAttributeOrNull( element, "twiceZero" );
             stringNotEmpty = getOptionalStringAttribute(element, "stringNotEmpty");
             stringEmpty = getOptionalStringAttribute(element, "stringEmpty");
             stringNotNull = getOptionalStringAttributeOrNull(element, "stringNotNull");
@@ -67,7 +77,7 @@ public class ElementalTest {
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Ellie diversionElement unexpectedly null!" )
+            expectedExceptionsMessageRegExp = "Ellie element unexpectedly null!" )
     public void nullElement() throws Exception {
         new Ellie( null );
     }
@@ -122,24 +132,60 @@ public class ElementalTest {
     }
 
     @Test
-    public void getOptionalDoubleAttributeEmpty() throws Exception {
+    public void getOptionalDoubleAttributeOrZeroEmpty() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmpty"), (Double) 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyZero"), null );
     }
 
     @Test
-    public void getOptionalDoubleAttributeUnset() throws Exception {
+    public void getOptionalDoubleAttributeOrZeroUnset() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUnset"), (Double) 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUnsetZero"), 0.0 );
     }
 
     @Test
-    public void getOptionalDoubleAttributeUsed() throws Exception {
+    public void getOptionalDoubleAttributeOrZeroZero() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsed"), (Double) 4.32 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroZero"), (Double) 0.0 );
+    }
+
+    @Test
+    public void getOptionalDoubleAttributeOrZeroUsed() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedZero"), (Double) 4.32 );
+    }
+
+
+    @Test
+    public void getOptionalDoubleAttributeOrNullEmpty() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyNull"), null );
+    }
+
+    @Test
+    public void getOptionalDoubleAttributeOrNullUnset() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUnsetNull"), null );
+    }
+
+    @Test
+    public void getOptionalDoubleAttributeOrNullZero() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroNull"), (Double) 0.0 );
+    }
+
+    @Test
+    public void getOptionalDoubleAttributeOrNullUsed() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedNull"), (Double) 4.32 );
     }
 
     @Test
@@ -244,6 +290,7 @@ public class ElementalTest {
         element.setAttribute( "empty", "" );
         element.setAttribute( "twiceUsed", "4.32" );
         element.setAttribute( "twiceEmpty", "" );
+        element.setAttribute( "twiceZero", "0.0" );
         element.setAttribute( "stringNotEmpty", "Not Empty" );
         element.setAttribute( "stringNotNull", "Not Null" );
     }

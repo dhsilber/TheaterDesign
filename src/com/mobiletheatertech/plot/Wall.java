@@ -101,24 +101,36 @@ public class Wall extends MinderDom {
      * @param destinationPoint
      * @return
      */
-    public Point nextCorner( Point startingPoint, Point destinationPoint, Wall destinationWall ) {
+    public Point nextCorner( Point startingPoint, Point destinationPoint,
+                             Wall destinationWall ) throws DataException {
 
-//System.out.print("nextCorner. start: " + startingPoint.toString()
-//        + ", end: " + destinationPoint.toString());
+System.out.println("nextCorner. start: " + startingPoint.toString()
+        + ", end: " + destinationPoint.toString());
+System.out.println("destinationWall: " + destinationWall.toString());
 
         if ( this == destinationWall ) {
             return destinationPoint;
+        }
+        System.err.println(" Here" );
+
+        if ( null == nextCornerPoint || null == previousCornerPoint ) {
+            throw new DataException( "Cannot find abutting wall." );
         }
 
         if ( nextCornerPoint.equals( startingPoint ) ) {
             return previousCornerPoint;
         }
+        System.err.println(" Here" );
 
         if ( previousCornerPoint.equals( startingPoint ) ) {
             return nextCornerPoint;
         }
+        System.err.println(" Here" );
 
 //        Double destination = startingPoint.distance( destinationPoint );
+System.err.println(" destinationPoint: " + destinationPoint.toString() );
+System.err.println(" nextCornerPoint: " + nextCornerPoint.toString() );
+System.err.println(" previousCornerPoint: " + previousCornerPoint.toString() );
         Double nextCorner = destinationPoint.distance( nextCornerPoint );
         Double previousCorner = destinationPoint.distance( previousCornerPoint );
 
@@ -299,6 +311,17 @@ public class Wall extends MinderDom {
                         : y1 - space;
                 previousCornerPoint = new Point( x, y, 0.0 );
             }
+//            else {
+//                In this case there is no adjacent wall segment and nextCorner() fails
+//                        (null pointer exception) when previousCornerPoint is referenced.
+//
+//                    This should not be an error for a wall.
+//                    It is only a problem when CableRun attempts to traverse the walls.
+//
+//                    nextCorner() should check for previousCornerPoint being null and throw an exception.
+//                            Then CableRun can catch that exception and provide a reasonable message that
+//                            explains why that cable run didn't get computed.
+//            }
 
             if ( this.x2.equals( wall.x1 ) && this.y2.equals( wall.y1 ) ) {
                 next = wall;

@@ -30,9 +30,9 @@ public class Grid extends MinderDom {
     public Grid( Element element ) throws AttributeMissingException, InvalidXMLException{
         super( element );
 
-        startx = getOptionalDoubleAttribute( element, "startx" );
-        starty = getOptionalDoubleAttribute( element, "starty" );
-        startz = getOptionalDoubleAttribute( element, "startz" );
+        startx = getOptionalDoubleAttributeOrZero( element, "startx" );
+        starty = getOptionalDoubleAttributeOrZero( element, "starty" );
+        startz = getOptionalDoubleAttributeOrZero( element, "startz" );
 
         SvgElement.Offset( SCALETHICKNESS + startx, SCALETHICKNESS + starty );
 

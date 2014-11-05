@@ -73,11 +73,11 @@
 ////        pipeElement.setAttribute( "y2", "40" );
 ////        new Pipe( pipeElement );
 ////
-////        elementOnPipe = new IIOMetadataNode( "wall" );
-////        elementOnPipe.setAttribute( "height", height.toString() );
-////        elementOnPipe.setAttribute( "width", width.toString() );
-////        elementOnPipe.setAttribute( "x2", x2.toString() );
-////        elementOnPipe.setAttribute( "y2", y2.toString() );
+////        baseElement = new IIOMetadataNode( "wall" );
+////        baseElement.setAttribute( "height", height.toString() );
+////        baseElement.setAttribute( "width", width.toString() );
+////        baseElement.setAttribute( "x2", x2.toString() );
+////        baseElement.setAttribute( "y2", y2.toString() );
 //    }
 //
 //    @AfterMethod

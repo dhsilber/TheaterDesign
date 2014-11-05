@@ -42,15 +42,22 @@ public class Truss extends Mountable implements Legendable {
     //    private String processedMark = null;
     private Element element = null;
 
-    // Placeholder to allow tests to confirm that there is no base set, even though the base class is commented out entirely.
-    private Integer base = null;
+    private Base base = null;
 
     Point point1 = null;
     Point point2 = null;
     Double rotation = null;
     Double overHang = null;
-    Point startA = null;
+//    Point startA = null;
 
+    Double x = null;
+    Double y = null;
+    Double z = null;
+
+    Point position = null;
+    Boolean positioned = false;
+
+    Point verticalCenter = null;
 
     /**
      * Creates a {@code Truss}.
@@ -70,9 +77,19 @@ public class Truss extends Mountable implements Legendable {
         this.element = element;
         size = getDoubleAttribute(element, "size");
         length = getDoubleAttribute(element, "length");
+        x = getOptionalDoubleAttributeOrNull(element, "x");
+        y = getOptionalDoubleAttributeOrNull(element, "y");
+        z = getOptionalDoubleAttributeOrNull( element, "z" );
 
         if( 12.0 != size && 20.5 != size ) {
                 throw new KindException("Truss", size);
+        }
+
+        if ( null != x || null != y || null != z ) {
+            if ( null == x || null == y || null == z ) {
+                throw new InvalidXMLException("Truss (" + id + ") must have x, y, and z coordinates or exactly two suspend children");
+            }
+            positioned = true;
         }
 
 //        processedMark = Mark.Generate();
@@ -86,25 +103,48 @@ public class Truss extends Mountable implements Legendable {
         assert null != element;
 //        NodeList baseList = element.getElementsByTagName( "base" );
 
-        NodeList suspendList = element.getElementsByTagName("suspend");
-
-        if (2 != suspendList.getLength()) {
-            System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
-            throw new InvalidXMLException("Truss (" + id + ") must have exactly two suspend children");
+        if ( positioned ) {
+            position = new Point( x, y, z );
+            return;
         }
 
-        suspend1 = findSuspend(0, suspendList);
-        suspend2 = findSuspend(1, suspendList);
+        NodeList suspendList = element.getElementsByTagName("suspend");
+        NodeList baseList = element.getElementsByTagName( "base" );
+        assert( null != baseList );
 
-        point1 = suspend1.locate();
-        point2 = suspend2.locate();
-        Double slope = slope(point1, point2);
-        rotation = Math.toDegrees(Math.atan(slope));
+        if (2 == suspendList.getLength()) {
 
-        Double supportSpan = point1.distance(point2);
-        Long span = Math.round(supportSpan);
-        overHang = (length - span.intValue()) / 2;
-        // Given suspend1 and the slope, find where the start of the truss will end up.
+            suspend1 = findSuspend(0, suspendList);
+            suspend2 = findSuspend(1, suspendList);
+
+            point1 = suspend1.locate();
+            point2 = suspend2.locate();
+            Double slope = slope(point1, point2);
+            rotation = Math.toDegrees(Math.atan(slope));
+
+            Double supportSpan = point1.distance(point2);
+            Long span = Math.round(supportSpan);
+            overHang = (length - span.intValue()) / 2;
+            // Given suspend1 and the slope, find where the start of the truss will end up.
+        }
+        else if ( 1 == baseList.getLength() ) {
+            base = findBase( baseList );
+
+            assert( null != base );
+
+            verticalCenter = new Point( base.x(), base.y(), 0.0 );
+            rotation = base.rotation();
+
+//            positioned = true;
+            x = base.x();
+            y = base.y();
+            z = 0.0;
+        }
+        else {
+            System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
+            System.err.println("Found " + baseList.getLength() + " base child nodes");
+            throw new InvalidXMLException("Truss (" + id + ") must have a base or exactly two suspend children");
+        }
     }
 
     private Suspend findSuspend(int item, NodeList suspendList) {
@@ -112,9 +152,24 @@ public class Truss extends Mountable implements Legendable {
         // Much of this code is copied from HangPoint.ParseXML - refactor
         if (null != node) {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element parent = (Element) node;
-                String mark = parent.getAttribute("processedMark");
+                Element element = (Element) node;
+                String mark = element.getAttribute("processedMark");
                 Suspend found = Suspend.Find(mark);
+
+                return found;
+            }
+        }
+        return null;
+    }
+
+    private Base findBase( NodeList baseList ) {
+        Node node = baseList.item( 0 );
+        // Much of this code is copied from HangPoint.ParseXML - refactor
+        if (null != node) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                String mark = element.getAttribute("processedMark");
+                Base found = Base.Find(mark);
 
                 return found;
             }
@@ -168,25 +223,43 @@ public class Truss extends Mountable implements Legendable {
             throw new MountingException("Truss (" + id + ") does not include location " + distance.toString() + ".");
         }
 
-        if (null == suspend1) {
-            throw new InvalidXMLException("suspend1 is null");
-        }
-        Point point = suspend1.locate();
+        if ( positioned ) {
+            Double verticalOffset = size / 2;
+            switch (vertex) {
+                case 'a':
+                case 'b':
+                    break;
+                case 'c':
+                case 'd':
+                    verticalOffset *= -1;
+                    break;
+                default:
+                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+            }
 
-        Double verticalOffset = 0.0;
-        switch (vertex) {
-            case 'a':
-            case 'b':
-                break;
-            case 'c':
-            case 'd':
-                verticalOffset += size;
-                break;
-            default:
-                throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+            return new Point( x - length / 2 + distance, y + offset, z + verticalOffset );
         }
+        else {
+            if (null == suspend1) {
+                throw new InvalidXMLException("suspend1 is null");
+            }
+            Point point = suspend1.locate();
 
-        return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
+            Double verticalOffset = 0.0;
+            switch (vertex) {
+                case 'a':
+                case 'b':
+                    break;
+                case 'c':
+                case 'd':
+                    verticalOffset += size;
+                    break;
+                default:
+                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+            }
+
+            return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
+        }
     }
 
     /*
@@ -253,10 +326,15 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     @Override
     public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
 
-        Double transformX = point1.x() + SvgElement.OffsetX();
-        Double transformY = point1.y() + SvgElement.OffsetY();
-        Point origin = new Point( transformX, transformY, point1.z() );
-        return new Place(location(location), origin, rotation);
+        if( positioned ) {
+            return new Place( location( location ), position, 0.0 );
+        }
+        else {
+            Double transformX = point1.x() + SvgElement.OffsetX();
+            Double transformY = point1.y() + SvgElement.OffsetY();
+            Point origin = new Point( transformX, transformY, point1.z() );
+            return new Place(location(location), origin, rotation);
+        }
     }
 
 //    @Override
@@ -387,58 +465,78 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     public void dom(Draw draw, View mode) {
         SvgElement trussRectangle = null;//draw.element("rect");
         SvgElement group = null;
-
+System.err.println( "Dom." );
         // Common setup:
         switch (mode) {
             case PLAN:
+                System.err.println( "PLAN." );
             case TRUSS:
+                System.err.println( "TRUSS." );
                 group = svgClassGroup( draw, LAYERTAG );
-//                draw.element("g");
-//                group.setAttribute("class", LAYERTAG);
                 draw.appendRootChild(group);
-
-//                trussRectangle.setAttribute("height", size.toString());
-//                trussRectangle.setAttribute("fill", "none");
-//                trussRectangle.setAttribute("stroke", color);
-//                trussRectangle.setAttribute("width", length.toString());
                 break;
             default:
+                System.err.println( "No known mode." );
                 return;
         }
+        System.err.println( "between." );
 
         // Separate details:
         switch (mode) {
             case PLAN:
-                Double x1 = point1.x();// + MinderDom.OffsetX();
-                Double y1 = point1.y();// + MinderDom.OffsetY();
-                Double xPlan = x1 - overHang;
-                Double yPlan = y1 - size / 2;
+                System.err.println( "PLAN again." );
+                if ( positioned ) {
+                    group.rectangle( draw, x - length / 2, y - size / 2, length, size, color );
+                }
+                else if ( null != base ) {
+                    SvgElement verticalTruss =
+                            group.rectangle( draw, x - size / 2, y - size / 2, size, size, color );
 
-                trussRectangle = group.rectangle( draw, xPlan, yPlan, length, size, color );
-                Double transformX = x1 + SvgElement.OffsetX();
-                Double transformY = y1 + SvgElement.OffsetY();
-                trussRectangle.attribute("transform",
-                        "rotate(" + rotation + "," + transformX + "," + transformY + ")");
+                    Double transformX = x + SvgElement.OffsetX();
+                    Double transformY = y + SvgElement.OffsetY();
+                    String transform =
+                            "rotate(" + base.rotation() + "," + transformX + "," + transformY + ")";
+                    verticalTruss.attribute( "transform", transform );
+
+                }
+                else {
+                    System.err.println( "PLAN not positioned." );
+                    Double x1 = point1.x();// + MinderDom.OffsetX();
+                    Double y1 = point1.y();// + MinderDom.OffsetY();
+                    Double xPlan = x1 - overHang;
+                    Double yPlan = y1 - size / 2;
+
+                    trussRectangle = group.rectangle( draw, xPlan, yPlan, length, size, color );
+                    Double transformX = x1 + SvgElement.OffsetX();
+                    Double transformY = y1 + SvgElement.OffsetY();
+                    trussRectangle.attribute("transform",
+                            "rotate(" + rotation + "," + transformX + "," + transformY + ")");
 //                trussRectangle.setAttribute("x", xPlan.toString());
 //                trussRectangle.setAttribute("y", yPlan.toString());
 //                group.appendChild(trussRectangle);
+                }
                 break;
             case TRUSS:
-                Double yTruss1 = TrussCount * 320 + 80;
-                trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
+                if ( null != base ) {
+
+                }
+                else if( ! positioned ) {
+                    System.err.println( "TRUSS not positioooned." );
+                    Double yTruss1 = TrussCount * 320 + 80;
+                    trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
 //                trussRectangle.setAttribute("x", size.toString());
 //                trussRectangle.setAttribute("y", yTruss1.toString());
 
 //                System.out.println( "dom() Count: "+TrussCount);
-                Double yTruss2 = TrussCount * 320 + 220;
+                    Double yTruss2 = TrussCount * 320 + 220;
 //                draw.element("rect");
 //                group.appendChild(trussRectangle);
 
-                SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
+                    SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
 //                draw.element("g");
 //                group.setAttribute("class", LAYERTAG);
-                draw.appendRootChild(group2);
-                SvgElement trussRectangle2 = group2.rectangle( draw, size, yTruss2, length, size, color );
+                    draw.appendRootChild(group2);
+                    SvgElement trussRectangle2 = group2.rectangle( draw, size, yTruss2, length, size, color );
 //                trussRectangle2.setAttribute("height", size.toString());
 //                trussRectangle2.setAttribute("fill", "none");
 //                trussRectangle2.setAttribute("stroke", color);
@@ -448,13 +546,13 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                trussRectangle2.setAttribute("x", size.toString());
 //                trussRectangle2.setAttribute("y", yTruss2.toString());
 
-                Double hangOneX = size + overHang;
-                Double hangOneY = yTruss1 + size / 2;
-                HangPoint.Draw( draw, hangOneX, hangOneY, hangOneX, hangOneY + size+ size, suspend1.ref() );
+                    Double hangOneX = size + overHang;
+                    Double hangOneY = yTruss1 + size / 2;
+                    HangPoint.Draw( draw, hangOneX, hangOneY, hangOneX, hangOneY + size+ size, suspend1.ref() );
 
-                Double hangTwoX = size + length - overHang;
-                Double hangTwoY = yTruss1 + size / 2;
-                HangPoint.Draw( draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size+size, suspend2.ref() );
+                    Double hangTwoX = size + length - overHang;
+                    Double hangTwoY = yTruss1 + size / 2;
+                    HangPoint.Draw( draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size+size, suspend2.ref() );
 
 //                Integer hangThreeX = size + overHang;
 //                Integer hangThreeY = yTruss2 - size / 2;
@@ -464,9 +562,9 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                Integer hangFourY = yTruss2 - size / 2;
 //                HangPoint.Draw( draw, hangFourX, hangFourY, hangFourX, hangFourY + size, suspend1.id );
 
-                Double textX=size *2 + length;
-                Double textY = yTruss1;
-                SvgElement idText = group.text( draw, id + " top layer", textX, textY, color );
+                    Double textX=size *2 + length;
+                    Double textY = yTruss1;
+                    SvgElement idText = group.text( draw, id + " top layer", textX, textY, color );
 //                draw.element("text");
 //                idText.setAttribute( "x", textX.toString() );
 //                idText.setAttribute( "y", textY.toString() );
@@ -481,9 +579,9 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                Text textId = draw.document().createTextNode( id + " top layer" );
 //                idText.appendChild( textId );
 
-                Double textX2=size *2 + length;
-                Double textY2 = yTruss2;
-                SvgElement idText2 = group.text(draw, id + " bottom layer", textX2, textY2, color);
+                    Double textX2=size *2 + length;
+                    Double textY2 = yTruss2;
+                    SvgElement idText2 = group.text(draw, id + " bottom layer", textX2, textY2, color);
 //                draw.element("text");
 //                idText2.setAttribute("x", textX2.toString());
 //                idText2.setAttribute("y", textY2.toString());
@@ -499,10 +597,12 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //                idText2.appendChild(textId2);
 
 
-                trussCounted = TrussCount;
-                TrussCount++;
+                    trussCounted = TrussCount;
+                    TrussCount++;
+                }
                 break;
             default:
+                System.err.println( "default." );
                 return;
         }
 
@@ -528,6 +628,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 //            default:
 //
 //        }
+        System.err.println( "Dom done!" );
     }
 
     @Override

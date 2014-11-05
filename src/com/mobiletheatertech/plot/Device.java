@@ -53,10 +53,6 @@ public class Device extends Stackable
     Boolean verified = false;
 
 
-//    private static final String COLOR = "black";
-//    private static final String FILLCOLOR = "grey";
-
-
     /**
      * Construct a {@code Box} from an XML element.
      *
@@ -69,10 +65,10 @@ public class Device extends Stackable
         id = getStringAttribute(element, "id");
         is = getStringAttribute(element, "is");
         on = getOptionalStringAttribute(element, "on");
-        x = getOptionalDoubleAttribute(element, "x");
-        y = getOptionalDoubleAttribute(element, "y");
-        z = getOptionalDoubleAttribute(element, "z");
-        orientation = getOptionalDoubleAttribute(element, "orientation");
+        x = getOptionalDoubleAttributeOrZero(element, "x");
+        y = getOptionalDoubleAttributeOrZero(element, "y");
+        z = getOptionalDoubleAttributeOrZero(element, "z");
+        orientation = getOptionalDoubleAttributeOrZero(element, "orientation");
         layer = getOptionalStringAttribute( element, "layer" );
 
         if( "".equals( on ) && ( x.equals( 0.0 ) || y.equals( 0.0 ) ) ) {
@@ -173,6 +169,7 @@ public class Device extends Stackable
                 Double y = place.y() + depth - 4;
                 SvgElement idText = group.text( draw, id, place.x(), y, color );
                 idText.attribute( "text-anchor", "left" );
+
                 break;
             case SECTION:
                 Double bottom = Venue.Height();
@@ -192,7 +189,6 @@ public class Device extends Stackable
             case TRUSS:
                 break;
         }
-
     }
 
     /**

@@ -53,7 +53,7 @@ public class SuspendTest {
     @Test
     public void storesSelf() throws Exception
     {
-        Suspend suspend = new Suspend( elementOnPipe );
+        Suspend suspend = new Suspend( baseElement );
 
         ArrayList<Minder> thing = Drawable.List();
         assertNotNull( thing, "List should exist" );
@@ -142,7 +142,7 @@ public class SuspendTest {
     @Test
     public void associatesWithParentTruss() throws Exception
     {
-        Suspend suspend = new Suspend( elementOnPipe );
+        Suspend suspend = new Suspend( baseElement );
         Field parentTrussField = TestHelpers.accessField( suspend, "truss" );
         Truss parentTruss = (Truss) parentTrussField.get( suspend );
 
@@ -211,7 +211,7 @@ public class SuspendTest {
 
 //    @Test
 //    public void drawUnused() throws Exception {
-//        Suspend suspend = new Suspend( elementOnPipe );
+//        Suspend suspend = new Suspend( baseElement );
 //
 //        suspend.drawPlan( null );
 //    }

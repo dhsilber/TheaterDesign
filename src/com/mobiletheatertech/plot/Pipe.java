@@ -56,22 +56,6 @@ public class Pipe extends Mountable {
     private static final String COLOR = "black";
 
 
-//    /**
-//     * Find a specific {@code Pipe} from all that have been constructed.
-//     *
-//     * @param id of {@code Pipe} to find
-//     * @return {@code Pipe}, or {@code null} if not found
-//     */
-//    public static Pipe Select( String id ) {
-//        for (Pipe selection : PIPELIST) {
-//            if (selection.id.equals( id )) {
-//                return selection;
-//            }
-//        }
-//        return null;
-//    }
-
-
     /**
      * Construct a {@code Pipe} from an XML Element.
      * <p/>
@@ -104,8 +88,8 @@ public class Pipe extends Mountable {
             throw new SizeException(this.toString(), "length");
         }
 
-        orientation = getOptionalDoubleAttribute(element, "orientation");
-        offsetX = getOptionalDoubleAttribute(element, "offsetx");
+        orientation = getOptionalDoubleAttributeOrZero(element, "orientation");
+        offsetX = getOptionalDoubleAttributeOrZero(element, "offsetx");
 
         new Layer(LAYERTAG, LAYERNAME, COLOR );
     }
@@ -117,13 +101,17 @@ public class Pipe extends Mountable {
      */
     @Override
     public void verify() throws LocationException, ReferenceException {
+        System.err.println( "Pipe starting.");
         String identity = (id.equals(""))
                 ? this.toString()
                 : "Pipe (" + id + ")";
 
+        System.err.println( "Identity: "+ identity );
 
         if (Proscenium.Active()) {
+            System.err.println( "Proscenium.Active()" );
             if (90.0 == orientation) {
+                System.err.println( "90.0 == orientation" );
                 boxOrigin = Proscenium.Locate(new Point(start.x() - 1, start.y(), start.z() - 1));
 
                 Space space = new Space(boxOrigin, DIAMETER, length, DIAMETER);
@@ -139,6 +127,7 @@ public class Pipe extends Mountable {
                     );
                 }
             } else {
+                System.err.println( "90.0 != orientation" );
 //            Integer depth = Venue.Depth();
 //            Point origin = Proscenium.Origin();
 //            boxOrigin = new Point( origin.x() + start.x() - length / 2,
@@ -157,9 +146,12 @@ public class Pipe extends Mountable {
                 }
             }
         } else {
+            System.err.println( "! Proscenium.Active()" );
             if (90.0 == orientation) {
+                System.err.println( "90.0 == orientation" );
                 throw new ReferenceException("90-degree oriented only implemented with proscenium.");
             } else {
+                System.err.println( "90.0 != orientation" );
 
                 boxOrigin = new Point(start.x(), start.y() - 1, start.z() - 1);
 
@@ -172,6 +164,7 @@ public class Pipe extends Mountable {
                 }
             }
         }
+        System.err.println( "Pipe verified.");
     }
 
     /**
