@@ -66,6 +66,8 @@ public class Venue extends MinderDom implements Legendable {
     public Venue( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
+//System.out.println(  "Just inside VENUE constructor.");
+
         room = getStringAttribute( element, "room" );
         width = getDoubleAttribute( element, "width" );
         depth = getDoubleAttribute( element, "depth" );

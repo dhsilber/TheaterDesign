@@ -61,24 +61,24 @@ public class Write {
         writeFile(pathname, "designer.html", generateDesigner() );
         writeFile(pathname, "styles.css", CSS );
         // TODO factor out heading generation for these:
-        System.err.println( " Plan");
+//        System.err.println( " Plan");
         drawPlan().create( pathname + "/plan.svg" );
-        System.err.println( " Section");
+//        System.err.println( " Section");
         drawSection().create( pathname + "/section.svg" );
-        System.err.println( " Front");
+//        System.err.println( " Front");
         drawFront().create( pathname + "/front.svg" );
-        System.err.println( " Create");
+//        System.err.println( " Create");
         drawTruss().create( pathname + "/truss.svg" );
-        System.err.println( " Drawings");
+//        System.err.println( " Drawings");
         writeDrawings( pathname );
-        System.err.println( " Spreadsheet");
-        writeSpreadsheet( pathname + "/gear.ods" );
+//        System.err.println( " Spreadsheet");
+//        writeSpreadsheet( pathname + "/gear.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
         File directory = new File(basename);
         Boolean dir = directory.mkdir();
-        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
+//        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
     }
 
     public String OLDgenerateIndex( String basename ) throws ReferenceException {

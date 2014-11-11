@@ -6,6 +6,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,7 +44,7 @@ public class PipeTest {
 
     @Test
     public void constantDiameter() {
-        assertEquals(Pipe.DIAMETER, (Integer) 2);
+        assertEquals( Pipe.DIAMETER, 2.0 );
     }
 
     @Test
@@ -70,7 +72,7 @@ public class PipeTest {
 //        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
         assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
-        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), (Integer)0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), 0.0 );
     }
 //    @Test
 //    public void storesAttributes() throws Exception {
@@ -97,7 +99,7 @@ public class PipeTest {
 //        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
         assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), -90.0 );
-        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50 );
+        assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50.0 );
     }
 
     @Test
@@ -247,6 +249,13 @@ public class PipeTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Pipe instance is missing required 'id' attribute.")
+    public void noId() throws Exception {
+        element.removeAttribute("id");
+        new Pipe(element);
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) is missing required 'length' attribute.")
     public void noLength() throws Exception {
         element.removeAttribute("length");
@@ -276,7 +285,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=0 \\} should have a positive length.")
+                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=0 \\} should have a positive length.")
     public void tooSmallLengthZero() throws Exception {
         element.setAttribute("length", "0");
         new Pipe(element);
@@ -284,7 +293,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12, y=23, z=34 \\}, length=-1 \\} should have a positive length.")
+                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=-1 \\} should have a positive length.")
     public void tooSmallLength() throws Exception {
         element.setAttribute("length", "-1");
         new Pipe(element);
@@ -404,9 +413,9 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.location("15");
-        assertEquals(place.x, 227);
-        assertEquals(place.y, 122);
-        assertEquals(place.z, 45);
+        assertEquals(place.x, 227.0 );
+        assertEquals(place.y, 122.0 );
+        assertEquals(place.z, 45.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -439,9 +448,9 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.location("15");
-        assertEquals(place.x, 215);
-        assertEquals(place.y, 122);
-        assertEquals(place.z, 45);
+        assertEquals(place.x, 215.0 );
+        assertEquals(place.y, 122.0 );
+        assertEquals(place.z, 45.0 );
     }
 
     @Test
@@ -452,9 +461,9 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.location("-5");
-        assertEquals(place.x, 195);
-        assertEquals(place.y, 122);
-        assertEquals(place.z, 45);
+        assertEquals(place.x, 195.0 );
+        assertEquals(place.y, 122.0 );
+        assertEquals(place.z, 45.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -679,6 +688,40 @@ public class PipeTest {
         assertEquals(element.getAttribute("y"), zee.toString());
     }
 
+    @Test
+    public void parseWithCoordinates() throws Exception {
+        String xml = "<plot>" +
+                "<pipe id=\"Identifier\" length=\"71\" x=\"4\" y=\"14\" z=\"2\" />" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+        TestResets.MinderDomReset();
+
+        new Parse( stream );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        assertEquals( list.size(), 1 );
+    }
+
+    @Test
+    public void parseWithSuspends() throws Exception {
+        String xml = "<plot>" +
+                "<hangpoint id=\"bill\" x=\"7\" y=\"8\" />" +
+                "<hangpoint id=\"betty\" x=\"7\" y=\"8\" />" +
+                "<pipe id=\"fineMe\" length=\"17\" >" +
+                "<suspend ref=\"bill\" />" +
+                "<suspend ref=\"betty\" />" +
+                "</pipe>" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+        TestResets.MinderDomReset();
+
+        new Parse( stream );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        assertEquals( list.size(), 5 );
+    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

@@ -49,12 +49,12 @@ public abstract class MinderDom extends Verifier {
         for (ElementalLister item : LIST) {
             if ( MinderDom.class.isInstance( item )) {
                 MinderDom thing = (MinderDom) item;
-System.err.println("DomAllPlan " + thing.getClass().getSimpleName() + ": " + thing.toString() +".");
+//System.err.println("DomAllPlan " + thing.getClass().getSimpleName() + ": " + thing.toString() +".");
 
                 thing.dom( draw, View.PLAN );
             }
         }
-System.err.println("DomAllPlan Done.");
+//System.err.println("DomAllPlan Done.");
     }
 
     /**

@@ -100,7 +100,6 @@ public class Truss extends Mountable implements Legendable {
 
 
     public void verify() throws InvalidXMLException, ReferenceException {
-        assert null != element;
 //        NodeList baseList = element.getElementsByTagName( "base" );
 
         if ( positioned ) {
@@ -110,7 +109,6 @@ public class Truss extends Mountable implements Legendable {
 
         NodeList suspendList = element.getElementsByTagName("suspend");
         NodeList baseList = element.getElementsByTagName( "base" );
-        assert( null != baseList );
 
         if (2 == suspendList.getLength()) {
 
@@ -129,8 +127,6 @@ public class Truss extends Mountable implements Legendable {
         }
         else if ( 1 == baseList.getLength() ) {
             base = findBase( baseList );
-
-            assert( null != base );
 
             verticalCenter = new Point( base.x(), base.y(), 0.0 );
             rotation = base.rotation();
@@ -198,18 +194,6 @@ public class Truss extends Mountable implements Legendable {
     @Override
     public Point location(String location) throws InvalidXMLException, MountingException, ReferenceException {
         Character vertex = location.charAt(0);
-        Double offset = size / 2;
-        switch (vertex) {
-            case 'a':
-            case 'c':
-                offset *= -1;
-                break;
-            case 'b':
-            case 'd':
-                break;
-            default:
-                throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
-        }
 
         String distanceString = location.substring(1);
         Integer distance;
@@ -223,42 +207,82 @@ public class Truss extends Mountable implements Legendable {
             throw new MountingException("Truss (" + id + ") does not include location " + distance.toString() + ".");
         }
 
-        if ( positioned ) {
-            Double verticalOffset = size / 2;
+        if( null != base ) {
+            Double northOffset = size / 2 * -1;
+            Double westOffset = size / 2 * -1;
+
             switch (vertex) {
                 case 'a':
+                    break;
                 case 'b':
+                    westOffset *= -1;
                     break;
                 case 'c':
+                    northOffset *= -1;
+                    break;
                 case 'd':
-                    verticalOffset *= -1;
+                    northOffset *= -1;
+                    westOffset *= -1;
                     break;
                 default:
                     throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
             }
 
-            return new Point( x - length / 2 + distance, y + offset, z + verticalOffset );
+            return new Point( x + westOffset, y + northOffset, z + distance );
+
         }
         else {
-            if (null == suspend1) {
-                throw new InvalidXMLException("suspend1 is null");
-            }
-            Point point = suspend1.locate();
+            Double offset = size / 2;
 
-            Double verticalOffset = 0.0;
             switch (vertex) {
                 case 'a':
-                case 'b':
-                    break;
                 case 'c':
+                    offset *= -1;
+                    break;
+                case 'b':
                 case 'd':
-                    verticalOffset += size;
                     break;
                 default:
                     throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
             }
 
-            return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
+            if ( positioned ) {
+                Double verticalOffset = size / 2;
+                switch (vertex) {
+                    case 'a':
+                    case 'b':
+                        break;
+                    case 'c':
+                    case 'd':
+                        verticalOffset *= -1;
+                        break;
+                    default:
+                        throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+                }
+
+                return new Point( x - length / 2 + distance, y + offset, z + verticalOffset );
+            }
+            else {
+                if (null == suspend1) {
+                    throw new InvalidXMLException("suspend1 is null");
+                }
+                Point point = suspend1.locate();
+
+                Double verticalOffset = 0.0;
+                switch (vertex) {
+                    case 'a':
+                    case 'b':
+                        break;
+                    case 'c':
+                    case 'd':
+                        verticalOffset += size;
+                        break;
+                    default:
+                        throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+                }
+
+                return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
+            }
         }
     }
 
@@ -325,14 +349,28 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
      */
     @Override
     public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
+        verify();
+
+//        System.err.println( "RotatedLocation()" );
 
         if( positioned ) {
+//            System.err.println( "positioned" );
             return new Place( location( location ), position, 0.0 );
         }
+        else if ( null != base ) {
+//            System.err.println( "base" );
+            Double transformX = base.x() + SvgElement.OffsetX();
+            Double transformY = base.y() + SvgElement.OffsetY();
+            Point origin = new Point( transformX, transformY, 0.0 );
+//            System.err.println( "base end" );
+            return new Place(location(location), origin, base.rotation() );
+        }
         else {
+//            System.err.println( "standard" );
             Double transformX = point1.x() + SvgElement.OffsetX();
             Double transformY = point1.y() + SvgElement.OffsetY();
             Point origin = new Point( transformX, transformY, point1.z() );
+//            System.err.println( "standard end" );
             return new Place(location(location), origin, rotation);
         }
     }
@@ -465,26 +503,26 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     public void dom(Draw draw, View mode) {
         SvgElement trussRectangle = null;//draw.element("rect");
         SvgElement group = null;
-System.err.println( "Dom." );
+//System.err.println( "Dom." );
         // Common setup:
         switch (mode) {
             case PLAN:
-                System.err.println( "PLAN." );
+//                System.err.println( "PLAN." );
             case TRUSS:
-                System.err.println( "TRUSS." );
+//                System.err.println( "TRUSS." );
                 group = svgClassGroup( draw, LAYERTAG );
                 draw.appendRootChild(group);
                 break;
             default:
-                System.err.println( "No known mode." );
+//                System.err.println( "No known mode." );
                 return;
         }
-        System.err.println( "between." );
+//        System.err.println( "between." );
 
         // Separate details:
         switch (mode) {
             case PLAN:
-                System.err.println( "PLAN again." );
+//                System.err.println( "PLAN again." );
                 if ( positioned ) {
                     group.rectangle( draw, x - length / 2, y - size / 2, length, size, color );
                 }
@@ -500,7 +538,7 @@ System.err.println( "Dom." );
 
                 }
                 else {
-                    System.err.println( "PLAN not positioned." );
+//                    System.err.println( "PLAN not positioned." );
                     Double x1 = point1.x();// + MinderDom.OffsetX();
                     Double y1 = point1.y();// + MinderDom.OffsetY();
                     Double xPlan = x1 - overHang;
@@ -521,7 +559,7 @@ System.err.println( "Dom." );
 
                 }
                 else if( ! positioned ) {
-                    System.err.println( "TRUSS not positioooned." );
+//                    System.err.println( "TRUSS not positioooned." );
                     Double yTruss1 = TrussCount * 320 + 80;
                     trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
 //                trussRectangle.setAttribute("x", size.toString());
@@ -602,7 +640,7 @@ System.err.println( "Dom." );
                 }
                 break;
             default:
-                System.err.println( "default." );
+//                System.err.println( "default." );
                 return;
         }
 
@@ -628,7 +666,7 @@ System.err.println( "Dom." );
 //            default:
 //
 //        }
-        System.err.println( "Dom done!" );
+//        System.err.println( "Dom done!" );
     }
 
     @Override

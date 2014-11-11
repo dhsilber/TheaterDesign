@@ -29,6 +29,8 @@ public class Parse {
 
     Element root = null;
 
+    Boolean fatalParseError = false;
+
     /**
      * Parse the provided XML stream, expecting a description of a lighting plot.
      *
@@ -91,6 +93,7 @@ public class Parse {
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
         parseXML( Base.class, "base" );
+        parseXML( Cheeseborough.class, "cheeseborough" );
         parseXML( Truss.class, "truss" );
         parseXML( Suspend.class, "suspend" );
         parseXML( Pipe.class, "pipe" );
@@ -98,6 +101,11 @@ public class Parse {
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );
         parseXML( CableRun.class, "cable-run" );
+
+        if ( fatalParseError ) {
+            System.err.println( "... unable to continue." );
+            System.exit( 42 );
+        }
 
         MinderDom.VerifyAll();
 
@@ -129,7 +137,11 @@ public class Parse {
                         InstantiationException |
                         IllegalAccessException |
                         InvocationTargetException e ) {
-                    e.printStackTrace();
+                    System.err.println(  e.getCause().getMessage() );
+
+                    fatalParseError = true;
+
+//                    e.printStackTrace();
                 }
             }
         }

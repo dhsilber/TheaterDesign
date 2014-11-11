@@ -409,7 +409,7 @@ public class TrussTest {
     public void locationFormatNoDistance() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location( "a");
+        truss.location("a");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -453,7 +453,7 @@ public class TrussTest {
         truss.verify();
 
         Point point = truss.location( "a 17");
-        assertEquals( point, new Point(x - length / 2 + 17, y - size / 2, z + size / 2));
+        assertEquals(point, new Point(x - length / 2 + 17, y - size / 2, z + size / 2));
     }
 
     @Test
@@ -500,7 +500,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location( "a");
+        truss.location("a");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -571,6 +571,20 @@ public class TrussTest {
         new Suspend( suspendElement2 );
 
         truss.verify();
+
+        Place place = truss.rotatedLocation( "b 23");
+
+        assertEquals(place.origin(), TestHelpers.accessPoint(truss, "point1"));
+        assertNotNull(TestHelpers.accessDouble(truss, "rotation"));
+        assertEquals( place.rotation(), -0.0);
+        assertEquals( place.location(), new Point(83, 206, 239));
+    }
+ 
+    @Test
+    public void rotatedLocationBeforeVerify() throws Exception {
+        Truss truss = new Truss( element );
+        new Suspend( suspendElement1 );
+        new Suspend( suspendElement2 );
 
         Place place = truss.rotatedLocation( "b 23");
 

@@ -20,13 +20,13 @@ public abstract class Verifier extends ElementalLister {
     {
         for ( ElementalLister item : LIST ) {
             if ( Verifier.class.isInstance( item )) {
-System.err.print( "Verifying: " );
-System.err.println( item.toString() );
+//System.err.print( "Verifying: " );
+//System.err.println( item.toString() );
                 Verifier thing = (Verifier) item;
                 thing.verify();
             }
         }
-System.err.println( "Verifying done." );
+//System.err.println( "Verifying done." );
     }
 
     /**

@@ -104,14 +104,9 @@ public class Wall extends MinderDom {
     public Point nextCorner( Point startingPoint, Point destinationPoint,
                              Wall destinationWall ) throws DataException {
 
-System.out.println("nextCorner. start: " + startingPoint.toString()
-        + ", end: " + destinationPoint.toString());
-System.out.println("destinationWall: " + destinationWall.toString());
-
         if ( this == destinationWall ) {
             return destinationPoint;
         }
-        System.err.println(" Here" );
 
         if ( null == nextCornerPoint || null == previousCornerPoint ) {
             throw new DataException( "Cannot find abutting wall." );
@@ -120,23 +115,14 @@ System.out.println("destinationWall: " + destinationWall.toString());
         if ( nextCornerPoint.equals( startingPoint ) ) {
             return previousCornerPoint;
         }
-        System.err.println(" Here" );
 
         if ( previousCornerPoint.equals( startingPoint ) ) {
             return nextCornerPoint;
         }
-        System.err.println(" Here" );
 
 //        Double destination = startingPoint.distance( destinationPoint );
-System.err.println(" destinationPoint: " + destinationPoint.toString() );
-System.err.println(" nextCornerPoint: " + nextCornerPoint.toString() );
-System.err.println(" previousCornerPoint: " + previousCornerPoint.toString() );
         Double nextCorner = destinationPoint.distance( nextCornerPoint );
         Double previousCorner = destinationPoint.distance( previousCornerPoint );
-
-//System.out.print("... Distances - destination: " + destination.toString()
-//        + ", nextCorner: " + nextCorner.toString()
-//        + ", previousCorner: " + previousCorner.toString());
 
 //        if ( destination <= nextCorner || destination <= previousCorner ) {
 //            System.out.println( ".  Returning destination " + destinationPoint.toString() );
@@ -145,13 +131,11 @@ System.err.println(" previousCornerPoint: " + previousCornerPoint.toString() );
 //        else
 //        if ( nextCorner < previousCorner && ! nextCornerPoint.equals( startingPoint ) ) {
             if ( nextCorner < previousCorner ) {
-//            System.out.println( ".  Returning next " + nextCornerPoint.toString() );
             return nextCornerPoint;
         }
         else
 //        if ( ! previousCornerPoint.equals( startingPoint ) )
         {
-//            System.out.println( ".  Returning previous " + previousCornerPoint.toString() );
             return previousCornerPoint;
         }
 //        else {
