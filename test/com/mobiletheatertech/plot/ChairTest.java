@@ -1,8 +1,299 @@
 package com.mobiletheatertech.plot;
 
+import org.testng.annotations.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.imageio.metadata.IIOMetadataNode;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
+
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:42 PM To change this template use
  * File | Settings | File Templates.
  */
 public class ChairTest {
+
+    private static final Integer CHAIRWIDTH = 18;
+    private static final Integer CHAIRDEPTH = 19;
+    private static final Integer FOOTSPACE = 11;
+    private static final String COLOR = "black";
+    private static final String CHAIR = "chair";
+
+    public static final String LAYERTAG = "chair";
+
+    Draw draw = null;
+    Element element = null;
+    Double x = 12.5;
+    Double y = 45.0;
+    Double orientation = 90.0;
+
+    @Test
+    public void isA() throws Exception {
+        Chair chair = new Chair(element);
+
+        assert MinderDom.class.isInstance(chair);
+    }
+
+    @Test
+    public void storesAttributes() throws Exception {
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+//        assertEquals(TestHelpers.accessDouble(chair, "width"), WIDTH.doubleValue());
+//        assertEquals(TestHelpers.accessDouble(chair, "depth"), DEPTH.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        element.setAttribute("orientation", orientation.toString());
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+//        assertEquals(TestHelpers.accessDouble(chair, "width"), WIDTH.doubleValue());
+//        assertEquals(TestHelpers.accessDouble(chair, "depth"), DEPTH.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), orientation.doubleValue() );
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Chair instance is missing required 'x' attribute.")
+    public void noX() throws Exception {
+        element.removeAttribute("x");
+        new Chair(element);
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Chair instance is missing required 'y' attribute.")
+    public void noY() throws Exception {
+        element.removeAttribute("y");
+        new Chair(element);
+    }
+
+    @Test
+    public void hasChairWidthSet() throws Exception {
+        Object chairWidthObject =
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Chair",
+                        "CHAIRWIDTH");
+        assertNotNull(chairWidthObject);
+        Integer chairWidth = (Integer) chairWidthObject;
+
+        assertEquals( chairWidth, CHAIRWIDTH );
+    }
+
+    @Test
+    public void hasChairDepthSet() throws Exception {
+        Object chairDepthObject =
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Chair",
+                        "CHAIRDEPTH");
+        assertNotNull(chairDepthObject);
+        Integer chairDepth = (Integer) chairDepthObject;
+
+        assertEquals( chairDepth, CHAIRDEPTH );
+    }
+
+    @Test
+    public void hasColorSet() throws Exception {
+        Object colorObject =
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Chair",
+                        "COLOR");
+        assertNotNull( colorObject );
+        String color = (String) colorObject;
+
+        assertEquals( color, COLOR );
+    }
+
+    @Test
+    public void hasChairNameSet() throws Exception {
+        Object chairNameObject =
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Chair",
+                        "CHAIR");
+        assertNotNull( chairNameObject );
+        String chairName = (String) chairNameObject;
+
+        assertEquals( chairName, CHAIR );
+    }
+
+    @Test
+    public void hasLayerTagSet() throws Exception {
+        Object layerTagObject =
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Chair",
+                        "LAYERTAG");
+        assertNotNull(layerTagObject);
+        String layerTag = (String) layerTagObject;
+
+        assertEquals( layerTag, LAYERTAG );
+    }
+
+    private void domCheckSymbolGeneration() throws Exception {
+        NodeList defsList = draw.root().getElementsByTagName("defs");
+        assertEquals(defsList.getLength(), 2);
+        /* 0th baseElement is the empty defs tag generated by Batik - why? */
+        Node defsNode = defsList.item(1);
+        assertEquals(defsNode.getNodeType(), Node.ELEMENT_NODE);
+        Element defsElement = (Element) defsNode;
+        assertEquals(defsElement.getAttribute("id"), "");
+
+        NodeList list = draw.root().getElementsByTagName("symbol");
+        assertEquals(list.getLength(), 1);
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("id"), "chair");
+    }
+
+    @Test
+    public void domFirstGeneratesSymbol() throws Exception {
+        draw.establishRoot();
+
+        Chair chair = new Chair(element);
+        chair.dom(draw, View.PLAN);
+
+        domCheckSymbolGeneration();
+    }
+
+    @Test
+    public void domSecondDoesNothingMore() throws Exception {
+        draw.establishRoot();
+
+        Chair chair1 = new Chair(element);
+        chair1.dom(draw, View.PLAN);
+        Chair chair2 = new Chair(element);
+        chair2.dom(draw, View.PLAN);
+
+        domCheckSymbolGeneration();
+    }
+
+    @Test
+    public void domPlanSingle() throws Exception {
+        draw.establishRoot();
+        Chair chair = new Chair(element);
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals(list.getLength(), 1);
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, x );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, y );
+        assertEquals( element.getAttribute( "transform" ), "rotate(0.0,"+x+","+y+")" );
+    }
+
+    @Test
+    public void domPlanSingleRotated() throws Exception {
+        Double offsetX = 13.6;
+        Double offsetY = 4.8;
+        SvgElement.Offset( offsetX, offsetY );
+        Double shiftedX = x + offsetX;
+        Double shiftedY = y + offsetY;
+
+        draw.establishRoot();
+        element.setAttribute("orientation", orientation.toString());
+        Chair chair = new Chair(element);
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals(list.getLength(), 1);
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, shiftedX );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, shiftedY );
+
+        assertEquals( element.getAttribute( "transform" ), "rotate("+orientation+","+shiftedX+","+shiftedY+")" );
+    }
+
+    @Test
+    public void parse() throws Exception {
+        String xml = "<plot>" +
+                "<chair x=\"20\" y=\"30\" />" +
+//                "<chair id=\"victoria\" x=\"20\" y=\"30\" />" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+        TestResets.MinderDomReset();
+
+        //TODO Takes too long to complete:
+        new Parse( stream );
+
+        // Final size of list
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        assertEquals( list.size(), 1 );
+
+        ElementalLister chair = list.get( 0 );
+        assert MinderDom.class.isInstance( chair );
+        assert Chair.class.isInstance( chair );
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+
+        TestResets.ChairReset();
+//        Element venueElement = new IIOMetadataNode("venue");
+//        venueElement.setAttribute("room", "Test Name");
+//        venueElement.setAttribute("width", "350");
+//        venueElement.setAttribute("depth", "400");
+//        venueElement.setAttribute("height", "240");
+//        new Venue(venueElement);
+
+        element = new IIOMetadataNode("chair");
+        element.setAttribute("x", x.toString());
+        element.setAttribute("y", y.toString());
+
+        draw = new Draw();
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
+
 }

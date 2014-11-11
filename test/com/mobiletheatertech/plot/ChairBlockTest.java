@@ -37,7 +37,7 @@ public class ChairBlockTest {
     private static final String PERIMETER = "200 300 180 280 900 400";
 
     @Test
-    public void isMinderDom() throws Exception {
+    public void isA() throws Exception {
         ChairBlock chairBlock = new ChairBlock(element);
 
         assert MinderDom.class.isInstance(chairBlock);

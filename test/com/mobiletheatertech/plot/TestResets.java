@@ -11,6 +11,13 @@ import java.util.TreeMap;
  */
 public class TestResets {
 
+    public static void ChairReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Chair.class.getDeclaredField( "SYMBOLGENERATED" );
+        field.setAccessible( true );
+        boolean generated = field.getBoolean( Chair.class );
+        field.set( generated, false );
+    }
+
     public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
         Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
         field.setAccessible( true );

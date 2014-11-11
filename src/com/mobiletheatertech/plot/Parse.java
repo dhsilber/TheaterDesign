@@ -89,6 +89,7 @@ public class Parse {
         parseXML( Airwall.class, "airwall");
         parseXML( Stage.class, "stage" );
         parseXML( Table.class, "table" );
+        parseXML( Chair.class, "chair" );
         parseXML( ChairBlock.class, "chairblock" );
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
