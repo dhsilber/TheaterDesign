@@ -19,6 +19,7 @@ public class Chair extends MinderDom {
     Double x = null;
     Double y = null;
     Double orientation = null;
+    Integer line = null;
 
     public Chair(Element element) throws AttributeMissingException, InvalidXMLException {
         super(element);
@@ -29,6 +30,7 @@ public class Chair extends MinderDom {
         x = getDoubleAttribute(element, "x");
         y = getDoubleAttribute(element, "y");
         orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
+        line = getOptionalIntegerAttributeOrZero( element, "line" );
 //        width = getOptionalDoubleAttribute(element, "width");
 //        depth = getOptionalIntegerAttribute(element, "depth");
 
@@ -62,8 +64,20 @@ public class Chair extends MinderDom {
 
         SvgElement group = svgClassGroup( draw, LAYERTAG );
         draw.appendRootChild(group);
-        SvgElement use = group.use( draw, CHAIR, x, y );
-        use.attribute( "transform", "rotate("+orientation+","+(x+SvgElement.OffsetX())+","+(y+SvgElement.OffsetY())+")" );
+        useChair(draw, group, x, y);
 
+        Double interimX = x;
+        Double interimY = y;
+        for ( int count = 1; count < line; count++ ) {
+            interimX += Math.cos( Math.toRadians( orientation ) ) * CHAIRWIDTH;
+            interimY += Math.sin( Math.toRadians( orientation ) ) * CHAIRWIDTH;
+            useChair(draw, group, interimX, interimY);
+        }
+    }
+
+    void useChair(Draw draw, SvgElement parent, Double interimX, Double interimY) {
+        SvgElement use;
+        use = parent.use( draw, CHAIR, interimX, interimY );
+        use.attribute( "transform", "rotate("+orientation+","+(interimX+SvgElement.OffsetX())+","+(interimY+SvgElement.OffsetY())+")" );
     }
 }

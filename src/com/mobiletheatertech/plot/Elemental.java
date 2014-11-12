@@ -110,7 +110,7 @@ public class Elemental {
      * @param name    name of attribute.
      * @return Integer value of attribute - zero if attribute is not set
      */
-    protected Integer getOptionalIntegerAttribute( Element element, String name ) {
+    protected Integer getOptionalIntegerAttributeOrZero(Element element, String name) {
         String value = element.getAttribute( name );
         if (value.isEmpty()) {
             value = "0";

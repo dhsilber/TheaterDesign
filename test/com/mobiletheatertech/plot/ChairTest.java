@@ -31,9 +31,11 @@ public class ChairTest {
 
     Draw draw = null;
     Element element = null;
+//    Element chairLineElement = null;
     Double x = 12.5;
     Double y = 45.0;
     Double orientation = 90.0;
+    Integer line = 7;
 
     @Test
     public void isA() throws Exception {
@@ -48,21 +50,30 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-//        assertEquals(TestHelpers.accessDouble(chair, "width"), WIDTH.doubleValue());
-//        assertEquals(TestHelpers.accessDouble(chair, "depth"), DEPTH.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger( chair, "line" ), (Integer) 0 );
     }
 
     @Test
-    public void storesOptionalAttributes() throws Exception {
+    public void storesOptionalOrientationAttribute() throws Exception {
         element.setAttribute("orientation", orientation.toString());
         Chair chair = new Chair(element);
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-//        assertEquals(TestHelpers.accessDouble(chair, "width"), WIDTH.doubleValue());
-//        assertEquals(TestHelpers.accessDouble(chair, "depth"), DEPTH.doubleValue());
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), orientation.doubleValue() );
+    }
+
+    @Test
+    public void storesOptionalLineAttribute() throws Exception {
+        element.setAttribute("line", line.toString());
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), line );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -245,10 +256,109 @@ public class ChairTest {
     }
 
     @Test
+    public void domPlanLine() throws Exception {
+        draw.establishRoot();
+
+        element.setAttribute( "line", line.toString() );
+        Chair chair = new Chair(element);
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals( list.getLength(), (int) line );
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, x );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, y );
+        assertEquals( element.getAttribute( "transform" ), "rotate(0.0,"+x+","+y+")" );
+
+        Node lastNode = list.item( line - 1 );
+        assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+        Element lastElement = (Element) lastNode;
+        assertEquals(lastElement.getAttribute("xlink:href"), "#chair");
+        Double lastX = new Double( lastElement.getAttribute("x") );
+        Double expectedLastX = x + (CHAIRWIDTH * (line - 1));
+        assertEquals( lastX, expectedLastX );
+        Double lastY = new Double( lastElement.getAttribute("y") );
+        assertEquals( lastY, y );
+        assertEquals( lastElement.getAttribute( "transform" ), "rotate(0.0," + expectedLastX + "," + y + ")" );
+    }
+
+    // TODO Allow for lines of chairs to be rotated.
+    // See URL in comment below for math.
+    @Test
+    public void domPlanLineRotatedFromOrigin() throws Exception {
+        draw.establishRoot();
+
+//        http://gamedev.stackexchange.com/questions/18340/get-position-of-point-on-circumference-of-circle-given-an-angle
+
+        Double degrees = 60.0;
+        Integer count = 5;
+        element.setAttribute( "x", "0" );
+        element.setAttribute( "y", "0" );
+        element.setAttribute( "orientation", degrees.toString() );
+        element.setAttribute( "line", count.toString() );
+        Double expectedLastX = Math.cos( Math.toRadians( degrees ) ) * (count - 1) * CHAIRWIDTH;
+        Double expectedLastY = Math.sin( Math.toRadians( degrees ) ) * (count - 1) * CHAIRWIDTH;
+
+        Chair chair = new Chair(element);
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals( list.getLength(), (int) count );
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, 0.0 );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, 0.0 );
+        assertEquals( element.getAttribute( "transform" ), "rotate(60.0,0.0,0.0)" );
+
+        Node lastNode = list.item( count - 1 );
+        assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+        Element lastElement = (Element) lastNode;
+        assertEquals(lastElement.getAttribute("xlink:href"), "#chair");
+        Double lastX = new Double( lastElement.getAttribute("x") );
+        assertEquals( lastX, expectedLastX );
+        Double lastY = new Double( lastElement.getAttribute("y") );
+        assertEquals( lastY, expectedLastY );
+        assertEquals( lastElement.getAttribute( "transform" ),
+                "rotate(60.0," + expectedLastX + "," + expectedLastY + ")" );
+    }
+
+    @Test
     public void parse() throws Exception {
         String xml = "<plot>" +
                 "<chair x=\"20\" y=\"30\" />" +
-//                "<chair id=\"victoria\" x=\"20\" y=\"30\" />" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
@@ -288,6 +398,10 @@ public class ChairTest {
         element = new IIOMetadataNode("chair");
         element.setAttribute("x", x.toString());
         element.setAttribute("y", y.toString());
+
+//        chairLineElement = new IIOMetadataNode("chair");
+//        chairLineElement.setAttribute("x", x.toString());
+//        chairLineElement.setAttribute("y", y.toString());
 
         draw = new Draw();
     }

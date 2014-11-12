@@ -44,9 +44,9 @@ public class ElementalTest {
 
             id = getOptionalStringAttribute( element, "id" );
             stringValue = getStringAttribute(element, "stringValue");
-            empty = getOptionalIntegerAttribute(element, "empty");
-            unset = getOptionalIntegerAttribute(element, "unset");
-            used = getOptionalIntegerAttribute(element, "used");
+            empty = getOptionalIntegerAttributeOrZero(element, "empty");
+            unset = getOptionalIntegerAttributeOrZero(element, "unset");
+            used = getOptionalIntegerAttributeOrZero(element, "used");
             integerValue = getIntegerAttribute(element, "integerValue");
             positiveIntegerValue=getPositiveIntegerAttribute(element, "positiveIntegerValue");
             twiceUnsetZero = getOptionalDoubleAttributeOrZero(element, "twiceUnset");

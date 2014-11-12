@@ -1,8 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Represents a rectangular block of individual chairs, such as a hotel would lay out in a function
@@ -77,10 +75,10 @@ public class ChairBlock extends MinderDom {
         String exceptionMessage =
                 "Chairblock can be defined with either a perimeter or a complete set of x/y/width/depth parameters, but not both.";
 
-        x = getOptionalIntegerAttribute(element, "x");
-        y = getOptionalIntegerAttribute(element, "y");
-        width = getOptionalIntegerAttribute(element, "width");
-        depth = getOptionalIntegerAttribute(element, "depth");
+        x = getOptionalIntegerAttributeOrZero(element, "x");
+        y = getOptionalIntegerAttributeOrZero(element, "y");
+        width = getOptionalIntegerAttributeOrZero(element, "width");
+        depth = getOptionalIntegerAttributeOrZero(element, "depth");
         perimeter = getOptionalStringAttribute(element, "perimeter");
 
         if (!perimeter.isEmpty() && (0 != x && 0 != y && 0 != width && 0 != depth)) {

@@ -2,8 +2,6 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.*;
 
-import java.util.ArrayList;
-
 /*
  * Created with IntelliJ IDEA. User: dhs Date: 7/18/13 Time: 1:53 PM To change this template use
  * File | Settings | File Templates.
@@ -75,8 +73,8 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             throw new AttributeMissingException( "Luminaire definition", null, "name" );
         }
         complete = (element.getAttribute( "complete" ).equals( "1" ));
-        width = getOptionalIntegerAttribute( element, "width" );
-        length = getOptionalIntegerAttribute( element, "length" );
+        width = getOptionalIntegerAttributeOrZero(element, "width");
+        length = getOptionalIntegerAttributeOrZero(element, "length");
 
         NodeList svgList = element.getElementsByTagName( "svg" );
         if (null != svgList && svgList.getLength() > 0) {
