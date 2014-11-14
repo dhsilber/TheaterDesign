@@ -8,32 +8,36 @@ import org.w3c.dom.Element;
  */
 public class Chair extends MinderDom {
 
+    static final String CATEGORY = "chair";
+
     private static final Integer CHAIRWIDTH = 18;
     private static final Integer CHAIRDEPTH = 19;
     private static final String COLOR = "black";
     private static final String CHAIR = "chair";
     public static final String LAYERTAG = "chair";
+    public static final String LAYERNAME = "Chairs";
 
-    private static boolean SYMBOLGENERATED = false;
+    static boolean SYMBOLGENERATED = false;
 
     Double x = null;
     Double y = null;
     Double orientation = null;
     Integer line = null;
+    String layerName = null;
 
-    public Chair(Element element) throws AttributeMissingException, InvalidXMLException {
+    public Chair(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
-
-//        String exceptionMessage =
-//                "Chairblock can be defined with either a perimeter or a complete set of x/y/width/depth parameters, but not both.";
 
         x = getDoubleAttribute(element, "x");
         y = getDoubleAttribute(element, "y");
         orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
         line = getOptionalIntegerAttributeOrZero( element, "line" );
-//        width = getOptionalDoubleAttribute(element, "width");
-//        depth = getOptionalIntegerAttribute(element, "depth");
+        layerName = getOptionalStringAttribute( element, "layer" );
 
+        new Layer( LAYERTAG, LAYERNAME, COLOR );
+
+        new Category( CATEGORY, this.getClass() );
+//        new Category( CATEGORY, this.getClass(), LAYERTAG );
     }
 
     @Override
@@ -46,6 +50,8 @@ public class Chair extends MinderDom {
         if (!SYMBOLGENERATED) {
             SvgElement defs = draw.element("defs");
             draw.appendRootChild(defs);
+
+            layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
 
             SvgElement symbol = defs.symbol( draw, CHAIR );
             defs.appendChild(symbol);
@@ -62,14 +68,14 @@ public class Chair extends MinderDom {
             SYMBOLGENERATED = true;
         }
 
-        SvgElement group = svgClassGroup( draw, LAYERTAG );
+        SvgElement group = svgClassGroup( draw, layerName );
         draw.appendRootChild(group);
         useChair(draw, group, x, y);
 
         Double interimX = x;
         Double interimY = y;
         for ( int count = 1; count < line; count++ ) {
-            interimX += Math.cos( Math.toRadians( orientation ) ) * CHAIRWIDTH;
+            interimX += Math.cos(Math.toRadians(orientation)) * CHAIRWIDTH;
             interimY += Math.sin( Math.toRadians( orientation ) ) * CHAIRWIDTH;
             useChair(draw, group, interimX, interimY);
         }

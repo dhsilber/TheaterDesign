@@ -124,8 +124,8 @@ public class Luminaire extends MinderDom {
             rotation = new Double(rotate);
         }
 
-        new Layer(LAYERTAG, LAYERNAME, COLOR );
-        new Layer(INFOLAYERTAG, INFOLAYERNAME, COLOR );
+        new Layer( LAYERTAG, LAYERNAME, COLOR );
+        new Layer( INFOLAYERTAG, INFOLAYERNAME, COLOR );
 
         GearList.Add(type);
     }

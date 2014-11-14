@@ -362,30 +362,12 @@ public class Wall extends MinderDom {
                     yTwo = y1 + opening.start();
 
                     SvgElement line = draw.line( draw, x1, yOne, x2, yTwo, COLOR );
-//                            draw.element("line");
-//
-//                    line.setAttribute( "x1", x1.toString() );
-//                    line.setAttribute( "y1", yOne.toString() );
-//                    line.setAttribute( "x2", x2.toString() );
-//                    line.setAttribute( "y2", yTwo.toString() );
-//                    line.setAttribute( "stroke", "black" );
-//                    line.setAttribute( "stroke-width", "2" );
                     line.attribute( "stroke-width", "2" );
-//                    draw.appendRootChild( line );
 
                     yOne = yTwo + opening.width();
                 }
                 SvgElement line = draw.line( draw, x1, yOne, x2, y2, COLOR );
-//                SvgElement line = draw.element("line");
-//
-//                line.setAttribute( "x1", x1.toString() );
-//                line.setAttribute( "y1", yOne.toString() );
-//                line.setAttribute( "x2", x2.toString() );
-//                line.setAttribute( "y2", y2.toString() );
-//                line.setAttribute( "stroke", "black" );
-//                line.setAttribute( "stroke-width", "2" );
                 line.attribute( "stroke-width", "2" );
-//                draw.appendRootChild( line );
             }
             else {
                 Double xOne = x1;
@@ -395,30 +377,12 @@ public class Wall extends MinderDom {
                     xTwo = x1 + opening.start();
 
                     SvgElement line = draw.line( draw, xOne, y1, xTwo, y2, COLOR );
-//                    SvgElement line = draw.element("line");
-//
-//                    line.setAttribute( "x1", xOne.toString() );
-//                    line.setAttribute( "y1", y1.toString() );
-//                    line.setAttribute( "x2", xTwo.toString() );
-//                    line.setAttribute( "y2", y2.toString() );
-//                    line.setAttribute( "stroke", "black" );
-//                    line.setAttribute( "stroke-width", "2" );
                     line.attribute( "stroke-width", "2" );
-//                    draw.appendRootChild( line );
 
                     xOne = xTwo + opening.width();
                 }
                 SvgElement line = draw.line( draw, xOne, y1, x2, y2, COLOR );
-//                SvgElement line = draw.element("line");
-//
-//                line.setAttribute( "x1", xOne.toString() );
-//                line.setAttribute( "y1", y1.toString() );
-//                line.setAttribute( "x2", x2.toString() );
-//                line.setAttribute( "y2", y2.toString() );
-//                line.setAttribute( "stroke", "black" );
-//                line.setAttribute( "stroke-width", "2" );
                 line.attribute( "stroke-width", "2" );
-//                draw.appendRootChild( line );
             }
         }
 
@@ -426,15 +390,7 @@ public class Wall extends MinderDom {
 
         {
             SvgElement line = draw.line( draw, x1, y1, x2, y2, COLOR );
-//            SvgElement line = draw.element("line");
-//
-//            line.setAttribute( "x1", x1.toString() );
-//            line.setAttribute( "y1", y1.toString() );
-//            line.setAttribute( "x2", x2.toString() );
-//            line.setAttribute( "y2", y2.toString() );
-//            line.setAttribute( "stroke", "black" );
             line.attribute( "stroke-width", "2" );
-//            draw.appendRootChild( line );
         }
     }
 

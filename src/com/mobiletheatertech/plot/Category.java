@@ -54,4 +54,11 @@ public class Category {
     public String layer() {
         return layer;
     }
+
+    @Override
+    public String toString() {
+        return "Category: " + name +
+                ", class: " + clazz.toString() +
+                ", layer: " + ((null == layer) ? "null" : layer) + "." ;
+    }
 }

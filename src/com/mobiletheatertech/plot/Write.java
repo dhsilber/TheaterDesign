@@ -228,6 +228,9 @@ public class Write {
     }
 
     private Draw drawPlan() throws MountingException, ReferenceException {
+
+        resetOneOffs();
+
         Draw draw = startFile();
         Legend.Startup(draw, View.PLAN,
                 Venue.Width() + SvgElement.OffsetX() * 2 + 5,
@@ -272,6 +275,9 @@ public class Write {
     }
 
     private Draw drawSection() throws MountingException, ReferenceException {
+
+        resetOneOffs();
+
         Draw draw = startFile();
         Legend.Startup(draw, View.SECTION,
                 Venue.Width() + SvgElement.OffsetX() * 2 + 5,
@@ -289,6 +295,9 @@ public class Write {
     }
 
     private Draw drawFront() throws MountingException, ReferenceException {
+
+        resetOneOffs();
+
         Draw draw = new Draw();
 
 //        Minder.DrawAllFront(draw.canvas());
@@ -309,6 +318,9 @@ public class Write {
     }
 
     private Draw drawTruss() throws MountingException, ReferenceException {
+
+        resetOneOffs();
+
         Draw draw = startFile();
 
 
@@ -364,7 +376,7 @@ public class Write {
 
 //        Grid.DOM(draw);
 
-        HangPoint.SYMBOLGENERATED = false;
+        resetOneOffs();
 
         for ( String categoryName : drawing.displayList ) {
             if ( categoryName.equals( Legend.CATEGORY )) {
@@ -376,6 +388,7 @@ public class Write {
                 continue;
             }
             Category category = Category.Select( categoryName );
+            System.out.println( "Category selected: " + category.toString() );
             if ( null == category ) {
                 System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
                 continue;
@@ -453,6 +466,12 @@ public class Write {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void resetOneOffs() {
+        HangPoint.SYMBOLGENERATED = false;
+        Chair.SYMBOLGENERATED = false;
 
     }
 

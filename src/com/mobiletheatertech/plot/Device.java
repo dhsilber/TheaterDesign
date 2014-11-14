@@ -116,14 +116,14 @@ public class Device extends Stackable
         // Get what needs to be drawn from 'is'.
         shape = template.getSolid();
 
-        if( 90.0 == orientation ){
-            width = shape.depth();
-            depth = shape.width();
-        }
-        else {
+//        if( 90.0 == orientation ){
+//            width = shape.depth();
+//            depth = shape.width();
+//        }
+//        else {
             width = shape.width();
             depth = shape.depth();
-        }
+//        }
 
         if( "".equals( on ) ) {
             place = new Point( x - width / 2, y - depth / 2, z );
@@ -159,6 +159,9 @@ public class Device extends Stackable
         switch (mode) {
             case PLAN:
                 group = svgClassGroup( draw, layerName);
+                Double shiftedX = x + SvgElement.OffsetX();
+                Double shiftedY = y + SvgElement.OffsetY();
+                group.attribute( "transform", "rotate(" + orientation + "," + shiftedX + "," + shiftedY + ")" );
                 draw.appendRootChild(group);
 
                 element = group.rectangle( draw, place.x(), place.y(), width, depth, color );

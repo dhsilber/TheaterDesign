@@ -288,7 +288,7 @@ public class DeviceTest {
         device.verify();
 
         assertNull(device.layer());
-        assertEquals( TestHelpers.accessString( device, "color" ), "black" );
+        assertEquals( TestHelpers.accessString(device, "color"), "black" );
     }
 
     @Test
@@ -319,7 +319,7 @@ public class DeviceTest {
         Device device = new Device( layeredElement );
         device.verify();
 
-        assertEquals( TestHelpers.accessString( device, "color" ), layerColor);
+        assertEquals( TestHelpers.accessString(device, "color"), layerColor);
     }
 
     @Test
@@ -479,6 +479,42 @@ public class DeviceTest {
         assertEquals(deviceElement.getAttribute("stroke"), "black");
     }
 
+    @Test
+    public void domPlanCoordinatesRotated60() throws Exception {
+        Double offsetX = 13.6;
+        Double offsetY = 4.8;
+        SvgElement.Offset( offsetX, offsetY );
+        Double shiftedX = x + offsetX;
+        Double shiftedY = y + offsetY;
+
+        new DeviceTemplate(templateElement);
+
+        Draw draw = new Draw();
+
+        draw.establishRoot();
+        element.removeAttribute("on");
+        element.setAttribute( "orientation", "60" );
+        Device device = new Device( element );
+        device.verify();
+
+        NodeList existingGroups = draw.root().getElementsByTagName("rect");
+        assertEquals(existingGroups.getLength(), 0);
+
+        device.dom(draw, View.PLAN);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals( rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element deviceElement = (Element) groupNode;
+         Node parentNode = deviceElement.getParentNode();
+        assertEquals( parentNode.getNodeType(), Node.ELEMENT_NODE );
+        Element parentElement = (Element) parentNode;
+
+        assertEquals( parentElement.getAttribute( "transform" ),
+                "rotate(60.0,"+ shiftedX +","+ shiftedY +")" );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -495,6 +531,7 @@ public class DeviceTest {
         TestResets.DeviceTemplateReset();
         TestResets.DeviceReset();
         TestResets.StackableReset();
+        SvgElement.Offset( 0.0, 0.0 );
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");

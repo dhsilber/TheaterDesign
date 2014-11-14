@@ -31,7 +31,6 @@ public class Drawing extends ElementalLister {
                     Element subElement = (Element) node;
                     Display display = new Display( subElement );
                     displayList.add( display.category() );
-//                    displayList.add( new Opening( subElement ) );
                 }
             }
         }
