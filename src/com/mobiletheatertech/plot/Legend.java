@@ -28,7 +28,8 @@ public class Legend {
 
     static final String CATEGORY = "legend";
 
-    static final Integer TEXTOFFSET = 20;
+    static final Integer TEXTOFFSET = 40;
+    static final Integer QUANTITYOFFSET = 200;
 
     /**
      * Register a callback function that will draw an individual legend entry
@@ -72,7 +73,7 @@ public class Legend {
         headerText( draw, group, center, y, Venue.Name() );
         y += 17;
 
-        INITIAL = new PagePoint( start + 20, y );
+        INITIAL = new PagePoint( start, y );
 
         // TODO Adding the Y offset to the box height is really cheating
         Double boxHeight = y + HEIGHT + SvgElement.OffsetY();

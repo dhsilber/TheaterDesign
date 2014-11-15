@@ -112,6 +112,7 @@ public class Device extends Stackable
             throw new InvalidXMLException( "Device", id,
                     "'is' reference ("+is+") does not exist" );
         }
+        template.count();
 
         // Get what needs to be drawn from 'is'.
         shape = template.getSolid();

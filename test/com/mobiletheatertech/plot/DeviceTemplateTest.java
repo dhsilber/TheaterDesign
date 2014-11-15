@@ -6,6 +6,8 @@ import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
+import java.util.TreeMap;
+
 import static org.testng.Assert.*;
 import static org.testng.Assert.assertEquals;
 
@@ -22,6 +24,12 @@ public class DeviceTemplateTest {
     private final Double height = 2.3;
     private final String layerTag = "Device_Layer";
     private final String layerColor = "color";
+    
+    Element deviceElement = null;
+    String deviceName = "individual device";
+    Double x = 3.6;
+    Double y = 1.8;
+    Double z = 0.1;
 
 //    private Solid solid = null;
 
@@ -55,7 +63,7 @@ public class DeviceTemplateTest {
         assertEquals( TestHelpers.accessDouble(deviceTemplate, "width"), width );
         assertEquals( TestHelpers.accessDouble(deviceTemplate, "depth"), depth );
         assertEquals( TestHelpers.accessDouble(deviceTemplate, "height"), height );
-        assertEquals( TestHelpers.accessString( deviceTemplate, "layer" ), layerTag);
+        assertEquals(TestHelpers.accessString(deviceTemplate, "layer"), layerTag);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -109,6 +117,21 @@ public class DeviceTemplateTest {
 
         Object svgStored = TestHelpers.accessObject( deviceTemplate, "svg" );
         assertNotNull( svgStored );
+    }
+
+    @Test
+    public void initialCountZero() throws Exception {
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+
+        assertEquals(TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 0);
+    }
+
+    @Test
+    public void incrementsCount() throws Exception {
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        deviceTemplate.count();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
     }
 
     @Test
@@ -171,10 +194,45 @@ public class DeviceTemplateTest {
 
     @Test
     public void layer() throws Exception {
-        element.setAttribute( "layer", layerTag );
-        DeviceTemplate deviceTemplate=new DeviceTemplate( element );
+        element.setAttribute("layer", layerTag);
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
 
-        assertEquals( deviceTemplate.layer(), layerTag );
+        assertEquals(deviceTemplate.layer(), layerTag);
+    }
+
+    @Test
+    public void registersLegend() throws Exception {
+        TestResets.LegendReset();
+
+        new DeviceTemplate( element );
+
+        TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+    }
+
+    @Test
+    public void domLegendItemNoCount() throws Exception {
+        Draw draw = new Draw();
+        PagePoint start = new PagePoint( 3.2, 4.5 );
+
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        PagePoint finish = deviceTemplate.domLegendItem( draw, start );
+
+        assertEquals( finish, start );
+    }
+
+    @Test
+    public void domLegendItemYesCount() throws Exception {
+        Draw draw = new Draw();
+        PagePoint start = new PagePoint( 3.2, 4.5 );
+
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        /*Device device =*/ new Device( deviceElement );
+        PagePoint finish = deviceTemplate.domLegendItem( draw, start );
+
+        assertNotEquals( start, finish );
+//        assertNotEquals( finish, start );
     }
 
     @BeforeClass
@@ -196,6 +254,13 @@ public class DeviceTemplateTest {
         element.setAttribute("width", width.toString());
         element.setAttribute("depth", depth.toString());
         element.setAttribute("height", height.toString());
+
+        deviceElement = new IIOMetadataNode( "device" );
+        deviceElement.setAttribute( "id", deviceName );
+        deviceElement.setAttribute( "is", name );
+        deviceElement.setAttribute( "x", x.toString() );
+        deviceElement.setAttribute( "y", y.toString() );
+        deviceElement.setAttribute( "z", z.toString() );
     }
 
     @AfterMethod

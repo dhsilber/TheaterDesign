@@ -272,6 +272,16 @@ public class DeviceTest {
     }
 
     @Test
+    public void incrementsCount() throws Exception {
+        DeviceTemplate deviceTemplate = new DeviceTemplate( templateElement );
+        element.removeAttribute("on");
+        Device device = new Device( element );
+        device.verify();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+    }
+
+    @Test
     public void addsToGearList() throws Exception {
         assertEquals( GearList.Check(templateName), (Integer)0 );
 
@@ -454,8 +464,8 @@ public class DeviceTest {
         NodeList existingGroups = draw.root().getElementsByTagName("rect");
         assertEquals(existingGroups.getLength(), 0);
 
-        Double expectedX = x - depth / 2.0;
-        Double expectedY = y - width / 2.0;
+        Double expectedX = x - width / 2.0;
+        Double expectedY = y - depth / 2.0;
 
         device.dom(draw, View.PLAN);
 

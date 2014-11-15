@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @author David H. Silber
  *
  */
-public class DeviceTemplate extends Verifier
+public class DeviceTemplate extends Verifier implements Legendable
 {
     private static ArrayList<DeviceTemplate> DEVICELIST = new ArrayList<>();
 
@@ -63,6 +63,10 @@ public class DeviceTemplate extends Verifier
     private Double height = null;
     private String layer = null;
 
+    String color = "black";
+
+    Integer count = 0;
+
     /**
      * Handle the common parts of constructing the various types of
      * <code>*Template</code>.
@@ -101,11 +105,15 @@ public class DeviceTemplate extends Verifier
         this.solid = new Solid( width, depth, height );
 
         DEVICELIST.add( this );
+
+        Legend.Register( this, 2, 7, LegendOrder.Device );
     }
 
     @Override
-    public void verify() {
+    public void verify() { }
 
+    public void count() {
+        count++;
     }
 
     public Solid getSolid()
@@ -125,4 +133,27 @@ public class DeviceTemplate extends Verifier
     }
 
 
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        if (0 >= count) { return start; }
+
+        Layer layerInstance = Layer.List().get( layer );
+        if( null != layerInstance ) {
+            color = layerInstance.color();
+        }
+
+        SvgElement box = draw.rectangle( draw, start.x(), start.y(), 30.0, 7.0, color );
+        box.attribute( "fill", color );
+        box.attribute( "fill-opacity", "0.1" );
+
+        Double x = start.x() + Legend.TEXTOFFSET;
+        Double y = start.y() + 7;
+        draw.text(draw, id, x, y, Legend.TEXTCOLOR);
+
+        x = start.x() + Legend.QUANTITYOFFSET;
+        draw.text( draw, count.toString(), x, y, Legend.TEXTCOLOR );
+
+        PagePoint finish = new PagePoint( start.x(), start.y() + 7 );
+        return finish;
+    }
 }

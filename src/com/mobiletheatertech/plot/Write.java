@@ -371,12 +371,9 @@ public class Write {
 
     private Draw writeIndividualDrawing( Drawing drawing )
             throws MountingException, ReferenceException {
-        Draw draw = startFile();
-
-
-//        Grid.DOM(draw);
-
         resetOneOffs();
+
+        Draw draw = startFile();
 
         for ( String categoryName : drawing.displayList ) {
             if ( categoryName.equals( Legend.CATEGORY )) {
