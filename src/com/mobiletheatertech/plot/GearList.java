@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Collect lists of gear.
  *
- * Constructor accepts a string and keeps a count of how many times
+ * Constructor accepts a string and keeps a COUNT of how many times
  * that string has been seen.
  *
  * Created by dhs on 4/12/14.

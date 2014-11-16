@@ -123,7 +123,7 @@ public class DeviceTemplateTest {
     public void initialCountZero() throws Exception {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
 
-        assertEquals(TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 0);
+        assertEquals(TestHelpers.accessInteger(deviceTemplate, "COUNT"), (Integer) 0);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class DeviceTemplateTest {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
         deviceTemplate.count();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "COUNT" ), (Integer) 1 );
     }
 
     @Test

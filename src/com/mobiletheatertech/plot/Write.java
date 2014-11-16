@@ -469,7 +469,8 @@ public class Write {
     private void resetOneOffs() {
         HangPoint.SYMBOLGENERATED = false;
         Chair.SYMBOLGENERATED = false;
-
+        Chair.LEGENDREGISTERED = false;
+        Chair.COUNT = 0;
     }
 
 //

@@ -171,7 +171,7 @@ public class Device extends Stackable
 
                 Double x = place.x() + 3;
                 Double y = place.y() + depth - 4;
-                SvgElement idText = group.text( draw, id, place.x(), y, color );
+                SvgElement idText = group.text( draw, id, x, y, color );
                 idText.attribute( "text-anchor", "left" );
 
                 break;

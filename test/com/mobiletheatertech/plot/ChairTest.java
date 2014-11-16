@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import static org.testng.Assert.*;
 import static org.testng.Assert.assertEquals;
@@ -160,7 +161,7 @@ public class ChairTest {
 
     @Test
     public void registersLayer() throws Exception {
-        Chair chair = new Chair(element);
+        Chair chair = new Chair( element );
 
         HashMap<String, Layer> layers = Layer.List();
 
@@ -168,14 +169,130 @@ public class ChairTest {
         assertEquals( layers.get( Chair.LAYERTAG ).name(), Chair.LAYERNAME );
     }
 
+    @Test
+    public void registersLegend() throws Exception {
+        TestResets.LegendReset();
+
+        new Chair( element );
+
+        TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+        Integer order = legendList.lastKey();
+        assert( order >= LegendOrder.Furniture.ordinal() );
+        assert( order < LegendOrder.Luminaire.ordinal() );
+
+    }
+
+    @Test
+    public void registersLegendOnce() throws Exception {
+        TestResets.LegendReset();
+
+        new Chair( element );
+        new Chair( element );
+
+        TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+    }
+
+    @Test
+    public void domLegendItemMovesPagePoint() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        PagePoint start = new PagePoint( 3.2, 4.5 );
+
+        Chair chair = new Chair( element );
+        chair.verify();
+        PagePoint finish = chair.domLegendItem( draw, start );
+
+        assertNotEquals(start, finish);
+    }
+
+    @Test
+    public void domLegendItemContent() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        PagePoint start = new PagePoint( 3.2, 4.5 );
+
+        String eleven = "11";
+        element.setAttribute( "line", eleven );
+        Chair chair = new Chair( element );
+        chair.domLegendItem( draw, start );
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals( list.getLength(), 1 );
+
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, start.x() );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, start.y() + 4 );
+        assertEquals( element.getAttribute("transform"), "scale(0.3)" );
+
+
+        NodeList textList = groupElement.getElementsByTagName("text");
+        assertEquals( textList.getLength(), 2 );
+
+        Node nameNode = textList.item( 0 );
+        assertEquals( nameNode.getNodeType(), Node.ELEMENT_NODE );
+        Element nameElement = (Element) nameNode;
+        assertEquals( nameElement.getAttribute( "x" ), Legend.TEXTOFFSET );
+        assertEquals( nameElement.getAttribute( "y" ), start.y() + 7.0 );
+        String name = nameElement.getTextContent();
+        assertEquals( name, CHAIR );
+
+        Node countNode = textList.item( 1 );
+        assertEquals( countNode.getNodeType(), Node.ELEMENT_NODE );
+        Element countElement = (Element) countNode;
+        assertEquals( countElement.getAttribute( "x" ), Legend.QUANTITYOFFSET );
+        assertEquals( countElement.getAttribute( "y" ), start.y() + 7.0 );
+        String count = countElement.getTextContent();
+        assertEquals( count, eleven );
+    }
+
+    @Test
+    public void domCounts() throws Exception {
+        draw.establishRoot();
+
+        assertEquals( Chair.Count(), 0 );
+
+        Chair chair = new Chair(element);
+        chair.dom(draw, View.PLAN);
+
+        assertEquals( Chair.Count(), 1 );
+    }
+
+    @Test
+    public void domCountsLine() throws Exception {
+        draw.establishRoot();
+
+        assertEquals( Chair.Count(), 0 );
+
+        element.setAttribute( "line", "12" );
+        Chair chair = new Chair(element);
+        chair.dom(draw, View.PLAN);
+
+        assertEquals( Chair.Count(), 12 );
+    }
+
     private void domCheckSymbolGeneration() throws Exception {
         NodeList defsList = draw.root().getElementsByTagName("defs");
         assertEquals(defsList.getLength(), 2);
         /* 0th baseElement is the empty defs tag generated by Batik - why? */
         Node defsNode = defsList.item(1);
-        assertEquals(defsNode.getNodeType(), Node.ELEMENT_NODE);
+        assertEquals( defsNode.getNodeType(), Node.ELEMENT_NODE );
         Element defsElement = (Element) defsNode;
-        assertEquals(defsElement.getAttribute("id"), "");
+        assertEquals( defsElement.getAttribute("id"), "" );
 
         NodeList list = draw.root().getElementsByTagName("symbol");
         assertEquals(list.getLength(), 1);

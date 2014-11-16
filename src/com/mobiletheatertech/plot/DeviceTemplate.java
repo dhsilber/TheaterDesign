@@ -128,11 +128,6 @@ public class DeviceTemplate extends Verifier implements Legendable
 //        return name;
 //    }
 
-    public String toString() {
-        return "DeviceTemplate: "+id+".";
-    }
-
-
     @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
         if (0 >= count) { return start; }
@@ -155,5 +150,9 @@ public class DeviceTemplate extends Verifier implements Legendable
 
         PagePoint finish = new PagePoint( start.x(), start.y() + 7 );
         return finish;
+    }
+
+    public String toString() {
+        return "DeviceTemplate: "+id+".";
     }
 }

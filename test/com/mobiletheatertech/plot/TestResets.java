@@ -12,10 +12,20 @@ import java.util.TreeMap;
 public class TestResets {
 
     public static void ChairReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Chair.class.getDeclaredField( "SYMBOLGENERATED" );
-        field.setAccessible( true );
-        boolean generated = field.getBoolean( Chair.class );
-        field.set( generated, false );
+        Field generatedField = Chair.class.getDeclaredField( "SYMBOLGENERATED" );
+        generatedField.setAccessible( true );
+        boolean generated = generatedField.getBoolean( Chair.class );
+        generatedField.set( generated, false );
+
+        Field registeredField = Chair.class.getDeclaredField( "LEGENDREGISTERED" );
+        registeredField.setAccessible( true );
+        boolean regisitered = registeredField.getBoolean( Chair.class );
+        registeredField.set( regisitered, false );
+
+        Field countField = Chair.class.getDeclaredField( "COUNT" );
+        countField.setAccessible( true );
+        Integer count = (Integer) countField.get( Chair.class );
+        countField.set( count, 0 );
     }
 
     public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {

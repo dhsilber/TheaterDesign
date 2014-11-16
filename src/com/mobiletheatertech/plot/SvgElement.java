@@ -329,13 +329,18 @@ class SvgElement {
             ySet += yOffset;
         }
 
+        SvgElement element = useAbsolute(draw, id, xSet, ySet);
+
+        return element;
+    }
+
+    SvgElement useAbsolute(Draw draw, String id, Double x, Double y) {
         SvgElement element = draw.element("use");
         element.attribute("xlink:href", "#" + id);
-        element.attribute("x", xSet.toString());
-        element.attribute("y", ySet.toString());
+        element.attribute("x", x.toString());
+        element.attribute("y", y.toString());
 
         this.appendChild( element );
-
         return element;
     }
 

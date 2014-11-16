@@ -28,8 +28,8 @@ public class Legend {
 
     static final String CATEGORY = "legend";
 
-    static final Integer TEXTOFFSET = 40;
-    static final Integer QUANTITYOFFSET = 200;
+    static final Double TEXTOFFSET = 40.0;
+    static final Double  QUANTITYOFFSET = 200.0;
 
     /**
      * Register a callback function that will draw an individual legend entry
@@ -151,6 +151,14 @@ public class Legend {
 
     /**
      * Invoke all of the registered callbacks.
+     *
+     * TODO Fix this so that I'm not passing coordinates around.
+     * Legend should create a group element with a transform="translate(..)" attribute.
+     * The callback should get just the group and populate it as needed.
+     * It might also need to return the amount of vertical space required.
+     * This will simplify:
+     *   a) the logic of this, and so my understanding of it
+     *   b) the tests
      */
     public static void Callback() {
         PagePoint start = INITIAL;

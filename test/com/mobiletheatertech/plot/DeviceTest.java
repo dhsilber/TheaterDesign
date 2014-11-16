@@ -278,7 +278,7 @@ public class DeviceTest {
         Device device = new Device( element );
         device.verify();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "COUNT" ), (Integer) 1 );
     }
 
     @Test

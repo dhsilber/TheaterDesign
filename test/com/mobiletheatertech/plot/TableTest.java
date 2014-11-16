@@ -322,13 +322,13 @@ public class TableTest {
         assertEquals(tableElement.getAttribute("fill"), "none");
         assertEquals(tableElement.getAttribute("stroke"), "brown");
 
-//        int count = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
+//        int COUNT = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
 //        String expectedX = Integer.toString( X + CHAIRWIDTH / 2 + 2 );
 //        String expectedY = Integer.toString( Y + CHAIRDEPTH / 2 + FOOTSPACE );
-//        assert (count > 0);
+//        assert (COUNT > 0);
 //
 //        NodeList list = groupElement.getElementsByTagName( "use" );
-//        assertEquals( list.getLength(), count );
+//        assertEquals( list.getLength(), COUNT );
 //
 //        Node node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
