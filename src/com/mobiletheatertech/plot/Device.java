@@ -44,7 +44,7 @@ public class Device extends Stackable
     Double y = null;
     Double z = null;
     Double orientation = null;
-    String layer = null;
+    String layerSpecified = null;
 
     // device dimensions
     Double width = null;
@@ -60,7 +60,7 @@ public class Device extends Stackable
      * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException       if element is null
      */
-    public Device( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Device( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
         id = getStringAttribute(element, "id");
         is = getStringAttribute(element, "is");
@@ -69,7 +69,7 @@ public class Device extends Stackable
         y = getOptionalDoubleAttributeOrZero(element, "y");
         z = getOptionalDoubleAttributeOrZero(element, "z");
         orientation = getOptionalDoubleAttributeOrZero(element, "orientation");
-        layer = getOptionalStringAttribute( element, "layer" );
+        layerSpecified = getOptionalStringAttribute( element, "layer" );
 
         if( "".equals( on ) && ( x.equals( 0.0 ) || y.equals( 0.0 ) ) ) {
             throw new AttributeMissingException( "Device (" + id +
@@ -104,7 +104,7 @@ public class Device extends Stackable
 
     @Override
     public void verify()
-            throws FeatureException, InvalidXMLException, LocationException,
+            throws DataException, FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException
     {
         template = DeviceTemplate.Select( is );
@@ -140,12 +140,14 @@ public class Device extends Stackable
             place = surface.location(shape);
         }
 
-        layerName = ( ! "".equals( layer ) ) ? layer : template.layer();
+        layerName = ( ! "".equals( layerSpecified ) ) ? layerSpecified : template.layer();
 
-        Layer layer = Layer.List().get( layerName );
-        if( null != layer ) {
-            color = layer.color();
+        Layer layerActual = Layer.Retrieve( layerName );
+        if( null != layerActual ) {
+            color = layerActual.color();
         }
+
+        layerActual.register( this );
 
         verified = true;
     }
@@ -205,7 +207,7 @@ public class Device extends Stackable
     This needs verify() to have been run. If it hasn't been, run verify() when invoked.
      */
     @Override
-    public Point location( Solid shape ) throws FeatureException, InvalidXMLException,
+    public Point location( Solid shape ) throws DataException, FeatureException, InvalidXMLException,
             LocationException, MountingException, ReferenceException {
 
         if ( ! verified ) { this.verify(); }

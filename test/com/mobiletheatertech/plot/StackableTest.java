@@ -19,7 +19,7 @@ public class StackableTest {
      */
     private class Stacked extends Stackable {
 
-        public Stacked( Element element ) throws AttributeMissingException, InvalidXMLException {
+        public Stacked( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
             super( element );
         }
 

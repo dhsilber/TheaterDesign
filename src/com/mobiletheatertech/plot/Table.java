@@ -55,7 +55,7 @@ public class Table extends Stackable implements Legendable {
      * @throws LocationException
      */
     public Table(Element element)
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException {
+            throws AttributeMissingException, DataException, InvalidXMLException, LocationException, ReferenceException, SizeException {
         super(element);
 
         id = getOptionalStringAttribute(element, "id");

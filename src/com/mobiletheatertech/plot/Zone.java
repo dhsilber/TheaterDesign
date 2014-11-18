@@ -88,7 +88,7 @@ public class Zone extends MinderDom {
             color = COLORDEFAULT;
         }
 
-        new Layer(LAYERTAG, LAYERNAME, COLORDEFAULT );
+        new Layer( LAYERTAG, LAYERNAME, COLORDEFAULT );
     }
 
     /**
@@ -116,7 +116,7 @@ public class Zone extends MinderDom {
     @Override
     public void verify() {
         if (Proscenium.Active()) {
-            Point point = Proscenium.Locate(new Point(x, y, 48.0));
+            Point point = Proscenium.Locate( new Point( x, y, 48.0 ) );
             xDraw = point.x();
             yDraw = point.y();
         } else {

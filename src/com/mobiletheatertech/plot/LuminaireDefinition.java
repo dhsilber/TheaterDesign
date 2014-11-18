@@ -65,7 +65,8 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
      * @param element DOM Element defining a pipe
      * @throws AttributeMissingException if any attribute is missing
      */
-    public LuminaireDefinition( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public LuminaireDefinition( Element element )
+            throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
         id = element.getAttribute( "name" );

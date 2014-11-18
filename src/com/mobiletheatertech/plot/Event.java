@@ -45,7 +45,7 @@ public class Event extends MinderDom {
         throw new ReferenceException( "Event is not defined." );
     }
 
-    public Event( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Event( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
         id = getStringAttribute( element, "name" );

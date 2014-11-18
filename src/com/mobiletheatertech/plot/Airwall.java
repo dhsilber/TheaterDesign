@@ -28,7 +28,7 @@ public class Airwall extends MinderDom {
      * @throws AttributeMissingException
      */
     public Airwall( Element element )
-            throws AttributeMissingException, InvalidXMLException, LocationException,
+            throws AttributeMissingException, DataException, InvalidXMLException, LocationException,
             ReferenceException
     {
         super( element );

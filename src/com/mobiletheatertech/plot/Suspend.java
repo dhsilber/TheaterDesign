@@ -25,7 +25,7 @@ public class Suspend extends MinderDom {
 
 
     public Suspend( Element element )
-            throws AttributeMissingException, InvalidXMLException, ReferenceException
+            throws AttributeMissingException, DataException, InvalidXMLException, ReferenceException
     {
         super( element );
 

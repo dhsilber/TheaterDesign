@@ -1,5 +1,6 @@
 package com.mobiletheatertech.plot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
@@ -17,9 +18,8 @@ public class Layer {
 
     private static HashMap<String, Layer> LIST = new HashMap<>();
 
-    public static HashMap<String, Layer> List() {
-        return LIST;
-    }
+    ArrayList<MinderDom> contents = new ArrayList<>();
+
 
     private String name = null;
     private String color = null;
@@ -39,6 +39,28 @@ public class Layer {
         LIST.put( tag, this );
     }
 
+    public static Layer Register( String tag, String name ) throws DataException {
+        Layer result = LIST.get( tag );
+
+        if ( null == result ) {
+            result = new Layer( tag, name, "black" );
+        }
+
+        return result;
+    }
+
+    public static HashMap<String, Layer> List() {
+        return LIST;
+    }
+
+    public static Layer Retrieve( String tag ) throws DataException {
+        Layer  result = LIST.get( tag );
+        if ( null == result ) {
+            throw new DataException( "Layer "+tag+" does not exist." );
+        }
+        return result;
+    }
+
     public String name() {
         return name;
     }
@@ -51,6 +73,14 @@ public class Layer {
 
     public void activate() {
         active = true;
+    }
+
+    public void register( MinderDom thingy ) {
+        contents.add( thingy );
+    }
+
+    public ArrayList<MinderDom> contents() {
+        return contents;
     }
 }
 

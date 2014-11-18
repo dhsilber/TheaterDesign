@@ -54,7 +54,7 @@ public class Wall extends MinderDom {
      * @param element DOM Element defining a wall
      * @throws AttributeMissingException if any attribute is missing
      */
-    public Wall( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Wall( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
         x1 = getDoubleAttribute( element, "x1" );

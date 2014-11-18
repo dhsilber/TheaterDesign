@@ -57,7 +57,7 @@ public abstract class Mountable extends MinderDom {
      * @throws InvalidXMLException if null element is somehow presented to constructor
      *                             // * @throws SizeException             if the length is too short
      */
-    public Mountable(Element element) throws AttributeMissingException, InvalidXMLException {
+    public Mountable(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
         id = getStringAttribute(element, "id");

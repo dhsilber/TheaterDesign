@@ -16,7 +16,8 @@ public abstract class Verifier extends ElementalLister {
      * @throws LocationException
      */
     public static void VerifyAll()
-            throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException
+            throws DataException, FeatureException, InvalidXMLException, LocationException,
+            MountingException, ReferenceException
     {
         for ( ElementalLister item : LIST ) {
             if ( Verifier.class.isInstance( item )) {
@@ -39,6 +40,7 @@ public abstract class Verifier extends ElementalLister {
      * @throws LocationException   if certain plot items don't fit in available physical space
      */
     public abstract void verify()
-            throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException;
+            throws DataException, FeatureException, InvalidXMLException, LocationException,
+            MountingException, ReferenceException;
 
 }

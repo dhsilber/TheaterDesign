@@ -15,7 +15,7 @@ public class Cheeseborough extends MinderDom {
 
     String color = "orange";
 
-    public Cheeseborough( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Cheeseborough( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super (element);
 
         on = getStringAttribute( element, "on" );

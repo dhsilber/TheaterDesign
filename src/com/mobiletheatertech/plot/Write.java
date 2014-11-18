@@ -384,29 +384,39 @@ public class Write {
                 Legend.Callback();
                 continue;
             }
-            Category category = Category.Select( categoryName );
-            System.out.println( "Category selected: " + category.toString() );
-            if ( null == category ) {
+
+            Layer layer = Layer.List().get( categoryName );
+            if ( null == layer ) {
                 System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
                 continue;
             }
-            Class requested = category.clazz();
-            String layer = category.layer();
-            for ( Object thing : MinderDom.List() ) {
-                if ( requested.equals( thing.getClass() ) ) {
-                    MinderDom item = (MinderDom) thing;
-                    if( Device.class.isInstance( item ) )
-                    {
-                        Device device = (Device) item;
-                        if ( null != layer && layer.equals( device.layer() ) ) {
-                            device.dom( draw, View.PLAN );
-                        }
-                    }
-                    else {
-                        item.dom(draw, View.PLAN);
-                    }
-                }
+            for ( MinderDom item : layer.contents() ) {
+                item.dom( draw, View.PLAN );
             }
+
+//            Category category = Category.Select( categoryName );
+//            System.out.println( "Category selected: " + category.toString() );
+//            if ( null == category ) {
+//                System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
+//                continue;
+//            }
+//            Class requested = category.clazz();
+//            String layer = category.layer();
+//            for ( Object thing : MinderDom.List() ) {
+//                if ( requested.equals( thing.getClass() ) ) {
+//                    MinderDom item = (MinderDom) thing;
+//                    if( Device.class.isInstance( item ) )
+//                    {
+//                        Device device = (Device) item;
+//                        if ( null != layer && layer.equals( device.layer() ) ) {
+//                            device.dom( draw, View.PLAN );
+//                        }
+//                    }
+//                    else {
+//                        item.dom(draw, View.PLAN);
+//                    }
+//                }
+//            }
         }
 
 //        for ( Object thing : MinderDom.List() ) {

@@ -63,7 +63,7 @@ public class Venue extends MinderDom implements Legendable {
      * @param element DOM Element defining a venue.
      * @throws AttributeMissingException if any attribute is missing.
      */
-    public Venue( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Venue( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
 //System.out.println(  "Just inside VENUE constructor.");

@@ -27,7 +27,7 @@ public class Grid extends MinderDom {
     Double starty = null;
     Double startz = null;
 
-    public Grid( Element element ) throws AttributeMissingException, InvalidXMLException{
+    public Grid( Element element ) throws AttributeMissingException, DataException, InvalidXMLException{
         super( element );
 
         startx = getOptionalDoubleAttributeOrZero( element, "startx" );

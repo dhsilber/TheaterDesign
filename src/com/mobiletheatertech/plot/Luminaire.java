@@ -69,31 +69,6 @@ public class Luminaire extends MinderDom {
 
     private static final String COLOR = "black";
 
-//    /**
-//     * Construct a {@code Luminaire} for each element in a list of XML nodes.
-//     *
-//     * @param list of XML nodes
-//     * @throws AttributeMissingException if a required attribute is missing
-//     * @throws LocationException         if the stage is outside the {@code Venue}
-//     * @throws SizeException             if a length attribute is too short
-//     */
-//
-//    // This seems to be generic - refactor it into Minder
-//    public static void ParseXML(NodeList list)
-//            throws AttributeMissingException, DataException,
-//            InvalidXMLException, LocationException, SizeException
-//    {
-//        int length = list.getLength();
-//        for (int index = 0; index < length; index++) {
-//            Node node = list.item(index);
-//
-//            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-//                Element element = (Element) node;
-//                new Luminaire(element);
-//            }
-//
-//        }
-//    }
 
     /**
      * Construct a {@code Luminaire} from an XML element.

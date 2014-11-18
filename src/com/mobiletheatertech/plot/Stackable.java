@@ -38,7 +38,8 @@ public abstract class Stackable extends MinderDom {
         return null;
     }
 
-    public Stackable(Element element) throws AttributeMissingException, InvalidXMLException {
+    public Stackable(Element element)
+            throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
         id = getOptionalStringAttribute( element, "id");
@@ -56,7 +57,7 @@ public abstract class Stackable extends MinderDom {
 //    public abstract Point location( String location )
 //            throws InvalidXMLException, MountingException, ReferenceException;
 
-    public abstract Point location( Solid shape ) throws FeatureException, InvalidXMLException,
+    public abstract Point location( Solid shape ) throws DataException, FeatureException, InvalidXMLException,
             LocationException, MountingException, ReferenceException
             ;
 

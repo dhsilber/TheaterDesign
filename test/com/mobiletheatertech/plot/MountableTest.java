@@ -26,7 +26,7 @@ public class MountableTest {
      */
     private class Mounted extends Mountable {
 
-        public Mounted( Element element ) throws AttributeMissingException, InvalidXMLException {
+        public Mounted( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
             super( element );
         }
 

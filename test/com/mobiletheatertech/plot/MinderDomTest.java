@@ -6,9 +6,7 @@ import org.w3c.dom.Element;
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 /**
  * Test {@code MinderDom}
@@ -23,7 +21,7 @@ public class MinderDomTest {
      */
     private class MindedDom extends MinderDom {
 
-        public MindedDom( Element element ) throws InvalidXMLException {
+        public MindedDom( Element element ) throws DataException, InvalidXMLException {
             super( element );
         }
 
@@ -72,6 +70,15 @@ public class MinderDomTest {
         new MindedDom( null );
     }
 
+    @Test
+    public void createsClassLayer() throws Exception {
+        assertFalse(Layer.List().containsKey("MindedDom"));
+
+        new MindedDom( element );
+
+        assertTrue(Layer.List().containsKey("MindedDom"));
+    }
+
     // TODO: tests for DomAllPlan, DomAllSection, DomAllFront, DomAllTruss
     // They should all invoke the appropriate methods and skip anything that isn't a MinderDom
 
@@ -87,6 +94,8 @@ public class MinderDomTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         element = new IIOMetadataNode( "bogus" );
+
+        TestResets.LayerReset();
     }
 
     @AfterMethod

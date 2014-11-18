@@ -54,7 +54,7 @@ public class CableRun extends MinderDom implements Legendable {
      * @throws InvalidXMLException       if element is null
      */
     public CableRun (Element element)
-            throws AttributeMissingException, InvalidXMLException {
+            throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
         /*

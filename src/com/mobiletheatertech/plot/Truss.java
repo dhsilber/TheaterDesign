@@ -67,7 +67,7 @@ public class Truss extends Mountable implements Legendable {
      * @throws KindException
      */
     public Truss(Element element)
-            throws AttributeMissingException, InvalidXMLException, KindException {
+            throws AttributeMissingException, DataException, InvalidXMLException, KindException {
         super(element);
 
         if (Proscenium.Active()) {

@@ -17,14 +17,20 @@ import java.util.ArrayList;
  */
 public abstract class MinderDom extends Verifier {
 
-    private static Integer xOffset = 0;
-    private static Integer yOffset = 0;
+//    private static Integer xOffset = 0;
+//    private static Integer yOffset = 0;
+
+    Layer layer = null;
 
     /**
      *
      */
-    public MinderDom( Element element ) throws InvalidXMLException {
+    public MinderDom( Element element ) throws DataException, InvalidXMLException {
         super (element);
+
+        String name = this.getClass().getSimpleName();
+        layer = Layer.Register( name, name );
+        layer.register( this );
     }
 
     /**

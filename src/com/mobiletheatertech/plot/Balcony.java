@@ -63,7 +63,7 @@ public class Balcony extends MinderDom{
      * @throws AttributeMissingException if any attribute is missing
      */
     public Balcony( Element element )
-            throws AttributeMissingException, DataException,
+            throws AttributeMissingException, DataException, DataException,
             InvalidXMLException {
         super( element );
 

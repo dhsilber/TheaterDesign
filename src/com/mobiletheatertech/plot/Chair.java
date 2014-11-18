@@ -36,11 +36,15 @@ public class Chair extends MinderDom implements Legendable {
         line = getOptionalIntegerAttributeOrZero( element, "line" );
         layerName = getOptionalStringAttribute( element, "layer" );
 
-        layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
+//        layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
+        if ( ! "".equals( layerName )) {
+            Layer layerActual = Layer.Retrieve( layerName );
+            layerActual.register( this );
+        }
 
-        new Layer( LAYERTAG, LAYERNAME, COLOR );
-
-        new Category( CATEGORY, this.getClass() );
+//        new Layer( LAYERTAG, LAYERNAME, COLOR );
+//
+//        new Category( CATEGORY, this.getClass() );
 //        new Category( CATEGORY, this.getClass(), LAYERTAG );
 
         if ( ! LEGENDREGISTERED ) {

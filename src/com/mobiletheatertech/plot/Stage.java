@@ -42,7 +42,7 @@ public class Stage extends Stackable implements Legendable {
      * @throws LocationException
      */
     public Stage( Element element )
-            throws AttributeMissingException, InvalidXMLException, LocationException, ReferenceException, SizeException
+            throws AttributeMissingException, DataException, InvalidXMLException, LocationException, ReferenceException, SizeException
     {
         super( element );
 

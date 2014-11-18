@@ -26,7 +26,7 @@ public class Base extends MinderDom {
     private String processedMark = null;
 
 
-    public Base( Element element ) throws AttributeMissingException, InvalidXMLException {
+    public Base( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
         size = getDoubleAttribute( element, "size" );

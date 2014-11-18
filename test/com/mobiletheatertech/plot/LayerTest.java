@@ -1,12 +1,13 @@
 package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
+import org.w3c.dom.Element;
 
+import javax.imageio.metadata.IIOMetadataNode;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 10/19/13 Time: 8:15 PM To change this template use
@@ -20,6 +21,8 @@ public class LayerTest {
     private final String tag = "Tag text";
     private final String color = "ultraviolet";
     private final String color2 = "infrared";
+
+    Element wallElement1 = null;
 
     @Test
     public void providesName() throws Exception {
@@ -45,6 +48,54 @@ public class LayerTest {
         Layer layer = thing.get( tag );
 
         assertEquals( layer.name(), name );
+    }
+
+    @Test
+    public void RegisterCreatesLayer() throws Exception {
+        HashMap<String, Layer> list = Layer.List();
+        assertEquals( list.size(), 0 );
+
+        Layer.Register( tag, name );
+
+        list = Layer.List();
+        assertEquals( list.size(), 1 );
+        assertTrue( list.containsKey( tag ) );
+
+        Layer layer = list.get( tag );
+        assertEquals( layer.name(), name );
+        assertEquals( layer.color(), "black" );
+    }
+
+    @Test
+    public void RegisterProvidesExistingLayer() throws Exception {
+        new Layer( tag, name, color );
+
+        HashMap<String, Layer> list = Layer.List();
+        assertEquals(list.size(), 1);
+
+        Layer.Register( tag, name );
+
+        list = Layer.List();
+        assertEquals( list.size(), 1 );
+        assertTrue( list.containsKey( tag ) );
+
+        Layer layer = list.get( tag );
+        assertEquals( layer.name(), name );
+        assertEquals( layer.color(), color );
+    }
+
+    @Test
+    public void Retrieve() throws Exception{
+        Layer initial = Layer.Register( tag, name );
+        Layer found = Layer.Retrieve( tag );
+
+        assertSame( found, initial );
+    }
+
+    @Test( expectedExceptions = DataException.class,
+            expectedExceptionsMessageRegExp = "Layer "+tag+" does not exist." )
+    public void RetrieveFail() throws Exception {
+        Layer.Retrieve( tag );
     }
 
     @Test
@@ -114,6 +165,13 @@ public class LayerTest {
 
     @Test
     public void layerCheckbox() throws Exception {
+        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Venue room" );
+        venueElement.setAttribute( "width", "32.4" );
+        venueElement.setAttribute( "depth", "57.5" );
+        venueElement.setAttribute( "height", "12.0" );
+        new Venue( venueElement );
+
         new Layer( "zig", "zag", color );
         Write writer = new Write();
         String output = writer.generateDesigner();
@@ -124,6 +182,23 @@ public class LayerTest {
         assertTrue(output.contains(selector));
     }
 
+    @Test
+    public void register() throws Exception {
+        Layer layer = new Layer( tag, name, color );
+
+        wallElement1 = new IIOMetadataNode( "wall" );
+        wallElement1.setAttribute( "x1", "0" );
+        wallElement1.setAttribute( "y1", "0" );
+        wallElement1.setAttribute( "x2", "350" );
+        wallElement1.setAttribute( "y2", "0" );
+        Wall wall = new Wall( wallElement1 );
+
+        layer.register( wall );
+
+        ArrayList<MinderDom> contents = layer.contents();
+
+        assert( contents.contains( wall ) );
+    }
 
 ////    @Test
 ////    public void finds() throws Exception {

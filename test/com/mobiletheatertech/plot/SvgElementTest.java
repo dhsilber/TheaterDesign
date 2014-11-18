@@ -22,7 +22,7 @@ public class SvgElementTest {
      */
     private class MindedDom extends MinderDom {
 
-        public MindedDom( Element element ) throws InvalidXMLException {
+        public MindedDom( Element element ) throws DataException, InvalidXMLException {
             super( element );
         }
 
