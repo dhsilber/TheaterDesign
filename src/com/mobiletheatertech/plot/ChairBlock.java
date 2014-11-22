@@ -72,6 +72,9 @@ public class ChairBlock extends MinderDom {
     public ChairBlock(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
+        System.err.println( "ChairBlocks are deprecated." +
+                " At some point they will either be removed entirely or they will be updated to work with aribitrary perimeters and layers.");
+
         String exceptionMessage =
                 "Chairblock can be defined with either a perimeter or a complete set of x/y/width/depth parameters, but not both.";
 
