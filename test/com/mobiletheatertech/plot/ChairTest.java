@@ -26,9 +26,9 @@ public class ChairTest {
     private static final Integer CHAIRDEPTH = 19;
     private static final Integer FOOTSPACE = 11;
     private static final String COLOR = "black";
-    private static final String CHAIR = "chair";
+//    private static final String CHAIR = "chair";
 
-    public static final String LAYERTAG = "chair";
+//    public static final String LAYERTAG = "Chair";
 
     Draw draw = null;
     Element element = null;
@@ -38,6 +38,8 @@ public class ChairTest {
     Double orientation = 90.0;
     Integer line = 7;
     String layerTag = "fred";
+    Double radius = 17.8;
+    Double space = 34.7;
 
     @Test
     public void isA() throws Exception {
@@ -52,8 +54,10 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
-        assertEquals( TestHelpers.accessInteger( chair, "line" ), (Integer) 0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
     }
 
     @Test
@@ -63,6 +67,8 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), orientation.doubleValue() );
     }
@@ -74,6 +80,8 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
         assertEquals( TestHelpers.accessInteger(chair, "line"), line );
     }
@@ -85,9 +93,39 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0);
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals( TestHelpers.accessString(chair, "layerName"), layerTag );
+    }
+
+    @Test
+    public void storesOptionalRadiusAttribute() throws Exception {
+        element.setAttribute("r", radius.toString() );
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "r"), radius);
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
+        assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
+    }
+
+    @Test
+    public void storesOptionalSpaceAttribute() throws Exception {
+        element.setAttribute("space", space.toString() );
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), space );
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
+        assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -145,7 +183,7 @@ public class ChairTest {
         assertNotNull( chairNameObject );
         String chairName = (String) chairNameObject;
 
-        assertEquals( chairName, CHAIR );
+        assertEquals( chairName, "chair" );
     }
 
     @Test
@@ -156,7 +194,7 @@ public class ChairTest {
         assertNotNull(layerTagObject);
         String layerTag = (String) layerTagObject;
 
-        assertEquals( layerTag, LAYERTAG );
+        assertEquals( layerTag, "Chair" );
     }
 
     @Test
@@ -249,7 +287,7 @@ public class ChairTest {
         assertEquals( nameElement.getAttribute( "x" ), Legend.TEXTOFFSET );
         assertEquals( nameElement.getAttribute( "y" ), start.y() + 7.0 );
         String name = nameElement.getTextContent();
-        assertEquals( name, CHAIR );
+        assertEquals( name, Chair.CHAIR );
 
         Node countNode = textList.item( 1 );
         assertEquals( countNode.getNodeType(), Node.ELEMENT_NODE );
@@ -290,7 +328,7 @@ public class ChairTest {
         assertEquals(defsList.getLength(), 2);
         /* 0th baseElement is the empty defs tag generated by Batik - why? */
         Node defsNode = defsList.item(1);
-        assertEquals( defsNode.getNodeType(), Node.ELEMENT_NODE );
+        assertEquals(defsNode.getNodeType(), Node.ELEMENT_NODE);
         Element defsElement = (Element) defsNode;
         assertEquals( defsElement.getAttribute("id"), "" );
 
@@ -376,15 +414,7 @@ public class ChairTest {
         NodeList list = groupElement.getElementsByTagName("use");
         assertEquals(list.getLength(), 1);
 
-        Node node = list.item(0);
-        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-        Element element = (Element) node;
-        assertEquals(element.getAttribute("xlink:href"), "#chair");
-        Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, x );
-        Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, y );
-        assertEquals( element.getAttribute( "transform" ), "rotate(0.0,"+x+","+y+")" );
+        checkRotatedChair(list, 0, x, y, 0.0 );
     }
 
     @Test
@@ -448,15 +478,7 @@ public class ChairTest {
         NodeList list = groupElement.getElementsByTagName("use");
         assertEquals( list.getLength(), (int) line );
 
-        Node node = list.item(0);
-        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-        Element element = (Element) node;
-        assertEquals(element.getAttribute("xlink:href"), "#chair");
-        Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, x );
-        Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, y );
-        assertEquals( element.getAttribute( "transform" ), "rotate(0.0,"+x+","+y+")" );
+        checkRotatedChair(list, 0, x, y, 0.0);
 
         Node lastNode = list.item( line - 1 );
         assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
@@ -468,6 +490,75 @@ public class ChairTest {
         Double lastY = new Double( lastElement.getAttribute("y") );
         assertEquals( lastY, y );
         assertEquals( lastElement.getAttribute( "transform" ), "rotate(0.0," + expectedLastX + "," + y + ")" );
+    }
+
+    @Test
+    public void domPlanCircle() throws Exception {
+        draw.establishRoot();
+
+        Double fourChairRadius = 4 * Chair.CHAIRWIDTH / 2 / Math.PI;
+
+        element.setAttribute( "r", fourChairRadius.toString() );
+        checkCircle(fourChairRadius);
+    }
+
+    @Test
+    public void domPlanCircleSpace() throws Exception {
+        draw.establishRoot();
+
+        Double fourChairRadius = 4 * (Chair.CHAIRWIDTH + space + 0.1) / 2 / Math.PI;
+
+        element.setAttribute( "r", fourChairRadius.toString() );
+        element.setAttribute( "space", space.toString() );
+        checkCircle(fourChairRadius);
+    }
+
+    void checkCircle(Double fourChairRadius) throws AttributeMissingException, DataException, InvalidXMLException, FeatureException, LocationException, MountingException, ReferenceException {
+        Chair chair = new Chair(element);
+        chair.verify();
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals( list.getLength(), 4 );
+
+        Double expectX = x;
+        Double expectY = y + fourChairRadius;
+        checkRotatedChair(list, 0, expectX, expectY, 0.0 );
+        expectX = x - fourChairRadius;
+        expectY = y;
+        checkRotatedChair(list, 1, expectX, expectY, 90.0 );
+        expectX = x;
+        expectY = y - fourChairRadius;
+        checkRotatedChair(list, 2, expectX, expectY, 180.0 );
+        expectX = x + fourChairRadius;
+        expectY = y;
+        checkRotatedChair(list, 3, expectX, expectY, 270.0 );
+    }
+
+    void checkRotatedChair(NodeList list, int index, Double expectX, Double expectY, Double rotation ) {
+        Node node = list.item( index );
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#chair");
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, expectX, 0.0001 );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, expectY, 0.0001 );
+        // Check for thisX & thisY in string rather than expectX & expectY.
+        // Values for x & y are checked above with a delta.
+        // The check below is to make sure that they make it into the string.
+        assertEquals( element.getAttribute( "transform" ), "rotate("+rotation+","+ thisX+","+ thisY+")" );
     }
 
     // TODO Allow for lines of chairs to be rotated.
@@ -543,6 +634,7 @@ public class ChairTest {
 
     @Test
     public void domLayer() throws Exception {
+        new Layer( layerTag, layerTag, "black" );
         draw.establishRoot();
         element.setAttribute("layer", layerTag);
         Chair chair = new Chair( element );

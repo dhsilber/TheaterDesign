@@ -6,16 +6,28 @@ import org.w3c.dom.Element;
  * Created with IntelliJ IDEA. User: dhs Date: 11/14/13 Time: 12:42 PM To change this template use
  * File | Settings | File Templates.
  */
+
+/**
+ * Represents a group of chairs.
+ * <p/>
+ * XML tag is 'chair'. Required attributes are: 'x' and 'y', which specify the location of a single chair as real numbers of inches from the origin.
+ * An optional 'orientation' attribute may be specified, which is an angle in degrees by which the chair should be rotated from its default of facing up on the page.
+ * An optional 'line' attribute may be specified to set an integer count of chairs that will be set out instead of just a single one. In this case, the coordinates will be for the leftmost chair in the line.
+ * An optional 'r' attribute may be specified to set the radius as a real number of inches of a circle of chairs. The coordinates are for the center of the circle. The number of chairs put out is calculated by the software.
+ * An optional 'space' attribute may be specified to allow extra space as a real number of inches between the chairs in a circle.
+ * An optional 'layer' attribute may be specified as the name of an existing {@code Layer} to orverride the default layer.
+ */
+// Note that 'space' only applies to circles. It ought to be trivial to make it also apply to lines.
 public class Chair extends MinderDom implements Legendable {
 
     static final String CATEGORY = "chair";
 
-    private static final Integer CHAIRWIDTH = 18;
+    static final Integer CHAIRWIDTH = 18;
     private static final Integer CHAIRDEPTH = 19;
     private static final String COLOR = "black";
-    private static final String CHAIR = "chair";
-    public static final String LAYERTAG = "chair";
-    public static final String LAYERNAME = "Chairs";
+    static final String CHAIR = "chair";
+    public static final String LAYERTAG = "Chair";
+    public static final String LAYERNAME = "Chair";
 
     static boolean SYMBOLGENERATED = false;
     static boolean LEGENDREGISTERED = false;
@@ -23,24 +35,34 @@ public class Chair extends MinderDom implements Legendable {
 
     Double x = null;
     Double y = null;
+    Double r = null;
     Double orientation = null;
     Integer line = null;
     String layerName = null;
+    Double space = null;
+
+    Integer chairFit = null;
+    Double chairWidth = CHAIRWIDTH.doubleValue();
+
 
     public Chair(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
         x = getDoubleAttribute(element, "x");
         y = getDoubleAttribute(element, "y");
+        r = getOptionalDoubleAttributeOrNull( element, "r" );
+        space = getOptionalDoubleAttributeOrZero( element, "space" );
         orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
         line = getOptionalIntegerAttributeOrZero( element, "line" );
         layerName = getOptionalStringAttribute( element, "layer" );
 
-//        layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
+        layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
         if ( ! "".equals( layerName )) {
             Layer layerActual = Layer.Retrieve( layerName );
             layerActual.register( this );
         }
+
+        chairWidth += space;
 
 //        new Layer( LAYERTAG, LAYERNAME, COLOR );
 //
@@ -58,7 +80,15 @@ public class Chair extends MinderDom implements Legendable {
     }
 
     @Override
-    public void verify() throws FeatureException, InvalidXMLException, LocationException, MountingException, ReferenceException {
+    public void verify() throws FeatureException, InvalidXMLException, LocationException,
+            MountingException, ReferenceException {
+        Double circumference = null;
+//        Double angle = null;
+        if( null != r ) {
+            circumference = 2 * Math.PI * r;
+            chairFit = (int) (circumference / chairWidth);
+//            angle = 360.0 / chairFit;
+        }
     }
 
     @Override
@@ -67,15 +97,27 @@ public class Chair extends MinderDom implements Legendable {
 
         SvgElement group = svgClassGroup( draw, layerName );
         draw.appendRootChild(group);
-        useChair(draw, group, x, y);
 
         Double interimX = x;
         Double interimY = y;
-        for ( int chairCount = 1; chairCount < line; chairCount++ ) {
-            interimX += Math.cos(Math.toRadians(orientation)) * CHAIRWIDTH;
-            interimY += Math.sin( Math.toRadians( orientation ) ) * CHAIRWIDTH;
-            useChair(draw, group, interimX, interimY);
+        if ( null != r ) {
+            Double angle = 360.0 / chairFit;
+
+            for ( int chairCount = 0; chairCount < chairFit; chairCount++ ) {
+                Double thisAngle = angle * chairCount;
+                interimX = x - r * Math.sin(Math.toRadians(thisAngle));
+                interimY = y + r * Math.cos(Math.toRadians(thisAngle));
+                useChair(draw, group, interimX, interimY, thisAngle );
+            }
         }
+        else {
+            useChair(draw, group, x, y, orientation );
+            for (int chairCount = 1; chairCount < line; chairCount++) {
+                interimX += Math.cos(Math.toRadians(orientation)) * CHAIRWIDTH;
+                interimY += Math.sin(Math.toRadians(orientation)) * CHAIRWIDTH;
+                useChair(draw, group, interimX, interimY, orientation );
+            }
+        }http://www.ctrelectronics.co.uk/csc-show-control.php
         COUNT += (0 == line) ? 1: line;
     }
 
@@ -100,9 +142,9 @@ public class Chair extends MinderDom implements Legendable {
         }
     }
 
-    void useChair(Draw draw, SvgElement parent, Double interimX, Double interimY) {
+    void useChair(Draw draw, SvgElement parent, Double interimX, Double interimY, Double rotation ) {
         SvgElement use = parent.use( draw, CHAIR, interimX, interimY );
-        use.attribute( "transform", "rotate("+orientation+","+(interimX+SvgElement.OffsetX())+","+(interimY+SvgElement.OffsetY())+")" );
+        use.attribute( "transform", "rotate("+rotation+","+(interimX+SvgElement.OffsetX())+","+(interimY+SvgElement.OffsetY())+")" );
     }
 
     @Override
