@@ -419,7 +419,8 @@ public class SvgElementTest {
         Node childNode = parent.element().getLastChild();
         assert( childNode.isSameNode( result.element() ) );
 
-        fail("Check enclosed text element.");
+        String contents = result.element().getTextContent();
+        assertEquals( contents, text );
     }
 
     @Test
@@ -438,7 +439,8 @@ public class SvgElementTest {
         Node childNode = parent.element().getLastChild();
         assert( childNode.isSameNode( result.element() ) );
 
-        fail( "Check enclosed text element.");
+        String contents = result.element().getTextContent();
+        assertEquals(contents, text);
     }
 
     @Test
