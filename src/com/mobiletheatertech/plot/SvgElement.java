@@ -145,16 +145,20 @@ class SvgElement {
             ySet += yOffset;
         }
 
+        return rectangleAbsolute(draw, xSet, ySet, width, height, color);
+
+    }
+
+    SvgElement rectangleAbsolute(Draw draw, Double x, Double y, Double width, Double height, String color) {
         SvgElement element = draw.element("rect");
-        element.attribute("x", xSet.toString());
-        element.attribute("y", ySet.toString());
+        element.attribute("x", x.toString());
+        element.attribute("y", y.toString());
         element.attribute("width", width.toString());
         element.attribute("height", height.toString());
         element.attribute("stroke", color);
         element.attribute("fill", "none");
 
         this.appendChild( element );
-
         return element;
     }
 

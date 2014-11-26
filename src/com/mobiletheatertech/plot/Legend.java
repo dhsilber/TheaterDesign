@@ -29,7 +29,7 @@ public class Legend {
     static final String CATEGORY = "legend";
 
     static final Double TEXTOFFSET = 40.0;
-    static final Double  QUANTITYOFFSET = 200.0;
+    static final Double QUANTITYOFFSET = 200.0;
 
     /**
      * Register a callback function that will draw an individual legend entry
@@ -54,7 +54,7 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw, View mode, Double start, Integer width )
+    public static void Startup( Draw draw, View mode, Double x, Integer width )
             throws ReferenceException {
         DRAW = draw;
 
@@ -62,7 +62,7 @@ public class Legend {
         group.setAttribute( "class", "legend" );
         draw.appendRootChild( group );
 
-        Double x = start;
+//        Double x = start;
         Double y = 17.0;
 
         Double center = x + (width / 2);
@@ -73,7 +73,7 @@ public class Legend {
         headerText( draw, group, center, y, Venue.Name() );
         y += 17;
 
-        INITIAL = new PagePoint( start, y );
+        INITIAL = new PagePoint( x + 25, y );
 
         // TODO Adding the Y offset to the box height is really cheating
         Double boxHeight = y + HEIGHT + SvgElement.OffsetY();
@@ -81,7 +81,7 @@ public class Legend {
         Element box = draw.document().createElement( "rect" );
         box.setAttribute( "fill", "none" );
         box.setAttribute( "x", x.toString() );
-        box.setAttribute( "y", "0" );
+        box.setAttribute( "y", "1" );
         box.setAttribute( "width", width.toString() );
         box.setAttribute( "height", boxHeight.toString() );
 

@@ -288,6 +288,11 @@ public class Venue extends MinderDom implements Legendable {
         }
     }
 
+    @Override
+    public void countReset() {
+//        Count = 0;
+    }
+
     /**
      * Callback used by {@code Legend} to allow this object to generate the information it needs to
      * put into the legend area.

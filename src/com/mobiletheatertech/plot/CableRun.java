@@ -44,6 +44,8 @@ public class CableRun extends MinderDom implements Legendable {
     Device sourceDevice = null;
     Device sinkDevice = null;
 
+    static Integer Count = 0;
+
     private static Boolean Legended = false;
 
     /**
@@ -311,6 +313,9 @@ public class CableRun extends MinderDom implements Legendable {
         }
 
 //System.err.println("... sinkPoint: "+ sinkPoint.toString() +".");
+
+        Count++;
+
         list.add( sinkPoint );
 
         return list;
@@ -320,6 +325,11 @@ public class CableRun extends MinderDom implements Legendable {
         group.line( draw, one.x(), one.y(), two.x(), two.y(), "green" );
     }
 
+
+    @Override
+    public void countReset() {
+        Count = 0;
+    }
 
     /**
      * Callback used by {@code Legend} to allow this object to generate the information it needs to
@@ -334,15 +344,16 @@ public class CableRun extends MinderDom implements Legendable {
      */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
+        if ( 0 >= Count ) { return start; }
 
         Double endLine = start.x() + 12;
 
-        draw.line( draw, start.x(), start.y(), endLine, start.y(), COLOR );
+        draw.lineAbsolute(draw, start.x(), start.y(), endLine, start.y(), COLOR);
 
         String words = sourceDevice.layer() + " cable run";
         Double x = start.x() + Legend.TEXTOFFSET;
         Double y = start.y() + 3;
-        draw.text( draw, words, x, y, Legend.TEXTCOLOR );
+        draw.textAbsolute(draw, words, x, y, Legend.TEXTCOLOR);
 
         return new PagePoint( start.x(), start.y() + 7 );
     }

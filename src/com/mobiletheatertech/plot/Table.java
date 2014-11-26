@@ -21,11 +21,6 @@ import java.awt.*;
  */
 public class Table extends Stackable implements Legendable {
 
-    @Override
-    public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        return null;
-    }
-
     /**
      * Name of {@code Layer} of {@code Table}s.
      */
@@ -166,6 +161,17 @@ public class Table extends Stackable implements Legendable {
 //        tableElement.setAttribute("fill", "none");
 //        tableElement.setAttribute("stroke", "brown");
     }
+
+    @Override
+    public void countReset() {
+//        Count = 0;
+    }
+
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        return null;
+    }
+
 
     public String toString() {
         return "Table ("+id+"): "+height+", "+width+", "+depth+" at "+x+", "+y+", "+z+".";

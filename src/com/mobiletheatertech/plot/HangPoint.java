@@ -20,6 +20,8 @@ public class HangPoint extends MinderDom implements Legendable {
 
     static final String SYMBOL = "hangpoint";
 
+    static Integer COUNT = 0;
+
     /**
      * Name of {@code Layer} of {@code HangPoint}s.
      */
@@ -161,6 +163,7 @@ public class HangPoint extends MinderDom implements Legendable {
     @Override
     public void dom( Draw draw, View mode ) {
         if (( View.PLAN == mode || View.TRUSS == mode ) && !SYMBOLGENERATED) {
+            COUNT++;
 
             SvgElement defs = draw.element("defs");
             draw.appendRootChild( defs );
@@ -215,28 +218,20 @@ public class HangPoint extends MinderDom implements Legendable {
     }
 
     @Override
+    public void countReset() {
+        COUNT = 0;
+    }
+
+    @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        Double unitTextX = x.intValue() + RADIUS * 2;
-        Double unitTextY = y + RADIUS;
+        if ( 0 >= COUNT ) { return start; }
 
-//        Draw( draw, x, y, unitTextX, unitTextY, id );
-
-        SvgElement use = draw.use( draw, SYMBOL, start.x() + RADIUS, start.y() + RADIUS );
-//        draw.appendRootChild( use );
-//        SvgElement circle = svgCircle( draw, start.x()+RADIUS, start.y()+RADIUS, 4, COLOR );
-//        draw.appendRootChild( circle );
-//
-//        SvgElement line =svgLine( draw, start.x()+RADIUS, start.y(), start.x()+RADIUS, start.y()+RADIUS*2, COLOR );
-//        draw.appendRootChild( line );
-//
-//        SvgElement line2 = svgLine(draw, start.x(), start.y()+RADIUS, start.x()+RADIUS*2, start.y()+RADIUS, COLOR);
-//        draw.appendRootChild( line2 );
+        draw.useAbsolute( draw, SYMBOL, start.x() + RADIUS, start.y() + RADIUS );
 
         Double x = start.x() + Legend.TEXTOFFSET;
         Double y = start.y() + RADIUS * 3 / 2;
 
-        SvgElement text = draw.text( draw, "Hangpoint", x, y, COLOR );
-//        draw.appendRootChild( text );
+        draw.textAbsolute( draw, "Hangpoint", x, y, COLOR );
 
         return new PagePoint( start.x(), start.y() + RADIUS * 2 );
     }

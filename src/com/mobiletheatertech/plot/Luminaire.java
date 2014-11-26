@@ -196,6 +196,15 @@ public class Luminaire extends MinderDom {
 
         switch (mode) {
             case PLAN:
+
+                // TODO Keep this until I resolve how Luminaire knows what type it is.
+                LuminaireDefinition definition = LuminaireDefinition.Select( type );
+                if( null == definition ) {
+                    throw new    ReferenceException( "Unable to find definition for "+ type );
+                }
+
+                definition.count();
+
                 use = group.use( draw, type, point.x(), point.y() );
 //                use.setAttribute("x", point.x().toString());
 //                use.setAttribute("y", point.y().toString());
@@ -487,14 +496,7 @@ public class Luminaire extends MinderDom {
 ////        System.out.println("Luminaire.dom: added color stuff.");
 //
 //        if (View.PLAN == mode ) {
-//
-        // TODO Keep this until I resolve how Luminaire knows what type it is.
-//            LuminaireDefinition definition = LuminaireDefinition.Select( type );
-//            if( null == definition ) {
-//                throw new    ReferenceException( "Unable to find definition for "+ type );
-//            }
-//
-//
+
 //            SvgElement addressOval= draw.element("ellipse");
 //            SvgElement addressText = draw.element("text");
 //

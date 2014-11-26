@@ -24,6 +24,9 @@ public class LegendTest {
 
     class testLegendable implements Legendable {
         @Override
+        public void countReset() {}
+
+        @Override
         public PagePoint domLegendItem( Draw draw, PagePoint start ) {
             calledBack++;
             return new PagePoint( 12.0, 13.0 );

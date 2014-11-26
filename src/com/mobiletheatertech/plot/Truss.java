@@ -670,6 +670,11 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     }
 
     @Override
+    public void countReset() {
+//        Count = 0;
+    }
+
+    @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
         return null;
     }

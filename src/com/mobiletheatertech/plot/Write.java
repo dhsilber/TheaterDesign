@@ -379,7 +379,7 @@ public class Write {
             if ( categoryName.equals( Legend.CATEGORY )) {
 //                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
                 Legend.Startup(draw, View.PLAN,
-                        Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                        Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
                         Legend.PlanWidth() );
                 Legend.Callback();
                 continue;
@@ -479,8 +479,9 @@ public class Write {
     private void resetOneOffs() {
         HangPoint.SYMBOLGENERATED = false;
         Chair.SYMBOLGENERATED = false;
-        Chair.LEGENDREGISTERED = false;
+//        Chair.LEGENDREGISTERED = false;
         Chair.COUNT = 0;
+        LuminaireDefinition.CountReset();
     }
 
 //

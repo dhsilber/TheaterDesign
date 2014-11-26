@@ -109,6 +109,7 @@ public class Chair extends MinderDom implements Legendable {
                 interimY = y + r * Math.cos(Math.toRadians(thisAngle));
                 useChair(draw, group, interimX, interimY, thisAngle );
             }
+//            COUNT += chairFit;
         }
         else {
             useChair(draw, group, x, y, orientation );
@@ -117,8 +118,8 @@ public class Chair extends MinderDom implements Legendable {
                 interimY += Math.sin(Math.toRadians(orientation)) * CHAIRWIDTH;
                 useChair(draw, group, interimX, interimY, orientation );
             }
-        }http://www.ctrelectronics.co.uk/csc-show-control.php
-        COUNT += (0 == line) ? 1: line;
+//            COUNT += (0 == line) ? 1: line;
+        }
     }
 
     void generateSymbol(Draw draw) {
@@ -145,28 +146,33 @@ public class Chair extends MinderDom implements Legendable {
     void useChair(Draw draw, SvgElement parent, Double interimX, Double interimY, Double rotation ) {
         SvgElement use = parent.use( draw, CHAIR, interimX, interimY );
         use.attribute( "transform", "rotate("+rotation+","+(interimX+SvgElement.OffsetX())+","+(interimY+SvgElement.OffsetY())+")" );
+
+        COUNT++;
+    }
+
+    @Override
+    public void countReset() {
+        COUNT = 0;
     }
 
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
+        if ( 0 >= COUNT ) { return start; }
+
         generateSymbol(draw);
 
         SvgElement group = svgClassGroup( draw, layerName );
         group.attribute( "transform", "translate(" + start.x() + "," + start.y() + ")" );
         draw.appendRootChild(group);
 
-//        group.rectangle( draw, 0.0, 0.0, 300.0, 14.0, "blue" );
-
-        // The offsets are added in to compensate for the shift that happens when the chair
-        // icon is scaled to half size.
-        SvgElement use = group.use(draw, CHAIR,
-                CHAIRWIDTH / 2.0 + SvgElement.OffsetX(), CHAIRDEPTH / 2.0 + SvgElement.OffsetY());
+        SvgElement use = group.useAbsolute(draw, CHAIR, CHAIRWIDTH / 2.0, CHAIRDEPTH / 2.0  );
         use.attribute( "transform", "scale(0.5)" );
 
-        group.text(draw, CHAIR, Legend.TEXTOFFSET, 7.0, Legend.TEXTCOLOR);
+        group.textAbsolute(draw, CHAIR, Legend.TEXTOFFSET, 7.0, Legend.TEXTCOLOR);
 
-        group.text( draw, COUNT.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR );
+        group.textAbsolute(draw, COUNT.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR);
 
         return new PagePoint( start.x(), start.y() + 7.0 );
     }
+
 }

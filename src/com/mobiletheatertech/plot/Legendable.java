@@ -8,5 +8,7 @@ package com.mobiletheatertech.plot;
  */
 public interface Legendable {
 
+    public void countReset();
+
     public PagePoint domLegendItem( Draw draw, PagePoint start );
 }

@@ -129,6 +129,11 @@ public class DeviceTemplate extends Verifier implements Legendable
 //    }
 
     @Override
+    public void countReset() {
+        count = 0;
+    }
+
+    @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
         if (0 >= count) { return start; }
 
@@ -137,16 +142,16 @@ public class DeviceTemplate extends Verifier implements Legendable
             color = layerInstance.color();
         }
 
-        SvgElement box = draw.rectangle( draw, start.x(), start.y(), 30.0, 7.0, color );
+        SvgElement box = draw.rectangleAbsolute(draw, start.x(), start.y(), 30.0, 7.0, color);
         box.attribute( "fill", color );
         box.attribute( "fill-opacity", "0.1" );
 
         Double x = start.x() + Legend.TEXTOFFSET;
         Double y = start.y() + 7;
-        draw.text(draw, id, x, y, Legend.TEXTCOLOR);
+        draw.textAbsolute(draw, id, x, y, Legend.TEXTCOLOR);
 
         x = start.x() + Legend.QUANTITYOFFSET;
-        draw.text( draw, count.toString(), x, y, Legend.TEXTCOLOR );
+        draw.textAbsolute(draw, count.toString(), x, y, Legend.TEXTCOLOR);
 
         PagePoint finish = new PagePoint( start.x(), start.y() + 7 );
         return finish;

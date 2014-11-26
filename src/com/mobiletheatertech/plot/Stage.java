@@ -23,11 +23,6 @@ public class Stage extends Stackable implements Legendable {
     private Double y = null;
     private Double z = null;
 
-    @Override
-    public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        return null;
-    }
-
     private final static String COLOR = "orange";
 
     static final String CATEGORY = "stage";
@@ -130,5 +125,14 @@ public class Stage extends Stackable implements Legendable {
             case TRUSS:
                 break;
         }
+    }
+
+    @Override
+    public void countReset() {
+    }
+
+    @Override
+    public PagePoint domLegendItem(Draw draw, PagePoint start) {
+        return null;
     }
 }

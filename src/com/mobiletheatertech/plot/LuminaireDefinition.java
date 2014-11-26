@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.*;
 
+import java.util.ArrayList;
+
 /*
  * Created with IntelliJ IDEA. User: dhs Date: 7/18/13 Time: 1:53 PM To change this template use
  * File | Settings | File Templates.
@@ -28,7 +30,9 @@ import org.w3c.dom.*;
 public class LuminaireDefinition extends MinderDom implements Legendable {
 
     // TODO Keep this until I resolve how Luminaire knows what type it is.
-//    private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
+    private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
+
+    Integer count = 0;
 
     //    private String id;
     private Boolean complete;
@@ -46,14 +50,14 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
      * @return {@code LuminaireDefinition}, or {@code null} if not found
      */
     // TODO Keep this until I resolve how Luminaire knows what type it is.
-//    public static LuminaireDefinition Select( String id ) {
-//        for (LuminaireDefinition selection : LUMINAIRELIST) {
-//            if (selection.id.equals( id )) {
-//                return selection;
-//            }
-//        }
-//        return null;
-//    }
+    public static LuminaireDefinition Select( String id ) {
+        for (LuminaireDefinition selection : LUMINAIRELIST) {
+            if (selection.id.equals( id )) {
+                return selection;
+            }
+        }
+        return null;
+    }
 
     /**
      * Construct a {@code LuminaireDefinition} from an XML element.
@@ -83,7 +87,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             svg = (Element) svgNode;
         }
 
-//        LUMINAIRELIST.add( this );
+        LUMINAIRELIST.add( this );
 
         legendHeight = 2 + ((width > length)
                             ? length
@@ -120,15 +124,27 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
         SvgElement defs = draw.element("defs");
 
         SvgElement symbol = defs.symbol( draw, id );
-//        draw.element("symbol");
-//        symbol.setAttribute( "id", id );
-//        symbol.setAttribute( "overflow", "visible" );
         defs.appendChild( symbol );
 
         Node svgNode = document.importNode( svg, true );
         symbol.appendChild( svgNode );
 
         draw.insertRootChild( defs );
+    }
+
+    public void count() {
+        count++;
+    }
+
+    public static void CountReset()  {
+        for (LuminaireDefinition selection : LUMINAIRELIST) {
+            selection.countReset();
+        }
+    }
+
+    @Override
+    public void countReset() {
+        count = 0;
     }
 
     /**
@@ -144,33 +160,21 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
      */
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        SvgElement use = draw.use( draw, id, start.x(), start.y() );
-//        draw.element("use");
-//        use.setAttribute( "xlink:href", "#" + id );
-//        use.setAttribute( "x", start.x().toString() );
-//        use.setAttribute( "y", start.y().toString() );
+        if ( 0 >= count ) { return start; }
+
+        SvgElement group = svgClassGroup( draw , "" );
+        group.attribute( "transform", "translate(" + start.x() + "," + start.y() + ")" );
+        draw.appendRootChild(group);
+
+        SvgElement use = group.useAbsolute( draw, id, 0.0, 0.0 );
+
         if (length > width) {
-            Double transformX = start.x() + SvgElement.OffsetX();
-            Double transformY = start.y() + SvgElement.OffsetY();
-            use.attribute( "transform", "rotate(-90," + transformX + "," + transformY + ")" );
+            use.attribute( "transform", "rotate(-90,0,0)" );
         }
 
-        Double x = start.x() + Legend.TEXTOFFSET;
-        Double y = start.y() + 3;
-        SvgElement text = draw.text( draw, id, x, y, COLOR );
-//        draw.element("text");
-//        text.setAttribute( "x", x.toString() );
-//        text.setAttribute( "y", y.toString() );
-//        text.setAttribute( "fill", "black" );
-//        text.setAttribute( "stroke", "none" );
-//        text.setAttribute( "font-family", "serif" );
-//        text.setAttribute( "font-size", "10" );
+        group.textAbsolute( draw, id, Legend.TEXTOFFSET, 3.0, COLOR );
 
-//        draw.appendRootChild( use );
-//        draw.appendRootChild( text );
-
-//        Text foo = draw.document().createTextNode( id );
-//        text.appendChild( foo );
+        group.textAbsolute( draw, count.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR );
 
         return new PagePoint( start.x(), start.y() + legendHeight );
     }
