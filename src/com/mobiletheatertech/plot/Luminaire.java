@@ -134,6 +134,7 @@ public class Luminaire extends MinderDom {
         point=place.location();
         origin=place.origin();
         pipeRotation=place.rotation();
+        rotation += 180;
 //        Integer transformY = origin.y() + SvgElement.OffsetY();
 //        transform = "rotate(" + pipeRotation + "," + origin.x() + "," + transformY + ")";
         transform = "rotate(" + pipeRotation + "," + origin.x() + "," + origin.y() + ")";
@@ -168,7 +169,7 @@ public class Luminaire extends MinderDom {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
+    public void dom( Draw draw, View mode ) throws MountingException, ReferenceException {
         if( View.TRUSS == mode && !Truss.class.isInstance(mount)) {
             return;
         }
@@ -215,6 +216,8 @@ public class Luminaire extends MinderDom {
                 String transform;
                 Double transformX = point.x() + SvgElement.OffsetX();
                 Double transformY = point.y() + SvgElement.OffsetY();
+//                Double transformX = point.x();
+//                Double transformY = point.y();
                 if ( !target.equals("") ) {
                     // With this I lose the alignment with zones. :-(
                     Integer rotation = alignWithZone(point);
@@ -222,7 +225,6 @@ public class Luminaire extends MinderDom {
 //                    transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
                 }
                 else {
-                    rotation += 180;
                     transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
 //                    transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
                 }
@@ -243,13 +245,9 @@ public class Luminaire extends MinderDom {
                 break;
             case TRUSS:
                 truss = (Truss) mount;
-                point = truss.relocate( location );
-                use = group.use( draw, type, point.x(), point.y() );
-//                System.out.println("Truss Point: "+point.toString() );
-//                use.setAttribute("x", point.x().toString());
-//                use.setAttribute("y", point.y().toString());
-////                 rotation += 180;
-                use.attribute("transform", "rotate(" + rotation + "," + point.x() + "," + point.y() + ")" );
+                Point newPoint = truss.relocate( location );
+                use = group.use( draw, type, newPoint.x(), newPoint.y() );
+                use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
         }
 //        group.appendChild(use);

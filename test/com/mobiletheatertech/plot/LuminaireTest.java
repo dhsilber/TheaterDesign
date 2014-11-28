@@ -22,6 +22,10 @@ public class LuminaireTest {
     Element venueElement;
     Element elementOnPipe = null;
     Element elementOnTruss = null;
+    Element definitionElement = null;
+
+
+
     final String type = "6x9";
     final String pipeName = "luminaireTestPipe";
     final String trussId = "luminaireTestTruss";
@@ -215,7 +219,7 @@ public class LuminaireTest {
 
 //        NodeList list = draw.root().getElementsByTagName( "use" );
         NodeList group = draw.root().getElementsByTagName( "g" );
-        assertEquals( group.getLength(), 2 );
+        assertEquals( group.getLength(), 3 );
         Node groupNode = group.item( 1 );
         assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
         Element groupElement = (Element) groupNode;
@@ -227,8 +231,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
 
         list = groupElement.getElementsByTagName( "path" );
         assertEquals( list.getLength(), 1 );
@@ -308,8 +312,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
 
         list = draw.root().getElementsByTagName( "path" );
         assertEquals( list.getLength(), 0 );
@@ -368,8 +372,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
 
         list = draw.root().getElementsByTagName( "path" );
         assertEquals( list.getLength(), 0 );
@@ -436,9 +440,9 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34" );
-        assertEquals( diversionElement.getAttribute( "transform" ), "rotate(-45,24,34)" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+        assertEquals( diversionElement.getAttribute( "transform" ), "rotate(-45,24.0,34.0)" );
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -466,8 +470,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
         assertEquals( diversionElement.getAttribute( "transform" ), "rotate(0,24,34)" );
     }
 
@@ -487,8 +491,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "34" );
-        assertEquals( diversionElement.getAttribute( "y" ), "184" );
+        assertEquals( diversionElement.getAttribute( "x" ), "34.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "184.0" );
 
 //        list = draw.root().getElementsByTagName( "path" );
 //        assertEquals( list.getLength(), 1 );
@@ -525,8 +529,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24" );
-        assertEquals( diversionElement.getAttribute( "y" ), "184" );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "184.0" );
 
 //        list = draw.root().getElementsByTagName( "path" );
 //        assertEquals( list.getLength(), 1 );
@@ -608,6 +612,16 @@ public class LuminaireTest {
         trussElement.appendChild( suspendElement2 );
         Truss truss = new Truss( trussElement );
         truss.verify();
+
+
+        Integer width = 13;
+        Integer length = 27;
+        definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", "6x9" );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        new LuminaireDefinition( definitionElement );
+
 
         elementOnPipe = new IIOMetadataNode( "luminaire" );
         elementOnPipe.setAttribute( "type", type );

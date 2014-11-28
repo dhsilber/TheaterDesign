@@ -375,154 +375,25 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
         }
     }
 
-//    @Override
-//    public void drawPlan(Graphics2D canvas) throws ReferenceException {
-//        System.out.println( "About to drawPlan Truss" );
-//        canvas.setPaint( Color.MAGENTA );
-//        Point point1 = suspend1.locate();
-//        Point point2 = suspend2.locate();
-//
-//        int x1 = point1.x();
-//        int y1 = point1.y();
-//        int x2 = point2.x();
-//        int y2 = point2.y();
-//        canvas.draw( new Line2D.Float( x1, y1, x2, y2 ) );
-//
-//        double supportSpan = point1.distance( point2 );
-//        double overHang = (length - supportSpan) / 2;
-//
-//        drawHelper( canvas,
-//                    (int) (point1.x() - overHang),
-//                    point1.y() + size / 2,
-//                    size, length );
-/*
-        int supportSpan =
-
-        my $supportSpan = $point1->distance( $point2 );
-        my $overHang = ($self->{Length} - $supportSpan) / 2;
-
-          drawShape_horizontal( $drawPlan,
-      $point1->x - $overHang,
-      $point1->y + $self->{Size}/2,
-      $self->{Size}, $self->{Length}, 1 );
-
-        sub drawShape_horizontal {
-        my $drawPlan = shift;
-        my $x = shift;
-        my $y = shift;
-        my $width = shift;
-        my $length = shift;
-
-        # Draw edges
-        $drawPlan->plotColorLine(
-                $x, $y,
-                $x + $length, $y,
-                "magenta" );
-        $drawPlan->plotColorLine(
-                $x, $y - $width,
-                $x + $length, $y - $width,
-                "magenta" );
-        $drawPlan->plotColorLine(
-                $x, $y,
-                $x, $y - $width,
-                "magenta" );
-        $drawPlan->plotColorLine(
-                $x + $length, $y,
-                $x + $length, $y - $width,
-                "magenta" );
-
-        # Draw cross-braces
-        my $side1x = $x;
-        my $side1y = $y;
-        my $side2x = $side1x + $width;
-        my $side2y = $side1y - $width;
-        while ( $x + $length > $side1x ) {
-            $drawPlan->plotColorLine( $side1x, $side1y, $side2x, $side2y, "magenta" );
-            $side1x += ($width * 2);
-            $drawPlan->plotColorLine( $side1x, $side1y, $side2x, $side2y, "magenta" );
-            $side2x += ($width * 2);
-        }
-    }
-*/
-
-
-//        System.out.println("Done drawing Truss");
-//    }
-
-    /**
-     * Draw a {@code Truss} onto the provided section canvas.
-     * <p/>
-     * This presumes that the truss is seen end-on in this view.
-     * <p/>
-     * //     * @param canvas surface to draw on
-     *
-     * @since 0.0.5
-     */
-//    @Override
-//    public void drawSection(Graphics2D canvas) throws ReferenceException {
-//        int bottom = Venue.Height();
-//
-//        System.out.println("About to drawSection Truss");
-//        canvas.setPaint(Color.MAGENTA);
-//        Point point1 = suspend1.locate();
-//
-//        int shift = size / 2;
-//
-//        canvas.draw(new Rectangle(point1.y() - shift, bottom - point1.z() - shift,
-//                size, size));
-//    }
-
-//    @Override
-//    public void drawFront(Graphics2D canvas) throws ReferenceException {
-//        int bottom = Venue.Height();
-//
-//        System.out.println("About to drawFront Truss");
-//        canvas.setPaint(Color.MAGENTA);
-//        Point point1 = suspend1.locate();
-//        Point point2 = suspend2.locate();
-//
-//        double supportSpan = point1.distance(point2);
-//        double overHang = (length - supportSpan) / 2;
-//
-//        drawHelper(canvas,
-//                (int) (point1.x() - overHang),
-//                bottom - point1.z() + size / 2,
-//                size, length);
-//    }
-
-//    private void drawHelper(Graphics2D canvas, int x, int y, int width, int length) {
-//
-//        canvas.setPaint(Color.MAGENTA);
-//        canvas.draw(new Line2D.Float(x, y, x + length, y));
-//        canvas.draw(new Line2D.Float(x, y - width, x + length, y - width));
-//        canvas.draw(new Line2D.Float(x, y, x, y - width));
-//        canvas.draw(new Line2D.Float(x + length, y, x + length, y - width));
-//
-//    }
     @Override
     public void dom(Draw draw, View mode) {
         SvgElement trussRectangle = null;//draw.element("rect");
         SvgElement group = null;
-//System.err.println( "Dom." );
+
         // Common setup:
         switch (mode) {
             case PLAN:
-//                System.err.println( "PLAN." );
             case TRUSS:
-//                System.err.println( "TRUSS." );
                 group = svgClassGroup( draw, LAYERTAG );
                 draw.appendRootChild(group);
                 break;
             default:
-//                System.err.println( "No known mode." );
                 return;
         }
-//        System.err.println( "between." );
 
         // Separate details:
         switch (mode) {
             case PLAN:
-//                System.err.println( "PLAN again." );
                 if ( positioned ) {
                     group.rectangle( draw, x - length / 2, y - size / 2, length, size, color );
                 }
@@ -549,9 +420,6 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
                     Double transformY = y1 + SvgElement.OffsetY();
                     trussRectangle.attribute("transform",
                             "rotate(" + rotation + "," + transformX + "," + transformY + ")");
-//                trussRectangle.setAttribute("x", xPlan.toString());
-//                trussRectangle.setAttribute("y", yPlan.toString());
-//                group.appendChild(trussRectangle);
                 }
                 break;
             case TRUSS:
@@ -559,20 +427,12 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 
                 }
                 else if( ! positioned ) {
-//                    System.err.println( "TRUSS not positioooned." );
                     Double yTruss1 = TrussCount * 320 + 80;
                     trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
-//                trussRectangle.setAttribute("x", size.toString());
-//                trussRectangle.setAttribute("y", yTruss1.toString());
 
-//                System.out.println( "dom() Count: "+TrussCount);
                     Double yTruss2 = TrussCount * 320 + 220;
-//                draw.element("rect");
-//                group.appendChild(trussRectangle);
 
                     SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
-//                draw.element("g");
-//                group.setAttribute("class", LAYERTAG);
                     draw.appendRootChild(group2);
                     SvgElement trussRectangle2 = group2.rectangle( draw, size, yTruss2, length, size, color );
 //                trussRectangle2.setAttribute("height", size.toString());
