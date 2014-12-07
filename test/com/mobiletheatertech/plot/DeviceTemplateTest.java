@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
+import java.util.HashMap;
 import java.util.TreeMap;
 
 import static org.testng.Assert.*;
@@ -39,8 +40,11 @@ public class DeviceTemplateTest {
 
     @Test
     public void isa() throws Exception {
-        DeviceTemplate deviceTemplate=new DeviceTemplate( element );
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        assert Layerer.class.isInstance( deviceTemplate );
         assert Verifier.class.isInstance( deviceTemplate );
+        assert ElementalLister.class.isInstance( deviceTemplate );
+        assert Elemental.class.isInstance( deviceTemplate );
     }
 
     @Test
@@ -123,7 +127,7 @@ public class DeviceTemplateTest {
     public void initialCountZero() throws Exception {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
 
-        assertEquals(TestHelpers.accessInteger(deviceTemplate, "COUNT"), (Integer) 0);
+        assertEquals(TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 0);
     }
 
     @Test
@@ -131,7 +135,7 @@ public class DeviceTemplateTest {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
         deviceTemplate.count();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "COUNT" ), (Integer) 1 );
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
     }
 
     @Test
@@ -168,7 +172,7 @@ public class DeviceTemplateTest {
 
     @Test
     public void layerDefined() throws Exception {
-        new Layer( layerTag, "whatever", layerColor );
+//        new Layer( layerTag, "whatever", layerColor );
         element.setAttribute( "layer", layerTag );
 
         DeviceTemplate deviceTemplate=new DeviceTemplate( element );
@@ -184,12 +188,12 @@ public class DeviceTemplateTest {
         TestResets.LayerReset();
         element.setAttribute( "layer", layerTag );
 
-//TODO        This should throw an error because the layer is not defined
-        DeviceTemplate deviceTemplate=new DeviceTemplate( element );
-        deviceTemplate.verify();
-
-        Solid solid = deviceTemplate.getSolid();
-        assertEquals( solid.height(), height );
+        new DeviceTemplate( element );
+//        DeviceTemplate deviceTemplate=new DeviceTemplate( element );
+//        deviceTemplate.verify();
+//
+//        Solid solid = deviceTemplate.getSolid();
+//        assertEquals( solid.height(), height );
     }
 
     @Test
@@ -198,6 +202,19 @@ public class DeviceTemplateTest {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
 
         assertEquals(deviceTemplate.layer(), layerTag);
+    }
+
+    @Test
+    public void registersLayer() throws Exception {
+        TestResets.LayerReset();
+        HashMap<String, Layer> layers = Layer.List();
+        assertFalse(layers.containsKey(layerTag));
+
+        element.setAttribute("layer", layerTag);
+        new DeviceTemplate( element );
+
+        layers = Layer.List();
+        assertTrue(layers.containsKey(layerTag));
     }
 
     @Test
@@ -246,6 +263,9 @@ public class DeviceTemplateTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.DeviceTemplateReset();
+        TestResets.LayerReset();
+
+        Layer.Register(layerTag, layerTag);
 
 //        solid = new Solid( 1f, 2f, 3f );
 

@@ -18,7 +18,7 @@ public class Layer {
 
     private static HashMap<String, Layer> LIST = new HashMap<>();
 
-    ArrayList<MinderDom> contents = new ArrayList<>();
+    ArrayList<Layerer> contents = new ArrayList<>();
 
 
     private String name = null;
@@ -75,11 +75,11 @@ public class Layer {
         active = true;
     }
 
-    public void register( MinderDom thingy ) {
+    public void register( Layerer thingy ) {
         contents.add( thingy );
     }
 
-    public ArrayList<MinderDom> contents() {
+    public ArrayList<Layerer> contents() {
         return contents;
     }
 }

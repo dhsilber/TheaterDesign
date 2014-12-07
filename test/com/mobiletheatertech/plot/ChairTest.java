@@ -199,7 +199,7 @@ public class ChairTest {
 
     @Test
     public void registersLayer() throws Exception {
-        Chair chair = new Chair( element );
+        new Chair( element );
 
         HashMap<String, Layer> layers = Layer.List();
 

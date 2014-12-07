@@ -15,22 +15,22 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.20 (split off from 0.0.2 code)
  */
-public abstract class MinderDom extends Verifier {
+public abstract class MinderDom extends Layerer {
 
 //    private static Integer xOffset = 0;
 //    private static Integer yOffset = 0;
-
-    Layer layer = null;
-
+//
+//    Layer layer = null;
+//
     /**
      *
      */
     public MinderDom( Element element ) throws DataException, InvalidXMLException {
         super (element);
-
-        String name = this.getClass().getSimpleName();
-        layer = Layer.Register( name, name );
-        layer.register( this );
+//
+//        String name = this.getClass().getSimpleName();
+//        layer = Layer.Register( name, name );
+//        layer.register( this );
     }
 
     /**

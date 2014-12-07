@@ -72,7 +72,7 @@ public class Write {
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
 //        System.err.println( " Spreadsheet");
-//        writeSpreadsheet( pathname + "/gear.ods" );
+        writeSpreadsheet( pathname + "/gear.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
@@ -390,8 +390,11 @@ public class Write {
                 System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
                 continue;
             }
-            for ( MinderDom item : layer.contents() ) {
-                item.dom( draw, View.PLAN );
+            for ( Layerer item : layer.contents() ) {
+                if( MinderDom.class.isInstance( item ) ) {
+                    MinderDom thingy = (MinderDom) item;
+                    thingy.dom( draw, View.PLAN );
+                }
             }
 
 //            Category category = Category.Select( categoryName );

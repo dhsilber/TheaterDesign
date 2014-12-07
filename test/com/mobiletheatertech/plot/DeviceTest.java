@@ -154,7 +154,7 @@ public class DeviceTest {
         assertEquals( TestHelpers.accessDouble(device, "x"), x );
         assertEquals( TestHelpers.accessDouble(device, "y"), y );
         assertEquals( TestHelpers.accessDouble(device, "z"), z );
-        assertEquals( TestHelpers.accessString(device, "layer"), otherLayerTag );
+        assertEquals( TestHelpers.accessString(device, "layerSpecified"), otherLayerTag );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -278,7 +278,7 @@ public class DeviceTest {
         Device device = new Device( element );
         device.verify();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "COUNT" ), (Integer) 1 );
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
     }
 
     @Test

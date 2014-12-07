@@ -195,7 +195,7 @@ public class LayerTest {
 
         layer.register( wall );
 
-        ArrayList<MinderDom> contents = layer.contents();
+        ArrayList<Layerer> contents = layer.contents();
 
         assert( contents.contains( wall ) );
     }

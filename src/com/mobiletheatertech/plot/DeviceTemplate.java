@@ -19,9 +19,9 @@ import java.util.ArrayList;
  * It is the responsibility of the extending constructor to populate that array.
  *
  * @author David H. Silber
- *
+
  */
-public class DeviceTemplate extends Verifier implements Legendable
+public class DeviceTemplate extends Layerer implements Legendable
 {
     private static ArrayList<DeviceTemplate> DEVICELIST = new ArrayList<>();
 
@@ -92,7 +92,8 @@ public class DeviceTemplate extends Verifier implements Legendable
         return null;
     }
 
-    public DeviceTemplate( Element element ) throws AttributeMissingException, InvalidXMLException
+    public DeviceTemplate( Element element )
+            throws AttributeMissingException, DataException, InvalidXMLException
     {
         super( element );
         id = getStringAttribute( element, "type");
@@ -107,6 +108,11 @@ public class DeviceTemplate extends Verifier implements Legendable
         DEVICELIST.add( this );
 
         Legend.Register( this, 2, 7, LegendOrder.Device );
+
+        if ( null != layer ) {
+            Layer layerActual = Layer.Register( layer, layer );
+            layerActual.register( this );
+        }
     }
 
     @Override

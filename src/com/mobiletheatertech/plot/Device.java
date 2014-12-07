@@ -142,12 +142,14 @@ public class Device extends Stackable
 
         layerName = ( ! "".equals( layerSpecified ) ) ? layerSpecified : template.layer();
 
-        Layer layerActual = Layer.Retrieve( layerName );
-        if( null != layerActual ) {
-            color = layerActual.color();
-        }
+        if ( null != layerName ) {
+            Layer layerActual = Layer.Retrieve(layerName);
+            if (null != layerActual) {
+                color = layerActual.color();
+            }
 
-        layerActual.register( this );
+            layerActual.register(this);
+        }
 
         verified = true;
     }
