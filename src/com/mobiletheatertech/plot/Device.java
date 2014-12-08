@@ -50,7 +50,7 @@ public class Device extends Stackable
     Double width = null;
     Double depth = 0.0;
 
-    Boolean verified = false;
+    boolean verified = false;
 
 
     /**
@@ -107,12 +107,13 @@ public class Device extends Stackable
             throws DataException, FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException
     {
+        verified = true;
+
         template = DeviceTemplate.Select( is );
         if( null == template ){
             throw new InvalidXMLException( "Device", id,
                     "'is' reference ("+is+") does not exist" );
         }
-        template.count();
 
         // Get what needs to be drawn from 'is'.
         shape = template.getSolid();
@@ -150,8 +151,6 @@ public class Device extends Stackable
 
             layerActual.register(this);
         }
-
-        verified = true;
     }
 
     @Override
@@ -166,7 +165,7 @@ public class Device extends Stackable
                 group = svgClassGroup( draw, layerName);
                 Double shiftedX = x + SvgElement.OffsetX();
                 Double shiftedY = y + SvgElement.OffsetY();
-                group.attribute( "transform", "rotate(" + orientation + "," + shiftedX + "," + shiftedY + ")" );
+                group.attribute("transform", "rotate(" + orientation + "," + shiftedX + "," + shiftedY + ")");
                 draw.appendRootChild(group);
 
                 element = group.rectangle( draw, place.x(), place.y(), width, depth, color );
@@ -177,6 +176,8 @@ public class Device extends Stackable
                 Double y = place.y() + depth - 4;
                 SvgElement idText = group.text( draw, id, x, y, color );
                 idText.attribute( "text-anchor", "left" );
+
+                template.count();
 
                 break;
             case SECTION:

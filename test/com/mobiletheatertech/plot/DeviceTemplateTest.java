@@ -139,6 +139,24 @@ public class DeviceTemplateTest {
     }
 
     @Test
+    public void countReset() throws Exception {
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        deviceTemplate.count();
+        deviceTemplate.countReset();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+    }
+
+    @Test
+    public void allCountReset() throws Exception {
+        DeviceTemplate deviceTemplate = new DeviceTemplate( element );
+        deviceTemplate.count();
+        DeviceTemplate.CountReset();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+    }
+
+    @Test
     public void recallsNull() {
         assertNull(DeviceTemplate.Select("bogus"));
     }

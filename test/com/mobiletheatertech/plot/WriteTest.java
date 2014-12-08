@@ -86,6 +86,55 @@ public class WriteTest {
 //                              name + "<br />\n" );
 //    }
 
+    @Test
+    public void drawingCounts() throws Exception {
+        String layerId = "layer ID";
+        String layerName = "layer Name";
+        String layerColor = "blue";
+        String deviceType = "device Type";
+
+        Element drawingElement = new IIOMetadataNode( "drawing" );
+        drawingElement.setAttribute( "id", "drawing" );
+        drawingElement.setAttribute( "filename", "file/file" );
+
+        Element displayElement = new IIOMetadataNode( "display" );
+        displayElement.setAttribute( "category", layerId );
+        drawingElement.appendChild( displayElement );
+
+        Drawing drawing = new Drawing( drawingElement );
+        new Layer( layerId, layerName, layerColor );
+
+        Element deviceTemplateElement = new IIOMetadataNode( "device-template" );
+        deviceTemplateElement.setAttribute( "type", deviceType );
+        deviceTemplateElement.setAttribute( "width", "1.0" );
+        deviceTemplateElement.setAttribute( "depth", "2.0" );
+        deviceTemplateElement.setAttribute( "height", "3.0" );
+        deviceTemplateElement.setAttribute( "layer", layerId );
+
+        DeviceTemplate deviceTemplate = new DeviceTemplate( deviceTemplateElement );
+
+        Element deviceElement = new IIOMetadataNode( "device" );
+        deviceElement.setAttribute( "id", "Fred" );
+        deviceElement.setAttribute( "is", deviceType );
+        deviceElement.setAttribute( "x", "1.0" );
+        deviceElement.setAttribute( "y", "2.0" );
+        deviceElement.setAttribute( "z", "0" );
+        deviceElement.setAttribute( "layer", layerId );
+        Device device = new Device( deviceElement );
+        device.verify();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+
+        Write write = new Write();
+        write.writeIndividualDrawing(drawing);
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+
+        write.writeIndividualDrawing( drawing );
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }

@@ -361,7 +361,7 @@ public class Write {
     }
 
     private void writeDrawings( String pathname ) throws MountingException, ReferenceException {
-        for (ElementalLister thingy : MinderDom.List() ) {
+        for (ElementalLister thingy : ElementalLister.List() ) {
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
                 writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
@@ -369,7 +369,7 @@ public class Write {
         }
     }
 
-    private Draw writeIndividualDrawing( Drawing drawing )
+    Draw writeIndividualDrawing( Drawing drawing )
             throws MountingException, ReferenceException {
         resetOneOffs();
 
@@ -485,6 +485,7 @@ public class Write {
 //        Chair.LEGENDREGISTERED = false;
         Chair.COUNT = 0;
         LuminaireDefinition.CountReset();
+        DeviceTemplate.CountReset();
     }
 
 //

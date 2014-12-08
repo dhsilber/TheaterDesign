@@ -115,6 +115,12 @@ public class DeviceTemplate extends Layerer implements Legendable
         }
     }
 
+    public static void CountReset()  {
+        for (DeviceTemplate selection : DEVICELIST) {
+            selection.countReset();
+        }
+    }
+
     @Override
     public void verify() { }
 

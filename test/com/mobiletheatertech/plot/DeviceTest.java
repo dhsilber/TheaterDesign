@@ -25,6 +25,9 @@ public class DeviceTest {
     Element stackedElement = null;
     Element stackedTemplateElement = null;
 
+    Layer deviceLayer;
+    Layer deviceOtherLayer;
+
     final String deviceName = "Intercom base station";
     final String tableName = "control table";
     final String templateName = "Clear-Com CS-210";
@@ -272,11 +275,45 @@ public class DeviceTest {
     }
 
     @Test
-    public void incrementsCount() throws Exception {
+    public void deviceLayerRegistered() throws Exception {
+        new DeviceTemplate( templateElement );
+        element.setAttribute( "layer", otherLayerTag );
+        element.removeAttribute("on");
+        Device device = new Device( element );
+
+        assertEquals( deviceOtherLayer.contents().size(), 0 );
+
+        device.verify();
+
+        assertEquals( deviceOtherLayer.contents().size(), 1 );
+    }
+
+    @Test
+    public void deviceTemplateLayerRegistered() throws Exception {
+        new DeviceTemplate( layeredTemplateElement );
+        element.setAttribute( "is", layeredTemplateName );
+        element.removeAttribute( "on" );
+        Device device = new Device( element );
+
+        assertEquals( deviceLayer.contents().size(), 0 );
+
+        device.verify();
+
+        assertEquals( deviceLayer.contents().size(), 1 );
+    }
+
+    @Test
+    public void incrementsCountOnDrawing() throws Exception {
         DeviceTemplate deviceTemplate = new DeviceTemplate( templateElement );
         element.removeAttribute("on");
         Device device = new Device( element );
         device.verify();
+
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+
+        Draw draw = new Draw();
+        draw.establishRoot();
+        device.dom( draw, View.PLAN );
 
         assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
     }
@@ -541,6 +578,7 @@ public class DeviceTest {
         TestResets.DeviceTemplateReset();
         TestResets.DeviceReset();
         TestResets.StackableReset();
+        TestResets.LayerReset();
         SvgElement.Offset( 0.0, 0.0 );
 
         Element venueElement = new IIOMetadataNode();
@@ -550,17 +588,21 @@ public class DeviceTest {
         venueElement.setAttribute("height", "240");
         new Venue(venueElement);
 
-        Element layerElement = new IIOMetadataNode("layer");
-        layerElement.setAttribute("id", layerTag);
-        layerElement.setAttribute("name", "Layer Description" );
-        layerElement.setAttribute("color", layerColor );
-        new UserLayer( layerElement );
+        deviceLayer = new Layer( layerTag, "Layer Description", layerColor );
 
-        Element otherlayerElement = new IIOMetadataNode("layer");
-        otherlayerElement.setAttribute("id", otherLayerTag);
-        otherlayerElement.setAttribute("name", "Otherlayer Description" );
-        otherlayerElement.setAttribute("color", otherLayerColor );
-        new UserLayer( otherlayerElement );
+//        Element layerElement = new IIOMetadataNode("layer");
+//        layerElement.setAttribute("id", layerTag);
+//        layerElement.setAttribute("name", "Layer Description" );
+//        layerElement.setAttribute("color", layerColor );
+//        new UserLayer( layerElement );
+
+        deviceOtherLayer = new Layer( otherLayerTag, "Otherlayer Description", otherLayerColor );
+
+//        Element otherlayerElement = new IIOMetadataNode("layer");
+//        otherlayerElement.setAttribute("id", otherLayerTag);
+//        otherlayerElement.setAttribute("name", "Otherlayer Description" );
+//        otherlayerElement.setAttribute("color", otherLayerColor );
+//        new UserLayer( otherlayerElement );
 
         tableElement = new IIOMetadataNode("table");
         tableElement.setAttribute("id", tableName);
