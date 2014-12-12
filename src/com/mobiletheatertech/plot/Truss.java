@@ -10,9 +10,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- * Defines a box truss. <p> XML tag is 'truss'. Required children are 'suspend' elements. Required
+ * Defines a box truss. <p> XML tag is 'truss'. Required children are 'suspend' or 'base' elements. Required
  * attributes are 'size' (valid values are 12 and 20) and 'length'. </p><p> For now, I'm allowing
- * any length of truss, so that assemblies </p>
+ * any length of truss, but the count of truss is presuming ten-foot lengths. </p>
  *
  * @author dhs
  * @since 0.0.5
@@ -30,9 +30,11 @@ public class Truss extends Mountable implements Legendable {
     public static final String LAYERTAG = "truss";
 
     static final String CATEGORY = "truss";
+    static boolean LEGENDREGISTERED = false;
 
     private static Double TrussCount = 0.0;
     private Double trussCounted = Double.MIN_VALUE;
+    Integer trussSegmentCount = 0;
 
     private String color = "dark blue";
     private Double size = null;
@@ -43,6 +45,7 @@ public class Truss extends Mountable implements Legendable {
     private Element element = null;
 
     private Base base = null;
+    static Integer BaseCount = 0;
 
     Point point1 = null;
     Point point2 = null;
@@ -135,6 +138,11 @@ public class Truss extends Mountable implements Legendable {
             x = base.x();
             y = base.y();
             z = 0.0;
+
+            if ( ! LEGENDREGISTERED ) {
+                Legend.Register( this, 2, 12, LegendOrder.Structure );
+                LEGENDREGISTERED = true;
+            }
         }
         else {
             System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
@@ -406,6 +414,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
                     String transform =
                             "rotate(" + base.rotation() + "," + transformX + "," + transformY + ")";
                     verticalTruss.attribute( "transform", transform );
+                    BaseCount++;
 
                 }
                 else {
@@ -536,6 +545,23 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 
     @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        return null;
+        if( 0 >= BaseCount ) { return start; };
+
+        SvgElement group = svgClassGroup( draw, LAYERNAME );
+        group.attribute( "transform", "translate(" + start.x() + "," + start.y() + ")" );
+        draw.appendRootChild(group);
+
+        group.rectangleAbsolute(draw, 0.0, 0.0, 12.0, 12.0, color);
+        group.rectangleAbsolute(draw, 3.0, 3.0, 6.0, 6.0, color);
+
+        Double x = Legend.TEXTOFFSET;
+        Double y = 8.0;
+        group.textAbsolute(draw, "Truss on base", x, y, Legend.TEXTCOLOR);
+
+        x = Legend.QUANTITYOFFSET;
+        group.textAbsolute(draw, BaseCount.toString(), x, y, Legend.TEXTCOLOR);
+
+        PagePoint finish = new PagePoint( start.x(), start.y() + 9 );
+        return finish;
     }
 }

@@ -487,6 +487,9 @@ public class Write {
         LuminaireDefinition.CountReset();
         DeviceTemplate.CountReset();
         DanceTile.Count = 0;
+        Truss.LEGENDREGISTERED = false;
+        Truss.BaseCount = 0;
+//        Legend.
     }
 
 //

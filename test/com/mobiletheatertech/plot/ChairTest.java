@@ -43,9 +43,15 @@ public class ChairTest {
 
     @Test
     public void isA() throws Exception {
-        Chair chair = new Chair(element);
+        Chair instance = new Chair(element);
 
-        assert MinderDom.class.isInstance(chair);
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
+
+        assert Legendable.class.isInstance( instance );
     }
 
     @Test
@@ -218,7 +224,7 @@ public class ChairTest {
         assertEquals( legendList.size(), 1 );
         Integer order = legendList.lastKey();
         assert( order >= LegendOrder.Furniture.ordinal() );
-        assert( order < LegendOrder.Luminaire.ordinal() );
+        assert( order < LegendOrder.Structure.ordinal() );
 
     }
 

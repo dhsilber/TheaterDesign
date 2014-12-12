@@ -24,14 +24,21 @@ public enum LegendOrder {
                     return last++;
                 }
             },
-    Luminaire( 200 )
+    Structure( 200 )
             {
                 @Override
                 public Integer next() {
                     return last++;
                 }
             },
-    Device( 300 )
+    Luminaire( 300 )
+            {
+                @Override
+                public Integer next() {
+                    return last++;
+                }
+            },
+    Device( 400 )
             {
                 @Override
                 public Integer next() {

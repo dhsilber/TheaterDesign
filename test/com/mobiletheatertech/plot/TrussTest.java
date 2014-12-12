@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import static org.testng.Assert.*;
 
@@ -48,15 +49,16 @@ public class TrussTest {
 
     @Test
     public void isA() throws Exception {
-        Truss truss = new Truss( element );
+        Truss instance = new Truss( element );
 
-        assert Mountable.class.isInstance(truss);
-    }
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
+        assert Mountable.class.isInstance( instance );
 
-    @Test
-    public void isLegendable() throws Exception {
-        Truss truss = new Truss( element );
-        assert Legendable.class.isInstance( truss );
+        assert Legendable.class.isInstance( instance );
     }
 
     @Test
@@ -627,6 +629,96 @@ public class TrussTest {
         assertEquals(element.getAttribute("y"), y.toString());
         assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + yBoth.toString() + ")");
     }
+
+    @Test
+    public void legendRegistered() throws Exception {
+        TestResets.LegendReset();
+
+        Truss truss = new Truss( trussOnBase );
+        new Base( baseElement );
+        truss.verify();
+
+        TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+        Integer order = legendList.lastKey();
+        assert( order >= LegendOrder.Structure.ordinal() );
+        assert( order < LegendOrder.Luminaire.ordinal() );
+
+    }
+
+    @Test
+    public void domLegendItem() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Truss truss = new Truss( trussOnBase );
+        new Base( baseElement );
+        truss.verify();
+
+        NodeList preGroup = draw.root().getElementsByTagName( "g" );
+        assertEquals( preGroup.getLength(), 1 );
+
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
+        PagePoint endPoint = truss.domLegendItem( draw, startPoint );
+
+//        NodeList group = draw.root().getElementsByTagName( "g" );
+//        assertEquals( group.getLength(), 1 );
+//        Node groupNod = group.item(0);
+//        Element groupElem = (Element) groupNod;
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        assertEquals( groupList.getLength(), 2 );
+        Node groupNode = groupList.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+
+        NodeList rectList = groupElement.getElementsByTagName( "rect" );
+        assertEquals( rectList.getLength(), 2 );
+
+        Node rectNode = rectList.item(0);
+        assertEquals(rectNode.getNodeType(), Node.ELEMENT_NODE);
+        Element rectElement = (Element) rectNode;
+        assertEquals(rectElement.getAttribute("x"), startPoint.x().toString() );
+        assertEquals(rectElement.getAttribute("y"), startPoint.y().toString());
+        assertEquals(rectElement.getAttribute("width"), "9.0");
+        assertEquals(rectElement.getAttribute("height"), "9.0");
+
+        rectNode = rectList.item(1);
+        assertEquals(rectNode.getNodeType(), Node.ELEMENT_NODE);
+        rectElement = (Element) rectNode;
+        Double innerX = startPoint.x() + 3;
+        Double innerY = startPoint.y() + 3;
+        assertEquals(rectElement.getAttribute("x"), innerX.toString() );
+        assertEquals(rectElement.getAttribute("y"), innerY.toString());
+        assertEquals(rectElement.getAttribute("width"), "6.0");
+        assertEquals(rectElement.getAttribute("height"), "6.0");
+
+        NodeList textList = groupElement.getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 2 );
+
+        Node textNode = textList.item(0);
+        assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
+        Element textElement = (Element) textNode;
+        Double x = startPoint.x() + Legend.TEXTOFFSET;
+        Double y = startPoint.y() + 8;
+        assertEquals(textElement.getAttribute("x"), x.toString() );
+        assertEquals(textElement.getAttribute("y"), y.toString() );
+        assertEquals(textElement.getAttribute("fill"), "black" );
+
+        textNode = textList.item(1);
+        assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
+        textElement = (Element) textNode;
+        x = startPoint.x() + Legend.QUANTITYOFFSET;
+        y = startPoint.y() + 8;
+        assertEquals(textElement.getAttribute("x"), x.toString() );
+        assertEquals(textElement.getAttribute("y"), y.toString() );
+        assertEquals(textElement.getAttribute("fill"), "black" );
+
+        // TODO Check for text here
+
+        assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 9 ));
+    }
+
 
 //    @Test
 //    public void domPlanProscenium() throws Exception {

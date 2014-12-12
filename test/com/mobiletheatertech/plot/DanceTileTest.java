@@ -22,15 +22,15 @@ public class DanceTileTest {
 
     @Test
     public void isA() throws Exception {
-        DanceTile danceTile = new DanceTile( element );
+        DanceTile instance = new DanceTile( element );
 
-        assert Elemental.class.isInstance( danceTile );
-        assert ElementalLister.class.isInstance( danceTile );
-        assert Verifier.class.isInstance( danceTile );
-        assert Layerer.class.isInstance( danceTile );
-        assert MinderDom.class.isInstance( danceTile );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
 
-        assert Legendable.class.isInstance( danceTile );
+        assert Legendable.class.isInstance( instance );
     }
 
     @Test
