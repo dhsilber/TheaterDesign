@@ -102,6 +102,7 @@ public class Parse {
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );
         parseXML( CableRun.class, "cable-run" );
+        parseXML( DanceTile.class, "dancetile" );
 
         if ( fatalParseError ) {
             System.err.println( "... unable to continue." );

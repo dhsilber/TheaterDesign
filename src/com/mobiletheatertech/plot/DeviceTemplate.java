@@ -84,7 +84,7 @@ public class DeviceTemplate extends Layerer implements Legendable
 //    }
 
     public static DeviceTemplate Select( String type ) {
-        for (DeviceTemplate selection : DEVICELIST) {
+        for ( DeviceTemplate selection : DEVICELIST ) {
             if (selection.id.equals( type )) {
                 return selection;
             }

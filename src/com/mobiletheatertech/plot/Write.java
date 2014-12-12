@@ -486,6 +486,7 @@ public class Write {
         Chair.COUNT = 0;
         LuminaireDefinition.CountReset();
         DeviceTemplate.CountReset();
+        DanceTile.Count = 0;
     }
 
 //
