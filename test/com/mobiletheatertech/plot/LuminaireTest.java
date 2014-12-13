@@ -43,6 +43,7 @@ public class LuminaireTest {
     String pipeLocation = "12";
     String trussLocation = "a 12";
 
+    final String id = pipeName + ":" + unit;
 
     @Test
     public void isMinderDom() throws Exception {
@@ -58,18 +59,17 @@ public class LuminaireTest {
         elementOnPipe.removeAttribute("circuit");
         elementOnPipe.removeAttribute("channel");
         elementOnPipe.removeAttribute("color");
-        elementOnPipe.removeAttribute("unit");
 
         Luminaire luminaire = new Luminaire(elementOnPipe);
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
+        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "color" ), "" );
-        assertEquals( TestHelpers.accessString( luminaire, "unit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "target" ), "" );
     }
 
@@ -82,15 +82,29 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
+        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), circuit );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), dimmer );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), channel );
         assertEquals( TestHelpers.accessString( luminaire, "color" ), color );
-        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "target" ), target );
     }
 
-    // TODO: commented out 2014-07-15 as it was hanging the whole test run.
+    @Test
+    public void buildsID() throws Exception {
+        Luminaire instance = new Luminaire(elementOnPipe);
+
+        assertEquals( instance.id, pipeName + ":" + unit );
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Luminaire id '"+id+"' is not unique.")
+    public void badId() throws Exception {
+        new Luminaire(elementOnPipe);
+        new Luminaire(elementOnPipe);
+    }
+
+        // TODO: commented out 2014-07-15 as it was hanging the whole test run.
     // Until such time as I properly implement this class' use of id.
 //    @Test
 //    public void idUnused() throws Exception {
@@ -472,7 +486,7 @@ public class LuminaireTest {
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
         assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
-        assertEquals( diversionElement.getAttribute( "transform" ), "rotate(0,24,34)" );
+        assertEquals( diversionElement.getAttribute( "transform" ), "rotate(0,24.0,34.0)" );
     }
 
     // TODO: commented out 2014-07-15 as it was hanging the whole test run.
@@ -564,6 +578,7 @@ public class LuminaireTest {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
         TestResets.MountableReset();
+        TestResets.LuminaireReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );

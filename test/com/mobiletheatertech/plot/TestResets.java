@@ -11,6 +11,33 @@ import java.util.TreeMap;
  */
 public class TestResets {
 
+    public static void CableDiversionReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = CableDiversion.class.getDeclaredField( "DIVERSIONLIST" );
+        field.setAccessible( true );
+        ArrayList<CableDiversion> cableDiversionArrayList =
+                (ArrayList<CableDiversion>) field.get( CableDiversion.class );
+        cableDiversionArrayList.clear();
+    }
+
+    public static void CategoryReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Category.class.getDeclaredField( "CATEGORYLIST" );
+        field.setAccessible( true );
+        HashMap<String, Class> categoryList =
+                (HashMap<String, Class>) field.get( Category.class );
+        categoryList.clear();
+    }
+
+    public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
+        field.setAccessible( true );
+        boolean generated = field.getBoolean( ChairBlock.class );
+        field.set(generated, false);
+    }
+
     public static void ChairReset() throws NoSuchFieldException, IllegalAccessException {
         Field generatedField = Chair.class.getDeclaredField( "SYMBOLGENERATED" );
         generatedField.setAccessible( true );
@@ -25,14 +52,16 @@ public class TestResets {
         Field countField = Chair.class.getDeclaredField( "COUNT" );
         countField.setAccessible( true );
         Integer count = (Integer) countField.get( Chair.class );
-        countField.set( count, 0 );
+        countField.set(count, 0);
     }
 
-    public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
+    public static void DeviceReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Device.class.getDeclaredField( "DEVICELIST" );
         field.setAccessible( true );
-        boolean generated = field.getBoolean( ChairBlock.class );
-        field.set( generated, false );
+        ArrayList<Device> deviceList = (ArrayList<Device>) field.get( Device.class );
+        deviceList.clear();
     }
 
     public static void DeviceTemplateReset()
@@ -45,40 +74,11 @@ public class TestResets {
         deviceTemplateList.clear();
     }
 
-    public static void CategoryReset()
-            throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = Category.class.getDeclaredField( "CATEGORYLIST" );
-        field.setAccessible( true );
-        HashMap<String, Class> categoryList =
-                (HashMap<String, Class>) field.get( Category.class );
-        categoryList.clear();
-    }
-
-    public static void DeviceReset()
-            throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = Device.class.getDeclaredField( "DEVICELIST" );
-        field.setAccessible( true );
-        ArrayList<Device> deviceList = (ArrayList<Device>) field.get( Device.class );
-        deviceList.clear();
-    }
-
-    public static void CableDiversionReset()
-            throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = CableDiversion.class.getDeclaredField( "DIVERSIONLIST" );
-        field.setAccessible( true );
-        ArrayList<CableDiversion> cableDiversionArrayList =
-                (ArrayList<CableDiversion>) field.get( CableDiversion.class );
-        cableDiversionArrayList.clear();
-    }
-
     public static void EventReset() throws NoSuchFieldException, IllegalAccessException {
         Field field = Event.class.getDeclaredField( "Only" );
         field.setAccessible( true );
         Event singleton = (Event) field.get( Event.class );
-        field.set( singleton, null );
+        field.set(singleton, null);
     }
 
     /**
@@ -116,7 +116,16 @@ public class TestResets {
         Field activeField = LightingStand.class.getDeclaredField( "SYMBOLGENERATED" );
         activeField.setAccessible( true );
         boolean active = activeField.getBoolean( LightingStand.class );
-        activeField.set( active, false );
+        activeField.set(active, false);
+    }
+
+    public static void LuminaireReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = Luminaire.class.getDeclaredField( "LUMINAIRELIST" );
+        field.setAccessible( true );
+        ArrayList<Luminaire> luminaireList = (ArrayList<Luminaire>) field.get( Luminaire.class );
+        luminaireList.clear();
     }
 
     /**

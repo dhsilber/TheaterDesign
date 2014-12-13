@@ -4,6 +4,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 //import java.awt.geom.Line2D;
 
 /**
@@ -27,6 +29,7 @@ import org.w3c.dom.Text;
  */
 public class Luminaire extends MinderDom {
 
+    private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
      * Name of {@code Layer} of {@code Luminaoire}s.
      */
@@ -86,11 +89,11 @@ public class Luminaire extends MinderDom {
         type = getStringAttribute(element, "type");
         on = getStringAttribute(element, "on");
         location = getStringAttribute(element, "location");
+        unit = getStringAttribute(element, "unit");
         circuit = getOptionalStringAttribute(element, "circuit");
         dimmer = getOptionalStringAttribute(element, "dimmer");
         channel = getOptionalStringAttribute(element, "channel");
         color = getOptionalStringAttribute(element, "color");
-        unit = getOptionalStringAttribute(element, "unit");
         target = getOptionalStringAttribute(element, "target");
         info = getOptionalStringAttribute( element, "info" );
         address = getOptionalStringAttribute( element, "address" );
@@ -99,10 +102,29 @@ public class Luminaire extends MinderDom {
             rotation = new Double(rotate);
         }
 
+        id = on + ":" + unit;
+
+        if( null != Select( id )){
+            throw new InvalidXMLException(
+                    this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
+        }
+
+
         new Layer( LAYERTAG, LAYERNAME, COLOR );
         new Layer( INFOLAYERTAG, INFOLAYERNAME, COLOR );
 
         GearList.Add(type);
+
+        LUMINAIRELIST.add( this );
+    }
+
+    public static Luminaire Select( String identifier ) {
+        for (Luminaire selection : LUMINAIRELIST) {
+            if (selection.id.equals( identifier )) {
+                return selection;
+            }
+        }
+        return null;
     }
 
     /**
@@ -176,8 +198,8 @@ public class Luminaire extends MinderDom {
         Truss truss = null;
 
 //        System.out.println( "Luminaire.dom: About to draw id: "+id+" type: "+type+" on: "+ on+" location: "+location+".");
-        Double x;
-        Double y;
+        Double x = point.x();
+        Double y = point.y();
 
         Double z = Venue.Height() - point.z();
 
@@ -206,7 +228,7 @@ public class Luminaire extends MinderDom {
 
                 definition.count();
 
-                use = group.use( draw, type, point.x(), point.y() );
+                use = group.use( draw, type, x, y );
 //                use.setAttribute("x", point.x().toString());
 //                use.setAttribute("y", point.y().toString());
 
@@ -263,6 +285,27 @@ public class Luminaire extends MinderDom {
             case FRONT:
                 return;
         }
+
+
+        //        // Unit number to overlay on icon
+        SvgElement unitText = group.text( draw, unit, x, y, COLOR );
+//        unitText.setAttribute("transform", transform);
+//        unitTextX = point.x();
+//        unitTextY = point.y() + 0;
+//        unitText.setAttribute("x", unitTextX.toString());
+//        unitText.setAttribute("y", unitTextY.toString());
+        unitText.attribute("fill", "green");
+        unitText.attribute("stroke", "green");
+        unitText.attribute("font-family", "sans-serif");
+        unitText.attribute("font-weight", "100");
+        unitText.attribute("font-size", "6");
+        unitText.attribute("text-anchor", "middle");
+//        infogroup.appendChild(unitText);
+
+//        Text textUnit = draw.document().createTextNode(unit);
+//        unitText.appendChild(textUnit);
+//        System.out.println("Luminaire.dom: added unit stuff.");
+
 
 //        SvgElement infogroup = svgClassGroup( draw, INFOLAYERTAG );
 ////        draw.element("g");
@@ -453,24 +496,6 @@ public class Luminaire extends MinderDom {
 //        System.out.println("Luminaire.dom: added channel stuff.");
 
 
-//        // Unit number to overlay on icon
-//        SvgElement unitText = draw.element("text");
-////        unitText.setAttribute("transform", transform);
-//        unitTextX = point.x();
-//        unitTextY = point.y() + 0;
-//        unitText.setAttribute("x", unitTextX.toString());
-//        unitText.setAttribute("y", unitTextY.toString());
-//        unitText.setAttribute("fill", "green");
-//        unitText.setAttribute("stroke", "green");
-//        unitText.setAttribute("font-family", "sans-serif");
-//        unitText.setAttribute("font-weight", "100");
-//        unitText.setAttribute("font-size", "6");
-//        unitText.setAttribute("text-anchor", "middle");
-//        infogroup.appendChild(unitText);
-//
-//        Text textUnit = draw.document().createTextNode(unit);
-//        unitText.appendChild(textUnit);
-////        System.out.println("Luminaire.dom: added unit stuff.");
 //
 //
 //        // Color designation to display

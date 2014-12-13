@@ -77,6 +77,7 @@ public class LightingStandTest {
 
     @Test
     public void rotatedLocation() throws Exception {
+        SvgElement.Offset( 9.9, 1.1 );
         element.setAttribute("orientation", orientation.toString());
         LightingStand instance = new LightingStand( element );
         instance.verify();
@@ -84,7 +85,7 @@ public class LightingStandTest {
         Place place = instance.rotatedLocation("d");
         assertEquals( place.rotation(), orientation );
         assertEquals( place.location(), new Point( x + 18, y, 144.0 ));
-        assertEquals( place.origin(), new Point( x, y, 144.0 ));
+        assertEquals( place.origin(), new Point( x + SvgElement.OffsetX(), y + SvgElement.OffsetY(), 144.0 ));
     }
 
     @Test
@@ -128,7 +129,7 @@ public class LightingStandTest {
         assertEquals(rectangleNode.getNodeType(), Node.ELEMENT_NODE );
         Element rectangleElement = (Element) rectangleNode;
         assertEquals(rectangleElement.getAttribute("x"), "-1.0");
-        assertEquals(rectangleElement.getAttribute("y"), "-11.0");
+        assertEquals(rectangleElement.getAttribute("y"), "-1.0");
         assertEquals(rectangleElement.getAttribute("width"), "2.0");
         assertEquals(rectangleElement.getAttribute("height"), "12.0");
 
@@ -139,7 +140,7 @@ public class LightingStandTest {
         assertEquals(rectangleElement.getAttribute("y"), "-1.0");
         assertEquals(rectangleElement.getAttribute("width"), "12.0");
         assertEquals(rectangleElement.getAttribute("height"), "2.0");
-        assertEquals(rectangleElement.getAttribute("transform"), "rotate(-30.0,0.0,0.0)");
+        assertEquals(rectangleElement.getAttribute("transform"), "rotate(30.0,0.0,0.0)");
 
         rectangleNode = rectangleList.item(2);
         assertEquals(rectangleNode.getNodeType(), Node.ELEMENT_NODE );
@@ -148,7 +149,7 @@ public class LightingStandTest {
         assertEquals(rectangleElement.getAttribute("y"), "-1.0");
         assertEquals(rectangleElement.getAttribute("width"), "12.0");
         assertEquals(rectangleElement.getAttribute("height"), "2.0");
-        assertEquals(rectangleElement.getAttribute("transform"), "rotate(30.0,0.0,0.0)");
+        assertEquals(rectangleElement.getAttribute("transform"), "rotate(-30.0,0.0,0.0)");
 
         rectangleNode = rectangleList.item(3);
         assertEquals(rectangleNode.getNodeType(), Node.ELEMENT_NODE );

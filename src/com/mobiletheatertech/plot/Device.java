@@ -81,9 +81,9 @@ public class Device extends Stackable
         DEVICELIST.add( this );
     }
 
-    public static Device Select( String type ) {
+    public static Device Select( String identifier ) {
         for (Device selection : DEVICELIST) {
-            if (selection.id.equals( type )) {
+            if (selection.id.equals( identifier )) {
                 return selection;
             }
         }
