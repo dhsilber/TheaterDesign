@@ -44,9 +44,6 @@ public class TrussTest {
     Double baseY = 32.8;
 
 
-    public TrussTest() {
-    }
-
     @Test
     public void isA() throws Exception {
         Truss instance = new Truss( element );
@@ -633,9 +630,10 @@ public class TrussTest {
     @Test
     public void legendRegistered() throws Exception {
         TestResets.LegendReset();
-
         Truss truss = new Truss( trussOnBase );
         new Base( baseElement );
+        Truss.LEGENDREGISTERED = false;
+
         truss.verify();
 
         TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
@@ -654,11 +652,13 @@ public class TrussTest {
         Truss truss = new Truss( trussOnBase );
         new Base( baseElement );
         truss.verify();
+//        truss.dom(draw, View.PLAN);
+        Truss.BaseCount = 1;
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
 
         NodeList preGroup = draw.root().getElementsByTagName( "g" );
         assertEquals( preGroup.getLength(), 1 );
 
-        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
         PagePoint endPoint = truss.domLegendItem( draw, startPoint );
 
 //        NodeList group = draw.root().getElementsByTagName( "g" );
@@ -678,18 +678,18 @@ public class TrussTest {
         Node rectNode = rectList.item(0);
         assertEquals(rectNode.getNodeType(), Node.ELEMENT_NODE);
         Element rectElement = (Element) rectNode;
-        assertEquals(rectElement.getAttribute("x"), startPoint.x().toString() );
-        assertEquals(rectElement.getAttribute("y"), startPoint.y().toString());
-        assertEquals(rectElement.getAttribute("width"), "9.0");
-        assertEquals(rectElement.getAttribute("height"), "9.0");
+        assertEquals(rectElement.getAttribute("x"), "0.0" );
+        assertEquals(rectElement.getAttribute("y"), "0.0" );
+        assertEquals(rectElement.getAttribute("width"), "12.0");
+        assertEquals(rectElement.getAttribute("height"), "12.0");
 
         rectNode = rectList.item(1);
         assertEquals(rectNode.getNodeType(), Node.ELEMENT_NODE);
         rectElement = (Element) rectNode;
         Double innerX = startPoint.x() + 3;
         Double innerY = startPoint.y() + 3;
-        assertEquals(rectElement.getAttribute("x"), innerX.toString() );
-        assertEquals(rectElement.getAttribute("y"), innerY.toString());
+        assertEquals(rectElement.getAttribute("x"), "3.0" );
+        assertEquals(rectElement.getAttribute("y"), "3.0" );
         assertEquals(rectElement.getAttribute("width"), "6.0");
         assertEquals(rectElement.getAttribute("height"), "6.0");
 
@@ -699,8 +699,8 @@ public class TrussTest {
         Node textNode = textList.item(0);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
         Element textElement = (Element) textNode;
-        Double x = startPoint.x() + Legend.TEXTOFFSET;
-        Double y = startPoint.y() + 8;
+        Double x = Legend.TEXTOFFSET;
+        Double y = 8.0;
         assertEquals(textElement.getAttribute("x"), x.toString() );
         assertEquals(textElement.getAttribute("y"), y.toString() );
         assertEquals(textElement.getAttribute("fill"), "black" );
@@ -708,8 +708,7 @@ public class TrussTest {
         textNode = textList.item(1);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
         textElement = (Element) textNode;
-        x = startPoint.x() + Legend.QUANTITYOFFSET;
-        y = startPoint.y() + 8;
+        x = Legend.QUANTITYOFFSET;
         assertEquals(textElement.getAttribute("x"), x.toString() );
         assertEquals(textElement.getAttribute("y"), y.toString() );
         assertEquals(textElement.getAttribute("fill"), "black" );

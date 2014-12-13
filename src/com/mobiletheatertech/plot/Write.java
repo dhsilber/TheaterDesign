@@ -489,6 +489,7 @@ public class Write {
         DanceTile.Count = 0;
         Truss.LEGENDREGISTERED = false;
         Truss.BaseCount = 0;
+        LightingStand.SYMBOLGENERATED = false;
 //        Legend.
     }
 

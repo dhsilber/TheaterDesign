@@ -112,6 +112,13 @@ public class TestResets {
         legendList.clear();
     }
 
+    public static void LightingStandReset() throws Exception {
+        Field activeField = LightingStand.class.getDeclaredField( "SYMBOLGENERATED" );
+        activeField.setAccessible( true );
+        boolean active = activeField.getBoolean( LightingStand.class );
+        activeField.set( active, false );
+    }
+
     /**
      * Reset the LUMINAIRELIST maintained by {@link LuminaireDefinition} to its initial empty
      * state.

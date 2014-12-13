@@ -122,7 +122,7 @@ public class Chair extends MinderDom implements Legendable {
         }
     }
 
-    void generateSymbol(Draw draw) {
+    private void generateSymbol(Draw draw) {
         if (!SYMBOLGENERATED) {
             SvgElement defs = draw.element("defs");
             draw.appendRootChild(defs);

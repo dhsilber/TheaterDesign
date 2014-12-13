@@ -248,6 +248,8 @@ public class ChairTest {
 
         Chair chair = new Chair( element );
         chair.verify();
+        Chair.COUNT++;
+
         PagePoint finish = chair.domLegendItem( draw, start );
 
         assertNotEquals(start, finish);
@@ -262,6 +264,9 @@ public class ChairTest {
         String eleven = "11";
         element.setAttribute( "line", eleven );
         Chair chair = new Chair( element );
+        chair.verify();
+        Chair.COUNT++;
+
         chair.domLegendItem( draw, start );
 
         NodeList group = draw.root().getElementsByTagName("g");

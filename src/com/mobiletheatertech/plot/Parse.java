@@ -96,6 +96,7 @@ public class Parse {
         parseXML( Base.class, "base" );
         parseXML( Cheeseborough.class, "cheeseborough" );
         parseXML( Truss.class, "truss" );
+        parseXML( LightingStand.class, LightingStand.TAG );
         parseXML( Suspend.class, "suspend" );
         parseXML( Pipe.class, "pipe" );
         parseXML( Zone.class, "zone" );
