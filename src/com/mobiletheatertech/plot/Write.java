@@ -72,7 +72,7 @@ public class Write {
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
 //        System.err.println( " Spreadsheet");
-        writeSpreadsheet( pathname + "/gear.ods" );
+//        writeSpreadsheet( pathname + "/gear.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {

@@ -41,16 +41,6 @@ public class Luminaire extends MinderDom {
     public static final String LAYERTAG = "luminaire";
 
 
-    /**
-     * Name of {@code Layer} of {@code Luminaoire}s.
-     */
-    public static final String INFOLAYERNAME = "Luminaire Information";
-
-    /**
-     * Name of {@code Layer} of {@code Luminare}s.
-     */
-    public static final String INFOLAYERTAG = "luminaireinformation";
-
     private String type;
     private String on;
     private String location;
@@ -70,7 +60,7 @@ public class Luminaire extends MinderDom {
     private String transform;
     private Mountable mount = null;
 
-    private static final String COLOR = "black";
+    static final String COLOR = "black";
 
 
     /**
@@ -111,7 +101,7 @@ public class Luminaire extends MinderDom {
 
 
         new Layer( LAYERTAG, LAYERNAME, COLOR );
-        new Layer( INFOLAYERTAG, INFOLAYERNAME, COLOR );
+        new LuminaireInformation( element, this );
 
         GearList.Add(type);
 
@@ -162,6 +152,30 @@ public class Luminaire extends MinderDom {
         transform = "rotate(" + pipeRotation + "," + origin.x() + "," + origin.y() + ")";
     }
 
+    Point point() {
+        return point;
+    }
+
+    Mountable mount() {
+        return mount;
+    }
+
+    String locationValue() {
+        return location;
+    }
+
+    String circuit() {
+        return circuit;
+    }
+
+    String dimmer() {
+        return dimmer;
+    }
+
+    String channel() {
+        return channel;
+    }
+
     /**
      * Provide the rotation required to orient this luminaire's icon to the specified point.
      *
@@ -195,7 +209,6 @@ public class Luminaire extends MinderDom {
         if( View.TRUSS == mode && !Truss.class.isInstance(mount)) {
             return;
         }
-        Truss truss = null;
 
 //        System.out.println( "Luminaire.dom: About to draw id: "+id+" type: "+type+" on: "+ on+" location: "+location+".");
         Double x = point.x();
@@ -266,7 +279,7 @@ public class Luminaire extends MinderDom {
 //                use.setAttribute("y", z.toString());
                 break;
             case TRUSS:
-                truss = (Truss) mount;
+                Truss truss = (Truss) mount;
                 Point newPoint = truss.relocate( location );
                 use = group.use( draw, type, newPoint.x(), newPoint.y() );
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
@@ -274,18 +287,6 @@ public class Luminaire extends MinderDom {
         }
 //        group.appendChild(use);
 //        System.out.println("Luminaire.dom: added use.");
-
-        // There is no good place to display extra information in section and front views.
-        switch (mode) {
-            case PLAN:
-            case TRUSS:
-                break;
-
-            case SECTION:
-            case FRONT:
-                return;
-        }
-
 
         //        // Unit number to overlay on icon
         SvgElement unitText = group.text( draw, unit, x, y, COLOR );
@@ -301,395 +302,6 @@ public class Luminaire extends MinderDom {
         unitText.attribute("font-size", "6");
         unitText.attribute("text-anchor", "middle");
 //        infogroup.appendChild(unitText);
-
-//        Text textUnit = draw.document().createTextNode(unit);
-//        unitText.appendChild(textUnit);
-//        System.out.println("Luminaire.dom: added unit stuff.");
-
-
-//        SvgElement infogroup = svgClassGroup( draw, INFOLAYERTAG );
-////        draw.element("g");
-//
-////        infogroup.setAttribute("class", INFOLAYERTAG);
-//        group.appendChild(infogroup);
-//        System.out.println("Luminaire.dom: added infogroup.");
-
-//        SvgElement circuitHexagon = draw.element("path");
-////        circuitHexagon.setAttribute("transform", transform);
-//        circuitHexagon.setAttribute("fill", "none");
-//        circuitHexagon.setAttribute("stroke", "black");
-//        circuitHexagon.setAttribute("stroke-width", "1");
-//        circuitHexagon.setAttribute("width", "18");
-//        circuitHexagon.setAttribute("height", "12");
-
-//        SvgElement dimmerRectangle = draw.element("rect");
-////        dimmerRectangle.setAttribute("transform", transform);
-//        dimmerRectangle.setAttribute("fill", "none");
-//        dimmerRectangle.setAttribute("height", "11");
-
-//        SvgElement channelCircle = draw.element("circle");
-////        channelCircle.setAttribute("transform", transform);
-//        channelCircle.setAttribute("fill", "none");
-//        channelCircle.setAttribute("r", "8");
-
-//        SvgElement circuitText = draw.element("text");
-////        circuitText.setAttribute("transform", transform);
-//        circuitText.setAttribute("fill", "black");
-//        circuitText.setAttribute("stroke", "none");
-//        circuitText.setAttribute("font-family", "serif");
-//        circuitText.setAttribute("font-size", "9");
-//        circuitText.setAttribute("text-anchor", "middle");
-
-//        SvgElement dimmerText = draw.element("text");
-////        dimmerText.setAttribute("transform", transform);
-//        dimmerText.setAttribute("fill", "black");
-//        dimmerText.setAttribute("stroke", "none");
-//        dimmerText.setAttribute("font-family", "serif");
-//        dimmerText.setAttribute("font-size", "9");
-//        dimmerText.setAttribute("text-anchor", "middle");
-
-//        SvgElement channelText = draw.element("text");
-////        channelText.setAttribute("transform", transform);
-//        channelText.setAttribute("fill", "black");
-//        channelText.setAttribute("fill", "black");
-//        channelText.setAttribute("font-family", "serif");
-//        channelText.setAttribute("font-size", "9");
-//        channelText.setAttribute("text-anchor", "middle");
-
-//        Text textCircuit = draw.document().createTextNode(circuit);
-//        Text textDimmer = draw.document().createTextNode(dimmer);
-//        Text textChannel = draw.document().createTextNode(channel);
-
-        boolean farSide = (null != truss && truss.farSide( location ) );
-
-        int direction = 1;
-        Double hexagonYOffset = 0.0;
-        Double rectangleYOffset = 0.0;
-        Double circleYOffset = 0.0;
-        Double dimmerTextYOffset = 0.0;
-        Double channelTextYOffset = 0.0;
-        if (View.TRUSS == mode && farSide ) {
-            direction = -1;
-            hexagonYOffset = 7.0;
-            rectangleYOffset = 12.0;
-            dimmerTextYOffset = -4.0;
-            circleYOffset = 6.0;
-        }
-
-        Double dimmerTextY;
-        Double dimmerRectangleY;
-        Double channelCircleY;
-        Double channelTextY;
-        Double dimmerTextX;
-        Double circuitTextX=0.0;
-        Double circuitTextY=0.0;
-        Double dimmerRectangleWidth;
-        Integer unitTextX;
-        Integer unitTextY;
-        Integer colorTextX;
-        Integer colorTextY;
-        Integer xColorText = 0;
-        Integer yColor = 0;
-        Integer yDimmerRectangle = 0;
-        Integer xDimmerRectangle = 0;
-        Integer yDimmerText = 0;
-        Integer addressOvalRadiusY;
-        Integer xAddressOval;
-        Integer yAddressOval;
-        Integer addressTextY;
-        String circuitPath="";
-
-        switch (Venue.Circuiting()) {
-            case Venue.ONETOONE:
-            case Venue.ONETOMANY:
-                dimmerTextY = point.y() - 20 * direction - hexagonYOffset - dimmerTextYOffset;
-                dimmerRectangleY = point.y() - 28 * direction - hexagonYOffset - rectangleYOffset;
-                channelCircleY = point.y() - 39 * direction - circleYOffset;
-                channelTextY = point.y() - 36 * direction - channelTextYOffset;
-                break;
-            default:
-                // Hexagon for circuit
-                x = point.x() - 9;
-                y = point.y() - 25 * direction - hexagonYOffset;
-//                circuitHexagon.setAttribute("d",
-//                        "M " + (x + 1) + " " + (y + 5) +
-//                                " L " + (x + 4) + " " + y +
-//                                " L " + (x + 14) + " " + y +
-//                                " L " + (x + 17) + " " + (y + 5) +
-//                                " L " + (x + 14) + " " + (y + 10) +
-//                                " L " + (x + 4) + " " + (y + 10) +
-//                                " Z");
-                circuitPath = "M " + (x + 1) + " " + (y + 5) +
-                            " L " + (x + 4) + " " + y +
-                            " L " + (x + 14) + " " + y +
-                            " L " + (x + 17) + " " + (y + 5) +
-                            " L " + (x + 14) + " " + (y + 10) +
-                            " L " + (x + 4) + " " + (y + 10) +
-                            " Z";
-//                circuitHexagon.setAttribute("x", x.toString());
-//                circuitHexagon.setAttribute("y", y.toString());
-//                infogroup.appendChild(circuitHexagon);
-
-                circuitTextX = point.x();
-                circuitTextY = point.y() - 17 * direction;
-//                circuitText.setAttribute("x", circuitTextX.toString());
-//                circuitText.setAttribute("y", circuitTextY.toString());
-//                infogroup.appendChild(circuitText);
-//                circuitText.appendChild(textCircuit);
-
-                dimmerTextY = point.y() - 31 * direction;
-                dimmerRectangleY = point.y() - 39 * direction;
-                channelCircleY = point.y() - 50 * direction;
-                channelTextY = point.y() - 46 * direction;
-                break;
-        }
-//        System.out.println( "Luminaire.dom: after circuiting switch.");
-
-       // Text for dimmer
-        dimmerTextX = point.x();
-//        if (3 < textDimmer.getLength()) {
-//            dimmerTextX -= 5;
-//        }
-//        dimmerText.setAttribute("x", dimmerTextX.toString());
-//        dimmerText.setAttribute("y", dimmerTextY.toString());
-
-        // Rectangle for dimmer
-        x = point.x() - 9;
-        dimmerRectangleWidth = 18.0;
-//        if (3 < textDimmer.getLength()) {
-//            dimmerRectangleWidth = 30;
-//            x -= 4;
-//        }
-
-//        dimmerRectangle.setAttribute("x", x.toString());
-//        dimmerRectangle.setAttribute("y", dimmerRectangleY.toString());
-//        dimmerRectangle.setAttribute( "width", dimmerRectangleWidth.toString() );
-
-//        if ( "" != dimmer ) {
-//        infogroup.appendChild(dimmerRectangle);
-
-//        infogroup.appendChild(dimmerText);
-//        switch (Venue.Circuiting()) {
-//            case Venue.ONETOMANY:
-//                dimmerText.appendChild(textCircuit);
-//                break;
-//            case Venue.ONETOONE:
-//            default:
-//                dimmerText.appendChild(textDimmer);
-//                break;
-//        }
-//        System.out.println( "Luminaire.dom: added dimmer stuff.");
-//        }
-
-        // Circle and text for channel number
-        x = point.x();
-//        channelCircle.setAttribute("cx", x.toString());
-//        channelCircle.setAttribute("cy", channelCircleY.toString());
-//        infogroup.appendChild(channelCircle);
-
-        Double channelTextX = point.x();
-//        channelText.setAttribute("x", channelTextX.toString());
-//        channelText.setAttribute("y", channelTextY.toString());
-//        infogroup.appendChild(channelText);
-
-//        channelText.appendChild(textChannel);
-//        System.out.println("Luminaire.dom: added channel stuff.");
-
-
-//
-//
-//        // Color designation to display
-//        SvgElement colorText = draw.element("text");
-////        colorText.setAttribute("transform", transform);
-//        colorTextX = point.x();
-//        colorTextY = point.y() + 18;
-//        colorText.setAttribute("x", colorTextX.toString());
-//        colorText.setAttribute("y", colorTextY.toString());
-//        colorText.setAttribute("fill", "black");
-//        colorText.setAttribute("stroke", "none");
-//        colorText.setAttribute("font-family", "sans-serif");
-//        colorText.setAttribute("font-weight", "100");
-//        colorText.setAttribute("font-size", "5");
-//        colorText.setAttribute("stroke-width", "1px");
-//        colorText.setAttribute("text-anchor", "middle");
-//        infogroup.appendChild(colorText);
-//
-//        Text textColor = draw.document().createTextNode(color);
-//        colorText.appendChild(textColor);
-////        System.out.println("Luminaire.dom: added color stuff.");
-//
-//        if (View.PLAN == mode ) {
-
-//            SvgElement addressOval= draw.element("ellipse");
-//            SvgElement addressText = draw.element("text");
-//
-//            if( "" != address){
-//                addressOval.setAttribute( "ry", "7" );
-//                addressOvalRadiusY = dimmerRectangleWidth / 2 + 1;
-//                addressOval.setAttribute( "rx", addressOvalRadiusY.toString() );
-//                addressOval.setAttribute( "fill", "none" );
-//                infogroup.appendChild( addressOval );
-//
-//                addressText.setAttribute("fill", "black");
-//                addressText.setAttribute("stroke", "none");
-//                addressText.setAttribute("font-family", "sans-serif");
-//                addressText.setAttribute("font-weight", "100");
-//                addressText.setAttribute("font-size", "9");
-//                addressText.setAttribute("stroke-width", "1px");
-//                addressText.setAttribute("text-anchor", "middle");
-//                infogroup.appendChild(addressText);
-//
-//                Text textAddress=draw.document().createTextNode( address );
-//                addressText.appendChild( textAddress );
-//            }
-//
-//            switch (info) {
-//                case "right":
-//                    xColorText = point.x()+definition.width() + dimmerRectangleWidth;
-//                    yColor = point.y() - 9;
-//                    colorText.setAttribute("x", xColorText.toString());
-//                    colorText.setAttribute("y", yColor.toString());
-//
-//                    yDimmerRectangle = yColor + 3;
-//                    xDimmerRectangle = point.x() - dimmerRectangleWidth / 2 + definition.width()  + 8;
-//                    dimmerRectangle.setAttribute("x", xDimmerRectangle.toString());
-//                    dimmerRectangle.setAttribute("y", yDimmerRectangle.toString());
-//
-//                    yDimmerText = yDimmerRectangle + 5;
-//                    dimmerText.setAttribute("x", xColorText.toString());
-//                    dimmerText.setAttribute("y", yDimmerText.toString());
-//
-//                    if( "" != address){
-//                        Integer xAddressOval = xDimmerRectangle + dimmerRectangleWidth * 2;
-//                        addressOval.setAttribute( "cx", xAddressOval.toString());
-//                        Integer yAddressOval = yDimmerRectangle + 5;
-//                        addressOval.setAttribute( "cy", yAddressOval.toString() );
-//
-//                        addressText.setAttribute("x", xAddressOval.toString());
-//                        Integer addressTextY = yAddressOval + 4;
-//                        addressText.setAttribute("y", addressTextY.toString());
-//                    }
-//
-//                    break;
-//                case "left":
-//                    xColorText = point.x() - definition.width() - dimmerRectangleWidth;
-//                    yColor = point.y() - 9;
-//                    colorText.setAttribute("x", xColorText.toString());
-//                    colorText.setAttribute("y", yColor.toString());
-//
-//                    yDimmerRectangle = yColor + 4;
-//                    xDimmerRectangle = point.x() - dimmerRectangleWidth / 2 - definition.width() - 8;
-//                    dimmerRectangle.setAttribute("x", xDimmerRectangle.toString());
-//                    dimmerRectangle.setAttribute("y", yDimmerRectangle.toString());
-//
-//                    yDimmerText = yDimmerRectangle + 5;
-//                    dimmerText.setAttribute("x", xColorText.toString());
-//                    dimmerText.setAttribute("y", yDimmerText.toString());
-//
-//                    if( "" != address){
-//                        xAddressOval = xDimmerRectangle - dimmerRectangleWidth;
-//                        addressOval.setAttribute( "cx", xAddressOval.toString());
-//                        yAddressOval = yDimmerRectangle + 5;
-//                        addressOval.setAttribute( "cy", yAddressOval.toString() );
-//
-//                        addressText.setAttribute("x", xAddressOval.toString());
-//                        addressTextY = yAddressOval + 4;
-//                        addressText.setAttribute("y", addressTextY.toString());
-//                    }
-//
-//                    break;
-//                case "up":
-//                     yColor = point.y() - definition.height();
-//                    colorText.setAttribute("x", point.x().toString());
-//                    colorText.setAttribute("y", yColor.toString());
-//
-//                    yDimmerRectangle = yColor - 17;
-//                    xDimmerRectangle = point.x() - dimmerRectangleWidth / 2;
-//                    dimmerRectangle.setAttribute("x", xDimmerRectangle.toString());
-//                    dimmerRectangle.setAttribute("y", yDimmerRectangle.toString());
-//
-//                    yDimmerText = yDimmerRectangle + 9;
-//                    dimmerText.setAttribute("x", point.x().toString());
-//                    dimmerText.setAttribute("y", yDimmerText.toString());
-//
-//                    if( "" != address){
-//                        addressOval.setAttribute( "cx", point.x().toString());
-//                        yAddressOval = yDimmerRectangle - 10;
-//                        addressOval.setAttribute( "cy", yAddressOval.toString() );
-//
-//                        addressText.setAttribute("x", point.x().toString());
-//                        addressTextY = yAddressOval + 4;
-//                        addressText.setAttribute("y", addressTextY.toString());
-//                    }
-//
-//                    break;
-//                case "down":
-//                    yColor = point.y() + definition.height();
-//                    colorText.setAttribute("x", point.x().toString());
-//                    colorText.setAttribute("y", yColor.toString());
-//
-//                    yDimmerRectangle = yColor + 2;
-//                    xDimmerRectangle = point.x() - dimmerRectangleWidth / 2;
-//                    dimmerRectangle.setAttribute("x", xDimmerRectangle.toString());
-//                    dimmerRectangle.setAttribute("y", yDimmerRectangle.toString());
-//
-//                    yDimmerText = yDimmerRectangle + 9;
-//                    dimmerText.setAttribute("x", point.x().toString());
-//                    dimmerText.setAttribute("y", yDimmerText.toString());
-//
-//                    if( "" != address){
-//                        addressOval.setAttribute( "cx", point.x().toString());
-//                        yAddressOval = yDimmerRectangle + 20;
-//                        addressOval.setAttribute( "cy", yAddressOval.toString() );
-//
-//                        addressText.setAttribute("x", point.x().toString());
-//                        addressTextY = yAddressOval + 4;
-//                        addressText.setAttribute("y", addressTextY.toString());
-//                    }
-//
-//                    break;
-//            }
-//        }
-
-        SvgElement infogroup = svgClassGroup( draw, INFOLAYERTAG );
-        group.appendChild(infogroup);
-
-        switch (Venue.Circuiting() ) {
-            case Venue.ONETOMANY:
-            case Venue.ONETOONE:
-                break;
-            default:
-                SvgElement circuitHexagon = infogroup.path( draw, circuitPath, COLOR );
-//                infogroup.appendChild(circuitHexagon);
-                SvgElement circuitText =
-                        infogroup.text( draw, circuit, circuitTextX, circuitTextY, COLOR );
-//                infogroup.appendChild(circuitText);
-
-                break;
-        }
-
-        SvgElement dimmerRectangle = infogroup.rectangle(
-                draw, x, dimmerRectangleY, dimmerRectangleWidth, 11.0, COLOR );
-//        infogroup.appendChild(dimmerRectangle);
-        SvgElement dimmerText;
-        switch (Venue.Circuiting()) {
-            case Venue.ONETOMANY:
-                dimmerText = infogroup.text(
-                        draw, circuit, dimmerTextX, dimmerTextY, COLOR );
-                break;
-            case Venue.ONETOONE:
-            default:
-                dimmerText = infogroup.text(
-                        draw, dimmer, dimmerTextX, dimmerTextY, COLOR );
-                break;
-        }
-//        infogroup.appendChild(dimmerText);
-
-        SvgElement channelCircle = infogroup.circle( draw, x, channelCircleY, 8.0, COLOR );
-//        infogroup.appendChild(channelCircle);
-        SvgElement channelText =
-                infogroup.text( draw, channel, channelTextX, channelTextY, COLOR );
-//        infogroup.appendChild(channelText);
 
     }
 

@@ -64,9 +64,13 @@ public class DeviceTest {
 
     @Test
     public void isA() throws Exception {
-        Device device = new Device( element );
+        Device instance = new Device( element );
 
-        assert MinderDom.class.isInstance( device );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
     }
 
     @Test

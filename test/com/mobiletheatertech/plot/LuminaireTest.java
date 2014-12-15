@@ -46,10 +46,14 @@ public class LuminaireTest {
     final String id = pipeName + ":" + unit;
 
     @Test
-    public void isMinderDom() throws Exception {
-        Luminaire luminaire = new Luminaire(elementOnPipe);
+    public void isA() throws Exception {
+        Luminaire instance = new Luminaire(elementOnPipe);
 
-        assert MinderDom.class.isInstance( luminaire );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
     }
 
     @Test

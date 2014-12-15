@@ -67,9 +67,14 @@ public class CableRunTest {
 //    private Solid solid = null;
 
     @Test
-    public void isa() throws Exception {
-        CableRun cableRun = new CableRun( element );
-        assert MinderDom.class.isInstance( cableRun );
+    public void isA() throws Exception {
+        CableRun instance = new CableRun( element );
+
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
     }
 
     @Test
