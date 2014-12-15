@@ -98,8 +98,8 @@ public class Device extends Stackable
         return is;
     }
 
-    public Point location() {
-        return place;
+    public Place location() {
+        return new Place( place, place, 0.0 );
     }
 
     @Override

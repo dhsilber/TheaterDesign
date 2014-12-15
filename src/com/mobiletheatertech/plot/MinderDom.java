@@ -38,7 +38,8 @@ public abstract class MinderDom extends Layerer {
      *
      * @param draw graphics manager
      */
-    public static void DomAllPlan( Draw draw ) throws MountingException, ReferenceException {
+    public static void DomAllPlan( Draw draw )
+            throws InvalidXMLException, MountingException, ReferenceException {
         for (ElementalLister item : LIST) {
             if ( MinderDom.class.isInstance( item )) {
                 MinderDom thing = (MinderDom) item;
@@ -53,7 +54,8 @@ public abstract class MinderDom extends Layerer {
      *
      * @param draw graphics manager
      */
-    public static void DomAllSection( Draw draw ) throws MountingException, ReferenceException {
+    public static void DomAllSection( Draw draw )
+            throws InvalidXMLException, MountingException, ReferenceException {
         for (ElementalLister item : LIST) {
             if ( MinderDom.class.isInstance( item )) {
                 MinderDom thing = (MinderDom) item;
@@ -67,7 +69,8 @@ public abstract class MinderDom extends Layerer {
      *
      * @param draw graphics manager
      */
-    public static void DomAllFront( Draw draw ) throws MountingException, ReferenceException {
+    public static void DomAllFront( Draw draw )
+            throws InvalidXMLException, MountingException, ReferenceException {
         for (ElementalLister item : LIST) {
             if ( MinderDom.class.isInstance( item )) {
                 MinderDom thing = (MinderDom) item;
@@ -81,7 +84,8 @@ public abstract class MinderDom extends Layerer {
      *
      * @param draw graphics manager
      */
-    public static void DomAllTruss( Draw draw ) throws MountingException, ReferenceException {
+    public static void DomAllTruss( Draw draw )
+            throws InvalidXMLException, MountingException, ReferenceException {
         // This is a terrible, terrible hack
 //        HangPoint.SYMBOLGENERATED = false;
 
@@ -102,7 +106,8 @@ public abstract class MinderDom extends Layerer {
      * @param mode drawing mode
      * @throws MountingException if mounting location cannot be established
      */
-    public abstract void dom( Draw draw, View mode ) throws MountingException, ReferenceException;
+    public abstract void dom( Draw draw, View mode )
+            throws InvalidXMLException, MountingException, ReferenceException;
 
     // TODO Move this to SvgElement
     public static SvgElement svgClassGroup( Draw draw,

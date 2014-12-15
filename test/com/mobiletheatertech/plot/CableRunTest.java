@@ -26,7 +26,13 @@ public class CableRunTest {
     Element templateElement = null;
     Element sourceElement = null;
     Element sinkElement = null;
+    Element sourceLuminaireElement = null;
+    Element sinkLuminaireElement = null;
     private Element element = null;
+    
+    Element deviceToLuminaireElement = null;
+    Element luminaireToLuminaireElement = null;
+    Element luminaireToDeviceElement = null;
 
     private final String signalName = "Signal";
 //    private final String bogusSignal = "Bogus Signal";
@@ -46,6 +52,17 @@ public class CableRunTest {
     private final Double table2Y = 15.0;
     private final Double table2Z = 16.0;
     private final String templateName = "thingy";
+    
+    String standId = "stand name";
+    Double standX = 4.6;
+    Double standY = 2.9;
+    String luminaireType = "light type";
+    String sourceLuminaireLocation = "a";
+    String sourceLuminaireUnit = "source light unit";
+    String sourceLuminaireId = standId + ":" + sourceLuminaireUnit;
+    String sinkLuminaireLocation = "d";
+    String sinkLuminaireUnit = "sink light unit";
+    String sinkLuminaireId = standId + ":" + sinkLuminaireUnit;
 
 //    private Solid solid = null;
 
@@ -81,6 +98,19 @@ public class CableRunTest {
         assertEquals( TestHelpers.accessString( cableRun, "signal" ), signalName );
         assertEquals( TestHelpers.accessString( cableRun, "source" ), sourceName );
         assertEquals( TestHelpers.accessString( cableRun, "sink" ), sinkName );
+        assertEquals( TestHelpers.accessString(cableRun, "channel"), channel );
+        assertEquals( TestHelpers.accessString(cableRun, "routing"), validRouting );
+    }
+
+    @Test
+    public void storesLuminaireAttributes() throws Exception {
+        luminaireToLuminaireElement.setAttribute("channel", channel);
+        luminaireToLuminaireElement.setAttribute("routing", validRouting);
+        CableRun cableRun = new CableRun( luminaireToLuminaireElement );
+
+        assertEquals( TestHelpers.accessString( cableRun, "signal" ), signalName );
+        assertEquals( TestHelpers.accessString( cableRun, "source" ), sourceLuminaireId );
+        assertEquals( TestHelpers.accessString( cableRun, "sink" ), sinkLuminaireId );
         assertEquals( TestHelpers.accessString(cableRun, "channel"), channel );
         assertEquals( TestHelpers.accessString(cableRun, "routing"), validRouting );
     }
@@ -716,6 +746,56 @@ public class CableRunTest {
         assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 7 ));
     }
 
+    @Test
+    public void domAlongLightingStand() throws Exception {
+        CableRun instance = new CableRun( luminaireToLuminaireElement );
+        Draw draw = new Draw();
+        draw.establishRoot();
+        instance.verify();
+
+        instance.dom( draw, View.PLAN );
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+//        assertEquals(groupElement.attribute("class"), Pipe.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("line");
+        assertEquals(list.getLength(), 3);
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("x1"), "12.0" );
+        assertEquals(element.getAttribute("y1"), "20.0" );
+        assertEquals(element.getAttribute("x2"), "12.0" );
+        assertEquals(element.getAttribute("y2"), "20.0" );
+        assertEquals(element.getAttribute("stroke"), "green" );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
+
+        node = list.item(1);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        element = (Element) node;
+        assertEquals(element.getAttribute("x1"), "12.0" );
+        assertEquals(element.getAttribute("y1"), "20.0" );
+        assertEquals(element.getAttribute("x2"), "2.0" );
+        assertEquals(element.getAttribute("y2"), "20.0" );
+        assertEquals(element.getAttribute("stroke"), "green" );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
+
+        node = list.item(2);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        element = (Element) node;
+        assertEquals(element.getAttribute("x1"), "2.0" );
+        assertEquals(element.getAttribute("y1"), "20.0" );
+        assertEquals(element.getAttribute("x2"), "2.0" );
+        assertEquals(element.getAttribute("y2"), "2.0" );
+        assertEquals(element.getAttribute("stroke"), "green" );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
+
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -730,6 +810,9 @@ public class CableRunTest {
         TestResets.DeviceReset();
         TestResets.ElementalListerReset();
         TestResets.StackableReset();
+//        TestResets.DeviceReset();
+        TestResets.MountableReset();
+        TestResets.LuminaireReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -804,7 +887,7 @@ public class CableRunTest {
         sourceElement.setAttribute( "is", templateName );
         Device source = new Device( sourceElement );
         source.verify();
-
+        
         sinkElement = new IIOMetadataNode( "device" );
         sinkElement.setAttribute( "id", sinkName );
         sinkElement.setAttribute( "on", table2Name );
@@ -816,6 +899,51 @@ public class CableRunTest {
         element.setAttribute("signal", signalName );
         element.setAttribute("source", sourceName );
         element.setAttribute("sink", sinkName );
+
+        Integer width = 13;
+        Integer length = 27;
+        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", luminaireType );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        new LuminaireDefinition( definitionElement );
+
+        Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
+        lightingStandElement.setAttribute( "id", standId );
+        lightingStandElement.setAttribute( "x", standX.toString() );
+        lightingStandElement.setAttribute( "y", standY.toString() );
+        new LightingStand( lightingStandElement );
+
+        sourceLuminaireElement = new IIOMetadataNode( "luminaire" );
+        sourceLuminaireElement.setAttribute( "on", standId );
+        sourceLuminaireElement.setAttribute( "type", luminaireType );
+        sourceLuminaireElement.setAttribute( "unit", sourceLuminaireUnit );
+        sourceLuminaireElement.setAttribute( "location", sourceLuminaireLocation );
+        Luminaire luminaire = new Luminaire( sourceLuminaireElement );
+        luminaire.verify();
+
+        sinkLuminaireElement = new IIOMetadataNode( "luminaire" );
+        sinkLuminaireElement.setAttribute( "on", standId );
+        sinkLuminaireElement.setAttribute( "type", luminaireType );
+        sinkLuminaireElement.setAttribute( "unit", sinkLuminaireUnit );
+        sinkLuminaireElement.setAttribute( "location", sinkLuminaireLocation );
+        luminaire = new Luminaire( sinkLuminaireElement );
+        luminaire.verify();
+
+        deviceToLuminaireElement = new IIOMetadataNode( "cable-run" );
+        deviceToLuminaireElement.setAttribute( "signal", signalName );
+        deviceToLuminaireElement.setAttribute( "source", sourceName );
+        deviceToLuminaireElement.setAttribute("sink", sinkLuminaireId);
+
+        luminaireToLuminaireElement = new IIOMetadataNode( "cable-run" );
+        luminaireToLuminaireElement.setAttribute( "signal", signalName );
+        luminaireToLuminaireElement.setAttribute( "source", sourceLuminaireId );
+        luminaireToLuminaireElement.setAttribute( "sink", sinkLuminaireId );
+
+        luminaireToDeviceElement = new IIOMetadataNode( "cable-run" );
+        luminaireToDeviceElement.setAttribute( "signal", signalName );
+        luminaireToDeviceElement.setAttribute( "source", sourceLuminaireId );
+        luminaireToDeviceElement.setAttribute( "sink", sinkName );
     }
 
     @AfterMethod

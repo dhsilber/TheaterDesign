@@ -43,6 +43,8 @@ public class CableRun extends MinderDom implements Legendable {
 
     Device sourceDevice = null;
     Device sinkDevice = null;
+    Luminaire sourceLuminaire = null;
+    Luminaire sinkLuminaire = null;
 
     static Integer Count = 0;
 
@@ -158,22 +160,32 @@ public class CableRun extends MinderDom implements Legendable {
         sourceDevice = Device.Select( source );
         sinkDevice = Device.Select( sink );
 
-        if( null == sourceDevice || null == sinkDevice ){
+        if( null == sourceDevice ) {
+            sourceLuminaire = Luminaire.Select( source );
+        }
+
+        if( null == sinkDevice) {
+            sinkLuminaire = Luminaire.Select( sink );
+        }
+
+        if( (null == sourceDevice && null == sourceLuminaire) ||
+                (null == sinkDevice && null == sinkLuminaire) ) {
             StringBuilder message = new StringBuilder( "CableRun of " + signal );
-            if ( null != sourceDevice ) {
+            if ( null != sourceDevice || null != sourceLuminaire ) {
                 message.append( " from " ).append( source );
             }
-            if ( null != sinkDevice ) {
+            if ( null != sinkDevice || null != sinkLuminaire ) {
                 message.append( " to " ).append( sink );
             }
             message.append( " references unknown " );
-            if ( null == sourceDevice ) {
+            if ( null == sourceDevice && null == sourceLuminaire ) {
                 message.append( "source '" ).append( source ).append( "'" );
             }
-            if( null == sourceDevice && null == sinkDevice ) {
+            if( null == sourceDevice && null == sourceLuminaire &&
+                    null == sinkDevice && null == sinkLuminaire ) {
                 message.append( " and " );
             }
-            if ( null == sinkDevice ) {
+            if ( null == sinkDevice && null == sinkLuminaire ) {
                 message.append( "sink '" ).append( sink ).append( "'" );
             }
             message.append( "." );
@@ -199,7 +211,7 @@ public class CableRun extends MinderDom implements Legendable {
     already have reference to them.
      */
     @Override
-    public void dom( Draw draw, View mode ) throws ReferenceException {
+    public void dom( Draw draw, View mode ) throws InvalidXMLException, MountingException, ReferenceException {
 
         switch (mode) {
             case PLAN:
@@ -210,13 +222,13 @@ public class CableRun extends MinderDom implements Legendable {
                 return;
         }
 
-        Point sourcePoint = sourceDevice.location();
-        Point sinkPoint = sinkDevice.location();
+        Place sourcePoint = (null != sourceDevice) ? sourceDevice.location() : sourceLuminaire.location();
+        Place sinkPoint = (null != sinkDevice) ? sinkDevice.location() : sinkLuminaire.location();
 
 //System.err.println("Finding path for CableRun "+ this.toString() +".");
         ArrayList<Point> vertices = null;
         try {
-            vertices = findPath( sourcePoint, sinkPoint );
+            vertices = findPath( sourcePoint.location(), sinkPoint.location() );
         }
         catch ( DataException e ) {
             System.out.println( "In drawing, cable run between "+
@@ -232,10 +244,13 @@ public class CableRun extends MinderDom implements Legendable {
 
         SvgElement group = draw.element("g");
         group.attribute("class", "CableRun" );
-        group.attribute("class", sourceDevice.layer() );
+        if (null != sourceDevice) {
+            group.attribute("class", sourceDevice.layer() );
+        }
+
         draw.appendRootChild(group);
 
-        Point previous = sourcePoint;
+        Point previous = sourcePoint.location();
 //System.err.println("... previous point:  "+ previous.toString() +".");
         for( Point point : vertices ) {
 //System.err.println("... next point: "+ point.toString() +".");
@@ -350,7 +365,7 @@ public class CableRun extends MinderDom implements Legendable {
 
         draw.lineAbsolute(draw, start.x(), start.y(), endLine, start.y(), COLOR);
 
-        String words = sourceDevice.layer() + " cable run";
+        String words = source + " cable run";
         Double x = start.x() + Legend.TEXTOFFSET;
         Double y = start.y() + 3;
         draw.textAbsolute(draw, words, x, y, Legend.TEXTCOLOR);

@@ -386,7 +386,7 @@ public class DeviceTest {
         Device device = new Device( element );
         device.verify();
 
-        Point place = device.location();
+        Point place = device.location().location();
 
         assertEquals( place.x, tableX );
         assertEquals( place.y, tableY );
@@ -403,7 +403,7 @@ public class DeviceTest {
         device.verify();
         stacked.verify();
 
-        Point place = stacked.location();
+        Point place = stacked.location().location();
 
         assertEquals( place.x, tableX + stackedX );
         assertEquals( place.y, tableY + stackedY );

@@ -46,7 +46,7 @@ public class Write {
      * @throws MountingException
      * @throws ReferenceException
      */
-    public void init( String basename ) throws MountingException, ReferenceException {
+    public void init( String basename ) throws InvalidXMLException, MountingException, ReferenceException {
         home = System.getProperty("user.home");
 
         // TODO Is it even possible for this to happen?
@@ -227,7 +227,7 @@ public class Write {
         return output;
     }
 
-    private Draw drawPlan() throws MountingException, ReferenceException {
+    private Draw drawPlan() throws InvalidXMLException, MountingException, ReferenceException {
 
         resetOneOffs();
 
@@ -274,7 +274,7 @@ public class Write {
         return draw;
     }
 
-    private Draw drawSection() throws MountingException, ReferenceException {
+    private Draw drawSection() throws InvalidXMLException, MountingException, ReferenceException {
 
         resetOneOffs();
 
@@ -317,7 +317,7 @@ public class Write {
         return draw;
     }
 
-    private Draw drawTruss() throws MountingException, ReferenceException {
+    private Draw drawTruss() throws InvalidXMLException, MountingException, ReferenceException {
 
         resetOneOffs();
 
@@ -360,7 +360,7 @@ public class Write {
         }
     }
 
-    private void writeDrawings( String pathname ) throws MountingException, ReferenceException {
+    private void writeDrawings( String pathname ) throws InvalidXMLException, MountingException, ReferenceException {
         for (ElementalLister thingy : ElementalLister.List() ) {
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
@@ -370,7 +370,7 @@ public class Write {
     }
 
     Draw writeIndividualDrawing( Drawing drawing )
-            throws MountingException, ReferenceException {
+            throws InvalidXMLException, MountingException, ReferenceException {
         resetOneOffs();
 
         Draw draw = startFile();
