@@ -491,6 +491,7 @@ public class Write {
         Truss.LEGENDREGISTERED = false;
         Truss.BaseCount = 0;
         LightingStand.SYMBOLGENERATED = false;
+        LightingStand.Count = 0;
 //        Legend.
     }
 

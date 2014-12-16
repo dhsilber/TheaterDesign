@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
  */
 public class LightingStand extends Mountable implements Legendable {
 
-    private static Integer Count = 0;
+    static Integer Count = 0;
     static final String NAME = "LightingStand";
     static final String TAG = "lighting-stand";
     static boolean SYMBOLGENERATED = false;
@@ -15,6 +15,11 @@ public class LightingStand extends Mountable implements Legendable {
     Double x;
     Double y;
     Double orientation;
+    static Double SchematicX = 100.0;
+    static Double SchematicY = 100.0;
+    static Double SchematicWidth = 48.0;
+    static Double SchematicHeight = 24.0;
+    static Double TextHeight = 12.0;
 
     public LightingStand( Element element )
             throws AttributeMissingException, DataException, InvalidXMLException {
@@ -61,20 +66,40 @@ public class LightingStand extends Mountable implements Legendable {
     }
 
     @Override
-    public void dom( Draw draw, View mode ) {
-        generateSymbol(draw);
+    public void dom( Draw draw, View view ) {
+        SvgElement group;
+        SvgElement use;
+        switch( view ) {
+            case PLAN:
+                generatePlanSymbol( draw );
 
-        SvgElement group = svgClassGroup( draw, TAG );
-        draw.appendRootChild(group);
+                group = svgClassGroup( draw, TAG );
+                draw.appendRootChild(group);
 
-        SvgElement use = group.use( draw, TAG, x, y );
-        use.attribute( "transform",
-                "rotate("+orientation+","+(x+SvgElement.OffsetX())+","+(y+SvgElement.OffsetY())+")" );
+                use = group.use( draw, TAG, x, y );
+                use.attribute("transform",
+                        "rotate(" + orientation + "," + (x + SvgElement.OffsetX()) + "," + (y + SvgElement.OffsetY()) + ")");
+
+                break;
+            case SCHEMATIC:
+                generateSchematicSymbol( draw );
+
+                group = svgClassGroup( draw, TAG );
+                draw.appendRootChild(group);
+
+                Double x = SchematicX * ((Count + 1) * 2) - SchematicX;
+                group.useAbsolute( draw, TAG, x, SchematicY );
+                group.textAbsolute( draw, id, x - SchematicWidth / 2, SchematicY + SchematicHeight + TextHeight, "black" );
+
+                break;
+            default:
+                return;
+        }
 
         Count++;
     }
 
-    private void generateSymbol(Draw draw) {
+    private void generatePlanSymbol(Draw draw) {
         if (!SYMBOLGENERATED) {
             SvgElement defs = draw.element("defs");
             draw.appendRootChild(defs);
@@ -99,7 +124,26 @@ public class LightingStand extends Mountable implements Legendable {
         }
     }
 
-    @Override
+    private void generateSchematicSymbol(Draw draw) {
+        if (!SYMBOLGENERATED) {
+            SvgElement defs = draw.element("defs");
+            draw.appendRootChild(defs);
+
+            SvgElement symbol = defs.symbol( draw, TAG );
+            defs.appendChild(symbol);
+
+            String color="black";
+
+            symbol.rectangle( draw, -1.0, -1.0, 2.0, 24.0, color );
+
+            SvgElement bar = symbol.rectangle( draw, -24.0, -1.0, 48.0, 2.0, color );
+            bar.attribute( "fill", "white" );
+
+            SYMBOLGENERATED = true;
+        }
+    }
+
+//    @Override
     public void countReset() {
 
     }

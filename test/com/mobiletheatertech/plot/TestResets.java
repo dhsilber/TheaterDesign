@@ -113,10 +113,15 @@ public class TestResets {
     }
 
     public static void LightingStandReset() throws Exception {
-        Field activeField = LightingStand.class.getDeclaredField( "SYMBOLGENERATED" );
-        activeField.setAccessible( true );
-        boolean active = activeField.getBoolean( LightingStand.class );
-        activeField.set(active, false);
+        Field generatedField = LightingStand.class.getDeclaredField( "SYMBOLGENERATED" );
+        generatedField.setAccessible( true );
+        boolean generated = generatedField.getBoolean( LightingStand.class );
+        generatedField.set(generated, false);
+
+        Field countField = LightingStand.class.getDeclaredField( "Count" );
+        countField.setAccessible(true);
+        Integer count = (Integer) countField.get( LightingStand.class );
+        countField.set(count, 0);
     }
 
     public static void LuminaireReset()
