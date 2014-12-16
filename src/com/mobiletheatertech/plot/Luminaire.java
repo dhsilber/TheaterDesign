@@ -201,12 +201,13 @@ public class Luminaire extends MinderDom {
      * unit information.
      *
      * @param draw Canvas/DOM manager
-     * @param mode drawing mode
+     * @param view drawing mode
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public void dom( Draw draw, View mode ) throws MountingException, ReferenceException {
-        if( View.TRUSS == mode && !Truss.class.isInstance(mount)) {
+    public void dom( Draw draw, View view )
+            throws InvalidXMLException, MountingException, ReferenceException {
+        if( View.TRUSS == view && !Truss.class.isInstance(mount)) {
             return;
         }
 
@@ -217,33 +218,24 @@ public class Luminaire extends MinderDom {
         Double z = Venue.Height() - point.z();
 
         SvgElement group = svgClassGroup( draw, LAYERTAG );
-//        draw.element("g");
-//        group.setAttribute("class", LAYERTAG);
-        if( View.TRUSS != mode ) {
-            group.attribute( "transform", transform );
-        }
         draw.appendRootChild(group);
-//        System.out.println("Luminaire.dom: added group.");
 
         // use element for luminaire icon
         SvgElement use = null;
-//        draw.element("use");
-//        use.setAttribute("xlink:href", "#" + type);
 
-        switch (mode) {
+        // TODO Keep this until I resolve how Luminaire knows what type it is.
+        LuminaireDefinition definition = LuminaireDefinition.Select( type );
+        if( null == definition ) {
+            throw new    ReferenceException( "Unable to find definition for "+ type );
+        }
+
+        switch (view) {
             case PLAN:
-
-                // TODO Keep this until I resolve how Luminaire knows what type it is.
-                LuminaireDefinition definition = LuminaireDefinition.Select( type );
-                if( null == definition ) {
-                    throw new    ReferenceException( "Unable to find definition for "+ type );
-                }
+                group.attribute( "transform", transform );
 
                 definition.count();
 
                 use = group.use( draw, type, x, y );
-//                use.setAttribute("x", point.x().toString());
-//                use.setAttribute("y", point.y().toString());
 
                 // This transform is to orient the luminaire.
                 // See verify() for the transform that rotates the position of the luminaire to
@@ -251,32 +243,31 @@ public class Luminaire extends MinderDom {
                 String transform;
                 Double transformX = point.x() + SvgElement.OffsetX();
                 Double transformY = point.y() + SvgElement.OffsetY();
-//                Double transformX = point.x();
-//                Double transformY = point.y();
                 if ( !target.equals("") ) {
                     // With this I lose the alignment with zones. :-(
                     Integer rotation = alignWithZone(point);
                     transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
-//                    transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
                 }
                 else {
                     transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
-//                    transform = "rotate(" + rotation + "," + point.x() + "," + point.y() + ")";
                 }
-//                use.setAttribute("transform", "rotate(" + rotation + "," + point.x() + "," + point.y() + ")" );
-//System.out.println( "In Luminaire.dom(), for " + type + " transform: " + transform );
                 use.attribute("transform", transform );
+
+                // Unit number to overlay on icon
+                SvgElement unitText = group.text( draw, unit, x, y, COLOR );
+                unitText.attribute("fill", "green");
+                unitText.attribute("stroke", "green");
+                unitText.attribute("font-family", "sans-serif");
+                unitText.attribute("font-weight", "100");
+                unitText.attribute("font-size", "6");
+                unitText.attribute("text-anchor", "middle");
 
                 break;
             case SECTION:
-                use = group.use( draw, type, point.y(), z );
-//                use.setAttribute("x", point.y().toString());
-//                use.setAttribute("y", z.toString());
+                group.use( draw, type, point.y(), z );
                 break;
             case FRONT:
-                use = group.use( draw, type, point.x(), z );
-//                use.setAttribute("x", point.x().toString());
-//                use.setAttribute("y", z.toString());
+                group.use( draw, type, point.x(), z );
                 break;
             case TRUSS:
                 Truss truss = (Truss) mount;
@@ -284,25 +275,11 @@ public class Luminaire extends MinderDom {
                 use = group.use( draw, type, newPoint.x(), newPoint.y() );
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
+            case SCHEMATIC:
+                PagePoint pagePoint = mount.schematicLocation( location );
+                group.useAbsolute( draw, type, pagePoint.x(), pagePoint.y() );
+                break;
         }
-//        group.appendChild(use);
-//        System.out.println("Luminaire.dom: added use.");
-
-        //        // Unit number to overlay on icon
-        SvgElement unitText = group.text( draw, unit, x, y, COLOR );
-//        unitText.setAttribute("transform", transform);
-//        unitTextX = point.x();
-//        unitTextY = point.y() + 0;
-//        unitText.setAttribute("x", unitTextX.toString());
-//        unitText.setAttribute("y", unitTextY.toString());
-        unitText.attribute("fill", "green");
-        unitText.attribute("stroke", "green");
-        unitText.attribute("font-family", "sans-serif");
-        unitText.attribute("font-weight", "100");
-        unitText.attribute("font-size", "6");
-        unitText.attribute("text-anchor", "middle");
-//        infogroup.appendChild(unitText);
-
     }
 
     /**

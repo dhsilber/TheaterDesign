@@ -72,5 +72,7 @@ public abstract class Mountable extends MinderDom {
 
     public abstract Point location( String location ) throws InvalidXMLException, MountingException, ReferenceException;
 
+    public abstract PagePoint schematicLocation( String location ) throws InvalidXMLException; //, MountingException, ReferenceException;
+
     public abstract Place rotatedLocation( String location ) throws InvalidXMLException, MountingException, ReferenceException;
 }

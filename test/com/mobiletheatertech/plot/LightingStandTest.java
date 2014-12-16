@@ -67,12 +67,46 @@ public class LightingStandTest {
     }
 
     @Test
+    public void schematicLocation() throws Exception {
+        LightingStand instance = new LightingStand( element );
+        instance.verify();
+        draw.establishRoot();
+        instance.dom(draw, View.SCHEMATIC);
+
+        PagePoint point = instance.schematicLocation("a");
+        assertEquals(point,
+                new PagePoint(LightingStand.SchematicX - LightingStand.Space * 1.5,
+                        LightingStand.SchematicY));
+    }
+
+    @Test
+    public void schematicLocationMultiple() throws Exception {
+        LightingStand instance = new LightingStand( element );
+        instance.verify();
+        instance.schematicPosition =
+                new PagePoint( LightingStand.SchematicX, LightingStand.SchematicY );
+        LightingStand instance2 = new LightingStand( element2 );
+        instance2.verify();
+        instance2.schematicPosition =
+                new PagePoint( LightingStand.SchematicX * 3, LightingStand.SchematicY );
+
+        PagePoint point = instance.schematicLocation("a");
+        assertEquals( point,
+                new PagePoint( LightingStand.SchematicX - LightingStand.Space * 1.5,
+                        LightingStand.SchematicY ));
+        PagePoint point2 = instance2.schematicLocation("c");
+        assertEquals( point2,
+                new PagePoint( LightingStand.SchematicX * 3 + LightingStand.Space * 0.5,
+                        LightingStand.SchematicY ));
+    }
+
+    @Test
     public void location() throws Exception {
         LightingStand instance = new LightingStand( element );
         instance.verify();
 
         Point point = instance.location( "a" );
-        assertEquals(point, new Point(x - 18, y, 144.0));
+        assertEquals(point, new Point(x + 18, y, 144.0));
     }
 
     @Test
@@ -84,7 +118,7 @@ public class LightingStandTest {
 
         Place place = instance.rotatedLocation("d");
         assertEquals( place.rotation(), orientation );
-        assertEquals( place.location(), new Point( x + 18, y, 144.0 ));
+        assertEquals( place.location(), new Point( x - 18, y, 144.0 ));
         assertEquals( place.origin(), new Point( x + SvgElement.OffsetX(), y + SvgElement.OffsetY(), 144.0 ));
     }
 
@@ -273,6 +307,21 @@ public class LightingStandTest {
         assertEquals( thisX, x );
         Double thisY = new Double( element.getAttribute("y") );
         assertEquals( thisY, y );
+    }
+
+    @Test
+    public void domSchematicTwiceSetsPostion() throws Exception {
+        draw.establishRoot();
+        LightingStand instance1 = new LightingStand( element );
+        LightingStand instance2 = new LightingStand( element2 );
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        assertEquals( instance1.schematicPosition,
+                new PagePoint( LightingStand.SchematicX, LightingStand.SchematicY ));
+        assertEquals( instance2.schematicPosition,
+                new PagePoint( LightingStand.SchematicX * 3, LightingStand.SchematicY ));
     }
 
     @Test

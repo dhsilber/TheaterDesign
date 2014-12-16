@@ -31,6 +31,11 @@ public class MountableTest {
         }
 
         @Override
+        public PagePoint schematicLocation( String location ) throws InvalidXMLException {
+            return null;
+        }
+
+        @Override
         public Point location( String location ) {
             return null;
         }

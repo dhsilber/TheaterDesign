@@ -194,6 +194,9 @@ public class Truss extends Mountable implements Legendable {
         return changeInY / changeInX;
     }
 
+    @Override
+    public PagePoint schematicLocation( String location ) { return null; }
+
     /*
     * Provide the location to draw a hanged thing at relative to the unrotated truss.
     *

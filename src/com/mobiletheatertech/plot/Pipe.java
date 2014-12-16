@@ -174,6 +174,9 @@ public class Pipe extends Mountable {
 //        System.err.println( "Pipe verified.");
     }
 
+    @Override
+    public PagePoint schematicLocation( String location ) { return null; }
+
     /**
      * Provide the drawing location of a point along this {@code Pipe}.
      *

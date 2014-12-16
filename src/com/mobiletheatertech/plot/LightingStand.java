@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 public class LightingStand extends Mountable implements Legendable {
 
     static Integer Count = 0;
+    PagePoint schematicPosition = null;
     static final String NAME = "LightingStand";
     static final String TAG = "lighting-stand";
     static boolean SYMBOLGENERATED = false;
@@ -19,6 +20,7 @@ public class LightingStand extends Mountable implements Legendable {
     static Double SchematicY = 100.0;
     static Double SchematicWidth = 48.0;
     static Double SchematicHeight = 24.0;
+    static Double Space = 12.0;
     static Double TextHeight = 12.0;
 
     public LightingStand( Element element )
@@ -35,27 +37,41 @@ public class LightingStand extends Mountable implements Legendable {
 
     }
 
+    /*
+     dom() MUST be invoked first in the schematic view, or we don't know where this
+     LightingStand will be drawn.
+     */
+    @Override
+    public PagePoint schematicLocation( String location ) throws InvalidXMLException {
+        return new PagePoint(
+                schematicPosition.x() + Space * topBarPositionOffset(location),
+                schematicPosition.y() );
+    }
+
     @Override
     public Point location( String location ) throws InvalidXMLException {
-        int offset = 0;
+        return new Point( x - Space * topBarPositionOffset(location), y, 144.0 );
+    }
 
+    Double topBarPositionOffset(String location) throws InvalidXMLException {
+        Double offset;
         switch ( location ) {
             case "a":
-                offset = -18;
+                offset = -1.5;
                 break;
             case "b":
-                offset = -6;
+                offset = -0.5;
                 break;
             case "c":
-                offset = 6;
+                offset = 0.5;
                 break;
             case "d":
-                offset = 18;
+                offset = 1.5;
                 break;
             default:
                 throw new InvalidXMLException("LightingStand (" + id + ") location must specify a letter in the range of 'a' to 'd'.");
         }
-        return new Point( x + offset, y, 144.0 );
+        return offset;
     }
 
     @Override
@@ -84,12 +100,14 @@ public class LightingStand extends Mountable implements Legendable {
             case SCHEMATIC:
                 generateSchematicSymbol( draw );
 
+                schematicPosition = new PagePoint( SchematicX * ((Count + 1) * 2) - SchematicX, SchematicY );
+
                 group = svgClassGroup( draw, TAG );
                 draw.appendRootChild(group);
 
-                Double x = SchematicX * ((Count + 1) * 2) - SchematicX;
-                group.useAbsolute( draw, TAG, x, SchematicY );
-                group.textAbsolute( draw, id, x - SchematicWidth / 2, SchematicY + SchematicHeight + TextHeight, "black" );
+                Double x = schematicPosition.x();
+                group.useAbsolute(draw, TAG, x, SchematicY);
+                group.textAbsolute(draw, id, x - SchematicWidth / 2, SchematicY + SchematicHeight + TextHeight, "black");
 
                 break;
             default:

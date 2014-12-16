@@ -22,12 +22,12 @@ public class LuminaireTest {
     Element venueElement;
     Element elementOnPipe = null;
     Element elementOnTruss = null;
+    Element elementOnLightingStand = null;
     Element definitionElement = null;
-
-
 
     final String type = "6x9";
     final String pipeName = "luminaireTestPipe";
+    final String lightingStandName = "luminaireTestLightingStand";
     final String trussId = "luminaireTestTruss";
     final String target = "frank";
     final String dimmer = "dimmer";
@@ -42,6 +42,7 @@ public class LuminaireTest {
     Integer trussLength=120;
     String pipeLocation = "12";
     String trussLocation = "a 12";
+    String lightingStandLocation = "b";
 
     final String id = pipeName + ":" + unit;
 
@@ -223,7 +224,7 @@ public class LuminaireTest {
 
         luminaire.verify();
 
-        assertNotNull( TestHelpers.accessPoint( luminaire, "point"));
+        assertNotNull(TestHelpers.accessPoint(luminaire, "point"));
     }
 
     @Test
@@ -237,7 +238,7 @@ public class LuminaireTest {
 
 //        NodeList list = draw.root().getElementsByTagName( "use" );
         NodeList group = draw.root().getElementsByTagName( "g" );
-        assertEquals( group.getLength(), 3 );
+        assertEquals( group.getLength(), 2 );
         Node groupNode = group.item( 1 );
         assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
         Element groupElement = (Element) groupNode;
@@ -310,6 +311,36 @@ public class LuminaireTest {
         diversionElement = (Element) node;
         text = diversionElement.getTextContent();
         assertEquals( text, color );
+    }
+
+    @Test
+    public void domSchematic() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Luminaire luminaire = new Luminaire(elementOnLightingStand);
+        luminaire.verify();
+
+        luminaire.dom( draw, View.SCHEMATIC );
+
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
+        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
+
+        NodeList list = groupElement.getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element diversionElement = (Element) node;
+        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+        Double x = LightingStand.SchematicX - LightingStand.Space / 2;
+        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+        assertEquals( diversionElement.getAttribute( "y" ), LightingStand.SchematicY.toString() );
+        assertEquals( diversionElement.getAttribute( "transform" ), "" );
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -601,6 +632,13 @@ public class LuminaireTest {
         Pipe pipe = new Pipe( pipeElement );
         pipe.verify();
 
+        Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
+        lightingStandElement.setAttribute("id", lightingStandName );
+        lightingStandElement.setAttribute("x", "12");
+        lightingStandElement.setAttribute("y", "34");
+        LightingStand lightingStand = new LightingStand( lightingStandElement );
+        lightingStand.verify();
+
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
         hangPoint1.setAttribute( "id", "jim" );
         hangPoint1.setAttribute("x", hangPoint1X.toString());
@@ -655,12 +693,22 @@ public class LuminaireTest {
         elementOnTruss = new IIOMetadataNode( "luminaire" );
         elementOnTruss.setAttribute( "type", type );
         elementOnTruss.setAttribute("on", trussId);
-        elementOnTruss.setAttribute("location", trussLocation );
+        elementOnTruss.setAttribute("location", trussLocation);
         elementOnTruss.setAttribute("dimmer", dimmer);
         elementOnTruss.setAttribute("circuit", circuit);
         elementOnTruss.setAttribute("channel", channel);
         elementOnTruss.setAttribute("color", color);
         elementOnTruss.setAttribute("unit", unit);
+
+        elementOnLightingStand = new IIOMetadataNode( "luminaire" );
+        elementOnLightingStand.setAttribute( "type", type );
+        elementOnLightingStand.setAttribute("on", lightingStandName );
+        elementOnLightingStand.setAttribute("location", lightingStandLocation );
+        elementOnLightingStand.setAttribute("dimmer", dimmer);
+        elementOnLightingStand.setAttribute("circuit", circuit);
+        elementOnLightingStand.setAttribute("channel", channel);
+        elementOnLightingStand.setAttribute("color", color);
+        elementOnLightingStand.setAttribute("unit", unit);
     }
 
     @AfterMethod
