@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Drawing extends ElementalLister {
 
     String filename = null;
+    View view = null;
     public ArrayList<String> displayList = new ArrayList<>();
 
     public Drawing( Element element ) throws AttributeMissingException, InvalidXMLException {
@@ -20,6 +21,18 @@ public class Drawing extends ElementalLister {
 
         id = getStringAttribute( element, "id" );
         filename = getStringAttribute( element, "filename" );
+        String viewString = getOptionalStringAttribute( element, "view" );
+        switch ( viewString ) {
+            case "schematic":
+                view = View.SCHEMATIC;
+                break;
+            case "":
+                view = View.PLAN;
+                break;
+            default:
+                throw new InvalidXMLException( this.getClass().getSimpleName(), id,
+                        "has invalid 'view' attribute. Valid is 'schematic'" );
+        }
 
         NodeList displays = element.getElementsByTagName( "display" );
         int length = displays.getLength();
@@ -48,5 +61,9 @@ public class Drawing extends ElementalLister {
 
     public String filename() {
         return filename;
+    }
+
+    public View view() {
+        return view;
     }
 }

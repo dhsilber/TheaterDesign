@@ -374,6 +374,7 @@ public class Write {
         resetOneOffs();
 
         Draw draw = startFile();
+        View view = drawing.view();
 
         for ( String categoryName : drawing.displayList ) {
             if ( categoryName.equals( Legend.CATEGORY )) {
@@ -393,7 +394,7 @@ public class Write {
             for ( Layerer item : layer.contents() ) {
                 if( MinderDom.class.isInstance( item ) ) {
                     MinderDom thingy = (MinderDom) item;
-                    thingy.dom( draw, View.PLAN );
+                    thingy.dom( draw, view );
                 }
             }
 

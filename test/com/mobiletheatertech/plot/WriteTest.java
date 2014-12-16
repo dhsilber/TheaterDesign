@@ -17,6 +17,21 @@ import static org.testng.Assert.*;
  */
 public class WriteTest {
 
+    class MindedDom extends MinderDom {
+
+        public View view;
+
+        public MindedDom( Element element ) throws DataException, InvalidXMLException {
+            super( element );
+        }
+        public void verify() {}
+
+        @Override
+        public void dom( Draw draw, View view ) {
+            this.view = view;
+        }
+    }
+
     Element venueElement;
 
     public WriteTest() {
@@ -135,6 +150,63 @@ public class WriteTest {
         assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
     }
 
+    @Test
+    public void writeIndividualDrawingSetsViewPlan() throws Exception {
+        String layerId = "MindedDom";
+        String layerName = "layer Name";
+        String layerColor = "blue";
+
+        Element drawingElement = new IIOMetadataNode( "drawing" );
+        drawingElement.setAttribute( "id", "drawing" );
+        drawingElement.setAttribute( "filename", "file/file" );
+
+        Element displayElement = new IIOMetadataNode( "display" );
+        displayElement.setAttribute( "category", layerId );
+        drawingElement.appendChild( displayElement );
+
+        Drawing drawing = new Drawing( drawingElement );
+        new Layer( layerId, layerName, layerColor );
+
+        Element bogusMindedDomElement = new IIOMetadataNode( "bogus" );
+        MindedDom bogusMindedDom = new MindedDom( bogusMindedDomElement );
+
+        assertNull( TestHelpers.accessView(bogusMindedDom, "view" ) );
+
+        Write write = new Write();
+        write.writeIndividualDrawing(drawing);
+
+        assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.PLAN );
+    }
+
+    @Test
+    public void writeIndividualDrawingSetsViewSchematic() throws Exception {
+        String layerId = "MindedDom";
+        String layerName = "layer Name";
+        String layerColor = "blue";
+
+        Element drawingElement = new IIOMetadataNode( "drawing" );
+        drawingElement.setAttribute( "id", "drawing" );
+        drawingElement.setAttribute( "filename", "file/file" );
+        drawingElement.setAttribute( "view", "schematic" );
+
+        Element displayElement = new IIOMetadataNode( "display" );
+        displayElement.setAttribute( "category", layerId );
+        drawingElement.appendChild( displayElement );
+
+        Drawing drawing = new Drawing( drawingElement );
+        new Layer( layerId, layerName, layerColor );
+
+        Element bogusMindedDomElement = new IIOMetadataNode( "bogus" );
+        MindedDom bogusMindedDom = new MindedDom( bogusMindedDomElement );
+
+        assertNull( TestHelpers.accessView(bogusMindedDom, "view" ) );
+
+        Write write = new Write();
+        write.writeIndividualDrawing(drawing);
+
+        assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.SCHEMATIC );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -147,6 +219,8 @@ public class WriteTest {
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
+//        TestResets.DeviceReset();
+        TestResets.ElementalListerReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Room" );

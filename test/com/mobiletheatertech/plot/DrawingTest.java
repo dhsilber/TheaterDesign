@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.fail;
 
 /**
@@ -22,20 +23,33 @@ public class DrawingTest {
 
     final String id = "Name";
     String filename = "filename";
+    String schematic = "schematic";
 
     @Test
     public void isa() throws Exception {
-        Drawing drawing = new Drawing( drawingElement );
+        Drawing instance = new Drawing( drawingElement );
 
-        assert ElementalLister.class.isInstance( drawing );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
     }
 
     @Test
     public void storesAttributes() throws Exception {
-        Drawing drawing = new Drawing( drawingElement );
+        Drawing instance = new Drawing( drawingElement );
 
-        assertEquals(TestHelpers.accessString(drawing, "id"), id);
-        assertEquals( TestHelpers.accessString( drawing, "filename" ), filename );
+        assertEquals( TestHelpers.accessString( instance, "id"), id);
+        assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
+        assertSame(TestHelpers.accessView(instance, "view"), View.PLAN );
+    }
+
+    @Test
+    public void storesOptionalAttributes() throws Exception {
+        drawingElement.setAttribute("view", schematic );
+        Drawing instance = new Drawing( drawingElement );
+
+        assertEquals( TestHelpers.accessString( instance, "id"), id);
+        assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
+        assertSame(TestHelpers.accessView(instance, "view"), View.SCHEMATIC );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -52,11 +66,28 @@ public class DrawingTest {
         drawingElement.removeAttribute("filename");
         new Drawing( drawingElement );
     }
-     @Test
-    public void filename() throws Exception{
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Drawing \\(" + id + "\\) has invalid 'view' attribute. Valid is 'schematic'." )
+    public void invalidView() throws Exception {
+        drawingElement.setAttribute("view", "bogus");
+        new Drawing( drawingElement );
+    }
+
+    @Test
+    public void filename() throws Exception {
         Drawing drawing = new Drawing( drawingElement );
 
         assertEquals( drawing.filename(), filename );
+    }
+
+    @Test
+    public void view() throws Exception {
+        drawingElement.setAttribute("view", schematic );
+        Drawing drawing = new Drawing( drawingElement );
+
+        assertEquals( drawing.view(), View.SCHEMATIC );
     }
 
     @Test

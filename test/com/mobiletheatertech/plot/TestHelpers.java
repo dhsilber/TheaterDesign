@@ -70,14 +70,19 @@ public class TestHelpers {
         return (Double) field.get( thingy );
     }
 
+    public static Point accessPoint( Object thingy, String name ) throws Exception {
+        Field field = accessField( thingy, name );
+        return (Point) field.get( thingy );
+    }
+
     public static String accessString( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
         return (String) field.get( thingy );
     }
 
-    public static Point accessPoint( Object thingy, String name ) throws Exception {
+    public static View accessView( Object thingy, String name ) throws Exception {
         Field field = accessField( thingy, name );
-        return (Point) field.get( thingy );
+        return (View) field.get( thingy );
     }
 
     /**
