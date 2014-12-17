@@ -289,7 +289,7 @@ public class DeviceTest {
 
         device.verify();
 
-        assertEquals( deviceOtherLayer.contents().size(), 1 );
+        assertEquals(deviceOtherLayer.contents().size(), 1);
     }
 
     @Test
@@ -303,7 +303,7 @@ public class DeviceTest {
 
         device.verify();
 
-        assertEquals( deviceLayer.contents().size(), 1 );
+        assertEquals(deviceLayer.contents().size(), 1);
     }
 
     @Test
@@ -313,13 +313,13 @@ public class DeviceTest {
         Device device = new Device( element );
         device.verify();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+        assertEquals( TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 0 );
 
         Draw draw = new Draw();
         draw.establishRoot();
-        device.dom( draw, View.PLAN );
+        device.dom(draw, View.PLAN);
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 1 );
+        assertEquals( TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 1 );
     }
 
     @Test
@@ -384,6 +384,43 @@ public class DeviceTest {
     }
 
     @Test
+    public void schematicLocation() throws Exception {
+        new DeviceTemplate( templateElement );
+        new Table( tableElement );
+        Device instance = new Device( element );
+        instance.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+
+        instance.dom(draw, View.SCHEMATIC);
+
+        PagePoint point = instance.schematicLocation();
+        assertEquals(point,
+                new PagePoint(Schematic.FirstX, Schematic.FirstY));
+    }
+
+    @Test
+    public void schematicLocationMultiple() throws Exception {
+//        LightingStand instance = new LightingStand( element );
+//        instance.verify();
+//        instance.schematicPosition =
+//                new PagePoint( LightingStand.SchematicX, LightingStand.SchematicY );
+//        LightingStand instance2 = new LightingStand( element2 );
+//        instance2.verify();
+//        instance2.schematicPosition =
+//                new PagePoint( LightingStand.SchematicX * 3, LightingStand.SchematicY );
+//
+//        PagePoint point = instance.schematicLocation("a");
+//        assertEquals( point,
+//                new PagePoint( LightingStand.SchematicX - LightingStand.Space * 1.5,
+//                        LightingStand.SchematicY ));
+//        PagePoint point2 = instance2.schematicLocation("c");
+//        assertEquals( point2,
+//                new PagePoint( LightingStand.SchematicX * 3 + LightingStand.Space * 0.5,
+//                        LightingStand.SchematicY ));
+    }
+
+    @Test
     public void location() throws Exception {
         new Table( tableElement );
         new DeviceTemplate(templateElement);
@@ -392,8 +429,8 @@ public class DeviceTest {
 
         Point place = device.location().location();
 
-        assertEquals( place.x, tableX );
-        assertEquals( place.y, tableY );
+        assertEquals(place.x, tableX);
+        assertEquals(place.y, tableY);
         assertEquals( place.z, tableZ + tableHeight );
     }
 
@@ -491,22 +528,33 @@ public class DeviceTest {
     }
 
     @Test
+    public void domPlanDoesNotSetSchematicPosition() throws Exception {
+        new DeviceTemplate(templateElement);
+        Draw draw = new Draw();
+        draw.establishRoot();
+        element.removeAttribute("on");
+        Device device = new Device( element );
+        device.verify();
+
+        device.dom(draw, View.PLAN);
+
+        assertNull( device.schematicPosition );
+    }
+
+    @Test
     public void domPlanCoordinatesRotated90() throws Exception {
         DeviceTemplate deviceTemplate =  new DeviceTemplate(templateElement);
-
         Draw draw = new Draw();
-
         draw.establishRoot();
         element.removeAttribute("on");
         element.setAttribute( "orientation", "90" );
         Device device = new Device( element );
         device.verify();
+        Double expectedX = x - width / 2.0;
+        Double expectedY = y - depth / 2.0;
 
         NodeList existingGroups = draw.root().getElementsByTagName("rect");
         assertEquals(existingGroups.getLength(), 0);
-
-        Double expectedX = x - width / 2.0;
-        Double expectedY = y - depth / 2.0;
 
         device.dom(draw, View.PLAN);
 
@@ -534,7 +582,7 @@ public class DeviceTest {
     public void domPlanCoordinatesRotated60() throws Exception {
         Double offsetX = 13.6;
         Double offsetY = 4.8;
-        SvgElement.Offset( offsetX, offsetY );
+        SvgElement.Offset(offsetX, offsetY);
         Double shiftedX = x + offsetX;
         Double shiftedY = y + offsetY;
 
@@ -566,6 +614,81 @@ public class DeviceTest {
                 "rotate(60.0,"+ shiftedX +","+ shiftedY +")" );
     }
 
+    @Test
+    public void domSchematicTwiceSetsPostion() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        new DeviceTemplate(templateElement);
+        element.removeAttribute("on");
+        element.setAttribute( "orientation", "60" );
+        Device instance1 = new Device( element );
+        instance1.verify();
+        element.setAttribute( "id", "other" );
+        Device instance2 = new Device( element );
+        instance2.verify();
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        assertEquals( instance1.schematicPosition,
+                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
+        assertEquals( instance2.schematicPosition,
+                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
+    }
+
+    @Test
+    public void domSchematicTwice() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        new DeviceTemplate(templateElement);
+        element.removeAttribute("on");
+        element.setAttribute("orientation", "60");
+        Device instance1 = new Device( element );
+        instance1.verify();
+        element.setAttribute( "id", "other" );
+        Device instance2 = new Device( element );
+        instance2.verify();
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 3);
+
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals(list.getLength(), 1);
+        Node node = list.item( 0 );
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
+        Double thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, Schematic.FirstX );
+        Double thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, Schematic.FirstY );
+
+        groupNode = group.item(2);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
+        list = groupElement.getElementsByTagName("use");
+        assertEquals(list.getLength(), 1);
+        node = list.item( 0 );
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        element = (Element) node;
+        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
+        thisX = new Double( element.getAttribute("x") );
+        assertEquals( thisX, Schematic.FirstX * 3 );
+        thisY = new Double( element.getAttribute("y") );
+        assertEquals( thisY, Schematic.FirstY );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -584,6 +707,7 @@ public class DeviceTest {
         TestResets.StackableReset();
         TestResets.LayerReset();
         SvgElement.Offset( 0.0, 0.0 );
+        Schematic.Count = 0;
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");

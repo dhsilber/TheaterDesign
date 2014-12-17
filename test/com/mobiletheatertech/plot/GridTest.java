@@ -65,14 +65,14 @@ public class GridTest {
         assertEquals( TestHelpers.accessDouble( grid, "startz" ), startz );
     }
 
-    @Test
-    public void category() throws Exception {
-        assertNull( Category.Select( Grid.CATEGORY ) );
-
-        new Grid( element );
-
-        assertNotNull( Category.Select( Grid.CATEGORY ) );
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull( Category.Select( Grid.CATEGORY ) );
+//
+//        new Grid( element );
+//
+//        assertNotNull( Category.Select( Grid.CATEGORY ) );
+//    }
 
     @Test
     public void dom() throws Exception {

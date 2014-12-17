@@ -16,12 +16,9 @@ public class LightingStand extends Mountable implements Legendable {
     Double x;
     Double y;
     Double orientation;
-    static Double SchematicX = 100.0;
-    static Double SchematicY = 100.0;
     static Double SchematicWidth = 48.0;
     static Double SchematicHeight = 24.0;
     static Double Space = 12.0;
-    static Double TextHeight = 12.0;
 
     public LightingStand( Element element )
             throws AttributeMissingException, DataException, InvalidXMLException {
@@ -100,14 +97,17 @@ public class LightingStand extends Mountable implements Legendable {
             case SCHEMATIC:
                 generateSchematicSymbol( draw );
 
-                schematicPosition = new PagePoint( SchematicX * ((Count + 1) * 2) - SchematicX, SchematicY );
+                schematicPosition = Schematic.Position( SchematicWidth, SchematicHeight );
 
                 group = svgClassGroup( draw, TAG );
                 draw.appendRootChild(group);
 
                 Double x = schematicPosition.x();
-                group.useAbsolute(draw, TAG, x, SchematicY);
-                group.textAbsolute(draw, id, x - SchematicWidth / 2, SchematicY + SchematicHeight + TextHeight, "black");
+                Double y = schematicPosition.y();
+                group.useAbsolute(draw, TAG, x, y );
+                group.textAbsolute(draw, id,
+                        x - SchematicWidth / 2,
+                        y + SchematicHeight + Schematic.TextSpace, "black");
 
                 break;
             default:

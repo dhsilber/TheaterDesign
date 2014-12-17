@@ -36,7 +36,7 @@ public class Grid extends MinderDom {
 
         SvgElement.Offset( SCALETHICKNESS + startx, SCALETHICKNESS + starty );
 
-        new Category( CATEGORY, this.getClass() );
+//        new Category( CATEGORY, this.getClass() );
     }
 
     @Override

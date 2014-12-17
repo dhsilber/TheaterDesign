@@ -77,7 +77,7 @@ public class Wall extends MinderDom {
             }
         }
 
-        new Category( CATEGORY, this.getClass() );
+//        new Category( CATEGORY, this.getClass() );
     }
 
     /**

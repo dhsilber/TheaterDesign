@@ -91,34 +91,38 @@ public class DrawingTest {
     }
 
     @Test
-    public void findChildDisplay() throws Exception {
+    public void storeDisplayLayer() throws Exception {
         Element displayElement = new IIOMetadataNode( "display" );
-        displayElement.setAttribute( "category", name );
+        displayElement.setAttribute( "layer", name );
         drawingElement.appendChild( displayElement );
-
         Draw draw = new Draw();
         draw.establishRoot();
+
         Drawing drawing = new Drawing( drawingElement );
 
-        ArrayList<String> displays = drawing.displayList;
-
-        assertEquals( displays.size(), 1 );
-//        Category category = displays.get( 0 );
-//        assertEquals(category.name(), name);
-        fail();
+        ArrayList<String> layers = drawing.layers;
+        assertEquals( layers.size(), 1 );
+        assertEquals(layers.get(0), name);
+        ArrayList<String> devices = drawing.devices;
+        assertEquals( devices.size(), 0 );
     }
 
     @Test
-//    public void recallsNull() {
-//        assertNull(Drawing.Select("bogus"));
-//    }
-//
-//    @Test
-//    public void recalls() throws Exception {
-//        Drawing drawing = new Drawing( drawingElement );
-//
-//        assertSame(Drawing.Select(drawingName), drawing);
-//    }
+    public void storeDisplayDevice() throws Exception {
+        Element displayElement = new IIOMetadataNode( "display" );
+        displayElement.setAttribute( "device", name );
+        drawingElement.appendChild( displayElement );
+        Draw draw = new Draw();
+        draw.establishRoot();
+
+        Drawing drawing = new Drawing( drawingElement );
+
+        ArrayList<String> devices = drawing.devices;
+        assertEquals( devices.size(), 1 );
+        assertEquals( devices.get( 0 ), name );
+        ArrayList<String> layers = drawing.layers;
+        assertEquals( layers.size(), 0 );
+    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -130,10 +134,6 @@ public class DrawingTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.CategoryReset();
-
-        new Category( name, DrawingTest.class );
-
         drawingElement = new IIOMetadataNode( "drawing" );
         drawingElement.setAttribute( "id", id );
         drawingElement.setAttribute( "filename", filename );

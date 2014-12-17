@@ -24,11 +24,11 @@ public class StageTest {
     Element elementP = null;
 
     String stageID = "name";
-    Integer x = 56;
-    Integer y = 16;
-    Integer z = 12;
-    Integer width = 288;
-    Integer depth = 144;
+    Double x = 56.0;
+    Double y = 16.0;
+    Double z = 12.0;
+    Double width = 288.0;
+    Double depth = 144.0;
 
     String foldingRiser = "Folding riser";
     Integer riserX = 34;
@@ -56,11 +56,11 @@ public class StageTest {
         Stage stage = new Stage(element);
 
         assertEquals(TestHelpers.accessString(stage, "id"), "" );
-        assertEquals(TestHelpers.accessInteger(stage, "width"), (Integer) 288);
-        assertEquals(TestHelpers.accessInteger(stage, "depth"), (Integer) 144);
-        assertEquals(TestHelpers.accessInteger(stage, "x"), (Integer) 56);
-        assertEquals(TestHelpers.accessInteger(stage, "y"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(stage, "z"), (Integer) 12);
+        assertEquals(TestHelpers.accessDouble(stage, "width"), width );
+        assertEquals(TestHelpers.accessDouble(stage, "depth"), depth );
+        assertEquals(TestHelpers.accessDouble(stage, "x"), x );
+        assertEquals(TestHelpers.accessDouble(stage, "y"), y );
+        assertEquals(TestHelpers.accessDouble(stage, "z"), z );
     }
 
     @Test
@@ -69,11 +69,11 @@ public class StageTest {
         Stage stage = new Stage(element);
 
         assertEquals(TestHelpers.accessString(stage, "id"), stageID );
-        assertEquals(TestHelpers.accessInteger(stage, "width"), (Integer) 288);
-        assertEquals(TestHelpers.accessInteger(stage, "depth"), (Integer) 144);
-        assertEquals(TestHelpers.accessInteger(stage, "x"), (Integer) 56);
-        assertEquals(TestHelpers.accessInteger(stage, "y"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(stage, "z"), (Integer) 12);
+        assertEquals(TestHelpers.accessDouble(stage, "width"), width );
+        assertEquals(TestHelpers.accessDouble(stage, "depth"), depth );
+        assertEquals(TestHelpers.accessDouble(stage, "x"), x );
+        assertEquals(TestHelpers.accessDouble(stage, "y"), y );
+        assertEquals(TestHelpers.accessDouble(stage, "z"), z );
     }
 
 //    @Test
@@ -95,14 +95,14 @@ public class StageTest {
 //        assertNull(TestHelpers.accessString(stage, "id"));
 //    }
 
-    @Test
-    public void category() throws Exception {
-        assertNull( Category.Select( Stage.CATEGORY ) );
-
-        new Stage( element );
-
-        assertNotNull( Category.Select( Stage.CATEGORY ) );
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull( Category.Select( Stage.CATEGORY ) );
+//
+//        new Stage( element );
+//
+//        assertNotNull( Category.Select( Stage.CATEGORY ) );
+//    }
 
     @Test
     public void storesSelf() throws Exception {
@@ -130,7 +130,7 @@ public class StageTest {
 
         assertEquals( risers.size(), 1 );
         Device stageRiser = risers.get( 0 );
-//        assertEquals(category.name(), name);
+//        assertEquals(layer.name(), name);
         assertEquals( stageRiser.is(), foldingRiser );
 //        fail();
     }

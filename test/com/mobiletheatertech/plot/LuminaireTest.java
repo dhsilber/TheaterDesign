@@ -44,6 +44,8 @@ public class LuminaireTest {
     String trussLocation = "a 12";
     String lightingStandLocation = "b";
 
+    LightingStand lightingStand = null;
+
     final String id = pipeName + ":" + unit;
 
     @Test
@@ -315,21 +317,22 @@ public class LuminaireTest {
 
     @Test
     public void domSchematic() throws Exception {
-        Draw draw = new Draw();
-        draw.establishRoot();
         Luminaire luminaire = new Luminaire(elementOnLightingStand);
         luminaire.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+        lightingStand.dom(draw, View.SCHEMATIC);
 
         luminaire.dom( draw, View.SCHEMATIC );
 
 //        NodeList list = draw.root().getElementsByTagName( "use" );
         NodeList group = draw.root().getElementsByTagName( "g" );
-        assertEquals( group.getLength(), 2 );
-        Node groupNode = group.item( 1 );
+        assertEquals( group.getLength(), 3 ); // One of them is the LightingStand
+        Node groupNode = group.item( 2 );
         assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
         Element groupElement = (Element) groupNode;
         assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
-        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
+//        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
 
         NodeList list = groupElement.getElementsByTagName( "use" );
         assertEquals( list.getLength(), 1 );
@@ -337,9 +340,9 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        Double x = LightingStand.SchematicX - LightingStand.Space / 2;
+        Double x = Schematic.FirstX - LightingStand.Space / 2;
         assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-        assertEquals( diversionElement.getAttribute( "y" ), LightingStand.SchematicY.toString() );
+        assertEquals( diversionElement.getAttribute( "y" ), Schematic.FirstY.toString() );
         assertEquals( diversionElement.getAttribute( "transform" ), "" );
     }
 
@@ -636,7 +639,7 @@ public class LuminaireTest {
         lightingStandElement.setAttribute("id", lightingStandName );
         lightingStandElement.setAttribute("x", "12");
         lightingStandElement.setAttribute("y", "34");
-        LightingStand lightingStand = new LightingStand( lightingStandElement );
+        lightingStand = new LightingStand( lightingStandElement );
         lightingStand.verify();
 
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );

@@ -189,14 +189,14 @@ public class TrussTest {
         assertSame( elementReference, element );
     }
 
-    @Test
-    public void category() throws Exception {
-        assertNull( Category.Select( Truss.CATEGORY ) );
-
-        new Truss( element );
-
-        assertNotNull( Category.Select( Truss.CATEGORY ) );
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull( Category.Select( Truss.CATEGORY ) );
+//
+//        new Truss( element );
+//
+//        assertNotNull( Category.Select( Truss.CATEGORY ) );
+//    }
 
     /*
             Make a couple of suspend objects that are children of this truss

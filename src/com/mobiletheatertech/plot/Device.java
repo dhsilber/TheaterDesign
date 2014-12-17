@@ -30,6 +30,8 @@ public class Device extends Stackable
 {
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
+    PagePoint schematicPosition = null;
+
     private String is;
     private String on;
 
@@ -49,6 +51,7 @@ public class Device extends Stackable
     // device dimensions
     Double width = null;
     Double depth = 0.0;
+    Double height = null;
 
     boolean verified = false;
 
@@ -98,6 +101,14 @@ public class Device extends Stackable
         return is;
     }
 
+    /*
+     dom() MUST be invoked first in the schematic view, or we don't know where this
+     Device will be drawn.
+     */
+    public PagePoint schematicLocation() throws InvalidXMLException {
+        return schematicPosition;
+    }
+
     public Place location() {
         return new Place( place, place, 0.0 );
     }
@@ -125,6 +136,7 @@ public class Device extends Stackable
 //        else {
             width = shape.width();
             depth = shape.depth();
+        height = shape.height();
 //        }
 
         if( "".equals( on ) ) {
@@ -186,8 +198,6 @@ public class Device extends Stackable
                 group = svgClassGroup( draw, layerName);
                 draw.appendRootChild(group);
 
-                Double height = shape.height();
-
                 element = group.rectangle( draw, place.y(), bottom - height, depth, height, color );
                 element.attribute("fill", color);
                 element.attribute("fill-opacity", "0.1");
@@ -196,6 +206,27 @@ public class Device extends Stackable
             case FRONT:
                 break;
             case TRUSS:
+                break;
+            case SCHEMATIC:
+                schematicPosition = Schematic.Position( shape.width(), shape.height() );
+
+                group = svgClassGroup( draw, layerName);
+                draw.appendRootChild(group);
+
+                Double leftEdge = schematicPosition.x() - width / 2;
+                Double topEdge = schematicPosition.y() - height / 2;
+                element = group.rectangleAbsolute( draw,
+                        leftEdge, topEdge, width, height, color );
+                element.attribute("fill", color);
+                element.attribute("fill-opacity", "0.1");
+
+                /*SvgElement idText =*/ group.textAbsolute( draw, id,
+                    leftEdge, topEdge + height + Schematic.TextSpace, color );
+//                idText.attribute( "text-anchor", "left" );
+
+                template.count();
+
+
                 break;
         }
     }

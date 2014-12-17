@@ -37,9 +37,9 @@ public class StageRiserTest {
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Display instance is missing required 'category' attribute." )
+            expectedExceptionsMessageRegExp = "Display instance is missing required 'layer' attribute." )
     public void noCategory() throws Exception {
-        element.removeAttribute( "category" );
+        element.removeAttribute( "layer" );
         new Display( element );
     }
 

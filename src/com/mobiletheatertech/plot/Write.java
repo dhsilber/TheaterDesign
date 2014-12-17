@@ -376,8 +376,18 @@ public class Write {
         Draw draw = startFile();
         View view = drawing.view();
 
-        for ( String categoryName : drawing.displayList ) {
-            if ( categoryName.equals( Legend.CATEGORY )) {
+        for ( String deviceName : drawing.devices ) {
+            Device device = Device.Select( deviceName );
+            if ( null == device ) {
+                System.err.println(
+                        "For " + drawing.filename() +", " + deviceName + " is not a valid device." );
+                continue;
+            }
+            device.dom( draw, view );
+        }
+
+        for ( String layerName : drawing.layers ) {
+            if ( layerName.equals( Legend.CATEGORY )) {
 //                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
                 Legend.Startup(draw, View.PLAN,
                         Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
@@ -386,9 +396,10 @@ public class Write {
                 continue;
             }
 
-            Layer layer = Layer.List().get( categoryName );
+            Layer layer = Layer.List().get( layerName );
             if ( null == layer ) {
-                System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
+                System.err.println(
+                        "For " + drawing.filename() +", " + layerName + " is not a Layer." );
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
@@ -398,49 +409,7 @@ public class Write {
                 }
             }
 
-//            Category category = Category.Select( categoryName );
-//            System.out.println( "Category selected: " + category.toString() );
-//            if ( null == category ) {
-//                System.err.println( "For " + drawing.filename() +", " + categoryName + " is not a Category." );
-//                continue;
-//            }
-//            Class requested = category.clazz();
-//            String layer = category.layer();
-//            for ( Object thing : MinderDom.List() ) {
-//                if ( requested.equals( thing.getClass() ) ) {
-//                    MinderDom item = (MinderDom) thing;
-//                    if( Device.class.isInstance( item ) )
-//                    {
-//                        Device device = (Device) item;
-//                        if ( null != layer && layer.equals( device.layer() ) ) {
-//                            device.dom( draw, View.PLAN );
-//                        }
-//                    }
-//                    else {
-//                        item.dom(draw, View.PLAN);
-//                    }
-//                }
-//            }
         }
-
-//        for ( Object thing : MinderDom.List() ) {
-//            if ( Wall.class.isInstance( thing )) {
-//                Wall wall = (Wall) thing;
-//                wall.dom( draw, View.PLAN );
-//            }
-//        }
-//        for ( Object thing : MinderDom.List() ) {
-//            if ( HangPoint.class.isInstance( thing )) {
-//                HangPoint hangPoint = (HangPoint) thing;
-//                hangPoint.dom( draw, View.PLAN );
-//            }
-//        }
-//        for ( Object thing : MinderDom.List() ) {
-//            if ( Truss.class.isInstance( thing )) {
-//                Truss truss = (Truss) thing;
-//                truss.dom( draw, View.PLAN );
-//            }
-//        }
 
         return draw;
 

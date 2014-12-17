@@ -71,33 +71,35 @@ public class LightingStandTest {
         LightingStand instance = new LightingStand( element );
         instance.verify();
         draw.establishRoot();
+
         instance.dom(draw, View.SCHEMATIC);
 
         PagePoint point = instance.schematicLocation("a");
         assertEquals(point,
-                new PagePoint(LightingStand.SchematicX - LightingStand.Space * 1.5,
-                        LightingStand.SchematicY));
+                new PagePoint(Schematic.FirstX - LightingStand.Space * 1.5,
+                        Schematic.FirstY));
     }
 
     @Test
     public void schematicLocationMultiple() throws Exception {
         LightingStand instance = new LightingStand( element );
         instance.verify();
-        instance.schematicPosition =
-                new PagePoint( LightingStand.SchematicX, LightingStand.SchematicY );
         LightingStand instance2 = new LightingStand( element2 );
         instance2.verify();
+
+        instance.schematicPosition =
+                new PagePoint( Schematic.FirstX, Schematic.FirstY );
         instance2.schematicPosition =
-                new PagePoint( LightingStand.SchematicX * 3, LightingStand.SchematicY );
+                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY );
 
         PagePoint point = instance.schematicLocation("a");
         assertEquals( point,
-                new PagePoint( LightingStand.SchematicX - LightingStand.Space * 1.5,
-                        LightingStand.SchematicY ));
+                new PagePoint( Schematic.FirstX - LightingStand.Space * 1.5,
+                        Schematic.FirstY ));
         PagePoint point2 = instance2.schematicLocation("c");
         assertEquals( point2,
-                new PagePoint( LightingStand.SchematicX * 3 + LightingStand.Space * 0.5,
-                        LightingStand.SchematicY ));
+                new PagePoint( Schematic.FirstX * 3 + LightingStand.Space * 0.5,
+                        Schematic.FirstY ));
     }
 
     @Test
@@ -319,9 +321,9 @@ public class LightingStandTest {
         instance2.dom(draw, View.SCHEMATIC);
 
         assertEquals( instance1.schematicPosition,
-                new PagePoint( LightingStand.SchematicX, LightingStand.SchematicY ));
+                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
         assertEquals( instance2.schematicPosition,
-                new PagePoint( LightingStand.SchematicX * 3, LightingStand.SchematicY ));
+                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
     }
 
     @Test
@@ -350,9 +352,9 @@ public class LightingStandTest {
         Element element = (Element) node;
         assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
         Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, LightingStand.SchematicX );
+        assertEquals( thisX, Schematic.FirstX );
         Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, LightingStand.SchematicY );
+        assertEquals( thisY, Schematic.FirstY );
 
         groupNode = group.item(2);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
@@ -365,9 +367,9 @@ public class LightingStandTest {
         element = (Element) node;
         assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
         thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, LightingStand.SchematicX * 3 );
+        assertEquals( thisX, Schematic.FirstX * 3 );
         thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, LightingStand.SchematicY );
+        assertEquals( thisY, Schematic.FirstY );
     }
 
     @Test
@@ -462,6 +464,7 @@ public class LightingStandTest {
         TestResets.LightingStandReset();
         SvgElement.Offset( 0.0, 0.0 );
         TestResets.LightingStandReset();
+        Schematic.Count = 0;
 
         element = new IIOMetadataNode("lighting-stand");
         element.setAttribute("id", id);

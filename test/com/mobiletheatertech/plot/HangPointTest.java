@@ -116,14 +116,14 @@ public class HangPointTest {
         assertSame( found, hangPoint );
     }
 
-    @Test
-    public void category() throws Exception {
-        assertNull( Category.Select( HangPoint.CATEGORY ) );
-
-        new HangPoint( element );
-
-        assertNotNull( Category.Select( HangPoint.CATEGORY ) );
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull( Category.Select( HangPoint.CATEGORY ) );
+//
+//        new HangPoint( element );
+//
+//        assertNotNull( Category.Select( HangPoint.CATEGORY ) );
+//    }
 
     /*
      * This is to ensure that no exception is thrown if data is OK.
@@ -240,9 +240,9 @@ public class HangPointTest {
         HangPoint hangPoint = new HangPoint( element );
 
         Point location = hangPoint.locate();
-        assertEquals( location.x(), (Integer) 296 );
-        assertEquals( location.y(), (Integer) 320 );
-        assertEquals( location.z(), (Integer) 240 );
+        assertEquals( location.x(), x );
+        assertEquals( location.y(), y );
+        assertEquals( location.z(), 240.0 );
     }
 
 //    @Mocked

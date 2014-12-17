@@ -98,7 +98,7 @@ public class Truss extends Mountable implements Legendable {
 //        processedMark = Mark.Generate();
 //        element.setAttribute("processedMark", processedMark);
 
-        new Category( CATEGORY, this.getClass() );
+//        new Category( CATEGORY, this.getClass() );
     }
 
 

@@ -56,12 +56,12 @@ public class TableTest {
         Table table = new Table(element);
 
         assertEquals(TestHelpers.accessString(table, "id"), "");
-        assertEquals(TestHelpers.accessInteger(table, "width"), width );
-        assertEquals(TestHelpers.accessInteger(table, "depth"), depth );
-        assertEquals(TestHelpers.accessInteger(table, "height"), height );
-        assertEquals(TestHelpers.accessInteger(table, "x"), x );
-        assertEquals(TestHelpers.accessInteger(table, "y"), y );
-        assertEquals(TestHelpers.accessInteger(table, "z"), z );
+        assertEquals(TestHelpers.accessDouble(table, "width"), width );
+        assertEquals(TestHelpers.accessDouble(table, "depth"), depth );
+        assertEquals(TestHelpers.accessDouble(table, "height"), height );
+        assertEquals(TestHelpers.accessDouble(table, "x"), x );
+        assertEquals(TestHelpers.accessDouble(table, "y"), y );
+        assertEquals(TestHelpers.accessDouble(table, "z"), z);
     }
 
     @Test
@@ -71,22 +71,22 @@ public class TableTest {
         Table table = new Table(element);
 
         assertEquals(TestHelpers.accessString(table, "id"), tableName);
-        assertEquals(TestHelpers.accessInteger(table, "width"), width );
-        assertEquals(TestHelpers.accessInteger(table, "depth"), depth );
-        assertEquals(TestHelpers.accessInteger(table, "height"), height );
-        assertEquals(TestHelpers.accessInteger(table, "x"), x );
-        assertEquals(TestHelpers.accessInteger(table, "y"), y );
-        assertEquals(TestHelpers.accessInteger(table, "z"), z );
+        assertEquals(TestHelpers.accessDouble(table, "width"), width );
+        assertEquals(TestHelpers.accessDouble(table, "depth"), depth );
+        assertEquals(TestHelpers.accessDouble(table, "height"), height );
+        assertEquals(TestHelpers.accessDouble(table, "x"), x );
+        assertEquals(TestHelpers.accessDouble(table, "y"), y );
+        assertEquals(TestHelpers.accessDouble(table, "z"), z );
     }
 
-    @Test
-    public void category() throws Exception {
-        assertNull(Category.Select(Table.CATEGORY));
-
-        new Table( element );
-
-        assertNotNull(Category.Select(Table.CATEGORY));
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull(Category.Select(Table.CATEGORY));
+//
+//        new Table( element );
+//
+//        assertNotNull(Category.Select(Table.CATEGORY));
+//    }
 
     @Test
     public void storesSelf() throws Exception {

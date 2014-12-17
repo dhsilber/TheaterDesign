@@ -255,11 +255,11 @@ public class Luminaire extends MinderDom {
 
                 // Unit number to overlay on icon
                 SvgElement unitText = group.text( draw, unit, x, y, COLOR );
-                unitText.attribute("fill", "green");
+                unitText.attribute("fill", "none");
                 unitText.attribute("stroke", "green");
                 unitText.attribute("font-family", "sans-serif");
                 unitText.attribute("font-weight", "100");
-                unitText.attribute("font-size", "6");
+                unitText.attribute("font-size", "7");
                 unitText.attribute("text-anchor", "middle");
 
                 break;

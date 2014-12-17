@@ -14,34 +14,63 @@ public class DisplayTest {
 
     Element element = null;
 
-    String category = "Name of Category";
+    String layerName = "Name of Layer";
+    String deviceName = "Id of device";
 
     @Test
-    public void isElemental() throws Exception {
+    public void isA() throws Exception {
+        element.removeAttribute("device");
         Display display = new Display( element );
 
         assert Elemental.class.isInstance( display );
     }
 
     @Test
-    public void storesAttributes() throws Exception {
+    public void storesLayerAttribute() throws Exception {
+        element.removeAttribute("device");
         Display display = new Display( element );
 
-        assertEquals( TestHelpers.accessString( display, "category" ), category );
+        assertEquals( TestHelpers.accessString( display, "layerName" ), layerName );
+        assertEquals( TestHelpers.accessString( display, "deviceName" ), "" );
     }
 
-    @Test( expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Display instance is missing required 'category' attribute." )
-    public void noCategory() throws Exception {
-        element.removeAttribute( "category" );
+    @Test
+    public void storesDeviceAttribute() throws Exception {
+        element.removeAttribute( "layer" );
+        Display display = new Display( element );
+
+        assertEquals( TestHelpers.accessString( display, "layerName" ), "" );
+        assertEquals( TestHelpers.accessString( display, "deviceName" ), deviceName );
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Display requires one of 'layer' or 'device' attributes." )
+    public void noAttributes() throws Exception {
+        element.removeAttribute( "layer" );
+        element.removeAttribute( "device" );
+        new Display( element );
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Display requires one of 'layer' or 'device' attributes." )
+    public void bothAttributes() throws Exception {
         new Display( element );
     }
 
     @Test
-    public void category() throws Exception {
+    public void layer() throws Exception {
+        element.removeAttribute( "device" );
         Display display = new Display( element );
 
-        assertEquals( display.category(), category );
+        assertEquals( display.layer(), layerName );
+    }
+
+    @Test
+    public void device() throws Exception {
+        element.removeAttribute( "layer" );
+        Display display = new Display( element );
+
+        assertEquals( display.device(), deviceName );
     }
 
     @BeforeClass
@@ -55,7 +84,8 @@ public class DisplayTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         element = new IIOMetadataNode( "display" );
-        element.setAttribute( "category", category );
+        element.setAttribute( "layer", layerName );
+        element.setAttribute( "device", deviceName );
     }
 
     @AfterMethod

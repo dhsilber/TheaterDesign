@@ -4,7 +4,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +13,8 @@ public class Drawing extends ElementalLister {
 
     String filename = null;
     View view = null;
-    public ArrayList<String> displayList = new ArrayList<>();
+    public ArrayList<String> layers = new ArrayList<>();
+    public ArrayList<String> devices = new ArrayList<>();
 
     public Drawing( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
@@ -43,21 +43,19 @@ public class Drawing extends ElementalLister {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element subElement = (Element) node;
                     Display display = new Display( subElement );
-                    displayList.add( display.category() );
+                    store( display.layer(), layers );
+                    store( display.device(), devices );
                 }
             }
         }
 
     }
 
-//    public static Drawing Select( String name ) {
-////        for( Drawing selection : DRAWINGLIST ) {
-////            if (selection.name.equals( name )) {
-////                return selection;
-////            }
-////        }
-//        return null;
-//    }
+    void store(String text, ArrayList<String> destination ) {
+        if( !text.equals( "" ) ) {
+            destination.add( text );
+        }
+    }
 
     public String filename() {
         return filename;

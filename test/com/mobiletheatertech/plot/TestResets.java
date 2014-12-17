@@ -21,15 +21,15 @@ public class TestResets {
         cableDiversionArrayList.clear();
     }
 
-    public static void CategoryReset()
-            throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = Category.class.getDeclaredField( "CATEGORYLIST" );
-        field.setAccessible( true );
-        HashMap<String, Class> categoryList =
-                (HashMap<String, Class>) field.get( Category.class );
-        categoryList.clear();
-    }
+//    public static void CategoryReset()
+//            throws NoSuchFieldException, IllegalAccessException
+//    {
+//        Field field = Category.class.getDeclaredField( "CATEGORYLIST" );
+//        field.setAccessible( true );
+//        HashMap<String, Class> categoryList =
+//                (HashMap<String, Class>) field.get( Category.class );
+//        categoryList.clear();
+//    }
 
     public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
         Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );

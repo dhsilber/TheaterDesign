@@ -152,14 +152,14 @@ public class WallTest {
         assertTrue( Wall.WallList().contains( wall ) );
     }
 
-    @Test
-    public void category() throws Exception {
-        assertNull( Category.Select( Wall.CATEGORY ) );
-
-        new Wall( wallElement );
-
-        assertNotNull( Category.Select( Wall.CATEGORY ) );
-    }
+//    @Test
+//    public void layer() throws Exception {
+//        assertNull( Category.Select( Wall.CATEGORY ) );
+//
+//        new Wall( wallElement );
+//
+//        assertNotNull( Category.Select( Wall.CATEGORY ) );
+//    }
 
     @Test
     public void findNearestWall() throws Exception {

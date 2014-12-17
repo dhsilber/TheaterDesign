@@ -19,7 +19,7 @@ public class CableDiversionPointTest {
     Double z = 48.0;
 
     Point point = new Point( x, y, z );
-//    String category = "Name of Category";
+//    String layer = "Name of Category";
 
     @Test
     public void isA() throws Exception {

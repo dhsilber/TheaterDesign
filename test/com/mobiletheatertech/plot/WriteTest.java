@@ -113,7 +113,7 @@ public class WriteTest {
         drawingElement.setAttribute( "filename", "file/file" );
 
         Element displayElement = new IIOMetadataNode( "display" );
-        displayElement.setAttribute( "category", layerId );
+        displayElement.setAttribute( "layer", layerId );
         drawingElement.appendChild( displayElement );
 
         Drawing drawing = new Drawing( drawingElement );
@@ -161,7 +161,7 @@ public class WriteTest {
         drawingElement.setAttribute( "filename", "file/file" );
 
         Element displayElement = new IIOMetadataNode( "display" );
-        displayElement.setAttribute( "category", layerId );
+        displayElement.setAttribute( "layer", layerId );
         drawingElement.appendChild( displayElement );
 
         Drawing drawing = new Drawing( drawingElement );
@@ -190,7 +190,7 @@ public class WriteTest {
         drawingElement.setAttribute( "view", "schematic" );
 
         Element displayElement = new IIOMetadataNode( "display" );
-        displayElement.setAttribute( "category", layerId );
+        displayElement.setAttribute( "layer", layerId );
         drawingElement.appendChild( displayElement );
 
         Drawing drawing = new Drawing( drawingElement );
