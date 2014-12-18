@@ -35,6 +35,7 @@ public class LightingStandTest {
         assert MinderDom.class.isInstance( instance );
         assert Mountable.class.isInstance( instance );
 
+        assert Schematicable.class.isInstance( instance );
         assert Legendable.class.isInstance( instance );
     }
 
@@ -78,28 +79,6 @@ public class LightingStandTest {
         assertEquals(point,
                 new PagePoint(Schematic.FirstX - LightingStand.Space * 1.5,
                         Schematic.FirstY));
-    }
-
-    @Test
-    public void schematicLocationMultiple() throws Exception {
-        LightingStand instance = new LightingStand( element );
-        instance.verify();
-        LightingStand instance2 = new LightingStand( element2 );
-        instance2.verify();
-
-        instance.schematicPosition =
-                new PagePoint( Schematic.FirstX, Schematic.FirstY );
-        instance2.schematicPosition =
-                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY );
-
-        PagePoint point = instance.schematicLocation("a");
-        assertEquals( point,
-                new PagePoint( Schematic.FirstX - LightingStand.Space * 1.5,
-                        Schematic.FirstY ));
-        PagePoint point2 = instance2.schematicLocation("c");
-        assertEquals( point2,
-                new PagePoint( Schematic.FirstX * 3 + LightingStand.Space * 0.5,
-                        Schematic.FirstY ));
     }
 
     @Test
@@ -320,9 +299,9 @@ public class LightingStandTest {
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
 
-        assertEquals( instance1.schematicPosition,
+        assertEquals( instance1.schematicPosition(),
                 new PagePoint( Schematic.FirstX, Schematic.FirstY ));
-        assertEquals( instance2.schematicPosition,
+        assertEquals( instance2.schematicPosition(),
                 new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
     }
 

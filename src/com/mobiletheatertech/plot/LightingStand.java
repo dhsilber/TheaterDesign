@@ -5,10 +5,10 @@ import org.w3c.dom.Element;
 /**
  * Created by dhs on 12/12/14.
  */
-public class LightingStand extends Mountable implements Legendable {
+public class LightingStand extends Mountable implements Legendable, Schematicable {
 
     static Integer Count = 0;
-    PagePoint schematicPosition = null;
+    private PagePoint schematicPosition = null;
     static final String NAME = "LightingStand";
     static final String TAG = "lighting-stand";
     static boolean SYMBOLGENERATED = false;
@@ -35,6 +35,8 @@ public class LightingStand extends Mountable implements Legendable {
     }
 
     /*
+    Hanging position at a specified location on this LightingStand.
+
      dom() MUST be invoked first in the schematic view, or we don't know where this
      LightingStand will be drawn.
      */
@@ -43,6 +45,14 @@ public class LightingStand extends Mountable implements Legendable {
         return new PagePoint(
                 schematicPosition.x() + Space * topBarPositionOffset(location),
                 schematicPosition.y() );
+    }
+
+    /*
+    Position of this LightingStand
+     */
+    @Override
+    public PagePoint schematicPosition() {
+        return schematicPosition;
     }
 
     @Override

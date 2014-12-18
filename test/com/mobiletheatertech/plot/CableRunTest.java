@@ -52,6 +52,13 @@ public class CableRunTest {
     private final Double table2Y = 15.0;
     private final Double table2Z = 16.0;
     private final String templateName = "thingy";
+
+    Device sourceDevice = null;
+    Device sinkDevice = null;
+    LightingStand lightingStand = null;
+    LuminaireDefinition luminaireDefinition = null;
+    Luminaire sourceLuminaire = null;
+    Luminaire sinkLuminaire = null;
     
     String standId = "stand name";
     Double standX = 4.6;
@@ -798,7 +805,44 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y2"), "2.0" );
         assertEquals(element.getAttribute("stroke"), "green" );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
+    }
 
+    @Test
+    public void domSchematicDeviceToLuminaire() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        sourceDevice.dom(draw, View.SCHEMATIC);
+        lightingStand.dom( draw, View.SCHEMATIC );
+        luminaireDefinition.dom( draw, View.SCHEMATIC );
+        sinkLuminaire.dom( draw, View.SCHEMATIC );
+        CableRun instance = new CableRun( deviceToLuminaireElement );
+        instance.verify();
+
+        NodeList preGroup = draw.root().getElementsByTagName("g");
+        assertEquals(preGroup.getLength(), 4);
+
+        instance.dom( draw, View.SCHEMATIC );
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 5);
+        Node groupNode = group.item(3);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), CableRun.class.getSimpleName() );
+
+        NodeList list = groupElement.getElementsByTagName("line");
+        assertEquals(list.getLength(), 1);
+        Node node = list.item(0);
+        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+        Element element = (Element) node;
+        PagePoint sourcePoint = sourceDevice.schematicPosition();
+        PagePoint sinkPoint = sinkLuminaire.schematicPosition();
+        assertEquals(element.getAttribute("x1"), sourcePoint.x() );
+        assertEquals(element.getAttribute("y1"), sourcePoint.y() );
+        assertEquals(element.getAttribute("x2"), sinkPoint.x() );
+        assertEquals(element.getAttribute("y2"), sinkPoint.y() );
+        assertEquals(element.getAttribute("stroke"), "green" );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
     @BeforeClass
@@ -890,15 +934,15 @@ public class CableRunTest {
         sourceElement.setAttribute( "id", sourceName );
         sourceElement.setAttribute( "on", tableName );
         sourceElement.setAttribute( "is", templateName );
-        Device source = new Device( sourceElement );
-        source.verify();
+        sourceDevice = new Device( sourceElement );
+        sourceDevice.verify();
         
         sinkElement = new IIOMetadataNode( "device" );
         sinkElement.setAttribute( "id", sinkName );
         sinkElement.setAttribute( "on", table2Name );
         sinkElement.setAttribute( "is", templateName );
-        Device sink = new Device( sinkElement );
-        sink.verify();
+        sinkDevice = new Device( sinkElement );
+        sinkDevice.verify();
 
         element = new IIOMetadataNode("cable-run");
         element.setAttribute("signal", signalName );
@@ -910,30 +954,33 @@ public class CableRunTest {
         Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
         definitionElement.setAttribute( "name", luminaireType );
         definitionElement.setAttribute( "width", width.toString() );
-        definitionElement.setAttribute( "length", length.toString() );
-        new LuminaireDefinition( definitionElement );
+        definitionElement.setAttribute("length", length.toString());
+        definitionElement.appendChild( new IIOMetadataNode( "svg" ) );
+        luminaireDefinition = new LuminaireDefinition( definitionElement );
+        luminaireDefinition.verify();
 
         Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
         lightingStandElement.setAttribute( "id", standId );
         lightingStandElement.setAttribute( "x", standX.toString() );
         lightingStandElement.setAttribute( "y", standY.toString() );
-        new LightingStand( lightingStandElement );
+        lightingStand = new LightingStand( lightingStandElement );
+        lightingStand.verify();
 
         sourceLuminaireElement = new IIOMetadataNode( "luminaire" );
         sourceLuminaireElement.setAttribute( "on", standId );
         sourceLuminaireElement.setAttribute( "type", luminaireType );
         sourceLuminaireElement.setAttribute( "unit", sourceLuminaireUnit );
         sourceLuminaireElement.setAttribute( "location", sourceLuminaireLocation );
-        Luminaire luminaire = new Luminaire( sourceLuminaireElement );
-        luminaire.verify();
+        sourceLuminaire = new Luminaire( sourceLuminaireElement );
+        sourceLuminaire.verify();
 
         sinkLuminaireElement = new IIOMetadataNode( "luminaire" );
         sinkLuminaireElement.setAttribute( "on", standId );
         sinkLuminaireElement.setAttribute( "type", luminaireType );
         sinkLuminaireElement.setAttribute( "unit", sinkLuminaireUnit );
         sinkLuminaireElement.setAttribute( "location", sinkLuminaireLocation );
-        luminaire = new Luminaire( sinkLuminaireElement );
-        luminaire.verify();
+        sinkLuminaire = new Luminaire( sinkLuminaireElement );
+        sinkLuminaire.verify();
 
         deviceToLuminaireElement = new IIOMetadataNode( "cable-run" );
         deviceToLuminaireElement.setAttribute( "signal", signalName );

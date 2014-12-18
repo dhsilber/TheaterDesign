@@ -11,8 +11,8 @@ package com.mobiletheatertech.plot;
  */
 public class PagePoint {
 
-    Double x;
-    Double y;
+    private Double x;
+    private Double y;
 
 //    static int SmallX;
 //    static int SmallY;

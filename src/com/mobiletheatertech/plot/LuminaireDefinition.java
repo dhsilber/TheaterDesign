@@ -86,6 +86,10 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             Node svgNode = svgList.item( 0 );
             svg = (Element) svgNode;
         }
+        else {
+            throw new InvalidXMLException( this.getClass().getSimpleName(), id,
+                    "svg element is required");
+        }
 
         LUMINAIRELIST.add( this );
 

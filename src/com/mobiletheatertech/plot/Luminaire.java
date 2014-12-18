@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.7
  */
-public class Luminaire extends MinderDom {
+public class Luminaire extends MinderDom implements Schematicable {
 
     private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
@@ -40,6 +40,7 @@ public class Luminaire extends MinderDom {
      */
     public static final String LAYERTAG = "luminaire";
 
+    private PagePoint schematicPosition = null;
 
     private String type;
     private String on;
@@ -115,6 +116,11 @@ public class Luminaire extends MinderDom {
             }
         }
         return null;
+    }
+
+    @Override
+    public PagePoint schematicPosition() {
+        return schematicPosition;
     }
 
     /**
@@ -276,8 +282,8 @@ public class Luminaire extends MinderDom {
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
             case SCHEMATIC:
-                PagePoint pagePoint = mount.schematicLocation( location );
-                group.useAbsolute( draw, type, pagePoint.x(), pagePoint.y() );
+                schematicPosition = mount.schematicLocation( location );
+                group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y());
                 break;
         }
     }

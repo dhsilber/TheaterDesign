@@ -71,6 +71,8 @@ public class DeviceTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+
+        assert Schematicable.class.isInstance( instance );
     }
 
     @Test
@@ -538,7 +540,7 @@ public class DeviceTest {
 
         device.dom(draw, View.PLAN);
 
-        assertNull( device.schematicPosition );
+        assertNull( device.schematicPosition() );
     }
 
     @Test
@@ -630,9 +632,9 @@ public class DeviceTest {
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
 
-        assertEquals( instance1.schematicPosition,
+        assertEquals( instance1.schematicPosition(),
                 new PagePoint( Schematic.FirstX, Schematic.FirstY ));
-        assertEquals( instance2.schematicPosition,
+        assertEquals( instance2.schematicPosition(),
                 new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
     }
 
@@ -640,7 +642,7 @@ public class DeviceTest {
     public void domSchematicTwice() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
-        new DeviceTemplate(templateElement);
+        DeviceTemplate template = new DeviceTemplate(templateElement);
         element.removeAttribute("on");
         element.setAttribute("orientation", "60");
         Device instance1 = new Device( element );
@@ -661,17 +663,16 @@ public class DeviceTest {
         Node groupNode = group.item(1);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element groupElement = (Element) groupNode;
-        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
-        NodeList list = groupElement.getElementsByTagName("use");
+        NodeList list = groupElement.getElementsByTagName("rect");
         assertEquals(list.getLength(), 1);
         Node node = list.item( 0 );
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
-        Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, Schematic.FirstX );
-        Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, Schematic.FirstY );
+        Double thisX = instance1.schematicPosition().x() - template.getSolid().width() / 2;
+        assertEquals(element.getAttribute("x"), thisX .toString() );
+        Double thisY = instance1.schematicPosition().y() - template.getSolid().height() / 2;
+        assertEquals(element.getAttribute("y"), thisY.toString());
+        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
 
         groupNode = group.item(2);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
@@ -682,11 +683,13 @@ public class DeviceTest {
         node = list.item( 0 );
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         element = (Element) node;
-        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
-        thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, Schematic.FirstX * 3 );
-        thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, Schematic.FirstY );
+//        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
+//        thisX = new Double( element.getAttribute("x") );
+//        assertEquals( thisX, Schematic.FirstX * 3 );
+//        thisY = new Double( element.getAttribute("y") );
+//        assertEquals( thisY, Schematic.FirstY );
+        assertEquals( element.getAttribute( "x" ), instance2.schematicPosition().x().toString() );
+        assertEquals( element.getAttribute( "y" ), instance2.schematicPosition().y().toString() );
     }
 
     @BeforeClass

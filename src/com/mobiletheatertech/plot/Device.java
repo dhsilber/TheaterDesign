@@ -26,11 +26,11 @@ import java.util.ArrayList;
 /*
 If I need it, implement 'inclination' for vertical rotation.
  */
-public class Device extends Stackable
+public class Device extends Stackable implements Schematicable
 {
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
-    PagePoint schematicPosition = null;
+    private PagePoint schematicPosition = null;
 
     private String is;
     private String on;
@@ -106,6 +106,14 @@ public class Device extends Stackable
      Device will be drawn.
      */
     public PagePoint schematicLocation() throws InvalidXMLException {
+        return schematicPosition;
+    }
+
+    /*
+    Position of this LightingStand
+     */
+    @Override
+    public PagePoint schematicPosition() {
         return schematicPosition;
     }
 
@@ -215,13 +223,13 @@ public class Device extends Stackable
 
                 Double leftEdge = schematicPosition.x() - width / 2;
                 Double topEdge = schematicPosition.y() - height / 2;
-                element = group.rectangleAbsolute( draw,
-                        leftEdge, topEdge, width, height, color );
+                element = group.rectangleAbsolute(draw,
+                        leftEdge, topEdge, width, height, color);
                 element.attribute("fill", color);
                 element.attribute("fill-opacity", "0.1");
 
-                /*SvgElement idText =*/ group.textAbsolute( draw, id,
-                    leftEdge, topEdge + height + Schematic.TextSpace, color );
+                /*SvgElement idText =*/ group.textAbsolute(draw, id,
+                    leftEdge, topEdge + height + Schematic.TextSpace, color);
 //                idText.attribute( "text-anchor", "left" );
 
                 template.count();

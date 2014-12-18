@@ -141,15 +141,15 @@ public class TestResets {
      * @throws IllegalAccessException if the {@code LUMINAIRELIST} field cannot be accessed.
      */
     // TODO Keep this until I resolve how Luminaire knows what type it is.
-//    public static void LuminaireDefinitionReset()
-//            throws NoSuchFieldException, IllegalAccessException
-//    {
-//        Field field = LuminaireDefinition.class.getDeclaredField( "LUMINAIRELIST" );
-//        field.setAccessible( true );
-//        ArrayList<LuminaireDefinition> LuminaireDefinitionlist =
-//                (ArrayList<LuminaireDefinition>) field.get( LuminaireDefinition.class );
-//        LuminaireDefinitionlist.clear();
-//    }
+    public static void LuminaireDefinitionReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = LuminaireDefinition.class.getDeclaredField( "LUMINAIRELIST" );
+        field.setAccessible( true );
+        ArrayList<LuminaireDefinition> LuminaireDefinitionlist =
+                (ArrayList<LuminaireDefinition>) field.get( LuminaireDefinition.class );
+        LuminaireDefinitionlist.clear();
+    }
 
     /**
      * Reset the GEARS array maintained by {@link GearList} to its initial empty state.

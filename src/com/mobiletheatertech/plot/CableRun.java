@@ -215,17 +215,40 @@ public class CableRun extends MinderDom implements Legendable {
 
         switch (mode) {
             case PLAN:
+                domPlan(draw);
+                break;
+            case SCHEMATIC:
+                domSchematic(draw);
                 break;
             case SECTION:
             case FRONT:
             case TRUSS:
                 return;
         }
+    }
 
+    void domSchematic(Draw draw) {
+        PagePoint sourcePoint = (null != sourceDevice)
+                ? sourceDevice.schematicPosition()
+                : sourceLuminaire.schematicPosition();
+        PagePoint sinkPoint = (null != sinkDevice)
+                ? sinkDevice.schematicPosition()
+                : sinkLuminaire.schematicPosition();
+
+        SvgElement group = draw.element("g");
+        group.attribute("class", this.getClass().getSimpleName() );
+        if (null != sourceDevice) {
+            group.attribute("class", sourceDevice.layer() );
+        }
+        draw.appendRootChild(group);
+
+        group.lineAbsolute( draw, sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y(), "green" );
+    }
+
+    void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {
         Place sourcePoint = (null != sourceDevice) ? sourceDevice.location() : sourceLuminaire.location();
         Place sinkPoint = (null != sinkDevice) ? sinkDevice.location() : sinkLuminaire.location();
 
-//System.err.println("Finding path for CableRun "+ this.toString() +".");
         ArrayList<Point> vertices = null;
         try {
             vertices = findPath( sourcePoint.location(), sinkPoint.location() );
@@ -240,25 +263,21 @@ public class CableRun extends MinderDom implements Legendable {
         }
         CableDiversion.InsertDiversion( vertices );
 
-//System.err.println("Drawing CableRun "+ this.toString() +".");
-
         SvgElement group = draw.element("g");
-        group.attribute("class", "CableRun" );
+        group.attribute("class", this.getClass().getSimpleName() );
         if (null != sourceDevice) {
             group.attribute("class", sourceDevice.layer() );
         }
-
         draw.appendRootChild(group);
 
         Point previous = sourcePoint.location();
-//System.err.println("... previous point:  "+ previous.toString() +".");
         for( Point point : vertices ) {
-//System.err.println("... next point: "+ point.toString() +".");
 
             appendLineSegment( draw, group, previous, point );
             previous = point;
         }
     }
+
 
     ArrayList<Point> findPath( Point sourcePoint, Point sinkPoint )
             throws DataException, ReferenceException {
@@ -278,8 +297,6 @@ public class CableRun extends MinderDom implements Legendable {
             Wall sourceWall = Wall.WallNearestPoint(sourceGround);
             Point sourceWallPoint = sourceWall.nearestPointNearWall( sourceGround );
 
-//System.err.println("\nsourceWallPoint: "+ sourceWallPoint.toString() +".");
-
             list.add( sourceWallPoint );
 
             // Find point on some wall nearest sink. We'll be using this as
@@ -291,25 +308,13 @@ public class CableRun extends MinderDom implements Legendable {
             Wall currentWall = sourceWall;
             Point currentPoint = sourceWallPoint;
             while ( ! currentPoint.equals( sinkWallPoint ) ) {
-//System.out.println( "Current Wall: " + currentWall.toString() + ".  Sink Wall: " + sinkWall.toString() );
                 // find corner of current wall in the direction we need to go,
                 Point nextCorner = currentWall.nextCorner( currentPoint, sinkWallPoint, sinkWall );
-//System.err.print("... nextCorner: ");
-//System.err.println( nextCorner.toString() +".");
-//System.err.println("        currentWall"+ currentWall.toString() +".");
-//System.err.println("        currentPoint"+ currentPoint.toString() +".");
-//System.err.println("        sinkWallPoint"+ sinkWallPoint.toString() +".");
-//System.err.println("        sinkWall"+ sinkWall.toString() +".");
                 Wall nextWall = currentWall.nextNear( currentPoint, sinkWallPoint, sinkWall );
-//System.err.println("... nextWall: "+ nextWall.toString() +".");
 
                 if ( nextCorner.equals( sinkWallPoint ) ) {
                     break;
                 }
-
-//                if( currentPoint.equals( ))
-
-//System.err.println("... nextCorner can be used.");
 
                 // draw line to that corner
                 list.add( nextCorner );
@@ -321,13 +326,9 @@ public class CableRun extends MinderDom implements Legendable {
 
             // Now that we've found any intermediate points, finish up by adding
             // the last two points before the sink device.
-//System.err.println("... sinkWallPoint: "+ sinkWallPoint.toString() +".");
             list.add( sinkWallPoint );
-//System.err.println("... sinkGround: "+ sinkGround.toString() +".");
             list.add( sinkGround );
         }
-
-//System.err.println("... sinkPoint: "+ sinkPoint.toString() +".");
 
         Count++;
 

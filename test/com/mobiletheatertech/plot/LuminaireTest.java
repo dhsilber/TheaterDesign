@@ -57,6 +57,9 @@ public class LuminaireTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+
+        assert Schematicable.class.isInstance( instance );
+        assert ! Legendable.class.isInstance( instance );
     }
 
     @Test
@@ -315,37 +318,6 @@ public class LuminaireTest {
         assertEquals( text, color );
     }
 
-    @Test
-    public void domSchematic() throws Exception {
-        Luminaire luminaire = new Luminaire(elementOnLightingStand);
-        luminaire.verify();
-        Draw draw = new Draw();
-        draw.establishRoot();
-        lightingStand.dom(draw, View.SCHEMATIC);
-
-        luminaire.dom( draw, View.SCHEMATIC );
-
-//        NodeList list = draw.root().getElementsByTagName( "use" );
-        NodeList group = draw.root().getElementsByTagName( "g" );
-        assertEquals( group.getLength(), 3 ); // One of them is the LightingStand
-        Node groupNode = group.item( 2 );
-        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
-        Element groupElement = (Element) groupNode;
-        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
-//        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
-
-        NodeList list = groupElement.getElementsByTagName( "use" );
-        assertEquals( list.getLength(), 1 );
-        Node node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        Element diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        Double x = Schematic.FirstX - LightingStand.Space / 2;
-        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-        assertEquals( diversionElement.getAttribute( "y" ), Schematic.FirstY.toString() );
-        assertEquals( diversionElement.getAttribute( "transform" ), "" );
-    }
-
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
     @Test
     public void domPlanCircuitingOne() throws Exception {
@@ -535,15 +507,15 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
 
-        luminaire.dom( draw, View.SECTION );
+        luminaire.dom(draw, View.SECTION);
 
         NodeList list = draw.root().getElementsByTagName( "use" );
-        assertEquals( list.getLength(), 1 );
+        assertEquals(list.getLength(), 1);
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "34.0" );
+        assertEquals(diversionElement.getAttribute("xlink:href"), "#" + type);
+        assertEquals(diversionElement.getAttribute("x"), "34.0");
         assertEquals( diversionElement.getAttribute( "y" ), "184.0" );
 
 //        list = draw.root().getElementsByTagName( "path" );
@@ -563,6 +535,58 @@ public class LuminaireTest {
 //
 //        assertEquals( baseElement.attribute( "d" ),
 //                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
+    }
+
+    @Test
+    public void domSchematicTwiceSetsPostion() throws Exception {
+        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+        elementOnLightingStand.setAttribute( "location", "c" );
+        elementOnLightingStand.setAttribute( "unit", "other unit" );
+        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+        instance1.verify();
+        instance2.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+        lightingStand.dom(draw, View.SCHEMATIC);
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        assertEquals( instance1.schematicPosition(),
+                new PagePoint( Schematic.FirstX - LightingStand.Space * 0.5, Schematic.FirstY ));
+        assertEquals( instance2.schematicPosition(),
+                new PagePoint( Schematic.FirstX + LightingStand.Space * 0.5, Schematic.FirstY ));
+    }
+
+    @Test
+    public void domSchematic() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnLightingStand);
+        luminaire.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+        lightingStand.dom(draw, View.SCHEMATIC);
+
+        luminaire.dom( draw, View.SCHEMATIC );
+
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 3 ); // One of them is the LightingStand
+        Node groupNode = group.item( 2 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
+//        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
+
+        NodeList list = groupElement.getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element diversionElement = (Element) node;
+        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+        Double x = Schematic.FirstX - LightingStand.Space / 2;
+        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+        assertEquals( diversionElement.getAttribute( "y" ), Schematic.FirstY.toString() );
+        assertEquals( diversionElement.getAttribute( "transform" ), "" );
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -617,6 +641,7 @@ public class LuminaireTest {
         TestResets.MinderDomReset();
         TestResets.MountableReset();
         TestResets.LuminaireReset();
+        Schematic.Count = 0;
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -680,6 +705,7 @@ public class LuminaireTest {
         definitionElement.setAttribute( "name", "6x9" );
         definitionElement.setAttribute( "width", width.toString() );
         definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.appendChild(new IIOMetadataNode("svg"));
         new LuminaireDefinition( definitionElement );
 
 
