@@ -217,9 +217,6 @@ public class Luminaire extends MinderDom implements Schematicable {
             return;
         }
 
-//        System.out.println( "Luminaire.dom: About to draw id: "+id+" type: "+type+" on: "+ on+" location: "+location+".");
-        Double x = point.x();
-        Double y = point.y();
 
         Double z = Venue.Height() - point.z();
 
@@ -237,36 +234,9 @@ public class Luminaire extends MinderDom implements Schematicable {
 
         switch (view) {
             case PLAN:
-                group.attribute( "transform", transform );
-
-                definition.count();
-
-                use = group.use( draw, type, x, y );
-
-                // This transform is to orient the luminaire.
-                // See verify() for the transform that rotates the position of the luminaire to
-                // keep it with a truss that has been rotated.
-                String transform;
-                Double transformX = point.x() + SvgElement.OffsetX();
-                Double transformY = point.y() + SvgElement.OffsetY();
-                if ( !target.equals("") ) {
-                    // With this I lose the alignment with zones. :-(
-                    Integer rotation = alignWithZone(point);
-                    transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
-                }
-                else {
-                    transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
-                }
-                use.attribute("transform", transform );
-
-                // Unit number to overlay on icon
-                SvgElement unitText = group.text( draw, unit, x, y, COLOR );
-                unitText.attribute("fill", "none");
-                unitText.attribute("stroke", "green");
-                unitText.attribute("font-family", "sans-serif");
-                unitText.attribute("font-weight", "100");
-                unitText.attribute("font-size", "7");
-                unitText.attribute("text-anchor", "middle");
+                domPlan(draw, group);
+                Double x;
+                Double y;
 
                 break;
             case SECTION:
@@ -283,9 +253,58 @@ public class Luminaire extends MinderDom implements Schematicable {
                 break;
             case SCHEMATIC:
                 schematicPosition = mount.schematicLocation( location );
-                group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y());
+                group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
+
+                // Unit number to overlay on icon
+                SvgElement unitText = group.textAbsolute( draw, unit,
+                        schematicPosition.x(), schematicPosition.y(), COLOR );
+                unitText.attribute("fill", "none");
+                unitText.attribute("stroke", "green");
+                unitText.attribute("font-family", "sans-serif");
+                unitText.attribute("font-weight", "100");
+                unitText.attribute("font-size", "6");
+                unitText.attribute("text-anchor", "middle");
                 break;
+            default:
+                return;
         }
+
+        definition.count();
+    }
+
+    void domPlan(Draw draw, SvgElement group) {
+        SvgElement use;
+        Double x = point.x();
+        Double y = point.y();
+
+        group.attribute("transform", transform);
+
+        use = group.use( draw, type, x, y );
+
+        // This transform is to orient the luminaire.
+        // See verify() for the transform that rotates the position of the luminaire to
+        // keep it with a truss that has been rotated.
+        String transform;
+        Double transformX = point.x() + SvgElement.OffsetX();
+        Double transformY = point.y() + SvgElement.OffsetY();
+        if ( !target.equals("") ) {
+            // With this I lose the alignment with zones. :-(
+            Integer rotation = alignWithZone(point);
+            transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
+        }
+        else {
+            transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
+        }
+        use.attribute("transform", transform );
+
+        // Unit number to overlay on icon
+        SvgElement unitText = group.text( draw, unit, x, y, COLOR );
+        unitText.attribute("fill", "none");
+        unitText.attribute("stroke", "green");
+        unitText.attribute("font-family", "sans-serif");
+        unitText.attribute("font-weight", "100");
+        unitText.attribute("font-size", "7");
+        unitText.attribute("text-anchor", "middle");
     }
 
     /**

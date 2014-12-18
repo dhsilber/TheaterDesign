@@ -584,9 +584,21 @@ public class LuminaireTest {
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         Double x = Schematic.FirstX - LightingStand.Space / 2;
+        Double y = Schematic.FirstY;
         assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-        assertEquals( diversionElement.getAttribute( "y" ), Schematic.FirstY.toString() );
+        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
         assertEquals( diversionElement.getAttribute( "transform" ), "" );
+
+        list = groupElement.getElementsByTagName( "text" );
+        assertEquals( list.getLength(), 1 );
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        diversionElement = (Element) node;
+        String text = diversionElement.getTextContent();
+        assertEquals( text, unit );
+        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
