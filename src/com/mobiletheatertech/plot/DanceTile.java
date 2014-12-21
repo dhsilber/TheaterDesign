@@ -31,7 +31,7 @@ public class DanceTile extends MinderDom implements Legendable {
         endY = getDoubleAttribute( element, "endY" );
 
         if ( ! LEGENDREGISTERED ) {
-            Legend.Register(this, 2, 7, LegendOrder.Furniture);
+            Legend.Register(this, 2.0, 7.0, LegendOrder.Furniture);
             LEGENDREGISTERED = true;
         }
     }

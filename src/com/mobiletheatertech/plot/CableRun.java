@@ -2,6 +2,7 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 /**
@@ -45,6 +46,8 @@ public class CableRun extends MinderDom implements Legendable {
     Device sinkDevice = null;
     Luminaire sourceLuminaire = null;
     Luminaire sinkLuminaire = null;
+    Schematicable sourceThingy = null;
+    Schematicable sinkThingy = null;
 
     static Integer Count = 0;
 
@@ -139,7 +142,7 @@ public class CableRun extends MinderDom implements Legendable {
         }
 
         if( ! Legended ) {
-            Legend.Register( this, 130, 7, LegendOrder.Device );
+            Legend.Register( this, 130.0, 7.0, LegendOrder.Device );
             Legended = true;
         }
     }
@@ -157,15 +160,15 @@ public class CableRun extends MinderDom implements Legendable {
     */
     @Override
     public void verify() throws InvalidXMLException {
-        sourceDevice = Device.Select( source );
-        sinkDevice = Device.Select( sink );
+        sourceThingy = sourceDevice = Device.Select( source );
+        sinkThingy = sinkDevice = Device.Select( sink );
 
         if( null == sourceDevice ) {
-            sourceLuminaire = Luminaire.Select( source );
+            sourceThingy = sourceLuminaire = Luminaire.Select( source );
         }
 
         if( null == sinkDevice) {
-            sinkLuminaire = Luminaire.Select( sink );
+            sinkThingy = sinkLuminaire = Luminaire.Select( sink );
         }
 
         if( (null == sourceDevice && null == sourceLuminaire) ||
@@ -228,12 +231,12 @@ public class CableRun extends MinderDom implements Legendable {
     }
 
     void domSchematic(Draw draw) {
-        PagePoint sourcePoint = (null != sourceDevice)
-                ? sourceDevice.schematicPosition()
-                : sourceLuminaire.schematicPosition();
-        PagePoint sinkPoint = (null != sinkDevice)
-                ? sinkDevice.schematicPosition()
-                : sinkLuminaire.schematicPosition();
+
+        String color = "green";
+        Double buffer = 6.0;
+
+        PagePoint sourcePoint = sourceThingy.schematicPosition();
+        PagePoint sinkPoint = sinkThingy.schematicPosition();
 
         SvgElement group = draw.element("g");
         group.attribute("class", this.getClass().getSimpleName() );
@@ -242,7 +245,27 @@ public class CableRun extends MinderDom implements Legendable {
         }
         draw.appendRootChild(group);
 
-        group.lineAbsolute( draw, sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y(), "green" );
+        Line2D.Double line = new Line2D.Double(
+                sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y() );
+        ArrayList<Schematicable> obstructionList = Schematic.FindObstruction( line );
+        obstructionList.remove( sourceThingy );
+        obstructionList.remove( sinkThingy );
+        if (                 obstructionList.size() == 0 ) {
+            group.lineAbsolute(draw, sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y(), color );
+        }
+        else {
+            Double top = Math.min(sourcePoint.y(), sinkPoint.y());
+            for( Schematicable obstruction : obstructionList ) {
+                if( obstruction.schematicBox().intersectsLine( line ) ) {
+                    top = Math.min( top, obstruction.schematicBox().getY() );
+                }
+            }
+            top -= buffer;
+            group.lineAbsolute( draw, sourcePoint.x(), sourcePoint.y(), sourcePoint.x(), top, color );
+            group.lineAbsolute( draw, sourcePoint.x(), top, sinkPoint.x(), top, color );
+            group.lineAbsolute( draw, sinkPoint.x(), top, sinkPoint.x(), sinkPoint.y(), color );
+        }
+
     }
 
     void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {

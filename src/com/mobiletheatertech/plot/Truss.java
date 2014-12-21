@@ -140,7 +140,7 @@ public class Truss extends Mountable implements Legendable {
             z = 0.0;
 
             if ( ! LEGENDREGISTERED ) {
-                Legend.Register( this, 2, 12, LegendOrder.Structure );
+                Legend.Register( this, 2.0, 12.0, LegendOrder.Structure );
                 LEGENDREGISTERED = true;
             }
         }

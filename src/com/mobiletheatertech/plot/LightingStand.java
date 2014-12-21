@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  * Created by dhs on 12/12/14.
  */
@@ -53,6 +55,11 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     @Override
     public PagePoint schematicPosition() {
         return schematicPosition;
+    }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
     }
 
     @Override

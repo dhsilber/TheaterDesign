@@ -20,8 +20,8 @@ public class Legend {
     public static final String TEXTCOLOR = "black";
 
     private static TreeMap<Integer, Legendable> LEGENDLIST = new TreeMap<>();
-    private static Integer HEIGHT = 0;
-    private static Integer WIDEST = 0;
+    private static Double HEIGHT = 0.0;
+    private static Double WIDEST = 0.0;
 
     private static PagePoint INITIAL;
     private static Draw DRAW;
@@ -39,7 +39,7 @@ public class Legend {
      * @param width    to allow for this entry
      * @param height   to allow for this entry
      */
-    public static void Register( Legendable callback, int width, int height, LegendOrder order ) {
+    public static void Register( Legendable callback, Double width, Double height, LegendOrder order ) {
 
         LEGENDLIST.put( order.next(), callback );
 
@@ -117,7 +117,7 @@ public class Legend {
      * @return width of widest legend
      * @since 0.0.13
      */
-    public static Integer Widest() {
+    public static Double Widest() {
         return WIDEST;
     }
 

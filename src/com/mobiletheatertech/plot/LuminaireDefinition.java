@@ -37,9 +37,9 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     //    private String id;
     private Boolean complete;
     private Element svg;
-    private Integer width;
-    private Integer length;
-    private int legendHeight;
+    private Double width;
+    private Double length;
+    private Double legendHeight;
 
     private static final String COLOR = "black";
 
@@ -78,8 +78,8 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             throw new AttributeMissingException( "Luminaire definition", null, "name" );
         }
         complete = (element.getAttribute( "complete" ).equals( "1" ));
-        width = getOptionalIntegerAttributeOrZero(element, "width");
-        length = getOptionalIntegerAttributeOrZero(element, "length");
+        width = getOptionalDoubleAttributeOrZero(element, "width");
+        length = getOptionalDoubleAttributeOrZero(element, "length");
 
         NodeList svgList = element.getElementsByTagName( "svg" );
         if (null != svgList && svgList.getLength() > 0) {
@@ -97,18 +97,16 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
                             ? length
                             : width);
         if (complete) {
-            Legend.Register( this, 130, legendHeight, LegendOrder.Luminaire );
+            Legend.Register( this, 130.0, legendHeight, LegendOrder.Luminaire );
         }
     }
 
-    public Integer height() {
-        return legendHeight;
+    public Double length() {
+        return length;
     }
 
-    public Integer width() {
-        return   ((width < length)
-                  ? length
-                  : width);
+    public Double width() {
+        return width;
     }
 
     @Override

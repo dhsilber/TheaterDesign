@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 //import java.awt.geom.Line2D;
 
@@ -41,6 +42,7 @@ public class Luminaire extends MinderDom implements Schematicable {
     public static final String LAYERTAG = "luminaire";
 
     private PagePoint schematicPosition = null;
+    private Rectangle2D.Double schematicBox = null;
 
     private String type;
     private String on;
@@ -121,6 +123,11 @@ public class Luminaire extends MinderDom implements Schematicable {
     @Override
     public PagePoint schematicPosition() {
         return schematicPosition;
+    }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return schematicBox;
     }
 
     /**
@@ -253,11 +260,19 @@ public class Luminaire extends MinderDom implements Schematicable {
                 break;
             case SCHEMATIC:
                 schematicPosition = mount.schematicLocation( location );
+                Double width = definition.width();
+                Double height = definition.length();
+                schematicBox = new Rectangle2D.Double(
+                        schematicPosition.x() - width / 2,
+                        schematicPosition.y() - height / 2,
+                        width, height );
+                Schematic.Obstruction( this );
+
                 group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
 
                 // Unit number to overlay on icon
-                SvgElement unitText = group.textAbsolute( draw, unit,
-                        schematicPosition.x(), schematicPosition.y(), COLOR );
+                SvgElement unitText = group.textAbsolute(draw, unit,
+                        schematicPosition.x() - 1, schematicPosition.y() + 2, COLOR);
                 unitText.attribute("fill", "none");
                 unitText.attribute("stroke", "green");
                 unitText.attribute("font-family", "sans-serif");
@@ -314,6 +329,6 @@ public class Luminaire extends MinderDom implements Schematicable {
      */
     @Override
     public String toString() {
-        return "Luminaire: " + type + ", " + circuit;
+        return "Luminaire: " + id + ": " + type + ", " + circuit;
     }
 }

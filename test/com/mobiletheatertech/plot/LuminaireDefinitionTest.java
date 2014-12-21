@@ -19,8 +19,8 @@ public class LuminaireDefinitionTest {
     Element element = null;
     Element svgElement = null;
     final String id = "6x9";
-    Integer width = 13;
-    Integer length = 27;
+    Double width = 13.8;
+    Double length = 27.2;
 
     @Test
     public void isA() throws Exception {
@@ -43,17 +43,20 @@ public class LuminaireDefinitionTest {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), id );
-        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "width" ), (Integer) 0 );
-        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "length" ), (Integer) 0 );
+        assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), 0.0 );
+        assertEquals( TestHelpers.accessDouble( luminaireDefinition, "length"), 0.0 );
+        assertEquals( TestHelpers.accessBoolean(luminaireDefinition, "complete"), Boolean.FALSE );
     }
 
     @Test
     public void storesOptionalAttributes() throws Exception {
+        element.setAttribute("complete", "1");
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), id );
-        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "width" ), width );
-        assertEquals( TestHelpers.accessInteger( luminaireDefinition, "length" ), length );
+        assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), width );
+        assertEquals( TestHelpers.accessDouble(luminaireDefinition, "length"), length );
+        assertEquals( TestHelpers.accessBoolean(luminaireDefinition, "complete"), Boolean.TRUE );
     }
 
     @Test
@@ -70,14 +73,14 @@ public class LuminaireDefinitionTest {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         Object svg = TestHelpers.accessObject(luminaireDefinition, "svg");
-        assertNotNull( svg );
+        assertNotNull(svg);
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
                     "LuminaireDefinition \\("+id+"\\) svg element is required.")
     public void missingSVG() throws Exception {
-        element.removeChild( svgElement );
+        element.removeChild(svgElement);
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         Object svg = TestHelpers.accessObject( luminaireDefinition, "svg" );
@@ -87,14 +90,44 @@ public class LuminaireDefinitionTest {
     // TODO Keep this until I resolve how Luminaire knows what type it is.
     @Test
     public void recallsNull() {
-        assertNull( LuminaireDefinition.Select( "bogus" ) );
+        assertNull(LuminaireDefinition.Select("bogus"));
     }
 
     // TODO Keep this until I resolve how Luminaire knows what type it is.
     @Test
     public void recalls() throws Exception {
         LuminaireDefinition definition = new LuminaireDefinition( element );
-        assertSame( LuminaireDefinition.Select( id ), definition );
+        assertSame(LuminaireDefinition.Select(id), definition);
+    }
+
+    @Test
+    public void length() throws Exception {
+        LuminaireDefinition instance = new LuminaireDefinition( element );
+
+        assertEquals(instance.length(), length);
+    }
+
+    @Test
+    public void noLength() throws Exception {
+        element.removeAttribute( "length" );
+        LuminaireDefinition instance = new LuminaireDefinition( element );
+
+        assertEquals(instance.length(), 0.0 );
+    }
+
+    @Test
+    public void width() throws Exception {
+        LuminaireDefinition instance = new LuminaireDefinition( element );
+
+        assertEquals( instance.width(), width );
+    }
+
+    @Test
+    public void noWidth() throws Exception {
+        element.removeAttribute( "width" );
+        LuminaireDefinition instance = new LuminaireDefinition( element );
+
+        assertEquals( instance.width(), 0.0 );
     }
 
     /*

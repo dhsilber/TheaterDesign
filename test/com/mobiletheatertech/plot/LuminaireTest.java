@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,6 +46,7 @@ public class LuminaireTest {
     String lightingStandLocation = "b";
 
     LightingStand lightingStand = null;
+    LuminaireDefinition luminaireDefinition = null;
 
     final String id = pipeName + ":" + unit;
 
@@ -596,9 +598,65 @@ public class LuminaireTest {
         diversionElement = (Element) node;
         String text = diversionElement.getTextContent();
         assertEquals( text, unit );
+        x -= 1;
+        y += 2;
         assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
         assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+    }
 
+    @Test
+    public void domSchematicStoresObstruction() throws Exception {
+        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+        elementOnLightingStand.setAttribute( "location", "c" );
+        elementOnLightingStand.setAttribute( "unit", "other unit" );
+        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+        instance1.verify();
+        instance2.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+        lightingStand.dom(draw, View.SCHEMATIC);
+        Double width = luminaireDefinition.width();
+        Double height = luminaireDefinition.length();
+        Rectangle2D.Double rectangle1 =
+                new Rectangle2D.Double(
+                        Schematic.FirstX - LightingStand.Space * 0.5 - width / 2,
+                        Schematic.FirstY - height / 2,
+                        width, height );
+        Rectangle2D.Double rectangle2 =
+                new Rectangle2D.Double(
+                        Schematic.FirstX + LightingStand.Space * 0.5 - width / 2,
+                        Schematic.FirstY - height / 2,
+                        width, height );
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        assertEquals( instance1.schematicBox(), rectangle1 );
+        assertEquals( instance2.schematicBox(), rectangle2 );
+    }
+
+    @Test
+    public void domSchematicRegistersObstruction() throws Exception {
+        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+        elementOnLightingStand.setAttribute( "location", "c" );
+        elementOnLightingStand.setAttribute( "unit", "other unit" );
+        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+        instance1.verify();
+        instance2.verify();
+        Draw draw = new Draw();
+        draw.establishRoot();
+        lightingStand.dom(draw, View.SCHEMATIC);
+
+        ArrayList<Schematicable> list = (ArrayList)
+                TestHelpers.accessStaticObject(
+                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
+        assertEquals( list.size(), 0 );
+
+        instance1.dom(draw, View.SCHEMATIC);
+        instance2.dom(draw, View.SCHEMATIC);
+
+        assert list.contains( instance1 );
+        assert list.contains( instance2 );
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -654,6 +712,7 @@ public class LuminaireTest {
         TestResets.MountableReset();
         TestResets.LuminaireReset();
         Schematic.Count = 0;
+        TestResets.SchematicReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -718,7 +777,7 @@ public class LuminaireTest {
         definitionElement.setAttribute( "width", width.toString() );
         definitionElement.setAttribute( "length", length.toString() );
         definitionElement.appendChild(new IIOMetadataNode("svg"));
-        new LuminaireDefinition( definitionElement );
+        luminaireDefinition = new LuminaireDefinition( definitionElement );
 
 
         elementOnPipe = new IIOMetadataNode( "luminaire" );

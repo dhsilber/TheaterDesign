@@ -825,10 +825,11 @@ public class CableRunTest {
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 5);
-        Node groupNode = group.item(3);
+        Node groupNode = group.item(4);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element groupElement = (Element) groupNode;
-        assertEquals(groupElement.getAttribute("class"), CableRun.class.getSimpleName() );
+        // No layer, so no class attribute
+        assertEquals(groupElement.getAttribute("class"), "" );
 
         NodeList list = groupElement.getElementsByTagName("line");
         assertEquals(list.getLength(), 1);
@@ -837,10 +838,10 @@ public class CableRunTest {
         Element element = (Element) node;
         PagePoint sourcePoint = sourceDevice.schematicPosition();
         PagePoint sinkPoint = sinkLuminaire.schematicPosition();
-        assertEquals(element.getAttribute("x1"), sourcePoint.x() );
-        assertEquals(element.getAttribute("y1"), sourcePoint.y() );
-        assertEquals(element.getAttribute("x2"), sinkPoint.x() );
-        assertEquals(element.getAttribute("y2"), sinkPoint.y() );
+        assertEquals(element.getAttribute("x1"), sourcePoint.x().toString() );
+        assertEquals(element.getAttribute("y1"), sourcePoint.y().toString() );
+        assertEquals(element.getAttribute("x2"), sinkPoint.x().toString() );
+        assertEquals(element.getAttribute("y2"), sinkPoint.y().toString() );
         assertEquals(element.getAttribute("stroke"), "green" );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }

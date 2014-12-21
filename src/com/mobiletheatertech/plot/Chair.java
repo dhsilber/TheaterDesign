@@ -70,7 +70,7 @@ public class Chair extends MinderDom implements Legendable {
 //        new Category( CATEGORY, this.getClass(), LAYERTAG );
 
         if ( ! LEGENDREGISTERED ) {
-            Legend.Register(this, 2, 7, LegendOrder.Furniture);
+            Legend.Register(this, 2.0, 7.0, LegendOrder.Furniture);
             LEGENDREGISTERED = true;
         }
     }

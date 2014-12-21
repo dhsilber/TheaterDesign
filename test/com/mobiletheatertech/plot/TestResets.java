@@ -206,6 +206,21 @@ public class TestResets {
      * @throws NoSuchFieldException   if the {@code STACKABLELIST} field isn't there.
      * @throws IllegalAccessException if the {@code STACKABLELIST} field cannot be accessed.
      */
+    public static void SchematicReset() throws Exception {
+        ArrayList<Schematicable> list = (ArrayList)
+                TestHelpers.accessStaticObject(
+                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
+        list.clear();
+
+        Schematic.Count = 0;
+    }
+
+    /**
+     * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code STACKABLELIST} field isn't there.
+     * @throws IllegalAccessException if the {@code STACKABLELIST} field cannot be accessed.
+     */
     public static void StackableReset() throws NoSuchFieldException, IllegalAccessException {
         Field field = Stackable.class.getDeclaredField( "STACKABLELIST" );
         field.setAccessible( true );

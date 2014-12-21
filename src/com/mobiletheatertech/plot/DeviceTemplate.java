@@ -107,7 +107,7 @@ public class DeviceTemplate extends Layerer implements Legendable
 
         DEVICELIST.add( this );
 
-        Legend.Register( this, 2, 7, LegendOrder.Device );
+        Legend.Register( this, 2.0, 7.0, LegendOrder.Device );
 
         if ( null != layer ) {
             Layer layerActual = Layer.Register( layer, layer );

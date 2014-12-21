@@ -84,7 +84,7 @@ public class HangPoint extends MinderDom implements Legendable {
 //        new Category( CATEGORY, this.getClass() );
 
         if( ! Legended ) {
-            Legend.Register( this, 130, 7, LegendOrder.Room );
+            Legend.Register( this, 130.0, 7.0, LegendOrder.Room );
             Legended = true;
         }
     }

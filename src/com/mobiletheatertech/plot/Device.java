@@ -2,6 +2,7 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -115,6 +116,11 @@ public class Device extends Stackable implements Schematicable
     @Override
     public PagePoint schematicPosition() {
         return schematicPosition;
+    }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
     }
 
     public Place location() {
