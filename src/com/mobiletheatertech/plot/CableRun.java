@@ -41,9 +41,10 @@ public class CableRun extends MinderDom implements Legendable, Schematicable {
     private String sink;
     private String channel;
     private String routing;
+    private String color;
 
     private static final String DIRECT = "direct";
-    private static final String COLOR = "green";
+//    private static final String COLOR = "green";
 
     Device sourceDevice = null;
     Device sinkDevice = null;
@@ -144,6 +145,8 @@ public class CableRun extends MinderDom implements Legendable, Schematicable {
             }
             throw new AttributeMissingException( message );
         }
+
+        color = CableType.Select( signal ).color();
 
         routing = getOptionalStringAttribute( element, "routing");
         if( ! "".equals( routing ) && ! DIRECT.equals( routing )) {
@@ -426,9 +429,6 @@ public class CableRun extends MinderDom implements Legendable, Schematicable {
             return;
         }
 
-
-        String color = "green";
-
         SvgElement group = draw.element("g");
         group.attribute("class", this.getClass().getSimpleName() );
         if (null != sourceDevice) {
@@ -534,7 +534,7 @@ public class CableRun extends MinderDom implements Legendable, Schematicable {
     }
 
     void appendLineSegment( Draw draw, SvgElement group, Point one, Point two ) {
-        group.line( draw, one.x(), one.y(), two.x(), two.y(), "green" );
+        group.line( draw, one.x(), one.y(), two.x(), two.y(), color );
     }
 
 
@@ -560,7 +560,7 @@ public class CableRun extends MinderDom implements Legendable, Schematicable {
 
         Double endLine = start.x() + 12;
 
-        draw.lineAbsolute(draw, start.x(), start.y(), endLine, start.y(), COLOR);
+        draw.lineAbsolute(draw, start.x(), start.y(), endLine, start.y(), "green" );
 
         String words = source + " cable run";
         Double x = start.x() + Legend.TEXTOFFSET;

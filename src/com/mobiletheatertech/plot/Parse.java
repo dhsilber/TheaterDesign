@@ -82,6 +82,7 @@ public class Parse {
         parseXML( CableDiversion.class, "cable-diversion" );
         parseXML( LuminaireDefinition.class, "luminaire-definition");
         parseXML( DeviceTemplate.class, "device-template");
+        parseXML( CableType.class, "cable-type");
         parseXML( Venue.class, "venue");
         parseXML( Wall.class, "wall");
         parseXML( Balcony.class, "balcony");

@@ -30,6 +30,15 @@ public class TestResets {
         runList.clear();
     }
 
+    public static void CableTypeReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = CableType.class.getDeclaredField( "CABLETYPELIST" );
+        field.setAccessible( true );
+        ArrayList<CableType> list = (ArrayList<CableType>) field.get( CableType.class );
+        list.clear();
+    }
+
 //    public static void CategoryReset()
 //            throws NoSuchFieldException, IllegalAccessException
 //    {

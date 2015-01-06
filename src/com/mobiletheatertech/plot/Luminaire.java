@@ -297,7 +297,8 @@ public class Luminaire extends MinderDom implements Schematicable {
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
             case SCHEMATIC:
-                group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
+                use = group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
+                use.attribute("transform", "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")" );
 
                 // Unit number to overlay on icon
                 SvgElement unitText = group.textAbsolute(draw, unit,

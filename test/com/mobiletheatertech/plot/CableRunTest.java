@@ -54,6 +54,7 @@ public class CableRunTest {
     private final Double table2Y = 15.0;
     private final Double table2Z = 16.0;
     private final String templateName = "thingy";
+    private final String color = "tangimarine";
 
     Device sourceDevice = null;
     Device sinkDevice = null;
@@ -329,7 +330,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), tableY.toString() );
         assertEquals(element.getAttribute("y2"), table2Y.toString() );
         assertEquals(element.getAttribute("x2"), table2X.toString() );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
         assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -397,7 +398,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "130.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -465,7 +466,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "25.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(1);
@@ -475,7 +476,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "25.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(2);
@@ -485,7 +486,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(3);
@@ -495,7 +496,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(4);
@@ -505,7 +506,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "14.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -573,7 +574,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "12.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(1);
@@ -583,7 +584,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(2);
@@ -593,7 +594,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(3);
@@ -603,7 +604,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(4);
@@ -613,7 +614,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(5);
@@ -623,7 +624,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "14.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -691,7 +692,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "12.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(1);
@@ -701,7 +702,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(2);
@@ -711,7 +712,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(3);
@@ -721,7 +722,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(4);
@@ -731,7 +732,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "2.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(5);
@@ -741,7 +742,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "14.0" );
         assertEquals(element.getAttribute("x2"), "310.0" );
         assertEquals(element.getAttribute("y2"), "14.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -774,7 +775,7 @@ public class CableRunTest {
         assertEquals(lineElement.getAttribute("y1"), startPoint.y().toString());
         assertEquals(lineElement.getAttribute("x2"), endX.toString() );
         assertEquals(lineElement.getAttribute("y2"), startPoint.y().toString());
-        assertEquals(lineElement.getAttribute("stroke"), "green" );
+        assertEquals(lineElement.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         Node textNode = textList.item(0);
@@ -816,7 +817,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "12.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(1);
@@ -826,7 +827,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "20.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
 
         node = list.item(2);
@@ -836,7 +837,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), "20.0" );
         assertEquals(element.getAttribute("x2"), "2.0" );
         assertEquals(element.getAttribute("y2"), "2.0" );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -875,7 +876,7 @@ public class CableRunTest {
         assertEquals(element.getAttribute("y1"), sourcePoint.y().toString() );
         assertEquals(element.getAttribute("x2"), sinkPoint.x().toString() );
         assertEquals(element.getAttribute("y2"), sinkPoint.y().toString() );
-        assertEquals(element.getAttribute("stroke"), "green" );
+        assertEquals(element.getAttribute("stroke"), color );
 //        assertEquals(element.getAttribute("stroke-width"), "1" );
     }
 
@@ -1016,6 +1017,11 @@ public class CableRunTest {
         sinkLuminaireElement.setAttribute( "location", sinkLuminaireLocation );
         sinkLuminaire = new Luminaire( sinkLuminaireElement );
         sinkLuminaire.verify();
+
+        Element cableTypeElement = new IIOMetadataNode( "cable-type" );
+        cableTypeElement.setAttribute( "id", signalName );
+        cableTypeElement.setAttribute( "schematic-color", color );
+        new CableType( cableTypeElement );
 
         deviceToLuminaireElement = new IIOMetadataNode( "cable-run" );
         deviceToLuminaireElement.setAttribute( "signal", signalName );
