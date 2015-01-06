@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Generic pipe.
@@ -16,7 +17,7 @@ import java.awt.*;
  * @author dhs
  * @since 0.0.6
  */
-public class Pipe extends Mountable {
+public class Pipe extends Mountable implements Schematicable {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -34,6 +35,10 @@ public class Pipe extends Mountable {
     public static final Double DIAMETER = 2.0;
 
 //    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
+
+
+    private PagePoint schematicPosition = null;
+
 
     /**
      * Length of pipe. I'm using inches so that the line thickness isn't ridiculous, but that isn't
@@ -175,7 +180,22 @@ public class Pipe extends Mountable {
     }
 
     @Override
-    public PagePoint schematicLocation( String location ) { return null; }
+    public PagePoint schematicLocation( String location ) {
+        return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicPosition() {
+        return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
+    }
 
     /**
      * Provide the drawing location of a point along this {@code Pipe}.
@@ -237,6 +257,18 @@ public class Pipe extends Mountable {
             throws InvalidXMLException, MountingException, ReferenceException {
         // Pipes are not yet able to be rotated, so this just passes through to location().
         return new Place(location(location), boxOrigin, 0.0);
+    }
+
+    @Override
+    public void useCount( Direction direction, CableRun run ) {
+    }
+
+    @Override
+    public void preview( View view ) {
+        switch ( view ) {
+            case SCHEMATIC:
+                schematicPosition = Schematic.Position( length, 2.0 );
+        }
     }
 
     /**

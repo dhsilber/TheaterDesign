@@ -9,6 +9,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  * Defines a box truss. <p> XML tag is 'truss'. Required children are 'suspend' or 'base' elements. Required
  * attributes are 'size' (valid values are 12 and 20) and 'length'. </p><p> For now, I'm allowing
@@ -17,7 +19,7 @@ import org.w3c.dom.Text;
  * @author dhs
  * @since 0.0.5
  */
-public class Truss extends Mountable implements Legendable {
+public class Truss extends Mountable implements Legendable, Schematicable {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -35,6 +37,10 @@ public class Truss extends Mountable implements Legendable {
     private static Double TrussCount = 0.0;
     private Double trussCounted = Double.MIN_VALUE;
     Integer trussSegmentCount = 0;
+
+    private PagePoint schematicPosition = null;
+    private final Double schematicHeight = 200.0;  // Room for two views of a piece of truss, plus space around them for luminaires.
+
 
     private String color = "dark blue";
     private Double size = null;
@@ -195,7 +201,80 @@ public class Truss extends Mountable implements Legendable {
     }
 
     @Override
-    public PagePoint schematicLocation( String location ) { return null; }
+    public PagePoint schematicLocation( String location ) throws InvalidXMLException, MountingException {
+        Character vertex = location.charAt(0);
+        Integer distance = locationDistance(location);
+
+
+//        if( null != base ) {
+//            Double northOffset = size / 2 * -1;
+//            Double westOffset = size / 2 * -1;
+//
+//            switch (vertex) {
+//                case 'a':
+//                    break;
+//                case 'b':
+//                    westOffset *= -1;
+//                    break;
+//                case 'c':
+//                    northOffset *= -1;
+//                    break;
+//                case 'd':
+//                    northOffset *= -1;
+//                    westOffset *= -1;
+//                    break;
+//                default:
+//                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+//            }
+//
+//            return new PagePoint( x + westOffset, y + northOffset, z + distance );
+//
+//        }
+//        else {
+            Double offset = size / 2;
+
+            switch (vertex) {
+                case 'a':
+                case 'c':
+                    offset *= -1;
+                    break;
+                case 'b':
+                case 'd':
+                    break;
+                default:
+                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+            }
+
+                Double verticalOffset = 0.0;
+                switch (vertex) {
+                    case 'a':
+                    case 'b':
+                        verticalOffset -= schematicHeight / 4;
+                        break;
+                    case 'c':
+                    case 'd':
+                        verticalOffset += schematicHeight / 4;
+                        break;
+                    default:
+                        throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+                }
+
+                return new PagePoint( schematicPosition.x() - length / 2 + distance, schematicPosition.y() + offset + verticalOffset );
+//        }
+    }
+
+    @Override
+    public PagePoint schematicPosition() {
+        return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
+    }
 
     /*
     * Provide the location to draw a hanged thing at relative to the unrotated truss.
@@ -205,18 +284,7 @@ public class Truss extends Mountable implements Legendable {
     @Override
     public Point location(String location) throws InvalidXMLException, MountingException, ReferenceException {
         Character vertex = location.charAt(0);
-
-        String distanceString = location.substring(1);
-        Integer distance;
-        try {
-            distance = new Integer(distanceString.trim());
-        } catch (NumberFormatException exception) {
-            throw new InvalidXMLException("Truss (" + id + ") location not correctly formatted.");
-        }
-
-        if (0 > distance || distance > length) {
-            throw new MountingException("Truss (" + id + ") does not include location " + distance.toString() + ".");
-        }
+        Integer distance = locationDistance(location);
 
         if( null != base ) {
             Double northOffset = size / 2 * -1;
@@ -295,6 +363,21 @@ public class Truss extends Mountable implements Legendable {
                 return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
             }
         }
+    }
+
+    Integer locationDistance(String location) throws InvalidXMLException, MountingException {
+        String distanceString = location.substring(1);
+        Integer distance;
+        try {
+            distance = new Integer(distanceString.trim());
+        } catch (NumberFormatException exception) {
+            throw new InvalidXMLException("Truss (" + id + ") location not correctly formatted.");
+        }
+
+        if (0 > distance || distance > length) {
+            throw new MountingException("Truss (" + id + ") does not include location " + distance.toString() + ".");
+        }
+        return distance;
     }
 
     /*
@@ -387,6 +470,18 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     }
 
     @Override
+    public void useCount( Direction direction, CableRun run ) {
+    }
+
+    @Override
+    public void preview( View view ) {
+        switch ( view ) {
+            case SCHEMATIC:
+                schematicPosition = Schematic.Position( length, schematicHeight );
+        }
+    }
+
+    @Override
     public void dom(Draw draw, View mode) {
         SvgElement trussRectangle = null;//draw.element("rect");
         SvgElement group = null;
@@ -394,7 +489,8 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
         // Common setup:
         switch (mode) {
             case PLAN:
-            case TRUSS:
+//            case TRUSS:
+            case SCHEMATIC:
                 group = svgClassGroup( draw, LAYERTAG );
                 draw.appendRootChild(group);
                 break;
@@ -434,77 +530,46 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
                             "rotate(" + rotation + "," + transformX + "," + transformY + ")");
                 }
                 break;
-            case TRUSS:
+            case SCHEMATIC:
                 if ( null != base ) {
 
                 }
-                else if( ! positioned ) {
-                    Double yTruss1 = TrussCount * 320 + 80;
-                    trussRectangle= group.rectangle( draw, size, yTruss1, length, size, color );
+                else {
+                    PagePoint trussTop =
+                            new PagePoint( schematicPosition.x(), schematicPosition.y() - schematicHeight / 4 );
+                    PagePoint trussBottom =
+                            new PagePoint( schematicPosition.x(), schematicPosition.y() + schematicHeight / 4 );
 
-                    Double yTruss2 = TrussCount * 320 + 220;
+                    group.rectangleAbsolute( draw,
+                            trussTop.x() - length / 2, trussTop.y() - size / 2,
+                            length, size, color );
 
                     SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
                     draw.appendRootChild(group2);
-                    SvgElement trussRectangle2 = group2.rectangle( draw, size, yTruss2, length, size, color );
-//                trussRectangle2.setAttribute("height", size.toString());
-//                trussRectangle2.setAttribute("fill", "none");
-//                trussRectangle2.setAttribute("stroke", color);
-//                trussRectangle2.setAttribute("width", length.toString());
-//                group2.appendChild(trussRectangle2);
+                    group.rectangleAbsolute( draw,
+                            trussBottom.x() - length / 2, trussBottom.y() - size / 2,
+                            length, size, color );
 
-//                trussRectangle2.setAttribute("x", size.toString());
-//                trussRectangle2.setAttribute("y", yTruss2.toString());
 
-                    Double hangOneX = size + overHang;
-                    Double hangOneY = yTruss1 + size / 2;
-                    HangPoint.Draw( draw, hangOneX, hangOneY, hangOneX, hangOneY + size+ size, suspend1.ref() );
-
-                    Double hangTwoX = size + length - overHang;
-                    Double hangTwoY = yTruss1 + size / 2;
-                    HangPoint.Draw( draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size+size, suspend2.ref() );
-
-//                Integer hangThreeX = size + overHang;
-//                Integer hangThreeY = yTruss2 - size / 2;
-//                HangPoint.Draw( draw, hangThreeX, hangThreeY, hangThreeX, hangThreeY + size, suspend1.id );
+//                    // For hangpoints, which is a lower priority today.
+//                    if ( ! positioned ) {
+//                        Double hangOneX = size + overHang;
+//                        Double hangOneY = yTruss1 + size / 2;
+//                        HangPoint.Draw(draw, hangOneX, hangOneY, hangOneX, hangOneY + size + size, suspend1.ref());
 //
-//                Integer hangFourX = size + length - overHang;
-//                Integer hangFourY = yTruss2 - size / 2;
-//                HangPoint.Draw( draw, hangFourX, hangFourY, hangFourX, hangFourY + size, suspend1.id );
+//                        Double hangTwoX = size + length - overHang;
+//                        Double hangTwoY = yTruss1 + size / 2;
+//                        HangPoint.Draw(draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size + size, suspend2.ref());
+//                    }
 
-                    Double textX=size *2 + length;
-                    Double textY = yTruss1;
-                    SvgElement idText = group.text( draw, id + " top layer", textX, textY, color );
-//                draw.element("text");
-//                idText.setAttribute( "x", textX.toString() );
-//                idText.setAttribute( "y", textY.toString() );
-//                idText.setAttribute( "fill", color );
-//                idText.setAttribute( "stroke", "none" );
-//                idText.setAttribute( "font-family", "sans-serif" );
-//                idText.setAttribute( "font-weight", "100" );
-//                idText.setAttribute( "font-size", "12pt" );
-//                idText.setAttribute( "text-anchor", "left" );
-//                group.appendChild( idText );
 
-//                Text textId = draw.document().createTextNode( id + " top layer" );
-//                idText.appendChild( textId );
+                    Double topTextX = trussTop.x() + length / 2 + Schematic.TextSpace;
+                    Double topTextY = trussTop.y();
+                    SvgElement idText = group.textAbsolute( draw, id + " top layer", topTextX, topTextY, color );
 
-                    Double textX2=size *2 + length;
-                    Double textY2 = yTruss2;
-                    SvgElement idText2 = group.text(draw, id + " bottom layer", textX2, textY2, color);
-//                draw.element("text");
-//                idText2.setAttribute("x", textX2.toString());
-//                idText2.setAttribute("y", textY2.toString());
-//                idText2.setAttribute("fill", color);
-//                idText2.setAttribute("stroke", "none");
-//                idText2.setAttribute("font-family", "sans-serif");
-//                idText2.setAttribute("font-weight", "100");
-//                idText2.setAttribute("font-size", "12pt");
-//                idText2.setAttribute("text-anchor", "left");
-//                group.appendChild( idText2 );
-
-//                Text textId2 = draw.document().createTextNode( id + " bottom layer" );
-//                idText2.appendChild(textId2);
+                    Double bottomTextX = trussBottom.x() + length / 2 + Schematic.TextSpace;
+                    Double bottomTextY = trussBottom.y();
+                    SvgElement idText2 = group.textAbsolute(draw, id + " bottom layer", bottomTextX, bottomTextY, color);
 
 
                     trussCounted = TrussCount;

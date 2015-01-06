@@ -140,7 +140,7 @@ public class Parse {
                         InstantiationException |
                         IllegalAccessException |
                         InvocationTargetException e ) {
-                    System.err.println(  e.getCause().getMessage() );
+                    System.err.println( e.getCause().getMessage() );
 
                     fatalParseError = true;
 

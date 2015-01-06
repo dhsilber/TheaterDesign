@@ -7,6 +7,8 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
+import java.util.ArrayList;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -82,6 +84,8 @@ public class CableRunTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+
+        assert Schematicable.class.isInstance( instance );
     }
 
     @Test
@@ -224,6 +228,35 @@ public class CableRunTest {
         element.setAttribute("sink", bogusSink);
         CableRun run = new CableRun(element);
         run.verify();
+    }
+
+    @Test
+    public void verifySavesReference() throws Exception {
+        CableRun run = new CableRun(element);
+
+//        ArrayList<CableRun> runlist = (ArrayList)
+//                TestHelpers.accessStaticObjectNotNull( "com.mobiletheatertech.plot.CableRun", "RunList" );
+        ArrayList<CableRun> runlist = (ArrayList)
+                TestHelpers.accessStaticObjectNotNull( CableRun.class.getName(), "RunList" );
+        assertEquals( runlist.size(), 0 );
+
+        run.verify();
+
+        assert runlist.contains(run);
+        assertEquals( runlist.size(), 1 );
+    }
+
+    @Test
+    public void CollateCounts() throws Exception {
+        CableRun run = new CableRun(element);
+        run.verify();
+
+        CableRun.Collate();
+
+//        assertEquals( sourceDevice.cablesIn[ Direction.Right.ordinal() ], 1 );
+//        assertEquals( sinkDevice.cablesIn[ Direction.Left.ordinal() ], 1 );
+////        assertEquals( sourceDevice.cablesIn[ Direction.Down.ordinal() ], (Integer) 1 );
+////        assertEquals( sinkDevice.cablesIn[ Direction.UP.ordinal() ], (Integer) 1 );
     }
 
 //    @Test
@@ -863,6 +896,7 @@ public class CableRunTest {
 //        TestResets.DeviceReset();
         TestResets.MountableReset();
         TestResets.LuminaireReset();
+        TestResets.CableRunReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );

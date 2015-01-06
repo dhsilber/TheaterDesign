@@ -59,6 +59,17 @@ public class ExceptionTest {
     }
 
     /**
+     * For bad data that the program previously stored.
+     *
+     * @since 0.1.29
+     */
+    @Test(expectedExceptions = CorruptedInternalInformationException.class,
+            expectedExceptionsMessageRegExp = "grubby")
+    public void corruptedInternalInformationException() throws Exception {
+        throw new CorruptedInternalInformationException("grubby");
+    }
+
+    /**
      * For bad data not directly from XML.
      *
      * @since 0.0.21

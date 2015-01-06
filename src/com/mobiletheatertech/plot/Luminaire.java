@@ -41,6 +41,8 @@ public class Luminaire extends MinderDom implements Schematicable {
      */
     public static final String LAYERTAG = "luminaire";
 
+    LuminaireDefinition definition;
+
     private PagePoint schematicPosition = null;
     private Rectangle2D.Double schematicBox = null;
 
@@ -64,6 +66,8 @@ public class Luminaire extends MinderDom implements Schematicable {
     private Mountable mount = null;
 
     static final String COLOR = "black";
+
+    CableCounter cableCounter = new CableCounter();
 
 
     /**
@@ -126,6 +130,15 @@ public class Luminaire extends MinderDom implements Schematicable {
     }
 
     @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run )
+            throws CorruptedInternalInformationException, ReferenceException
+    {
+        Solid shape = new Solid( definition.width(), definition.width(), definition.length() );
+
+        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
+    }
+
+    @Override
     public Rectangle2D.Double schematicBox() {
         return schematicBox;
     }
@@ -163,6 +176,17 @@ public class Luminaire extends MinderDom implements Schematicable {
 //        Integer transformY = origin.y() + SvgElement.OffsetY();
 //        transform = "rotate(" + pipeRotation + "," + origin.x() + "," + transformY + ")";
         transform = "rotate(" + pipeRotation + "," + origin.x() + "," + origin.y() + ")";
+
+        // TODO Keep this until I resolve how Luminaire knows what type it is.
+        definition = LuminaireDefinition.Select( type );
+        if( null == definition ) {
+            throw new ReferenceException( "Unable to find definition for "+ type );
+        }
+    }
+
+    @Override
+    public void useCount( Direction direction, CableRun run ) {
+        cableCounter.add( direction, run );
     }
 
     Point point() {
@@ -208,6 +232,26 @@ public class Luminaire extends MinderDom implements Schematicable {
         return angle.intValue() + 90;
     }
 
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//        cablesIn[ direction.ordinal() ]++;
+//    }
+
+    @Override
+    public void preview( View view ) throws InvalidXMLException, MountingException {
+        switch ( view ) {
+            case SCHEMATIC:
+                schematicPosition = mount.schematicLocation( location );
+
+                Double width = definition.width();
+                Double height = definition.length();
+                schematicBox = new Rectangle2D.Double(
+                        schematicPosition.x() - width / 2,
+                        schematicPosition.y() - height / 2,
+                        width, height );
+                Schematic.Obstruction( this );
+        }
+    }
 
     /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
@@ -233,17 +277,11 @@ public class Luminaire extends MinderDom implements Schematicable {
         // use element for luminaire icon
         SvgElement use = null;
 
-        // TODO Keep this until I resolve how Luminaire knows what type it is.
-        LuminaireDefinition definition = LuminaireDefinition.Select( type );
-        if( null == definition ) {
-            throw new    ReferenceException( "Unable to find definition for "+ type );
-        }
-
         switch (view) {
             case PLAN:
                 domPlan(draw, group);
-                Double x;
-                Double y;
+//                Double x;
+//                Double y;
 
                 break;
             case SECTION:
@@ -259,15 +297,6 @@ public class Luminaire extends MinderDom implements Schematicable {
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
             case SCHEMATIC:
-                schematicPosition = mount.schematicLocation( location );
-                Double width = definition.width();
-                Double height = definition.length();
-                schematicBox = new Rectangle2D.Double(
-                        schematicPosition.x() - width / 2,
-                        schematicPosition.y() - height / 2,
-                        width, height );
-                Schematic.Obstruction( this );
-
                 group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
 
                 // Unit number to overlay on icon

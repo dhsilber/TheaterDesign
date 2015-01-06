@@ -3,6 +3,7 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +32,9 @@ import java.util.ArrayList;
  * @author dhs
  * @since 2014-01-12
  */
-public class CableRun extends MinderDom implements Legendable {
+public class CableRun extends MinderDom implements Legendable, Schematicable {
+
+    static ArrayList<CableRun> RunList = new ArrayList<>();
 
     private String signal;
     private String source;
@@ -49,9 +52,17 @@ public class CableRun extends MinderDom implements Legendable {
     Schematicable sourceThingy = null;
     Schematicable sinkThingy = null;
 
+    PagePoint sourcePoint = null;
+    PagePoint sinkPoint = null;
+
+    Direction sourceIn = null;
+    Direction sinkIn = null;
+
     static Integer Count = 0;
+    ArrayList<Line2D.Double> schematicLines = new ArrayList<>();
 
     private static Boolean Legended = false;
+     static Boolean Collated = false;
 
     /**
      * Construct a {@code CableRun} from an XML element.
@@ -147,6 +158,19 @@ public class CableRun extends MinderDom implements Legendable {
         }
     }
 
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
+    }
+
+    @Override
+    public PagePoint schematicPosition() {
+        return null;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+
     /**
      * Confirm that the two specified devices actually refer to
      * {@code Device}s that have been instantiated.
@@ -194,6 +218,91 @@ public class CableRun extends MinderDom implements Legendable {
             message.append( "." );
             throw new InvalidXMLException( message.toString() );
         }
+
+        RunList.add( this );
+    }
+
+    public static void Collate() {
+        for( CableRun run : RunList ) {
+            run.schematicLines = new ArrayList<>();
+            run.precheck();
+        }
+
+        Collated = true;
+    }
+
+    /**
+     * figure out which direction cable-run lines will hit things from and register that
+     * information with the things.
+     */
+    private void precheck() {
+//        Double buffer = 6.0;
+
+        sourcePoint = sourceThingy.schematicPosition();
+        sinkPoint = sinkThingy.schematicPosition();
+
+        if( null == sourcePoint ) {
+            System.out.println( sourceThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
+            return;
+        }
+
+        if( null == sinkPoint ) {
+            System.out.println( sinkThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
+            return;
+        }
+
+        Line2D.Double line = new Line2D.Double(
+                sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y() );
+        ArrayList<Schematicable> obstructionList = Schematic.FindObstruction( line );
+        obstructionList.remove( sourceThingy );
+        obstructionList.remove( sinkThingy );
+
+        if ( obstructionList.size() == 0 ) {
+//            schematicLines.add(new Line2D.Double(
+//                    sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y()) );
+
+            Double slope = (sinkPoint.y() - sourcePoint.y()) / (sinkPoint.x() - sourcePoint.x());
+
+            if( Math.abs( slope ) > 1.0 ) {
+                if ( sourcePoint.y() > sinkPoint.y() ) {
+                    sourceThingy.useCount( Direction.UP, this );
+                    sinkThingy.useCount( Direction.Down, this );
+                }
+                else {
+                    sourceThingy.useCount( Direction.Down, this );
+                    sinkThingy.useCount( Direction.UP, this );
+                }
+            }
+            else {
+                if ( sourcePoint.x() < sinkPoint.x() ) {
+                    sourceThingy.useCount( Direction.Right, this );
+                    sinkThingy.useCount( Direction.Left, this );
+                }
+                else {
+                    sourceThingy.useCount( Direction.Left, this );
+                    sinkThingy.useCount( Direction.Right, this );
+                }
+            }
+
+        }
+        else {
+//            Double top = Math.min(sourcePoint.y(), sinkPoint.y());
+//            for( Schematicable obstruction : obstructionList ) {
+//                if( obstruction.schematicBox().intersectsLine( line ) ) {
+//                    top = Math.min( top, obstruction.schematicBox().getY() );
+//                }
+//            }
+//            top -= buffer;
+//            schematicLines.add( new Line2D.Double(
+//                    sourcePoint.x(), sourcePoint.y(), sourcePoint.x(), top ) );
+//            schematicLines.add(new Line2D.Double(
+//                    sourcePoint.x(), top, sinkPoint.x(), top ) );
+//            schematicLines.add(new Line2D.Double(
+//                    sinkPoint.x(), top, sinkPoint.x(), sinkPoint.y() ) );
+
+            sourceThingy.useCount( Direction.UP, this );
+            sinkThingy.useCount( Direction.UP, this );
+        }
     }
 
 //    Somewhere in there, use java.awt.geom.Rectangle2D.intersectsLine() to find if the path
@@ -201,6 +310,87 @@ public class CableRun extends MinderDom implements Legendable {
 //    modify the path accordingly.
 //    I'm specifying the ends of a cable-diversion as points, but I can make there be a rectangle
 //            around each of those points for intercepting the generic cable path.
+
+    // There is no counting for the lines - only for the things at the ends of the lines
+    @Override
+    public void useCount( Direction direction, CableRun run ) {
+    }
+
+    @Override
+    public void preview( View view )
+            throws CorruptedInternalInformationException, ReferenceException {
+
+        if ( View.SCHEMATIC != view ) { return; }
+
+        if ( !Collated ) {
+            Collate();
+        }
+
+
+        if( null == sourcePoint || null == sinkPoint ) {
+            return;
+        }
+
+
+        Double buffer = 6.0;
+
+        sourcePoint = sourceThingy.schematicCableIntersectPosition( this );
+        sinkPoint = sinkThingy.schematicCableIntersectPosition(this);
+
+        Line2D.Double line = new Line2D.Double(
+                sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y() );
+        ArrayList<Schematicable> obstructionList = Schematic.FindObstruction( line );
+        obstructionList.remove( sourceThingy );
+        obstructionList.remove( sinkThingy );
+
+        if ( obstructionList.size() == 0 ) {
+            schematicLines.add( line );
+//                    new Line2D.Double(
+//                    sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y()) );
+
+//            Double slope = (sinkPoint.y() - sourcePoint.y()) / (sinkPoint.x() - sourcePoint.x());
+//
+//            if( Math.abs( slope ) > 1.0 ) {
+//                if ( sourcePoint.y() < sinkPoint.y() ) {
+//                    sourceThingy.useCount( Direction.UP, this );
+//                    sinkThingy.useCount( Direction.Down, this );
+//                }
+//                else {
+//                    sourceThingy.useCount( Direction.Down, this );
+//                    sinkThingy.useCount( Direction.UP, this );
+//                }
+//            }
+//            else {
+//                if ( sourcePoint.x() < sinkPoint.x() ) {
+//                    sourceThingy.useCount( Direction.Right, this );
+//                    sinkThingy.useCount( Direction.Left, this );
+//                }
+//                else {
+//                    sourceThingy.useCount( Direction.Left, this );
+//                    sinkThingy.useCount( Direction.Right, this );
+//                }
+//            }
+
+        }
+        else {
+            Double top = Math.min(sourcePoint.y(), sinkPoint.y());
+            for( Schematicable obstruction : obstructionList ) {
+                if( obstruction.schematicBox().intersectsLine( line ) ) {
+                    top = Math.min( top, obstruction.schematicBox().getY() );
+                }
+            }
+            top -= buffer;
+            schematicLines.add( new Line2D.Double(
+                    sourcePoint.x(), sourcePoint.y(), sourcePoint.x(), top ) );
+            schematicLines.add(new Line2D.Double(
+                    sourcePoint.x(), top, sinkPoint.x(), top ) );
+            schematicLines.add(new Line2D.Double(
+                    sinkPoint.x(), top, sinkPoint.x(), sinkPoint.y() ) );
+//
+//            sourceThingy.useCount( Direction.UP, this );
+//            sinkThingy.useCount( Direction.UP, this );
+        }
+    }
 
     /**
      * Generate SVG DOM for a {@code CableRun}. Basicly just a set of lines
@@ -232,11 +422,12 @@ public class CableRun extends MinderDom implements Legendable {
 
     void domSchematic(Draw draw) {
 
-        String color = "green";
-        Double buffer = 6.0;
+        if( null == sourcePoint || null == sinkPoint ) {
+            return;
+        }
 
-        PagePoint sourcePoint = sourceThingy.schematicPosition();
-        PagePoint sinkPoint = sinkThingy.schematicPosition();
+
+        String color = "green";
 
         SvgElement group = draw.element("g");
         group.attribute("class", this.getClass().getSimpleName() );
@@ -245,27 +436,9 @@ public class CableRun extends MinderDom implements Legendable {
         }
         draw.appendRootChild(group);
 
-        Line2D.Double line = new Line2D.Double(
-                sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y() );
-        ArrayList<Schematicable> obstructionList = Schematic.FindObstruction( line );
-        obstructionList.remove( sourceThingy );
-        obstructionList.remove( sinkThingy );
-        if (                 obstructionList.size() == 0 ) {
-            group.lineAbsolute(draw, sourcePoint.x(), sourcePoint.y(), sinkPoint.x(), sinkPoint.y(), color );
+        for( Line2D.Double line : schematicLines ) {
+            group.lineAbsolute( draw, line, color );
         }
-        else {
-            Double top = Math.min(sourcePoint.y(), sinkPoint.y());
-            for( Schematicable obstruction : obstructionList ) {
-                if( obstruction.schematicBox().intersectsLine( line ) ) {
-                    top = Math.min( top, obstruction.schematicBox().getY() );
-                }
-            }
-            top -= buffer;
-            group.lineAbsolute( draw, sourcePoint.x(), sourcePoint.y(), sourcePoint.x(), top, color );
-            group.lineAbsolute( draw, sourcePoint.x(), top, sinkPoint.x(), top, color );
-            group.lineAbsolute( draw, sinkPoint.x(), top, sinkPoint.x(), sinkPoint.y(), color );
-        }
-
     }
 
     void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {

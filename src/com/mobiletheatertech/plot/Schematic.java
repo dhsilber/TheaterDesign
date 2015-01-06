@@ -9,16 +9,34 @@ import java.util.ArrayList;
  */
 public class Schematic {
 
-    static Double FirstX = 100.0;
-    static Double FirstY = 100.0;
-    static Double TextSpace = 12.0;
+    static final Double Increment = 100.0;
+    static final Double Spacer = 50.0;
+    static final Double MaxX = 700.0;
+//    static final Double MaxY = 600.0;
+    static Double LastX = 0.0;
+    static Double LastY = Increment;
+    static Double LastWidth = Spacer;
+
+
+//    static Double FirstX = 100.0;
+//    static Double FirstY = 100.0;
+    static final Double TextSpace = 12.0;
     static ArrayList<Schematicable> ObstructionList = new ArrayList<>();
 
-    static int Count = 0;
+//    static int CountX = 0;
+//    static int CountY = 1;
 
     static PagePoint Position( Double width, Double height ) {
-        Count++;
-        return new PagePoint( FirstX * Count * 2 - FirstX, FirstY );
+        Double newHeight = Math.max( height, Increment );
+        Double newWidth  = Math.max( width / 2 + Spacer,  Increment );
+
+        LastX += LastWidth / 2 + newWidth + Spacer;
+        if ( LastX >= MaxX ) {
+            LastX = newWidth + Spacer;
+            LastY += newHeight;
+        }
+        LastWidth = width;
+        return new PagePoint( LastX, LastY );
     }
 
     static void Obstruction( Schematicable schemer ) {
@@ -38,5 +56,14 @@ public class Schematic {
             }
         }
         return matches;
+    }
+
+    public static void Reset() {
+        ObstructionList = new ArrayList<>();
+        LastX = 0.0;
+        LastY = Increment;
+        LastWidth = Spacer;
+//        CableCounter.cablesIn = new ArrayList<>( Direction.Left.ordinal() + 1 );
+//        CableRun.RunList = new ArrayList<>();
     }
 }

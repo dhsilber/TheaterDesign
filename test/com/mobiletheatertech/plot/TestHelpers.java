@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 import java.lang.reflect.Field;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 /**
  * Encapsulations of various useful test code.
@@ -37,6 +38,14 @@ public class TestHelpers {
         Field field = Class.forName( classname ).getDeclaredField( name );
         field.setAccessible( true );
         return field.get( Class.forName( classname ) );
+    }
+
+    public static Object accessStaticObjectNotNull( String classname, String name ) throws Exception {
+        Field field = Class.forName( classname ).getDeclaredField( name );
+        field.setAccessible( true );
+        Object thingy = field.get( Class.forName( classname ) );
+        assertNotNull( thingy );
+        return thingy;
     }
 
 /*

@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 /**
@@ -114,6 +115,19 @@ class SvgElement {
         element.attribute("y1", y1.toString());
         element.attribute("x2", x2.toString());
         element.attribute("y2", y2.toString());
+        element.attribute("stroke", color);
+//        element.attribute( "stroke-width", "2" );
+
+        this.appendChild( element );
+        return element;
+    }
+
+    SvgElement lineAbsolute(Draw draw, Line2D.Double line, String color ) {
+        SvgElement element = draw.element("line");
+        element.attribute("x1", new Double(line.getX1()).toString());
+        element.attribute("y1", new Double(line.getY1()).toString());
+        element.attribute("x2", new Double(line.getX2()).toString());
+        element.attribute("y2", new Double(line.getY2()).toString());
         element.attribute("stroke", color);
 //        element.attribute( "stroke-width", "2" );
 

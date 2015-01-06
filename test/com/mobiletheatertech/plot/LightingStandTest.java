@@ -9,6 +9,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.fail;
 
 /**
  * Created by dhs on 12/12/14.
@@ -76,9 +77,10 @@ public class LightingStandTest {
         instance.dom(draw, View.SCHEMATIC);
 
         PagePoint point = instance.schematicLocation("a");
-        assertEquals(point,
-                new PagePoint(Schematic.FirstX - LightingStand.Space * 1.5,
-                        Schematic.FirstY));
+//        assertEquals(point,
+//                new PagePoint(Schematic.FirstX - LightingStand.Space * 1.5,
+//                        Schematic.FirstY));
+        fail();
     }
 
     @Test
@@ -299,10 +301,11 @@ public class LightingStandTest {
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
 
-        assertEquals( instance1.schematicPosition(),
-                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
-        assertEquals( instance2.schematicPosition(),
-                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
+//        assertEquals( instance1.schematicPosition(),
+//                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
+//        assertEquals( instance2.schematicPosition(),
+//                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
+        fail();
     }
 
     @Test
@@ -331,24 +334,27 @@ public class LightingStandTest {
         Element element = (Element) node;
         assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
         Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, Schematic.FirstX );
-        Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, Schematic.FirstY );
+//        assertEquals( thisX, Schematic.FirstX );
+        fail();
 
-        groupNode = group.item(2);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        groupElement = (Element) groupNode;
-        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
-        list = groupElement.getElementsByTagName("use");
-        assertEquals(list.getLength(), 1);
-        node = list.item( 0 );
-        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-        element = (Element) node;
-        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
-        thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, Schematic.FirstX * 3 );
-        thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, Schematic.FirstY );
+//
+//        Double thisY = new Double( element.getAttribute("y") );
+//        assertEquals( thisY, Schematic.FirstY );
+//
+//        groupNode = group.item(2);
+//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+//        groupElement = (Element) groupNode;
+//        assertEquals(groupElement.getAttribute("class"), LightingStand.TAG);
+//        list = groupElement.getElementsByTagName("use");
+//        assertEquals(list.getLength(), 1);
+//        node = list.item( 0 );
+//        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+//        element = (Element) node;
+//        assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
+//        thisX = new Double( element.getAttribute("x") );
+//        assertEquals( thisX, Schematic.FirstX * 3 );
+//        thisY = new Double( element.getAttribute("y") );
+//        assertEquals( thisY, Schematic.FirstY );
     }
 
     @Test
@@ -441,9 +447,10 @@ public class LightingStandTest {
     public void setUpMethod() throws Exception {
         TestResets.MountableReset();
         TestResets.LightingStandReset();
-        SvgElement.Offset( 0.0, 0.0 );
+        SvgElement.Offset(0.0, 0.0);
         TestResets.LightingStandReset();
-        Schematic.Count = 0;
+//        Schematic.CountX = 0;
+//        Schematic.CountY = 1;
 
         element = new IIOMetadataNode("lighting-stand");
         element.setAttribute("id", id);

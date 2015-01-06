@@ -21,6 +21,15 @@ public class TestResets {
         cableDiversionArrayList.clear();
     }
 
+    public static void CableRunReset()
+            throws NoSuchFieldException, IllegalAccessException
+    {
+        Field field = CableRun.class.getDeclaredField( "RunList" );
+        field.setAccessible( true );
+        ArrayList<CableRun> runList = (ArrayList<CableRun>) field.get( CableRun.class );
+        runList.clear();
+    }
+
 //    public static void CategoryReset()
 //            throws NoSuchFieldException, IllegalAccessException
 //    {
@@ -212,7 +221,8 @@ public class TestResets {
                         "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
         list.clear();
 
-        Schematic.Count = 0;
+        Schematic.LastX = 0.0;
+        Schematic.LastY = Schematic.Increment;
     }
 
     /**

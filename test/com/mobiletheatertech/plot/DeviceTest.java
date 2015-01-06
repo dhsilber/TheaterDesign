@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
+import static org.testng.Assert.fail;
+
 
 /**
  * Created by dhs on 6/22/14.
@@ -397,8 +399,10 @@ public class DeviceTest {
         instance.dom(draw, View.SCHEMATIC);
 
         PagePoint point = instance.schematicLocation();
-        assertEquals(point,
-                new PagePoint(Schematic.FirstX, Schematic.FirstY));
+//        assertEquals(point,
+//                new PagePoint(Schematic.FirstX, Schematic.FirstY));
+
+        fail();
     }
 
     @Test
@@ -632,10 +636,11 @@ public class DeviceTest {
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
 
-        assertEquals( instance1.schematicPosition(),
-                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
-        assertEquals( instance2.schematicPosition(),
-                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
+//        assertEquals( instance1.schematicPosition(),
+//                new PagePoint( Schematic.FirstX, Schematic.FirstY ));
+//        assertEquals( instance2.schematicPosition(),
+//                new PagePoint( Schematic.FirstX * 3, Schematic.FirstY ));
+        fail();
     }
 
     @Test
@@ -709,8 +714,9 @@ public class DeviceTest {
         TestResets.DeviceReset();
         TestResets.StackableReset();
         TestResets.LayerReset();
-        SvgElement.Offset( 0.0, 0.0 );
-        Schematic.Count = 0;
+        SvgElement.Offset(0.0, 0.0);
+//        Schematic.CountX = 0;
+//        Schematic.CountY = 1;
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute("room", "Test Name");

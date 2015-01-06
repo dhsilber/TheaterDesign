@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Represents a specific instance of a device described by a {@code DeviceTemplate}.
@@ -56,6 +57,8 @@ public class Device extends Stackable implements Schematicable
 
     boolean verified = false;
 
+    CableCounter cableCounter = new CableCounter();
+
 
     /**
      * Construct a {@code Box} from an XML element.
@@ -103,19 +106,27 @@ public class Device extends Stackable implements Schematicable
     }
 
     /*
-     dom() MUST be invoked first in the schematic view, or we don't know where this
-     Device will be drawn.
      */
     public PagePoint schematicLocation() throws InvalidXMLException {
         return schematicPosition;
     }
 
     /*
-    Position of this LightingStand
+    Position of this Device
      */
     @Override
     public PagePoint schematicPosition() {
+        if (null == schematicPosition) {
+            System.err.println( this.toString() + " has no schematic position.");
+        }
         return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run )
+            throws CorruptedInternalInformationException
+    {
+        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
     }
 
     @Override
@@ -180,13 +191,26 @@ public class Device extends Stackable implements Schematicable
     }
 
     @Override
-    public void dom(Draw draw, View mode)
+    public void useCount( Direction direction, CableRun run ) {
+        cableCounter.add( direction, run );
+    }
+
+    @Override
+    public void preview( View view ) {
+        switch ( view ) {
+            case SCHEMATIC:
+                schematicPosition = Schematic.Position( shape.width(), shape.height() );
+        }
+    }
+
+    @Override
+    public void dom(Draw draw, View view)
             throws MountingException, ReferenceException
     {
         SvgElement group = null;
         SvgElement element = null;
 
-        switch (mode) {
+        switch (view) {
             case PLAN:
                 group = svgClassGroup( draw, layerName);
                 Double shiftedX = x + SvgElement.OffsetX();
@@ -222,14 +246,12 @@ public class Device extends Stackable implements Schematicable
             case TRUSS:
                 break;
             case SCHEMATIC:
-                schematicPosition = Schematic.Position( shape.width(), shape.height() );
-
                 group = svgClassGroup( draw, layerName);
                 draw.appendRootChild(group);
 
                 Double leftEdge = schematicPosition.x() - width / 2;
                 Double topEdge = schematicPosition.y() - height / 2;
-                element = group.rectangleAbsolute(draw,
+                element = group.rectangleAbsolute( draw,
                         leftEdge, topEdge, width, height, color);
                 element.attribute("fill", color);
                 element.attribute("fill-opacity", "0.1");
@@ -239,7 +261,6 @@ public class Device extends Stackable implements Schematicable
 //                idText.attribute( "text-anchor", "left" );
 
                 template.count();
-
 
                 break;
         }

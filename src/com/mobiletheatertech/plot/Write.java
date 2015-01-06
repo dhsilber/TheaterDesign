@@ -6,6 +6,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -46,7 +47,9 @@ public class Write {
      * @throws MountingException
      * @throws ReferenceException
      */
-    public void init( String basename ) throws InvalidXMLException, MountingException, ReferenceException {
+    public void init( String basename )
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
+    {
         home = System.getProperty("user.home");
 
         // TODO Is it even possible for this to happen?
@@ -360,7 +363,9 @@ public class Write {
         }
     }
 
-    private void writeDrawings( String pathname ) throws InvalidXMLException, MountingException, ReferenceException {
+    private void writeDrawings( String pathname )
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
+    {
         for (ElementalLister thingy : ElementalLister.List() ) {
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
@@ -370,7 +375,8 @@ public class Write {
     }
 
     Draw writeIndividualDrawing( Drawing drawing )
-            throws InvalidXMLException, MountingException, ReferenceException {
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
+    {
         resetOneOffs();
 
         Draw draw = startFile();
@@ -383,12 +389,43 @@ public class Write {
                         "For " + drawing.filename() +", " + deviceName + " is not a valid device." );
                 continue;
             }
+            device.preview( view);
+        }
+
+        for ( String layerName : drawing.layers ) {
+            Layer layer = Layer.List().get( layerName );
+            if ( null == layer ) {
+                System.err.println(
+                        "For " + drawing.filename() +", " + layerName + " is not a Layer." );
+                continue;
+            }
+            for ( Layerer item : layer.contents() ) {
+                if( Schematicable.class.isInstance( item ) ) {
+                    Schematicable thingy = (Schematicable) item;
+                    thingy.preview( view );
+                }
+            }
+
+        }
+
+//        switch (view) {
+//            case SCHEMATIC:
+//                CableRun.Collate();
+//                break;
+//            default:
+//                break;
+//        }
+
+        for ( String deviceName : drawing.devices ) {
+            Device device = Device.Select( deviceName );
+            if ( null == device ) {
+                continue;
+            }
             device.dom( draw, view );
         }
 
         for ( String layerName : drawing.layers ) {
             if ( layerName.equals( Legend.CATEGORY )) {
-//                Legend.Startup( draw, View.PLAN,  Venue.Width() + 5, Legend.PlanWidth() );
                 Legend.Startup(draw, View.PLAN,
                         Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
                         Legend.PlanWidth() );
@@ -398,8 +435,6 @@ public class Write {
 
             Layer layer = Layer.List().get( layerName );
             if ( null == layer ) {
-                System.err.println(
-                        "For " + drawing.filename() +", " + layerName + " is not a Layer." );
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
@@ -462,6 +497,10 @@ public class Write {
         LightingStand.SYMBOLGENERATED = false;
         LightingStand.Count = 0;
 //        Legend.
+        Schematic.Reset();
+        CableRun.Collated = false;
+
+
     }
 
 //

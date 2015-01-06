@@ -553,11 +553,12 @@ public class LuminaireTest {
 
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
-
-        assertEquals( instance1.schematicPosition(),
-                new PagePoint( Schematic.FirstX - LightingStand.Space * 0.5, Schematic.FirstY ));
-        assertEquals( instance2.schematicPosition(),
-                new PagePoint( Schematic.FirstX + LightingStand.Space * 0.5, Schematic.FirstY ));
+//
+//        assertEquals( instance1.schematicPosition(),
+//                new PagePoint( Schematic.FirstX - LightingStand.Space * 0.5, Schematic.FirstY ));
+//        assertEquals( instance2.schematicPosition(),
+//                new PagePoint( Schematic.FirstX + LightingStand.Space * 0.5, Schematic.FirstY ));
+        fail();
     }
 
     @Test
@@ -585,10 +586,12 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        Double x = Schematic.FirstX - LightingStand.Space / 2;
-        Double y = Schematic.FirstY;
-        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+//        Double x = Schematic.FirstX - LightingStand.Space / 2;
+//        Double y = Schematic.FirstY;
+//        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+//        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+        fail();
+
         assertEquals( diversionElement.getAttribute( "transform" ), "" );
 
         list = groupElement.getElementsByTagName( "text" );
@@ -598,10 +601,10 @@ public class LuminaireTest {
         diversionElement = (Element) node;
         String text = diversionElement.getTextContent();
         assertEquals( text, unit );
-        x -= 1;
-        y += 2;
-        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+//        x -= 1;
+//        y += 2;
+//        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+//        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
     }
 
     @Test
@@ -617,22 +620,23 @@ public class LuminaireTest {
         lightingStand.dom(draw, View.SCHEMATIC);
         Double width = luminaireDefinition.width();
         Double height = luminaireDefinition.length();
-        Rectangle2D.Double rectangle1 =
-                new Rectangle2D.Double(
-                        Schematic.FirstX - LightingStand.Space * 0.5 - width / 2,
-                        Schematic.FirstY - height / 2,
-                        width, height );
-        Rectangle2D.Double rectangle2 =
-                new Rectangle2D.Double(
-                        Schematic.FirstX + LightingStand.Space * 0.5 - width / 2,
-                        Schematic.FirstY - height / 2,
-                        width, height );
+//        Rectangle2D.Double rectangle1 =
+//                new Rectangle2D.Double(
+//                        Schematic.FirstX - LightingStand.Space * 0.5 - width / 2,
+//                        Schematic.FirstY - height / 2,
+//                        width, height );
+//        Rectangle2D.Double rectangle2 =
+//                new Rectangle2D.Double(
+//                        Schematic.FirstX + LightingStand.Space * 0.5 - width / 2,
+//                        Schematic.FirstY - height / 2,
+//                        width, height );
+fail();
 
         instance1.dom(draw, View.SCHEMATIC);
         instance2.dom(draw, View.SCHEMATIC);
 
-        assertEquals( instance1.schematicBox(), rectangle1 );
-        assertEquals( instance2.schematicBox(), rectangle2 );
+//        assertEquals( instance1.schematicBox(), rectangle1 );
+//        assertEquals( instance2.schematicBox(), rectangle2 );
     }
 
     @Test
@@ -711,7 +715,8 @@ public class LuminaireTest {
         TestResets.MinderDomReset();
         TestResets.MountableReset();
         TestResets.LuminaireReset();
-        Schematic.Count = 0;
+//        Schematic.CountX = 0;
+//        Schematic.CountY = 1;
         TestResets.SchematicReset();
 
         venueElement = new IIOMetadataNode( "venue" );

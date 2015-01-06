@@ -27,6 +27,18 @@ public class SchematicTest {
         }
 
         @Override
+        public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+
+        @Override
+        public void useCount( Direction direction, CableRun run ) {
+        }
+
+        @Override
+        public void preview( View view ) {
+
+        }
+
+        @Override
         public Rectangle2D.Double schematicBox() {
             return schematicBox;
         }
@@ -42,8 +54,9 @@ public class SchematicTest {
 
     @Test
     public void constants() {
-        assertEquals( Schematic.FirstX, firstX );
-        assertEquals( Schematic.FirstY, firstY );
+//        assertEquals( Schematic.FirstX, firstX );
+//        assertEquals( Schematic.FirstY, firstY );
+        fail();
     }
 
     @Test
@@ -135,7 +148,9 @@ public class SchematicTest {
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
         list.clear();
 
-        Schematic.Count = 0;
+//        Schematic.CountX = 0;
+//        Schematic.CountY = 1;
+        TestResets.SchematicReset();
     }
 
     @AfterMethod

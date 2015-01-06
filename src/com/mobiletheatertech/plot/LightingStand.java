@@ -46,7 +46,7 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     public PagePoint schematicLocation( String location ) throws InvalidXMLException {
         return new PagePoint(
                 schematicPosition.x() + Space * topBarPositionOffset(location),
-                schematicPosition.y() );
+                schematicPosition.y() + 12 );
     }
 
     /*
@@ -56,6 +56,9 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     public PagePoint schematicPosition() {
         return schematicPosition;
     }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
 
     @Override
     public Rectangle2D.Double schematicBox() {
@@ -96,6 +99,18 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     }
 
     @Override
+    public void useCount( Direction direction, CableRun run ) {
+    }
+
+    @Override
+    public void preview( View view ) {
+        switch ( view ) {
+            case SCHEMATIC:
+                schematicPosition = Schematic.Position( SchematicWidth, SchematicHeight );
+        }
+    }
+
+    @Override
     public void dom( Draw draw, View view ) {
         SvgElement group;
         SvgElement use;
@@ -113,8 +128,6 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
                 break;
             case SCHEMATIC:
                 generateSchematicSymbol( draw );
-
-                schematicPosition = Schematic.Position( SchematicWidth, SchematicHeight );
 
                 group = svgClassGroup( draw, TAG );
                 draw.appendRootChild(group);
