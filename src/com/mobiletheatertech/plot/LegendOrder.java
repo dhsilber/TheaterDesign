@@ -44,6 +44,13 @@ public enum LegendOrder {
                 public Integer next() {
                     return last++;
                 }
+            },
+    Cable( 500 )
+            {
+                @Override
+                public Integer next() {
+                    return last++;
+                }
             };
 
     private int value;

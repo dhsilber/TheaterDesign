@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot;
 
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
@@ -64,6 +66,54 @@ public class CableTypeTest {
         ArrayList<CableType> list = (ArrayList<CableType>)
                 TestHelpers.accessStaticObject("com.mobiletheatertech.plot.CableType", "CABLETYPELIST");
         assertEquals( list.size(), 1 );
+    }
+
+    @Test
+    public void domLegendItem() throws Exception {
+        // Setup
+        Draw draw = new Draw();
+        draw.establishRoot();
+        CableType run = new CableType(element);
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
+
+        // Confirmation
+        NodeList preLine = draw.root().getElementsByTagName( "line" );
+        assertEquals( preLine.getLength(), 0 );
+        NodeList preText = draw.root().getElementsByTagName( "text" );
+        assertEquals( preText.getLength(), 0 );
+
+        // The main event
+        PagePoint endPoint = run.domLegendItem( draw, startPoint );
+
+        // Checking the result
+        NodeList lineList = draw.root().getElementsByTagName( "line" );
+        assertEquals( lineList.getLength(), 1 );
+        NodeList textList = draw.root().getElementsByTagName( "text" );
+        assertEquals( textList.getLength(), 1 );
+
+        Node useNode = lineList.item(0);
+        assertEquals(useNode.getNodeType(), Node.ELEMENT_NODE);
+        Element lineElement = (Element) useNode;
+        Double endX = startPoint.x() + 12;
+        assertEquals(lineElement.getAttribute("x1"), startPoint.x().toString() );
+        assertEquals(lineElement.getAttribute("y1"), startPoint.y().toString());
+        assertEquals(lineElement.getAttribute("x2"), endX.toString() );
+        assertEquals(lineElement.getAttribute("y2"), startPoint.y().toString());
+        assertEquals(lineElement.getAttribute("stroke"), color );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
+
+        Node textNode = textList.item(0);
+        assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
+        Element textElement = (Element) textNode;
+        Double x = startPoint.x() + 20;
+        Double y = startPoint.y() + 3;
+        assertEquals(textElement.getAttribute("x"), x.toString() );
+        assertEquals(textElement.getAttribute("y"), y.toString() );
+        assertEquals(textElement.getAttribute("fill"), "black" );
+
+        // TODO Check for text here
+
+        assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 7 ));
     }
 
     @BeforeClass

@@ -747,52 +747,6 @@ public class CableRunTest {
     }
 
     @Test
-    public void domLegendItem() throws Exception {
-        Draw draw = new Draw();
-        draw.establishRoot();
-        CableRun run = new CableRun(element);
-        run.verify();
-
-        NodeList preLine = draw.root().getElementsByTagName( "line" );
-        assertEquals( preLine.getLength(), 0 );
-        NodeList preText = draw.root().getElementsByTagName( "text" );
-        assertEquals( preText.getLength(), 0 );
-
-        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
-        PagePoint endPoint = run.domLegendItem( draw, startPoint );
-
-        NodeList lineList = draw.root().getElementsByTagName( "line" );
-        assertEquals( lineList.getLength(), 1 );
-        NodeList textList = draw.root().getElementsByTagName( "text" );
-        assertEquals( textList.getLength(), 1 );
-
-
-        Node useNode = lineList.item(0);
-        assertEquals(useNode.getNodeType(), Node.ELEMENT_NODE);
-        Element lineElement = (Element) useNode;
-        Double endX = startPoint.x() + 12;
-        assertEquals(lineElement.getAttribute("x1"), startPoint.x().toString() );
-        assertEquals(lineElement.getAttribute("y1"), startPoint.y().toString());
-        assertEquals(lineElement.getAttribute("x2"), endX.toString() );
-        assertEquals(lineElement.getAttribute("y2"), startPoint.y().toString());
-        assertEquals(lineElement.getAttribute("stroke"), color );
-//        assertEquals(element.getAttribute("stroke-width"), "1" );
-
-        Node textNode = textList.item(0);
-        assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
-        Element textElement = (Element) textNode;
-        Double x = startPoint.x() + 20;
-        Double y = startPoint.y() + 3;
-        assertEquals(textElement.getAttribute("x"), x.toString() );
-        assertEquals(textElement.getAttribute("y"), y.toString() );
-        assertEquals(textElement.getAttribute("fill"), "black" );
-
-        // TODO Check for text here
-
-        assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 7 ));
-    }
-
-    @Test
     public void domAlongLightingStand() throws Exception {
         CableRun instance = new CableRun( luminaireToLuminaireElement );
         Draw draw = new Draw();
