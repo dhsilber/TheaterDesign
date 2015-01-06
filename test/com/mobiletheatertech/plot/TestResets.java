@@ -232,6 +232,8 @@ public class TestResets {
 
         Schematic.LastX = 0.0;
         Schematic.LastY = Schematic.Increment;
+        Schematic.LastWidth = Schematic.Spacer;
+        Schematic.TotalWidth = 0.0;
     }
 
     /**

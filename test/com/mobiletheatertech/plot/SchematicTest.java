@@ -54,9 +54,10 @@ public class SchematicTest {
 
     @Test
     public void constants() {
-//        assertEquals( Schematic.FirstX, firstX );
-//        assertEquals( Schematic.FirstY, firstY );
-        fail();
+        assertEquals( Schematic.Increment, 100.0 );
+        assertEquals( Schematic.Spacer, 50.0 );
+        assertEquals( Schematic.MaxX, 700.0 );
+        assertEquals(Schematic.TextSpace, 12.0);
     }
 
     @Test
@@ -89,6 +90,15 @@ public class SchematicTest {
 //        Schematic.Obstruction( x, y, width, height );
 
         assertEquals( list.size(), 1 );
+    }
+
+    @Test
+    public void totalWidth() throws Exception {
+        Schematic.Position( width, height );
+        Schematic.Position( width, height );
+        Schematic.Position( width, height );
+
+        assertEquals( Schematic.TotalWidth, 525.0 );
     }
 
     @Test

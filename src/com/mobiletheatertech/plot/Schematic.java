@@ -17,6 +17,7 @@ public class Schematic {
     static Double LastY = Increment;
     static Double LastWidth = Spacer;
 
+    static Double TotalWidth = 0.0;
 
 //    static Double FirstX = 100.0;
 //    static Double FirstY = 100.0;
@@ -36,6 +37,9 @@ public class Schematic {
             LastY += newHeight;
         }
         LastWidth = width;
+
+        TotalWidth = Math.max( TotalWidth, LastX + width / 2 );
+
         return new PagePoint( LastX, LastY );
     }
 

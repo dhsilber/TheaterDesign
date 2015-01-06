@@ -426,9 +426,17 @@ public class Write {
 
         for ( String layerName : drawing.layers ) {
             if ( layerName.equals( Legend.CATEGORY )) {
-                Legend.Startup(draw, View.PLAN,
-                        Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
-                        Legend.PlanWidth() );
+                switch (view) {
+                    case PLAN:
+                        Legend.Startup(draw, View.PLAN,
+                                Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
+                                Legend.PlanWidth() );
+                        break;
+                    case SCHEMATIC:
+                        Legend.Startup(draw, View.SCHEMATIC,
+                                Schematic.TotalWidth + 100, Legend.PlanWidth() );
+                        break;
+                }
                 Legend.Callback();
                 continue;
             }
