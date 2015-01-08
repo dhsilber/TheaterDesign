@@ -276,6 +276,9 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         return null;
     }
 
+    @Override
+    public void schematicReset() {}
+
     /*
     * Provide the location to draw a hanged thing at relative to the unrotated truss.
     *

@@ -66,6 +66,9 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     }
 
     @Override
+    public void schematicReset() {}
+
+    @Override
     public Point location( String location ) throws InvalidXMLException {
         return new Point( x - Space * topBarPositionOffset(location), y, 144.0 );
     }

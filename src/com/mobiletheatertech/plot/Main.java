@@ -41,6 +41,7 @@ public class Main {
         }
         catch ( Exception e ) {
             System.err.println( e.getMessage() );
+            System.err.println( e.getStackTrace().toString() );
             System.exit( 1 );
         }
     }

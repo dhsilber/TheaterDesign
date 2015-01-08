@@ -43,6 +43,9 @@ public class SchematicTest {
             return schematicBox;
         }
 
+        @Override
+        public void schematicReset() {}
+
     }
     Double firstX = 100.0;
     Double firstY = 100.0;

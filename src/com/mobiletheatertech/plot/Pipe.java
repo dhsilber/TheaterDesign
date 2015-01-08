@@ -197,6 +197,9 @@ public class Pipe extends Mountable implements Schematicable {
         return null;
     }
 
+    @Override
+    public void schematicReset() {}
+
     /**
      * Provide the drawing location of a point along this {@code Pipe}.
      *

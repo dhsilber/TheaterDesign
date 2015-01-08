@@ -25,7 +25,13 @@ public class CableCounter {
     }
 
     public int index( Direction direction, CableRun run ) {
-        return cablesIn.get( direction.ordinal() ).indexOf( run );
+        return cablesIn.get( direction.ordinal() ).indexOf(run);
+    }
+
+    public void clear() {
+        for ( Direction direction : Direction.values() ) {
+            cablesIn.get( direction.ordinal()).clear();
+        }
     }
 
     public PagePoint cableIntersectPosition( Solid solid, PagePoint pagePoint, CableRun cableRun )
@@ -39,11 +45,11 @@ public class CableCounter {
             case UP:
             case Down:
                 span = solid.width();
-                offsetToEdge = solid.height() / 2;
+                offsetToEdge = solid.height() / 4;
                 break;
             default:
                 span = solid.height();
-                offsetToEdge = solid.width() / 2;
+                offsetToEdge = solid.width() / 4;
                 break;
         }
 

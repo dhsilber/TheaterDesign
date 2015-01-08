@@ -124,23 +124,27 @@ public class Luminaire extends MinderDom implements Schematicable {
         return null;
     }
 
-    @Override
-    public PagePoint schematicPosition() {
-        return schematicPosition;
-    }
+    public static Object[][] Report () {
+        final Object[][] data = new Object[ LUMINAIRELIST.size()][7];
 
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run )
-            throws CorruptedInternalInformationException, ReferenceException
-    {
-        Solid shape = new Solid( definition.width(), definition.width(), definition.length() );
+        int dataIndex = 0;
+        for (Luminaire selection : LUMINAIRELIST) {
+            data[dataIndex][0]= selection.on + ":" + selection.unit;
+            data[dataIndex][1]= selection.type;
+            data[dataIndex][2]= selection.location;
+//            data[dataIndex][3]= selection.circuit();
+            data[dataIndex][3]= selection.dimmer();
+            data[dataIndex][4]= selection.channel();
+//            data[dataIndex][6]= selection.target;
+            data[dataIndex][5]= selection.address;
+            data[dataIndex][6]= selection.info;
+            dataIndex++;
+        }
 
-        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
-    }
+//        data[0] = new Object[] { GEARS.get(0), COUNT.get(0) };
+//        data[1] = new Object[] { GEARS.get(1), COUNT.get(1) };
 
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return schematicBox;
+        return data;
     }
 
     /**
@@ -187,6 +191,7 @@ public class Luminaire extends MinderDom implements Schematicable {
     @Override
     public void useCount( Direction direction, CableRun run ) {
         cableCounter.add( direction, run );
+//        schematicPosition = null;
     }
 
     Point point() {
@@ -253,6 +258,31 @@ public class Luminaire extends MinderDom implements Schematicable {
         }
     }
 
+    @Override
+    public PagePoint schematicPosition() {
+        return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run )
+            throws CorruptedInternalInformationException, ReferenceException
+    {
+        Solid shape = new Solid( definition.width(), definition.width(), definition.length() );
+
+        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
+    }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return schematicBox;
+    }
+
+    @Override
+    public void schematicReset() {
+        cableCounter.clear();
+        schematicPosition = null;
+    }
+
     /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
      * unit information.
@@ -298,7 +328,10 @@ public class Luminaire extends MinderDom implements Schematicable {
                 break;
             case SCHEMATIC:
                 use = group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
-                use.attribute("transform", "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")" );
+                if( ! LightingStand.class.isInstance( mount ) ) {
+                    use.attribute("transform",
+                            "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")");
+                }
 
                 // Unit number to overlay on icon
                 SvgElement unitText = group.textAbsolute(draw, unit,

@@ -13,6 +13,8 @@ public class Drawing extends ElementalLister {
 
     String filename = null;
     View view = null;
+    String viewString = null;
+
     public ArrayList<String> layers = new ArrayList<>();
     public ArrayList<String> devices = new ArrayList<>();
 
@@ -21,7 +23,7 @@ public class Drawing extends ElementalLister {
 
         id = getStringAttribute( element, "id" );
         filename = getStringAttribute( element, "filename" );
-        String viewString = getOptionalStringAttribute( element, "view" );
+        viewString = getOptionalStringAttribute( element, "view" );
         switch ( viewString ) {
             case "schematic":
                 view = View.SCHEMATIC;
@@ -29,9 +31,11 @@ public class Drawing extends ElementalLister {
             case "":
                 view = View.PLAN;
                 break;
+            case "spreadsheet":
+                return;
             default:
                 throw new InvalidXMLException( this.getClass().getSimpleName(), id,
-                        "has invalid 'view' attribute. Valid is 'schematic'" );
+                        "has invalid 'view' attribute. Valid is 'schematic' or 'spreadsheet'" );
         }
 
         NodeList displays = element.getElementsByTagName( "display" );

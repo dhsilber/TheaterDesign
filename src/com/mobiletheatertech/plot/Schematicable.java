@@ -20,6 +20,8 @@ public interface Schematicable {
 
     public Rectangle2D.Double schematicBox();
 
+    public void schematicReset();
+
     public void useCount( Direction direction, CableRun run );
 
     public void preview( View view )

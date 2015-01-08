@@ -105,35 +105,6 @@ public class Device extends Stackable implements Schematicable
         return is;
     }
 
-    /*
-     */
-    public PagePoint schematicLocation() throws InvalidXMLException {
-        return schematicPosition;
-    }
-
-    /*
-    Position of this Device
-     */
-    @Override
-    public PagePoint schematicPosition() {
-        if (null == schematicPosition) {
-            System.err.println( this.toString() + " has no schematic position.");
-        }
-        return schematicPosition;
-    }
-
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run )
-            throws CorruptedInternalInformationException
-    {
-        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
-    }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return null;
-    }
-
     public Place location() {
         return new Place( place, place, 0.0 );
     }
@@ -201,6 +172,41 @@ public class Device extends Stackable implements Schematicable
             case SCHEMATIC:
                 schematicPosition = Schematic.Position( shape.width(), shape.height() );
         }
+    }
+
+    /*
+     */
+    public PagePoint schematicLocation() throws InvalidXMLException {
+        return schematicPosition;
+    }
+
+    /*
+    Position of this Device
+     */
+    @Override
+    public PagePoint schematicPosition() {
+        if (null == schematicPosition) {
+            System.err.println( this.toString() + " has no schematic position.");
+        }
+        return schematicPosition;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run )
+            throws CorruptedInternalInformationException
+    {
+        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
+    }
+
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
+    }
+
+    @Override
+    public void schematicReset() {
+        cableCounter.clear();
+        schematicPosition = null;
     }
 
     @Override

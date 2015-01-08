@@ -75,7 +75,8 @@ public class Write {
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
 //        System.err.println( " Spreadsheet");
-//        writeSpreadsheet( pathname + "/gear.ods" );
+        writeGearSpreadsheet(pathname + "/gear.ods");
+        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
@@ -127,17 +128,27 @@ public class Write {
     }
 
     private String generateHTMLDrawingList( String basename ) throws ReferenceException {
-        StringBuilder generated = new StringBuilder( "<p>" );
+        StringBuilder generated = new StringBuilder( "<p>\n" );
 
         for (ElementalLister thingy : MinderDom.List() ) {
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
-                generated.append( "<a href=\"" + basename + "/" + drawing.filename + ".svg\">" +
+                String extension =".svg";
+                switch (drawing.viewString) {
+                    case "spreadsheet":
+                        extension = ".ods";
+                        break;
+                }
+                generated.append( "<a href=\"" + basename + "/" + drawing.filename + extension + "\">" +
                         Venue.Name() + ": " + drawing.id + "</a><br/>\n" );
             }
+//            generated.append( "<a href=\"" + basename + "/gear.ods\">" +
+//                    Venue.Name() + ": Gear spreadsheet</a><br/>\n" );
+//            generated.append( "<a href=\"" + basename + "/luminaires.ods\">" +
+//                    Venue.Name() + ": Luminaires spreadsheet</a><br/>\n" );
         }
 
-        generated.append( "</p>" );
+        generated.append( "</p>\n" );
 
         return generated.toString();
     }
@@ -330,7 +341,7 @@ public class Write {
 //        Grid.DOM(draw);
 
         // Hardcoded values here are for Arisia '14 flying truss.
-        Legend.Startup(draw, View.TRUSS, 700.0, 300 );
+        Legend.Startup(draw, View.TRUSS, 700.0, 300);
 
         MinderDom.DomAllTruss(draw);
 
@@ -369,6 +380,7 @@ public class Write {
         for (ElementalLister thingy : ElementalLister.List() ) {
             if ( Drawing.class.isInstance( thingy ) ) {
                 Drawing drawing = (Drawing) thingy;
+                if ("spreadsheet".equals( drawing.viewString )) { return; }
                 writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
             }
         }
@@ -408,13 +420,13 @@ public class Write {
 
         }
 
-//        switch (view) {
-//            case SCHEMATIC:
-//                CableRun.Collate();
-//                break;
-//            default:
-//                break;
-//        }
+        switch (view) {
+            case SCHEMATIC:
+                CableRun.Collate();
+                break;
+            default:
+                break;
+        }
 
         for ( String deviceName : drawing.devices ) {
             Device device = Device.Select( deviceName );
@@ -458,7 +470,7 @@ public class Write {
 
     }
 
-    private void writeSpreadsheet( String pathname) {
+    private void writeGearSpreadsheet( String pathname) {
         // Create the data to save.
         final Object[][] data = GearList.Report();
 //        new Object[6][2];
@@ -482,7 +494,42 @@ public class Write {
         final File file = new File( pathname );
 
         try {
-        SpreadSheet.createEmpty(model).saveAs(file);
+            SpreadSheet.createEmpty(model).saveAs(file);
+
+//        OOUtils.open(file);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void writeLuminaireSpreadsheet( String pathname) {
+        // Create the data to save.
+        final Object[][] data = Luminaire.Report();
+//        new Object[6][2];
+//        data[0] = new Object[] { "January", 1 };
+//        data[1] = new Object[] { "February", 3 };
+//        data[2] = new Object[] { "March", 8 };
+//        data[3] = new Object[] { "April", 10 };
+//        data[4] = new Object[] { "May", 15 };
+//        data[5] = new Object[] { "June", 18 };
+
+        if ( 0 == data.length ) {
+            System.err.println( "No data in Luminaire list, not generating spreadsheet.");
+            return;
+        }
+
+        String[] columns = new String[]
+                { "Unit", "Type", "Location", "Dimmer", "Channel", "Address", "Notes" };
+
+        TableModel model = new DefaultTableModel(data, columns);
+
+        // Save the data to an ODS file and open it.
+        final File file = new File( pathname );
+
+        try {
+            SpreadSheet.createEmpty(model).saveAs(file);
 
 //        OOUtils.open(file);
         }
@@ -506,9 +553,7 @@ public class Write {
         LightingStand.Count = 0;
 //        Legend.
         Schematic.Reset();
-        CableRun.Collated = false;
-
-
+        CableRun.Reset();
     }
 
 //
