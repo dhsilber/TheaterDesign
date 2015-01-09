@@ -33,6 +33,7 @@ public class Device extends Stackable implements Schematicable
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
     private PagePoint schematicPosition = null;
+    private Rectangle2D.Double schematicBox = null;
 
     private String is;
     private String on;
@@ -171,6 +172,14 @@ public class Device extends Stackable implements Schematicable
         switch ( view ) {
             case SCHEMATIC:
                 schematicPosition = Schematic.Position( shape.width(), shape.height() );
+
+                Double width = shape.width();
+                Double height = shape.height();
+                schematicBox = new Rectangle2D.Double(
+                        schematicPosition.x() - width / 2,
+                        schematicPosition.y() - height / 2,
+                        width, height );
+                Schematic.Obstruction( this );
         }
     }
 
@@ -200,7 +209,7 @@ public class Device extends Stackable implements Schematicable
 
     @Override
     public Rectangle2D.Double schematicBox() {
-        return null;
+        return schematicBox;
     }
 
     @Override
