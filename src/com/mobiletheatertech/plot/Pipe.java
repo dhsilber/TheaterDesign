@@ -274,6 +274,11 @@ public class Pipe extends Mountable implements Schematicable {
         }
     }
 
+    @Override
+    public Place location() {
+        return null;
+    }
+
     /**
      * Generate SVG DOM for a {@code Pipe}
      *

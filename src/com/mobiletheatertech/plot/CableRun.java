@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 2014-01-12
  */
-public class CableRun extends MinderDom implements Schematicable {
+public class CableRun implements Schematicable {
 
     static ArrayList<CableRun> RunList = new ArrayList<>();
 
@@ -43,13 +43,15 @@ public class CableRun extends MinderDom implements Schematicable {
     private String routing;
     private String color;
 
-    private static final String DIRECT = "direct";
+    static final String DIRECT = "direct";
 //    private static final String COLOR = "green";
 
     Device sourceDevice = null;
     Device sinkDevice = null;
     Luminaire sourceLuminaire = null;
     Luminaire sinkLuminaire = null;
+    Multicable sourceMulticable = null;
+    Multicable sinkMulticable = null;
     Schematicable sourceThingy = null;
     Schematicable sinkThingy = null;
 
@@ -65,117 +67,112 @@ public class CableRun extends MinderDom implements Schematicable {
 //    private static Boolean Legended = false;
      static Boolean Collated = false;
 
-    /**
+    /*
      * Construct a {@code CableRun} from an XML element.
      *
-     * @param element DOM Element defining a CableRun
+     * @param  DOM Element defining a CableRun
      * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException       if element is null
      */
-    public CableRun (Element element)
-            throws AttributeMissingException, DataException, InvalidXMLException {
-        super(element);
+    public CableRun ( String signal, String source, String sink, String channel, String routing)
+             {
+                 this.signal = signal;
+                 this.source = source;
+                 this.sink = sink;
+                 this.channel = channel;
+                 this.routing = routing;
 
-        /*
-        A lot of this code is error detection and reporting on the
-         attribute values, which I've mostly done in Elemental. What
-         is different here is that I want to make the error messages
-         report ALL of the problems with this element's attributes at
-         once rather than having the thing break immediately on detecting
-         each error.
+                 color = CableType.Select( signal ).color();
 
-        If I need to move this up into Elemental, I will need to pass
-            in an array of: attribute name, variable name, variable type,
-            and error reporting prefix. This means that I will have to use
-             reflection to set the variables, which means things will break
-             easily if I typo a variable name, but hey, that's what tests
-             are for.
-         */
+                 RunList.add( this );
 
-        signal = getOptionalStringAttribute( element, "signal" );
-        source = getOptionalStringAttribute( element, "source" );
-        sink = getOptionalStringAttribute( element, "sink" );
-        channel = getOptionalStringAttribute( element, "channel" );
+//                 new Layer( CableRun.class.getSimpleName(), CableRun.class.getSimpleName(), "" );
 
-        if (signal.isEmpty() || source.isEmpty() || sink.isEmpty() ) {
-            StringBuilder message = new StringBuilder ( "CableRun " );
-            if ( ! signal.isEmpty() ) {
-                message.append( "of " ).append( signal ).append( " " );
-            }
-            if ( ! source.isEmpty() ) {
-                message.append( "from " ).append( source ).append( " " );
-            }
-            if ( ! sink.isEmpty() ) {
-                message.append( "to " ).append( sink ).append( " " );
-            }
-            message.append( "is missing required" );
-
-            int signalCommaPosition = 0;
-            int beforeLastErrorPosition = 0;
-            int errorCount = 0;
-
-            if ( signal.isEmpty() ) {
-                message.append( " 'signal'" );
-                signalCommaPosition = message.length();
-                errorCount++;
-            }
-            if ( source.isEmpty() ) {
-                beforeLastErrorPosition = message.length();
-                message.append( " 'source'" );
-                errorCount++;
-            }
-            if ( sink.isEmpty() ) {
-                beforeLastErrorPosition = message.length();
-                message.append( " 'sink'" );
-                errorCount++;
-            }
-
-            if ( 2 <= errorCount) {
-                message.insert( beforeLastErrorPosition, " and" );
-            }
-
-            if ( 3 == errorCount ) {
-                message.insert( beforeLastErrorPosition, "," );
-                message.insert( signalCommaPosition, "," );
-            }
-
-            message.append( " attribute." );
-            if (1 < errorCount) {
-                message.insert( message.length() - 1, 's' );
-            }
-            throw new AttributeMissingException( message );
-        }
-
-        color = CableType.Select( signal ).color();
-
-        routing = getOptionalStringAttribute( element, "routing");
-        if( ! "".equals( routing ) && ! DIRECT.equals( routing )) {
-            throw new InvalidXMLException(this.getClass().getSimpleName() +
-                    " from "+source+" to "+sink+" has invalid routing attribute '"+routing+"'.");
-
-        }
+//        super(element);
+//
+//        /*
+//        A lot of this code is error detection and reporting on the
+//         attribute values, which I've mostly done in Elemental. What
+//         is different here is that I want to make the error messages
+//         report ALL of the problems with this element's attributes at
+//         once rather than having the thing break immediately on detecting
+//         each error.
+//
+//        If I need to move this up into Elemental, I will need to pass
+//            in an array of: attribute name, variable name, variable type,
+//            and error reporting prefix. This means that I will have to use
+//             reflection to set the variables, which means things will break
+//             easily if I typo a variable name, but hey, that's what tests
+//             are for.
+//         */
+//
+//        signal = getOptionalStringAttribute( element, "signal" );
+//        source = getOptionalStringAttribute( element, "source" );
+//        sink = getOptionalStringAttribute( element, "sink" );
+//        channel = getOptionalStringAttribute( element, "channel" );
+//
+//        if (signal.isEmpty() || source.isEmpty() || sink.isEmpty() ) {
+//            StringBuilder message = new StringBuilder ( "CableRun " );
+//            if ( ! signal.isEmpty() ) {
+//                message.append( "of " ).append( signal ).append( " " );
+//            }
+//            if ( ! source.isEmpty() ) {
+//                message.append( "from " ).append( source ).append( " " );
+//            }
+//            if ( ! sink.isEmpty() ) {
+//                message.append( "to " ).append( sink ).append( " " );
+//            }
+//            message.append( "is missing required" );
+//
+//            int signalCommaPosition = 0;
+//            int beforeLastErrorPosition = 0;
+//            int errorCount = 0;
+//
+//            if ( signal.isEmpty() ) {
+//                message.append( " 'signal'" );
+//                signalCommaPosition = message.length();
+//                errorCount++;
+//            }
+//            if ( source.isEmpty() ) {
+//                beforeLastErrorPosition = message.length();
+//                message.append( " 'source'" );
+//                errorCount++;
+//            }
+//            if ( sink.isEmpty() ) {
+//                beforeLastErrorPosition = message.length();
+//                message.append( " 'sink'" );
+//                errorCount++;
+//            }
+//
+//            if ( 2 <= errorCount) {
+//                message.insert( beforeLastErrorPosition, " and" );
+//            }
+//
+//            if ( 3 == errorCount ) {
+//                message.insert( beforeLastErrorPosition, "," );
+//                message.insert( signalCommaPosition, "," );
+//            }
+//
+//            message.append( " attribute." );
+//            if (1 < errorCount) {
+//                message.insert( message.length() - 1, 's' );
+//            }
+//            throw new AttributeMissingException( message );
+//        }
+//
+//
+//        routing = getOptionalStringAttribute( element, "routing");
+//        if( ! "".equals( routing ) && ! DIRECT.equals( routing )) {
+//            throw new InvalidXMLException(this.getClass().getSimpleName() +
+//                    " from "+source+" to "+sink+" has invalid routing attribute '"+routing+"'.");
+//
+//        }
 
 //        if( ! Legended ) {
 //            Legend.Register( this, 130.0, 7.0, LegendOrder.Device );
 //            Legended = true;
 //        }
     }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return null;
-    }
-
-    @Override
-    public void schematicReset() {}
-
-    @Override
-    public PagePoint schematicPosition() {
-        return null;
-    }
-
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
 
     /**
      * Confirm that the two specified devices actually refer to
@@ -188,52 +185,70 @@ public class CableRun extends MinderDom implements Schematicable {
     to draw them, we'll keep them rather than searching them out again
     later.
     */
-    @Override
     public void verify() throws InvalidXMLException {
         sourceThingy = sourceDevice = Device.Select( source );
         sinkThingy = sinkDevice = Device.Select( sink );
 
-        if( null == sourceDevice ) {
+        if( null == sourceThingy ) {
             sourceThingy = sourceLuminaire = Luminaire.Select( source );
         }
 
-        if( null == sinkDevice) {
+        if( null == sinkThingy) {
             sinkThingy = sinkLuminaire = Luminaire.Select( sink );
         }
 
-        if( (null == sourceDevice && null == sourceLuminaire) ||
-                (null == sinkDevice && null == sinkLuminaire) ) {
+        if( null == sourceThingy ) {
+            sourceThingy = sourceMulticable = Multicable.Select( source );
+        }
+
+        if( null == sinkThingy) {
+            sinkThingy = sinkMulticable = Multicable.Select( sink );
+        }
+
+        if( (null == sourceThingy) ||
+                (null == sinkThingy) ) {
             StringBuilder message = new StringBuilder( "CableRun of " + signal );
-            if ( null != sourceDevice || null != sourceLuminaire ) {
+            if ( null != sourceThingy ) {
                 message.append( " from " ).append( source );
             }
-            if ( null != sinkDevice || null != sinkLuminaire ) {
+            if ( null != sinkThingy ) {
                 message.append( " to " ).append( sink );
             }
             message.append( " references unknown " );
-            if ( null == sourceDevice && null == sourceLuminaire ) {
+            if ( null == sourceThingy ) {
                 message.append( "source '" ).append( source ).append( "'" );
             }
-            if( null == sourceDevice && null == sourceLuminaire &&
-                    null == sinkDevice && null == sinkLuminaire ) {
+            if( null == sourceThingy && null == sinkThingy ) {
                 message.append( " and " );
             }
-            if ( null == sinkDevice && null == sinkLuminaire ) {
+            if ( null == sinkThingy ) {
                 message.append( "sink '" ).append( sink ).append( "'" );
             }
             message.append( "." );
             throw new InvalidXMLException( message.toString() );
         }
+    }
 
-        RunList.add( this );
+    public static void Verify() throws InvalidXMLException {
+        for ( CableRun instance : RunList ) {
+            instance.verify();
+        }
+    }
+
+    public static void DomAll( Draw draw, View view )
+            throws InvalidXMLException, MountingException, ReferenceException
+    {
+        for ( CableRun instance : RunList ) {
+            instance.dom( draw, view );
+        }
     }
 
     public static void Collate() throws CorruptedInternalInformationException, ReferenceException {
-        for( CableRun run : RunList ) {
-            run.precheck1();
+        for( CableRun instance : RunList ) {
+            instance.precheck1();
         }
-        for( CableRun run : RunList ) {
-            run.precheck2();
+        for( CableRun instance : RunList ) {
+            instance.precheck2();
         }
 
         Collated = true;
@@ -334,6 +349,22 @@ public class CableRun extends MinderDom implements Schematicable {
         }
     }
 
+    @Override
+    public Rectangle2D.Double schematicBox() {
+        return null;
+    }
+
+    @Override
+    public void schematicReset() {}
+
+    @Override
+    public PagePoint schematicPosition() {
+        return null;
+    }
+
+    @Override
+    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+
 //    Somewhere in there, use java.awt.geom.Rectangle2D.intersectsLine() to find if the path
 //            provided by findPath() intersects both endpoints of a cable-diversion. If so,
 //    modify the path accordingly.
@@ -346,17 +377,14 @@ public class CableRun extends MinderDom implements Schematicable {
     }
 
     @Override
-    public void preview( View view )
-            throws CorruptedInternalInformationException, ReferenceException {
-
-//        if ( View.SCHEMATIC != view ) { return; }
-//
-////        if ( !Collated ) {
-////            Collate();
-////        }
-//
-
+    public void preview( View view ) {
     }
+
+    @Override
+    public Place location() {
+        return null;
+    }
+
 
     /**
      * Generate SVG DOM for a {@code CableRun}. Basicly just a set of lines
@@ -369,7 +397,6 @@ public class CableRun extends MinderDom implements Schematicable {
     Because we had to search out the devices when we verified them, we
     already have reference to them.
      */
-    @Override
     public void dom( Draw draw, View mode ) throws InvalidXMLException, MountingException, ReferenceException {
 
         switch (mode) {
@@ -405,8 +432,14 @@ public class CableRun extends MinderDom implements Schematicable {
     }
 
     void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {
-        Place sourcePoint = (null != sourceDevice) ? sourceDevice.location() : sourceLuminaire.location();
-        Place sinkPoint = (null != sinkDevice) ? sinkDevice.location() : sinkLuminaire.location();
+        Place sourcePoint = sourceThingy.location();
+        Place sinkPoint = sinkThingy.location();
+
+        // Bogus 'fix' to not draw cable runs for lights on truss, because I do not currently
+        // have the points compensating for the rotation of the truss.
+        if ( sourcePoint.location().z() > 200.0 || sinkPoint.location().z() > 200 ) {
+            return;
+        }
 
         ArrayList<Point> vertices = null;
         try {
@@ -431,7 +464,6 @@ public class CableRun extends MinderDom implements Schematicable {
 
         Point previous = sourcePoint.location();
         for( Point point : vertices ) {
-
             appendLineSegment( draw, group, previous, point );
             previous = point;
         }

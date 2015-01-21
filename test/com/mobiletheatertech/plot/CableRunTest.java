@@ -78,129 +78,20 @@ public class CableRunTest {
 
     @Test
     public void isA() throws Exception {
-        CableRun instance = new CableRun( element );
-
-        assert Elemental.class.isInstance( instance );
-        assert ElementalLister.class.isInstance( instance );
-        assert Verifier.class.isInstance( instance );
-        assert Layerer.class.isInstance( instance );
-        assert MinderDom.class.isInstance( instance );
+        CableRun instance = new CableRun( signalName, sourceName, sinkName, "", "" );
 
         assert Schematicable.class.isInstance( instance );
     }
 
     @Test
-    public void isLegendable() throws Exception {
-        CableRun cableRun = new CableRun( element );
-        assert Legendable.class.isInstance( cableRun );
-    }
+    public void storesArguments() throws Exception {
+        CableRun instance = new CableRun( signalName, sourceName, sinkName, channel, validRouting );
 
-    @Test
-    public void storesAttributes() throws Exception {
-        CableRun cableRun=new CableRun( element );
-
-        assertEquals( TestHelpers.accessString( cableRun, "signal" ), signalName );
-        assertEquals( TestHelpers.accessString( cableRun, "source" ), sourceName );
-        assertEquals( TestHelpers.accessString( cableRun, "sink" ), sinkName );
-        assertEquals( TestHelpers.accessString(cableRun, "channel"), "" );
-        assertEquals( TestHelpers.accessString(cableRun, "routing"), "" );
-    }
-
-    @Test
-    public void storesOptionalAttributes() throws Exception {
-        element.setAttribute("channel", channel);
-        element.setAttribute("routing", validRouting);
-        CableRun cableRun=new CableRun( element );
-
-        assertEquals( TestHelpers.accessString( cableRun, "signal" ), signalName );
-        assertEquals( TestHelpers.accessString( cableRun, "source" ), sourceName );
-        assertEquals( TestHelpers.accessString( cableRun, "sink" ), sinkName );
-        assertEquals( TestHelpers.accessString(cableRun, "channel"), channel );
-        assertEquals( TestHelpers.accessString(cableRun, "routing"), validRouting );
-    }
-
-    @Test
-    public void storesLuminaireAttributes() throws Exception {
-        luminaireToLuminaireElement.setAttribute("channel", channel);
-        luminaireToLuminaireElement.setAttribute("routing", validRouting);
-        CableRun cableRun = new CableRun( luminaireToLuminaireElement );
-
-        assertEquals( TestHelpers.accessString( cableRun, "signal" ), signalName );
-        assertEquals( TestHelpers.accessString( cableRun, "source" ), sourceLuminaireId );
-        assertEquals( TestHelpers.accessString( cableRun, "sink" ), sinkLuminaireId );
-        assertEquals( TestHelpers.accessString(cableRun, "channel"), channel );
-        assertEquals( TestHelpers.accessString(cableRun, "routing"), validRouting );
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun is missing required 'signal', 'source', and 'sink' attributes.")
-    public void noRequiredAttributes() throws Exception {
-        element.removeAttribute("signal");
-        element.removeAttribute("source");
-        element.removeAttribute("sink");
-        new CableRun(element);
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun from "+sourceName+" to "+sinkName+" is missing required 'signal' attribute.")
-    public void noSignal() throws Exception {
-        element.removeAttribute("signal");
-        new CableRun(element);
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun of "+signalName+" to "+sinkName+" is missing required 'source' attribute.")
-    public void noSource() throws Exception {
-        element.removeAttribute("source");
-        new CableRun(element);
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun of "+signalName+" from "+sourceName+" is missing required 'sink' attribute.")
-    public void noSink() throws Exception {
-        element.removeAttribute("sink");
-        new CableRun(element);
-    }
-
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun to "+sinkName+" is missing required 'signal' and 'source' attributes.")
-    public void noSignalSource() throws Exception {
-        element.removeAttribute("signal");
-        element.removeAttribute("source");
-        new CableRun(element);
-    }
-
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun from "+sourceName+" is missing required 'signal' and 'sink' attributes.")
-    public void noSignalSink() throws Exception {
-        element.removeAttribute("signal");
-        element.removeAttribute("sink");
-        new CableRun(element);
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun of "+signalName+" is missing required 'source' and 'sink' attributes.")
-    public void noSourceSink() throws Exception {
-        element.removeAttribute("source");
-        element.removeAttribute("sink");
-        new CableRun(element);
-    }
-
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp =
-                    "CableRun from "+sourceName+" to "+sinkName+" has invalid routing attribute '"+invalidRouting+"'.")
-    public void invalidRouting() throws Exception {
-        element.setAttribute("routing", invalidRouting);
-        new CableRun(element);
+        assertEquals( TestHelpers.accessString( instance, "signal" ), signalName );
+        assertEquals( TestHelpers.accessString( instance, "source" ), sourceName );
+        assertEquals( TestHelpers.accessString( instance, "sink" ), sinkName );
+        assertEquals( TestHelpers.accessString( instance, "channel"), channel );
+        assertEquals( TestHelpers.accessString( instance, "routing"), validRouting );
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
@@ -208,8 +99,9 @@ public class CableRunTest {
                     "CableRun of "+signalName+" to "+sinkName+" references unknown source '"+ bogusSource+"'.")
     public void verifyUnknownSourceDevice() throws Exception {
         element.setAttribute("source", bogusSource);
-        CableRun run = new CableRun(element);
-        run.verify();
+        UserCableRun run = new UserCableRun(element);
+        CableRun ran = run.cableRun();
+        ran.verify();
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
@@ -217,8 +109,9 @@ public class CableRunTest {
                     "CableRun of "+signalName+" from "+sourceName+" references unknown sink '"+bogusSink+"'.")
     public void verifyUnknownSinkDevice() throws Exception {
         element.setAttribute("sink", bogusSink);
-        CableRun run = new CableRun(element);
-        run.verify();
+        UserCableRun run = new UserCableRun(element);
+        CableRun ran = run.cableRun();
+        ran.verify();
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
@@ -227,13 +120,15 @@ public class CableRunTest {
     public void verifyUnknownSourceSinkDevices() throws Exception {
         element.setAttribute("source", bogusSource);
         element.setAttribute("sink", bogusSink);
-        CableRun run = new CableRun(element);
-        run.verify();
+        UserCableRun run = new UserCableRun(element);
+        CableRun ran = run.cableRun();
+        ran.verify();
     }
 
     @Test
     public void verifySavesReference() throws Exception {
-        CableRun run = new CableRun(element);
+        UserCableRun run = new UserCableRun(element);
+        CableRun instance = run.cableRun();
 
 //        ArrayList<CableRun> runlist = (ArrayList)
 //                TestHelpers.accessStaticObjectNotNull( "com.mobiletheatertech.plot.CableRun", "RunList" );
@@ -241,16 +136,17 @@ public class CableRunTest {
                 TestHelpers.accessStaticObjectNotNull( CableRun.class.getName(), "RunList" );
         assertEquals( runlist.size(), 0 );
 
-        run.verify();
+        instance.verify();
 
-        assert runlist.contains(run);
+        assert runlist.contains( instance );
         assertEquals( runlist.size(), 1 );
     }
 
     @Test
     public void CollateCounts() throws Exception {
-        CableRun run = new CableRun(element);
-        run.verify();
+        UserCableRun run = new UserCableRun(element);
+        CableRun ran = run.cableRun();
+        ran.verify();
 
         CableRun.Collate();
 
@@ -305,34 +201,36 @@ public class CableRunTest {
 //        assertEquals( cableRun.layer(), layerTag );
 //    }
 
-    @Test
-    public void dom() throws Exception {
-        Draw draw = new Draw();
-        draw.establishRoot();
-        CableRun run = new CableRun(element);
-        run.verify();
-
-        run.dom( draw, View.PLAN );
-
-        NodeList group = draw.root().getElementsByTagName("g");
-        assertEquals(group.getLength(), 2);
-        Node groupNode = group.item(1);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        Element groupElement = (Element) groupNode;
-//        assertEquals(groupElement.attribute("class"), Pipe.LAYERTAG);
-
-        NodeList list = groupElement.getElementsByTagName("line");
-//        assertEquals(list.getLength(), 1);
-        Node node = list.item(0);
-        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-        Element element = (Element) node;
-        assertEquals(element.getAttribute("x1"), tableX.toString() );
-        assertEquals(element.getAttribute("y1"), tableY.toString() );
-        assertEquals(element.getAttribute("y2"), table2Y.toString() );
-        assertEquals(element.getAttribute("x2"), table2X.toString() );
-        assertEquals(element.getAttribute("stroke"), color );
-        assertEquals(element.getAttribute("stroke-width"), "1" );
-    }
+    // Redundant
+//    @Test
+//    public void dom() throws Exception {
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        UserCableRun run = new UserCableRun(element);
+//        CableRun ran = run.cableRun();
+//        ran.verify();
+//
+//        ran.dom( draw, View.PLAN );
+//
+//        NodeList group = draw.root().getElementsByTagName("g");
+//        assertEquals(group.getLength(), 2);
+//        Node groupNode = group.item(1);
+//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+//        Element groupElement = (Element) groupNode;
+////        assertEquals(groupElement.attribute("class"), Pipe.LAYERTAG);
+//
+//        NodeList list = groupElement.getElementsByTagName("line");
+////        assertEquals(list.getLength(), 1);
+//        Node node = list.item(0);
+//        assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+//        Element element = (Element) node;
+//        assertEquals(element.getAttribute("x1"), tableX.toString() );
+//        assertEquals(element.getAttribute("y1"), tableY.toString() );
+//        assertEquals(element.getAttribute("x2"), table2X.toString() );
+//        assertEquals(element.getAttribute("y2"), table2Y.toString() );
+//        assertEquals(element.getAttribute("stroke"), color );
+//        assertEquals(element.getAttribute("stroke-width"), "1" );
+//    }
 
     @Test
     public void domFourWallsDirect() throws Exception {
@@ -377,10 +275,11 @@ public class CableRunTest {
 
         Draw draw = new Draw();
         draw.establishRoot();
-        CableRun run = new CableRun(cableRunElement);
-        run.verify();
+        UserCableRun run = new UserCableRun(cableRunElement);
+        CableRun ran = run.cableRun();
+        ran.verify();
 
-        run.dom( draw, View.PLAN );
+        ran.dom( draw, View.PLAN );
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 2);
@@ -445,10 +344,11 @@ public class CableRunTest {
 
         Draw draw = new Draw();
         draw.establishRoot();
-        CableRun run = new CableRun(cableRunElement);
-        run.verify();
+        UserCableRun run = new UserCableRun(cableRunElement);
+        CableRun ran = run.cableRun();
+        ran.verify();
 
-        run.dom( draw, View.PLAN );
+        ran.dom( draw, View.PLAN );
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 2);
@@ -553,10 +453,11 @@ public class CableRunTest {
 
         Draw draw = new Draw();
         draw.establishRoot();
-        CableRun run = new CableRun(cableRunElement);
-        run.verify();
+        UserCableRun run = new UserCableRun(cableRunElement);
+        CableRun ran = run.cableRun();
+        ran.verify();
 
-        run.dom( draw, View.PLAN );
+        ran.dom( draw, View.PLAN );
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 2);
@@ -671,10 +572,11 @@ public class CableRunTest {
 
         Draw draw = new Draw();
         draw.establishRoot();
-        CableRun run = new CableRun(cableRunElement);
-        run.verify();
+        UserCableRun run = new UserCableRun(cableRunElement);
+        CableRun ran = run.cableRun();
+        ran.verify();
 
-        run.dom( draw, View.PLAN );
+        ran.dom( draw, View.PLAN );
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 2);
@@ -748,10 +650,12 @@ public class CableRunTest {
 
     @Test
     public void domAlongLightingStand() throws Exception {
-        CableRun instance = new CableRun( luminaireToLuminaireElement );
+        UserCableRun run = new UserCableRun( luminaireToLuminaireElement );
+        CableRun instance = run.cableRun();
+        instance.verify();
+        CableRun.Collate();
         Draw draw = new Draw();
         draw.establishRoot();
-        instance.verify();
 
         instance.dom( draw, View.PLAN );
 
@@ -797,14 +701,19 @@ public class CableRunTest {
 
     @Test
     public void domSchematicDeviceToLuminaire() throws Exception {
+        UserCableRun run = new UserCableRun( deviceToLuminaireElement );
+        CableRun instance = run.cableRun();
+        instance.verify();
+        CableRun.Collate();
         Draw draw = new Draw();
         draw.establishRoot();
+        sourceDevice.preview(View.SCHEMATIC);
+        lightingStand.preview( View.SCHEMATIC );
+        sinkLuminaire.preview( View.SCHEMATIC );
         sourceDevice.dom(draw, View.SCHEMATIC);
         lightingStand.dom( draw, View.SCHEMATIC );
         luminaireDefinition.dom( draw, View.SCHEMATIC );
-        sinkLuminaire.dom( draw, View.SCHEMATIC );
-        CableRun instance = new CableRun( deviceToLuminaireElement );
-        instance.verify();
+        sinkLuminaire.dom(draw, View.SCHEMATIC);
 
         NodeList preGroup = draw.root().getElementsByTagName("g");
         assertEquals(preGroup.getLength(), 4);

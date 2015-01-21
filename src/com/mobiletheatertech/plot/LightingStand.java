@@ -114,6 +114,11 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     }
 
     @Override
+    public Place location() {
+        return null;
+    }
+
+    @Override
     public void dom( Draw draw, View view ) {
         SvgElement group;
         SvgElement use;

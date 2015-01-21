@@ -485,6 +485,11 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     }
 
     @Override
+    public Place location() {
+        return null;
+    }
+
+    @Override
     public void dom(Draw draw, View mode) {
         SvgElement trussRectangle = null;//draw.element("rect");
         SvgElement group = null;

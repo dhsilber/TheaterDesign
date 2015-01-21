@@ -19,10 +19,11 @@ public class CableCounterTest {
 
     @Test
     public void add() throws Exception {
-        CableRun run = new CableRun(runElement);
+        UserCableRun run = new UserCableRun(runElement);
+        CableRun cableRun = run.cableRun();
         CableCounter counter = new CableCounter();
 
-        counter.add( Direction.UP, run );
+        counter.add( Direction.UP, cableRun );
 
         assertEquals( counter.count(Direction.UP), 1 );
     }

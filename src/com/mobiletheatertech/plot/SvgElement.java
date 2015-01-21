@@ -71,7 +71,7 @@ class SvgElement {
 
     public SvgElement circle( Draw draw,
                               Double x, Double y, Double r,
-                            String color ) {
+                              String color ) {
 
         Double xSet = x;
         Double ySet = y;
@@ -80,14 +80,29 @@ class SvgElement {
             ySet += yOffset;
         }
 
+        return circleAbsolute( draw, xSet, ySet, r, color );
+    }
+
+    public SvgElement circleAbsolute( Draw draw,
+                              Double x, Double y, Double r,
+                              String color ) {
+
         SvgElement element = draw.element("circle");
-        element.attribute("cx", xSet.toString());
-        element.attribute("cy", ySet.toString());
+        element.attribute("cx", x.toString());
+        element.attribute("cy", y.toString());
         element.attribute("r", r.toString());
         element.attribute("stroke", color);
         element.attribute("fill", "none" );
 
         this.appendChild(element);
+
+        return element;
+    }
+
+    // TODO Move this to SvgElement
+    public SvgElement group( Draw draw, String className ) {
+        SvgElement element = draw.element("g");
+        element.attribute("class", className);
 
         return element;
     }

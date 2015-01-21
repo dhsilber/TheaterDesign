@@ -39,6 +39,11 @@ public class SchematicTest {
         }
 
         @Override
+        public Place location() {
+            return null;
+        }
+
+        @Override
         public Rectangle2D.Double schematicBox() {
             return schematicBox;
         }

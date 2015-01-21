@@ -82,7 +82,7 @@ public class Parse {
         parseXML( CableDiversion.class, "cable-diversion" );
         parseXML( LuminaireDefinition.class, "luminaire-definition");
         parseXML( DeviceTemplate.class, "device-template");
-        parseXML( CableType.class, "cable-type");
+        parseXML( CableType.class, "cable-type" );
         parseXML( Venue.class, "venue");
         parseXML( Wall.class, "wall");
         parseXML( Balcony.class, "balcony");
@@ -103,15 +103,17 @@ public class Parse {
         parseXML( Zone.class, "zone" );
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );
-        parseXML( CableRun.class, "cable-run" );
         parseXML( DanceTile.class, "dancetile" );
+
+        parseXML( UserMulticable.class, "multicable" );
+        parseXML( UserCableRun.class, "cable-run" );
 
         if ( fatalParseError ) {
             System.err.println( "... unable to continue." );
             System.exit( 42 );
         }
 
-        MinderDom.VerifyAll();
+        Verifier.VerifyAll();
 
         NodeList setup = root.getElementsByTagName( "setup" );
         Setup.ParseXML( setup );

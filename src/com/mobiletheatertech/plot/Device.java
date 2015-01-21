@@ -171,10 +171,10 @@ public class Device extends Stackable implements Schematicable
     public void preview( View view ) {
         switch ( view ) {
             case SCHEMATIC:
-                schematicPosition = Schematic.Position( shape.width(), shape.height() );
-
                 Double width = shape.width();
                 Double height = shape.height();
+                schematicPosition = Schematic.Position( width, height );
+
                 schematicBox = new Rectangle2D.Double(
                         schematicPosition.x() - width / 2,
                         schematicPosition.y() - height / 2,

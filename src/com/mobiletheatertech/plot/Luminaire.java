@@ -153,7 +153,8 @@ public class Luminaire extends MinderDom implements Schematicable {
      * @return drawing location
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
-    protected Place location() throws InvalidXMLException, MountingException, ReferenceException {
+    @Override
+    public Place location() throws InvalidXMLException, MountingException, ReferenceException {
         mount = Mountable.Select(on);
         if (null == mount) {
             throw new MountingException(

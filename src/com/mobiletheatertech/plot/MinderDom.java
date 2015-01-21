@@ -47,6 +47,7 @@ public abstract class MinderDom extends Layerer {
                 thing.dom( draw, View.PLAN );
             }
         }
+        CableRun.DomAll( draw, View.PLAN );
     }
 
     /**

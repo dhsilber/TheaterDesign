@@ -75,7 +75,7 @@ public class Write {
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
 //        System.err.println( " Spreadsheet");
-        writeGearSpreadsheet(pathname + "/gear.ods");
+//        writeGearSpreadsheet(pathname + "/gear.ods");
         writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
     }
 
@@ -407,8 +407,10 @@ public class Write {
         for ( String layerName : drawing.layers ) {
             Layer layer = Layer.List().get( layerName );
             if ( null == layer ) {
-                System.err.println(
-                        "For " + drawing.filename() +", " + layerName + " is not a Layer." );
+                if( ! "legend".equals( layerName ) ) {
+                    System.err.println(
+                            "For " + drawing.filename() + ", " + layerName + " is not a Layer.");
+                }
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
@@ -419,6 +421,7 @@ public class Write {
             }
 
         }
+        Multicable.PreviewAll( view );
 
         switch (view) {
             case SCHEMATIC:
@@ -463,8 +466,9 @@ public class Write {
                     thingy.dom( draw, view );
                 }
             }
-
         }
+        Multicable.DomAll( draw, view );
+        CableRun.DomAll( draw, view );
 
         return draw;
 

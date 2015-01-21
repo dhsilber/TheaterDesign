@@ -7,6 +7,8 @@ import java.awt.geom.Rectangle2D;
  */
 public interface Schematicable {
 
+//    public static Schematicable Select( String identifier );
+
     public PagePoint schematicPosition();
 
     /**
@@ -26,4 +28,9 @@ public interface Schematicable {
 
     public void preview( View view )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException;
+
+    public Place location() throws InvalidXMLException, MountingException, ReferenceException
+//    throws DataException, FeatureException, InvalidXMLException,
+//            LocationException, MountingException, ReferenceException
+            ;
 }
