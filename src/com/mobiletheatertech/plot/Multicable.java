@@ -137,7 +137,7 @@ public class Multicable implements Schematicable {
         }
 
         SvgElement group = draw.group(draw, "");
-        draw.appendRootChild(group);
+//        draw.appendRootChild(group);
         SvgElement circle = null;
         switch (view) {
             case PLAN:

@@ -43,7 +43,7 @@ public class DrawTest {
     public void storesDocument() throws Exception {
         Draw draw = new Draw();
 
-        Object doc = TestHelpers.accessObject( draw, "document" );
+        Object doc = TestHelpers.accessObject(draw, "document");
         assert Document.class.isInstance( doc );
     }
 
@@ -75,7 +75,7 @@ public class DrawTest {
         Draw draw = new Draw();
 
         Object root = TestHelpers.accessObject( draw, "root" );
-        assertNull( root );
+        assertNull(root);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class DrawTest {
 
         Object root = TestHelpers.accessObject( draw, "root" );
         assertSame( draw.root(), root );
-        assertNull( draw.root() );
+        assertNull(draw.root());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class DrawTest {
 
         Object root = TestHelpers.accessObject( draw, "root" );
         assertSame( draw.root(), root );
-        assertNotNull( draw.root() );
+        assertNotNull(draw.root());
     }
 
     @Test
@@ -116,15 +116,15 @@ public class DrawTest {
         SvgElement element = draw.element(tag);
         assert Element.class.isInstance( element );
         assertEquals( element.element().getTagName(), tag );
-        assertEquals( element.element().getNamespaceURI(), namespace );
-        assertEquals( element.element().getOwnerDocument(), draw.document() );
+        assertEquals(element.element().getNamespaceURI(), namespace);
+        assertEquals(element.element().getOwnerDocument(), draw.document());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void setDocumentTitleBeforeGetRoot() {
         Draw draw = new Draw();
         String title = "Follow The Rabbit";
-        draw.setDocumentTitle( title );
+        draw.setDocumentTitle(title);
     }
 
     @Test
@@ -139,7 +139,12 @@ public class DrawTest {
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;
-        assertEquals( element.getTextContent(), title );
+        assertEquals(element.getTextContent(), title);
+    }
+
+    @Test
+    public void svgGroupOverride() throws Exception {
+        fail();
     }
 
     @Test(expectedExceptions = NullPointerException.class)

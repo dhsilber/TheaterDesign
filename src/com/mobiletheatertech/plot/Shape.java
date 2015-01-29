@@ -55,6 +55,7 @@ public class Shape {
             yPoints[pointIndex] = y;
 
             index++;
+            pointIndex++;
         }
 
         polygon = new Polygon(xPoints, yPoints, pointCount);
@@ -82,6 +83,30 @@ public class Shape {
         Rectangle2D rectangle = polygon.getBounds2D();
 
         return rectangle.getHeight();
+    }
+
+    String toSvgPath( Double startX, Double startY ) {
+
+        if( Proscenium.Active() ) {
+            startX = Proscenium.Origin().x() + startX;
+            startY = Proscenium.Origin().y() - startY;
+        }
+
+        StringBuilder result = new StringBuilder( "M " );
+
+        for( int index = 0; index < xPoints.length; index++ ) {
+            Double x = new Double( xPoints[index] ) + startX;
+            result.append( x.toString() );
+            result.append( " " );
+
+            Double y = new Double( yPoints[index] ) + startY;
+            result.append(y.toString());
+            result.append( " " );
+        }
+
+        result.append( "Z" );
+
+        return result.toString();
     }
 
     Boolean fits(double x, double y, double width, double depth) {

@@ -104,6 +104,7 @@ public class Parse {
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );
         parseXML( DanceTile.class, "dancetile" );
+        parseXML( SetPlatform.class, "set-platform" );
 
         parseXML( UserMulticable.class, "multicable" );
         parseXML( UserCableRun.class, "cable-run" );

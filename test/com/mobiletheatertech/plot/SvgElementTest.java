@@ -109,7 +109,7 @@ public class SvgElementTest {
         SvgElement result = parent.circle(draw, x, y, radius, color);
 
         assertEquals(result.attribute("cx"), x.toString());
-        assertEquals( result.attribute( "cy"), y.toString() );
+        assertEquals(result.attribute("cy"), y.toString());
         assertEquals( result.attribute( "r"), radius.toString() );
         assertEquals( result.attribute( "stroke"), color );
         assertEquals(result.attribute("fill"), "none");
@@ -166,6 +166,11 @@ public class SvgElementTest {
         SvgElement symbol = draw.element("symbol");
 
         baseCircle(draw, symbol);
+    }
+
+    @Test
+    public void svgGroup() throws Exception {
+        fail();
     }
 
     @Test

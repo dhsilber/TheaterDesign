@@ -99,8 +99,16 @@ class SvgElement {
         return element;
     }
 
-    // TODO Move this to SvgElement
     public SvgElement group( Draw draw, String className ) {
+        SvgElement element = groupExceptAppend(draw, className);
+
+        this.appendChild(element);
+
+        return element;
+    }
+
+    // TODO Clean source for this out of MinderDom
+    SvgElement groupExceptAppend(Draw draw, String className) {
         SvgElement element = draw.element("g");
         element.attribute("class", className);
 
@@ -154,7 +162,8 @@ class SvgElement {
                                       String path,
                                       String color) {
         SvgElement element = draw.element( "path" );
-        element.attribute("fill", "none");
+        element.attribute("fill", color );
+        element.attribute( "fill-opacity", "0.1" );
         element.attribute("stroke", color );
         element.attribute("stroke-width", "2");
         element.attribute("d", path );
@@ -196,9 +205,8 @@ class SvgElement {
         Double thickness = 19.0;  // width of two lines and numbers
         Integer lineSpacer = 3;
         Integer dashSpacer = 6;
-                
-        SvgElement scale = draw.element( "g" );
-        scale.attribute( "class", "scale" );
+
+        SvgElement scale = groupExceptAppend(draw, "scale");
 
         SvgElement top = scale.lineAbsolute( draw,
                 thickness - lineSpacer,

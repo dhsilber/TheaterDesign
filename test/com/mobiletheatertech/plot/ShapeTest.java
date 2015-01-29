@@ -22,6 +22,12 @@ public class ShapeTest {
 //    string empty="";
 //    String badShape=""
 
+    Double xRelative = 76.7;
+    Double yRelative = 93.6;
+    String polygonRelative = "-12 17 -8 20 8 20 12 17 14 6 14 -6 12 -17 8 -20 -8 -20 -12 -17 -14 -6 -14 6 ";
+    String pathRelative = "M 64.7 110.6 68.7 113.6 84.7 113.6 88.7 110.6 90.7 99.6 90.7 87.6 88.7 76.6 84.7 73.6 68.7 73.6 64.7 76.6 62.7 87.6 62.7 99.6 Z";
+
+
     @Test
     public void createsSquareVertexList() throws Exception {
         Shape shape = new Shape(square);
@@ -77,28 +83,28 @@ public class ShapeTest {
     public void x() throws DataException {
         Shape shape = new Shape(square);
 
-        assertEquals(shape.x(), 1);
+        assertEquals(shape.x(), 1.0 );
     }
 
     @Test
     public void y() throws DataException {
         Shape shape = new Shape(square);
 
-        assertEquals(shape.y(), 1);
+        assertEquals(shape.y(), 1.0 );
     }
 
     @Test
     public void width() throws DataException {
         Shape shape = new Shape(square);
 
-        assertEquals(shape.width(), 7);
+        assertEquals(shape.width(), 7.0 );
     }
 
     @Test
     public void depth() throws DataException {
         Shape shape = new Shape(square);
 
-        assertEquals(shape.depth(), 7);
+        assertEquals(shape.depth(), 7.0 );
     }
 
     @Test
@@ -134,5 +140,14 @@ public class ShapeTest {
         Shape shape = new Shape(polygon);
 
         assertFalse(shape.fits(2, 32, 5, 5));
+    }
+
+    @Test
+    public void toSvgPath() throws Exception {
+        Shape instance = new Shape( polygonRelative );
+
+        String path = instance.toSvgPath( xRelative, yRelative );
+
+        assertEquals( path, pathRelative );
     }
 }

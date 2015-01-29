@@ -446,7 +446,6 @@ public class LightingStandTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.MountableReset();
-        TestResets.LightingStandReset();
         SvgElement.Offset(0.0, 0.0);
         TestResets.LightingStandReset();
 //        Schematic.CountX = 0;

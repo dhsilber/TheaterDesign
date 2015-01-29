@@ -160,6 +160,16 @@ public class Draw extends SvgElement {
         root.appendChild( element.element() );
     }
 
+    @Override
+    public SvgElement group( Draw draw, String className ) {
+        SvgElement element = groupExceptAppend(draw, className);
+
+        this.appendRootChild(element);
+
+        return element;
+    }
+
+
     // TODO Get rid of this.
     /**
      * Add an element directly under the document root.
