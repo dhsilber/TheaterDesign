@@ -9,17 +9,32 @@ public class Display extends Elemental {
 
     String layerName = null;
     String deviceName = null;
+    String mountableName = null;
 
     public Display( Element element ) throws InvalidXMLException {
         super( element );
 
+        int attributeCount = 0;
+
         layerName = getOptionalStringAttribute( element, "layer" );
         deviceName = getOptionalStringAttribute( element, "device" );
+        mountableName = getOptionalStringAttribute( element, "mountable" );
 
-        if( (layerName.equals( "" ) && deviceName.equals( "" )) ||
-                (!layerName.equals( "" ) && !deviceName.equals( "" )) ) {
+        if( ! layerName.equals( "" ) ) {
+            attributeCount++;
+        }
+
+        if( ! deviceName.equals( "" ) ) {
+            attributeCount++;
+        }
+
+        if( ! mountableName.equals( "" ) ) {
+            attributeCount++;
+        }
+
+        if( 1 != attributeCount ) {
             throw new InvalidXMLException(
-                    "Display requires one of 'layer' or 'device' attributes." );
+                    "Display requires one of 'layer', 'device', or 'mountable' attributes." );
         }
     }
 
@@ -30,4 +45,9 @@ public class Display extends Elemental {
     public String device() {
         return deviceName;
     }
+
+    public String mountable() {
+        return mountableName;
+    }
+
 }

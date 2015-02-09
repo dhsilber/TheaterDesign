@@ -1,9 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -154,7 +151,7 @@ public class Luminaire extends MinderDom implements Schematicable {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public Place location() throws InvalidXMLException, MountingException, ReferenceException {
+    public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException {
         mount = Mountable.Select(on);
         if (null == mount) {
             throw new MountingException(
@@ -173,7 +170,7 @@ public class Luminaire extends MinderDom implements Schematicable {
 
     @Override
     public void verify() throws InvalidXMLException, MountingException, ReferenceException {
-        place = location();
+        place = drawingLocation();
         point=place.location();
         origin=place.origin();
         pipeRotation=place.rotation();
@@ -248,6 +245,9 @@ public class Luminaire extends MinderDom implements Schematicable {
         switch ( view ) {
             case SCHEMATIC:
                 schematicPosition = mount.schematicLocation( location );
+                if( null == schematicPosition ) {
+                    return;
+                }
 
                 Double width = definition.width();
                 Double height = definition.length();
@@ -299,7 +299,6 @@ public class Luminaire extends MinderDom implements Schematicable {
             return;
         }
 
-
         Double z = Venue.Height() - point.z();
 
         SvgElement group = svgClassGroup( draw, LAYERTAG );
@@ -328,6 +327,9 @@ public class Luminaire extends MinderDom implements Schematicable {
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
             case SCHEMATIC:
+                if( null == schematicPosition ) {
+                    return;
+                }
                 use = group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
                 if( ! LightingStand.class.isInstance( mount ) ) {
                     use.attribute("transform",

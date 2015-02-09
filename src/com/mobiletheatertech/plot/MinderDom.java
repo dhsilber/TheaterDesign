@@ -1,9 +1,7 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
 
 /**
  * MinderDom keeps a list of all of the plot items that are created and provides methods to ensure
@@ -118,5 +116,8 @@ public abstract class MinderDom extends Layerer {
 
         return element;
     }
+
+//    public abstract Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException
+//            ;
 
 }

@@ -69,7 +69,7 @@ public class DrawingTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Drawing \\(" + id + "\\) has invalid 'view' attribute. Valid is 'schematic'." )
+                    "Drawing \\(" + id + "\\) has invalid 'view' attribute. Valid is 'schematic' or 'spreadsheet'." )
     public void invalidView() throws Exception {
         drawingElement.setAttribute("view", "bogus");
         new Drawing( drawingElement );
@@ -105,6 +105,8 @@ public class DrawingTest {
         assertEquals(layers.get(0), name);
         ArrayList<String> devices = drawing.devices;
         assertEquals( devices.size(), 0 );
+        ArrayList<String> mountables = drawing.mountables;
+        assertEquals( mountables.size(), 0 );
     }
 
     @Test
@@ -120,6 +122,27 @@ public class DrawingTest {
         ArrayList<String> devices = drawing.devices;
         assertEquals( devices.size(), 1 );
         assertEquals( devices.get( 0 ), name );
+        ArrayList<String> layers = drawing.layers;
+        assertEquals( layers.size(), 0 );
+        ArrayList<String> mountables = drawing.mountables;
+        assertEquals( mountables.size(), 0 );
+    }
+
+    @Test
+    public void storeDisplayMountable() throws Exception {
+        Element displayElement = new IIOMetadataNode( "display" );
+        displayElement.setAttribute( "mountable", name );
+        drawingElement.appendChild( displayElement );
+        Draw draw = new Draw();
+        draw.establishRoot();
+
+        Drawing drawing = new Drawing( drawingElement );
+
+        ArrayList<String> mountables = drawing.mountables;
+        assertEquals( mountables.size(), 1 );
+        assertEquals( mountables.get( 0 ), name );
+        ArrayList<String> devices = drawing.devices;
+        assertEquals( devices.size(), 0 );
         ArrayList<String> layers = drawing.layers;
         assertEquals( layers.size(), 0 );
     }

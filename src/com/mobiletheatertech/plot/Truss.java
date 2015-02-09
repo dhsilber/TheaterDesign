@@ -7,7 +7,6 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import java.awt.geom.Rectangle2D;
 
@@ -205,62 +204,37 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         Character vertex = location.charAt(0);
         Integer distance = locationDistance(location);
 
+        Double offset = size / 2;
 
-//        if( null != base ) {
-//            Double northOffset = size / 2 * -1;
-//            Double westOffset = size / 2 * -1;
-//
-//            switch (vertex) {
-//                case 'a':
-//                    break;
-//                case 'b':
-//                    westOffset *= -1;
-//                    break;
-//                case 'c':
-//                    northOffset *= -1;
-//                    break;
-//                case 'd':
-//                    northOffset *= -1;
-//                    westOffset *= -1;
-//                    break;
-//                default:
-//                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
-//            }
-//
-//            return new PagePoint( x + westOffset, y + northOffset, z + distance );
-//
-//        }
-//        else {
-            Double offset = size / 2;
+        switch (vertex) {
+            case 'a':
+            case 'c':
+                offset *= -1;
+                break;
+            case 'b':
+            case 'd':
+                break;
+            default:
+                throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+        }
 
-            switch (vertex) {
-                case 'a':
-                case 'c':
-                    offset *= -1;
-                    break;
-                case 'b':
-                case 'd':
-                    break;
-                default:
-                    throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
-            }
+        Double verticalOffset = 0.0;
+        switch (vertex) {
+            case 'a':
+            case 'b':
+                verticalOffset -= schematicHeight / 4;
+                break;
+            case 'c':
+            case 'd':
+                verticalOffset += schematicHeight / 4;
+                break;
+            default:
+                throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+        }
 
-                Double verticalOffset = 0.0;
-                switch (vertex) {
-                    case 'a':
-                    case 'b':
-                        verticalOffset -= schematicHeight / 4;
-                        break;
-                    case 'c':
-                    case 'd':
-                        verticalOffset += schematicHeight / 4;
-                        break;
-                    default:
-                        throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
-                }
-
-                return new PagePoint( schematicPosition.x() - length / 2 + distance, schematicPosition.y() + offset + verticalOffset );
-//        }
+        return new PagePoint(
+                schematicPosition.x() - length / 2 + distance,
+                schematicPosition.y() + offset + verticalOffset );
     }
 
     @Override
@@ -285,7 +259,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
     * The hanged thing can also be rotated relative to the pivot point of the truss so that it lines up correctly.
      */
     @Override
-    public Point location(String location) throws InvalidXMLException, MountingException, ReferenceException {
+    public Point mountableLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
         Character vertex = location.charAt(0);
         Integer distance = locationDistance(location);
 
@@ -452,7 +426,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 
         if( positioned ) {
 //            System.err.println( "positioned" );
-            return new Place( location( location ), position, 0.0 );
+            return new Place( mountableLocation(location), position, 0.0 );
         }
         else if ( null != base ) {
 //            System.err.println( "base" );
@@ -460,7 +434,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
             Double transformY = base.y() + SvgElement.OffsetY();
             Point origin = new Point( transformX, transformY, 0.0 );
 //            System.err.println( "base end" );
-            return new Place(location(location), origin, base.rotation() );
+            return new Place(mountableLocation(location), origin, base.rotation() );
         }
         else {
 //            System.err.println( "standard" );
@@ -468,7 +442,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
             Double transformY = point1.y() + SvgElement.OffsetY();
             Point origin = new Point( transformX, transformY, point1.z() );
 //            System.err.println( "standard end" );
-            return new Place(location(location), origin, rotation);
+            return new Place(mountableLocation(location), origin, rotation);
         }
     }
 
@@ -485,7 +459,7 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     }
 
     @Override
-    public Place location() {
+    public Place drawingLocation() {
         return null;
     }
 

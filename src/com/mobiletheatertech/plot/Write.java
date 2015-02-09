@@ -394,6 +394,16 @@ public class Write {
         Draw draw = startFile();
         View view = drawing.view();
 
+        for ( String mountableName : drawing.mountables ) {
+            Mountable mountable = Mountable.Select( mountableName );
+            if ( null == mountable ) {
+                System.err.println(
+                        "For " + drawing.filename() +", " + mountableName + " is not a valid mountable." );
+                continue;
+            }
+            mountable.preview( view);
+        }
+
         for ( String deviceName : drawing.devices ) {
             Device device = Device.Select( deviceName );
             if ( null == device ) {
@@ -429,6 +439,14 @@ public class Write {
                 break;
             default:
                 break;
+        }
+
+        for ( String mountableName : drawing.mountables ) {
+            Mountable mountable = Mountable.Select( mountableName );
+            if ( null == mountable ) {
+                continue;
+            }
+            mountable.dom( draw, view );
         }
 
         for ( String deviceName : drawing.devices ) {
@@ -471,7 +489,6 @@ public class Write {
         CableRun.DomAll( draw, view );
 
         return draw;
-
     }
 
     private void writeGearSpreadsheet( String pathname) {
@@ -558,6 +575,7 @@ public class Write {
 //        Legend.
         Schematic.Reset();
         CableRun.Reset();
+        Pipe.SchematicPositionReset();
     }
 
 //

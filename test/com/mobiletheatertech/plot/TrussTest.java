@@ -386,7 +386,7 @@ public class TrussTest {
         assertNotNull( TestHelpers.accessObject(truss, "suspend1"));
         assertNotNull( TestHelpers.accessObject(truss, "suspend2"));
 
-        Point point = truss.location( "a 17");
+        Point point = truss.mountableLocation("a 17");
         assertEquals( point, new Point(77, 194, 239));
     }
 
@@ -399,7 +399,7 @@ public class TrussTest {
         assertNotNull( TestHelpers.accessObject(truss, "suspend1"));
         assertNotNull( TestHelpers.accessObject(truss, "suspend2"));
 
-        Point point = truss.location( "c 17");
+        Point point = truss.mountableLocation("c 17");
         assertEquals( point, new Point(77, 194, 227));
     }
 
@@ -408,7 +408,7 @@ public class TrussTest {
     public void locationFormatNoDistance() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location("a");
+        truss.mountableLocation("a");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -416,7 +416,7 @@ public class TrussTest {
     public void locationFormatNoVertex() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location( "17");
+        truss.mountableLocation("17");
     }
 
     @Test(expectedExceptions=MountingException.class,
@@ -424,7 +424,7 @@ public class TrussTest {
     public void locationOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location( "a 161");
+        truss.mountableLocation("a 161");
     }
 
     @Test(expectedExceptions=MountingException.class,
@@ -432,7 +432,7 @@ public class TrussTest {
     public void locationNegativeOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location( "a -1");
+        truss.mountableLocation("a -1");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -440,7 +440,7 @@ public class TrussTest {
     public void locationVertexOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
-        truss.location( "e 16");
+        truss.mountableLocation("e 16");
     }
 
     @Test
@@ -451,7 +451,7 @@ public class TrussTest {
         Truss truss = new Truss( element );
         truss.verify();
 
-        Point point = truss.location( "a 17");
+        Point point = truss.mountableLocation("a 17");
         assertEquals(point, new Point(x - length / 2 + 17, y - size / 2, z + size / 2));
     }
 
@@ -463,7 +463,7 @@ public class TrussTest {
         Truss truss = new Truss( element );
         truss.verify();
 
-        Point point = truss.location( "b 97");
+        Point point = truss.mountableLocation("b 97");
         assertEquals( point, new Point(x - length / 2 + 97, y + size / 2, z + size / 2));
     }
 
@@ -475,7 +475,7 @@ public class TrussTest {
         Truss truss = new Truss( element );
         truss.verify();
 
-        Point point = truss.location( "c 15");
+        Point point = truss.mountableLocation("c 15");
         assertEquals( point, new Point( x - length / 2 + 15, y - size / 2, z - size / 2 ));
     }
 
@@ -487,7 +487,7 @@ public class TrussTest {
         Truss truss = new Truss( element );
         truss.verify();
 
-        Point point = truss.location( "d 150");
+        Point point = truss.mountableLocation("d 150");
         assertEquals( point, new Point( x - length / 2 + 150, y + size / 2, z - size / 2 ));
     }
 
@@ -499,7 +499,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location("a");
+        truss.mountableLocation("a");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -510,7 +510,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location( "17");
+        truss.mountableLocation("17");
     }
 
     @Test(expectedExceptions=MountingException.class,
@@ -521,7 +521,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location( "a 161");
+        truss.mountableLocation("a 161");
     }
 
     @Test(expectedExceptions=MountingException.class,
@@ -532,7 +532,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location( "a -1");
+        truss.mountableLocation("a -1");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -543,7 +543,7 @@ public class TrussTest {
         element.setAttribute( "z", z.toString() );
         Truss truss = new Truss( element );
 
-        truss.location( "e 16");
+        truss.mountableLocation("e 16");
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,

@@ -377,7 +377,7 @@ public class PipeTest {
     public void location() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.location("15");
+        Point place = pipe.mountableLocation("15");
         assert place.equals(new Point(27, 23, 34));
     }
 
@@ -386,7 +386,7 @@ public class PipeTest {
     public void locationNotNumber() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.location("a");
+        pipe.mountableLocation("a");
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -394,7 +394,7 @@ public class PipeTest {
     public void locationOffPipe() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.location("121");
+        pipe.mountableLocation("121");
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -403,7 +403,7 @@ public class PipeTest {
     public void locationNegativeOffPipe() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.location("-1");
+        pipe.mountableLocation("-1");
     }
 
     @Test
@@ -412,7 +412,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.location("15");
+        Point place = pipe.mountableLocation("15");
         assertEquals(place.x, 227.0 );
         assertEquals(place.y, 122.0 );
         assertEquals(place.z, 45.0 );
@@ -426,7 +426,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        pipe.location("121");
+        pipe.mountableLocation("121");
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -437,7 +437,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        pipe.location("-1");
+        pipe.mountableLocation("-1");
     }
 
     @Test
@@ -447,7 +447,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.location("15");
+        Point place = pipe.mountableLocation("15");
         assertEquals(place.x, 215.0 );
         assertEquals(place.y, 122.0 );
         assertEquals(place.z, 45.0 );
@@ -460,7 +460,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.location("-5");
+        Point place = pipe.mountableLocation("-5");
         assertEquals(place.x, 195.0 );
         assertEquals(place.y, 122.0 );
         assertEquals(place.z, 45.0 );
@@ -475,7 +475,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        pipe.location("120");
+        pipe.mountableLocation("120");
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -487,7 +487,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        pipe.location("-15");
+        pipe.mountableLocation("-15");
     }
 
     @Test
@@ -717,7 +717,7 @@ public class PipeTest {
 
         TestResets.MinderDomReset();
 
-        new Parse( stream );
+//        new Parse( stream );
 
         ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals( list.size(), 5 );

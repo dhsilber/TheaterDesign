@@ -69,7 +69,7 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     public void schematicReset() {}
 
     @Override
-    public Point location( String location ) throws InvalidXMLException {
+    public Point mountableLocation(String location) throws InvalidXMLException {
         return new Point( x - Space * topBarPositionOffset(location), y, 144.0 );
     }
 
@@ -96,7 +96,7 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
 
     @Override
     public Place rotatedLocation( String location ) throws InvalidXMLException {
-        return new Place( location(location),
+        return new Place( mountableLocation(location),
                 new Point( x + SvgElement.OffsetX(), y + SvgElement.OffsetY(), 144.0 ),
                 orientation );
     }
@@ -114,7 +114,7 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     }
 
     @Override
-    public Place location() {
+    public Place drawingLocation() {
         return null;
     }
 

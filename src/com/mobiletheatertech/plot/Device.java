@@ -106,10 +106,21 @@ public class Device extends Stackable implements Schematicable
         return is;
     }
 
-    public Place location() {
+    public Place drawingLocation() {
         return new Place( place, place, 0.0 );
     }
 
+    /**
+     * Verifies that the specifications for this Device make sense within the context of all of the various
+     * XML that needed to be parsed before it could be discovered that it affected this Device.
+     *
+     * @throws DataException
+     * @throws FeatureException
+     * @throws InvalidXMLException
+     * @throws LocationException
+     * @throws MountingException
+     * @throws ReferenceException
+     */
     @Override
     public void verify()
             throws DataException, FeatureException, InvalidXMLException, LocationException,

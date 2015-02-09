@@ -1,7 +1,5 @@
 package com.mobiletheatertech.plot;
 
-import org.w3c.dom.Element;
-
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -381,7 +379,7 @@ public class CableRun implements Schematicable {
     }
 
     @Override
-    public Place location() {
+    public Place drawingLocation() {
         return null;
     }
 
@@ -432,8 +430,8 @@ public class CableRun implements Schematicable {
     }
 
     void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {
-        Place sourcePoint = sourceThingy.location();
-        Place sinkPoint = sinkThingy.location();
+        Place sourcePoint = sourceThingy.drawingLocation();
+        Place sinkPoint = sinkThingy.drawingLocation();
 
         // Bogus 'fix' to not draw cable runs for lights on truss, because I do not currently
         // have the points compensating for the rotation of the truss.

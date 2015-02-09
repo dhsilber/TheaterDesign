@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.23
  */
-public abstract class Mountable extends MinderDom {
+public abstract class Mountable extends MinderDom implements Schematicable {
 
     private static ArrayList<Mountable> MOUNTABLELIST = new ArrayList<>();
 
@@ -32,6 +32,8 @@ public abstract class Mountable extends MinderDom {
         }
         return null;
     }
+
+    public static ArrayList<Mountable> MountableList() { return MOUNTABLELIST; }
 
 //    public static void Remove( String id ) {
 //        Mountable candidate = null;
@@ -70,8 +72,16 @@ public abstract class Mountable extends MinderDom {
         MOUNTABLELIST.add(this);
     }
 
-    public abstract Point location( String location ) throws InvalidXMLException, MountingException, ReferenceException;
+    public abstract Point mountableLocation(String location) throws InvalidXMLException, MountingException, ReferenceException;
 
+    /**
+     * Provide the page location for the object at the location specified.
+     *
+     * @param location
+     * @return
+     * @throws InvalidXMLException
+     * @throws MountingException
+     */
     public abstract PagePoint schematicLocation( String location ) throws InvalidXMLException, MountingException; //, MountingException, ReferenceException;
 
     public abstract Place rotatedLocation( String location ) throws InvalidXMLException, MountingException, ReferenceException;

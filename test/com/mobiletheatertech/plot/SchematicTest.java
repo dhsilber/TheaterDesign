@@ -39,7 +39,7 @@ public class SchematicTest {
         }
 
         @Override
-        public Place location() {
+        public Place drawingLocation() {
             return null;
         }
 

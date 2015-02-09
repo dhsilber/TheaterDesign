@@ -122,7 +122,7 @@ public class Multicable implements Schematicable {
     }
 
     @Override
-    public Place location() {
+    public Place drawingLocation() {
         Point point = new Point( x, y, z );
         return new Place( point, point, 0.0 );
     }

@@ -65,7 +65,7 @@ public class LightingStandTest {
         LightingStand instance = new LightingStand( element );
         instance.verify();
 
-        instance.location("");
+        instance.mountableLocation("");
     }
 
     @Test
@@ -88,7 +88,7 @@ public class LightingStandTest {
         LightingStand instance = new LightingStand( element );
         instance.verify();
 
-        Point point = instance.location( "a" );
+        Point point = instance.mountableLocation("a");
         assertEquals(point, new Point(x + 18, y, 144.0));
     }
 

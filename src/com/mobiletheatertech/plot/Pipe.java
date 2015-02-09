@@ -1,10 +1,7 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -103,6 +100,15 @@ public class Pipe extends Mountable implements Schematicable {
         new Layer(LAYERTAG, LAYERNAME, COLOR );
     }
 
+    public static void SchematicPositionReset() {
+        for( Mountable mountable : MountableList() ) {
+            if (Pipe.class.isInstance( mountable ) ) {
+                Pipe pipe = (Pipe) mountable;
+                pipe.schematicPosition = null;
+            }
+        }
+    }
+
     /**
      * Confirm that this {@code Pipe}'s specification works with other Plot items.
      *
@@ -181,7 +187,12 @@ public class Pipe extends Mountable implements Schematicable {
 
     @Override
     public PagePoint schematicLocation( String location ) {
-        return schematicPosition;
+        if( null == schematicPosition ) {
+            return schematicPosition;
+        }
+        Double place = new Double( location );
+        return new PagePoint( schematicPosition.x() + place,
+                schematicPosition.y() );
     }
 
     @Override
@@ -207,7 +218,7 @@ public class Pipe extends Mountable implements Schematicable {
      * @return drawing location
      * @throws MountingException if location will be beyond the edge of the pipe
      */
-    public Point location(String location) throws InvalidXMLException, MountingException {
+    public Point mountableLocation(String location) throws InvalidXMLException, MountingException {
         Integer offset;
         try {
             offset = new Integer(location);
@@ -259,7 +270,7 @@ public class Pipe extends Mountable implements Schematicable {
     public Place rotatedLocation(String location)
             throws InvalidXMLException, MountingException, ReferenceException {
         // Pipes are not yet able to be rotated, so this just passes through to location().
-        return new Place(location(location), boxOrigin, 0.0);
+        return new Place(mountableLocation(location), boxOrigin, 0.0);
     }
 
     @Override
@@ -275,7 +286,7 @@ public class Pipe extends Mountable implements Schematicable {
     }
 
     @Override
-    public Place location() {
+    public Place drawingLocation() {
         return null;
     }
 
@@ -307,6 +318,12 @@ public class Pipe extends Mountable implements Schematicable {
                 } else {
                     group.rectangle( draw, drawBox.x(), drawBox.y(), length, DIAMETER, COLOR );
                 }
+                break;
+            case SCHEMATIC:
+                group.rectangleAbsolute( draw,
+                        schematicPosition.x() - length / 2,
+                        schematicPosition.y() - DIAMETER / 2,
+                        length, DIAMETER, COLOR );
                 break;
             case SECTION:
                 group.rectangle( draw, drawBox.y(), height, DIAMETER, DIAMETER, COLOR );

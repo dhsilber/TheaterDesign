@@ -4,6 +4,7 @@ import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
@@ -36,7 +37,7 @@ public class MountableTest {
         }
 
         @Override
-        public Point location( String location ) {
+        public Point mountableLocation(String location) {
             return null;
         }
 
@@ -56,6 +57,33 @@ public class MountableTest {
             throw new UnsupportedOperationException(
                     "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
+
+        public PagePoint schematicPosition() { return null; }
+
+        /**
+         * This is schematicPosition() adjusted to take into account the number of
+         * cables attempting to intersect a thing from that direction.
+         *
+         * @return a position along the edge of a thing
+         */
+        public PagePoint schematicCableIntersectPosition( CableRun run )
+                throws CorruptedInternalInformationException, ReferenceException
+        { return null; }
+
+        public Rectangle2D.Double schematicBox()
+        { return null; }
+
+        public void schematicReset()  {}
+
+        public void useCount( Direction direction, CableRun run ) {}
+
+        public void preview( View view )
+                throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
+        {}
+
+        public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException
+        { return null; }
+
     }
 
     //    private static Draw draw = null;
@@ -195,7 +223,7 @@ public class MountableTest {
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Mounted diversionElement unexpectedly null!" )
+            expectedExceptionsMessageRegExp = "Mounted element unexpectedly null!" )
     public void NullElement() throws Exception {
         new Mounted( null );
     }

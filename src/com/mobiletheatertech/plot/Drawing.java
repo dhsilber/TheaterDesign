@@ -17,6 +17,7 @@ public class Drawing extends ElementalLister {
 
     public ArrayList<String> layers = new ArrayList<>();
     public ArrayList<String> devices = new ArrayList<>();
+    public ArrayList<String> mountables = new ArrayList<>();
 
     public Drawing( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
@@ -49,6 +50,7 @@ public class Drawing extends ElementalLister {
                     Display display = new Display( subElement );
                     store( display.layer(), layers );
                     store( display.device(), devices );
+                    store( display.mountable(), mountables );
                 }
             }
         }
