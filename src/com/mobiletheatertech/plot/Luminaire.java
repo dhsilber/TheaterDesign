@@ -216,6 +216,10 @@ public class Luminaire extends MinderDom implements Schematicable {
         return channel;
     }
 
+    String info() {
+        return info;
+    }
+
     /**
      * Provide the rotation required to orient this luminaire's icon to the specified point.
      *
@@ -379,11 +383,11 @@ public class Luminaire extends MinderDom implements Schematicable {
         use.attribute("transform", transform );
 
         // Unit number to overlay on icon
-        SvgElement unitText = group.text( draw, unit, x, y, COLOR );
-        unitText.attribute("fill", "none");
+        SvgElement unitText = group.text( draw, unit, x, y, "green" );
+//        unitText.attribute("fill", "green");
         unitText.attribute("stroke", "green");
-        unitText.attribute("font-family", "sans-serif");
-        unitText.attribute("font-weight", "100");
+//        unitText.attribute("font-family", "sans-serif");
+//        unitText.attribute("font-weight", "100");
         unitText.attribute("font-size", "7");
         unitText.attribute("text-anchor", "middle");
     }

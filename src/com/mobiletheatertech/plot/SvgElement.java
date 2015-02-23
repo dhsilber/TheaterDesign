@@ -354,7 +354,8 @@ class SvgElement {
         element.attribute( "y", y.toString() );
         element.attribute( "fill", color );
         element.attribute( "stroke", "none" );
-        element.attribute( "font-family", "serif" );
+        element.attribute( "font-weight", "100" );
+        element.attribute( "font-family", "sans-serif" );
         element.attribute( "font-size", "10" );
 
         Text foo = draw.document().createTextNode( text );

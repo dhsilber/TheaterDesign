@@ -191,8 +191,15 @@ public class Pipe extends Mountable implements Schematicable {
             return schematicPosition;
         }
         Double place = new Double( location );
-        return new PagePoint( schematicPosition.x() + place,
-                schematicPosition.y() );
+        PagePoint schematicLocation;
+        if (90.0 == orientation) {
+            schematicLocation = new PagePoint( schematicPosition.x(),
+                    schematicPosition.y() + place );
+        } else {
+            schematicLocation = new PagePoint( schematicPosition.x() + place,
+                    schematicPosition.y() );
+        }
+        return schematicLocation;
     }
 
     @Override
@@ -320,10 +327,17 @@ public class Pipe extends Mountable implements Schematicable {
                 }
                 break;
             case SCHEMATIC:
-                group.rectangleAbsolute( draw,
-                        schematicPosition.x() - length / 2,
-                        schematicPosition.y() - DIAMETER / 2,
-                        length, DIAMETER, COLOR );
+                if (90.0 == orientation) {
+                    group.rectangleAbsolute(draw,
+                            schematicPosition.x() - DIAMETER / 2,
+                            schematicPosition.y() - length / 2,
+                            DIAMETER, length, COLOR);
+                } else {
+                    group.rectangleAbsolute(draw,
+                            schematicPosition.x() - length / 2,
+                            schematicPosition.y() - DIAMETER / 2,
+                            length, DIAMETER, COLOR );
+                }
                 break;
             case SECTION:
                 group.rectangle( draw, drawBox.y(), height, DIAMETER, DIAMETER, COLOR );
