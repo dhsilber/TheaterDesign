@@ -39,6 +39,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     private Element svg;
     private Double width;
     private Double length;
+    private Double weight;
     private Double legendHeight;
 
     private static final String COLOR = "black";
@@ -80,6 +81,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
         complete = (element.getAttribute( "complete" ).equals( "1" ));
         width = getOptionalDoubleAttributeOrZero(element, "width");
         length = getOptionalDoubleAttributeOrZero(element, "length");
+        weight = getDoubleAttribute( element, "weight" );
 
         NodeList svgList = element.getElementsByTagName( "svg" );
         if (null != svgList && svgList.getLength() > 0) {
@@ -107,6 +109,10 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
 
     public Double width() {
         return width;
+    }
+
+    public Double weight() {
+        return weight;
     }
 
     @Override

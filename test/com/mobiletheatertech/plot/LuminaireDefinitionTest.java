@@ -21,6 +21,7 @@ public class LuminaireDefinitionTest {
     final String id = "6x9";
     Double width = 13.8;
     Double length = 27.2;
+    Double weight = 19.4;
 
     @Test
     public void isA() throws Exception {
@@ -45,6 +46,7 @@ public class LuminaireDefinitionTest {
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), id );
         assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), 0.0 );
         assertEquals( TestHelpers.accessDouble( luminaireDefinition, "length"), 0.0 );
+        assertEquals( TestHelpers.accessDouble( luminaireDefinition, "weight"), weight );
         assertEquals( TestHelpers.accessBoolean(luminaireDefinition, "complete"), Boolean.FALSE );
     }
 
@@ -56,6 +58,7 @@ public class LuminaireDefinitionTest {
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), id );
         assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), width );
         assertEquals( TestHelpers.accessDouble(luminaireDefinition, "length"), length );
+        assertEquals( TestHelpers.accessDouble( luminaireDefinition, "weight"), weight );
         assertEquals( TestHelpers.accessBoolean(luminaireDefinition, "complete"), Boolean.TRUE );
     }
 
@@ -139,9 +142,23 @@ public class LuminaireDefinitionTest {
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
-           expectedExceptionsMessageRegExp = "Luminaire definition instance is missing required 'name' attribute." )
+            expectedExceptionsMessageRegExp = "Luminaire definition instance is missing required 'name' attribute." )
     public void noName() throws Exception {
         element.removeAttribute( "name" );
+        new LuminaireDefinition( element );
+    }
+
+    @Test
+    public void weight() throws Exception {
+        LuminaireDefinition instance = new LuminaireDefinition( element );
+
+        assertEquals(instance.weight(), weight);
+    }
+
+    @Test( expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "LuminaireDefinition \\("+id+"\\) is missing required 'weight' attribute." )
+    public void noWeight() throws Exception {
+        element.removeAttribute( "weight" );
         new LuminaireDefinition( element );
     }
 
@@ -169,6 +186,7 @@ public class LuminaireDefinitionTest {
         element.setAttribute( "name", id );
         element.setAttribute( "width", width.toString() );
         element.setAttribute( "length", length.toString() );
+        element.setAttribute( "weight", weight.toString() );
 
         svgElement = new IIOMetadataNode( "svg" );
         element.appendChild( svgElement );
