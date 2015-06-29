@@ -98,18 +98,25 @@ public class Luminaire extends MinderDom implements Schematicable {
 
         id = on + ":" + unit;
 
+        System.err.println("Got to middle of constructor");
+
         if( null != Select( id )){
             throw new InvalidXMLException(
                     this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
         }
 
 
+        System.err.println("selected");
         new Layer( LAYERTAG, LAYERNAME, COLOR );
-        new LuminaireInformation( element, this );
+        System.err.println("Made Layer");
+//        new LuminaireInformation( element, this );
+        System.err.println("Made Information");
 
         GearList.Add(type);
+        System.err.println("Added to gear list");
 
         LUMINAIRELIST.add( this );
+        System.err.println("added to luminaire list");
     }
 
     public static Luminaire Select( String identifier ) {
@@ -151,12 +158,18 @@ public class Luminaire extends MinderDom implements Schematicable {
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException {
-        mount = Mountable.Select(on);
-        if (null == mount) {
+    public Place drawingLocation()
+            throws InvalidXMLException, MountingException, ReferenceException {
+
+        try {
+            mount = Mountable.Select(on);
+        }
+        catch ( MountingException e ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
         }
+
+
         Place result;
         try {
             result = mount.rotatedLocation(location);

@@ -23,7 +23,8 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     static Double Space = 12.0;
 
     public LightingStand( Element element )
-            throws AttributeMissingException, DataException, InvalidXMLException {
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException {
         super( element );
 
         x = getDoubleAttribute(element, "x");

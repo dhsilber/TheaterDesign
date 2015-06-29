@@ -11,6 +11,7 @@ public abstract class Layerer extends Verifier {
 
     public Layerer( Element element ) throws DataException, InvalidXMLException {
         super( element );
+//        System.err.println("E");
 
         String name = this.getClass().getSimpleName();
         layer = Layer.Register( name, name );

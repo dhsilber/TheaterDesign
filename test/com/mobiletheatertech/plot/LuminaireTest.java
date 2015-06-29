@@ -825,6 +825,7 @@ public class LuminaireTest {
         elementOnLightingStand.setAttribute("channel", channel);
         elementOnLightingStand.setAttribute("color", color);
         elementOnLightingStand.setAttribute("unit", unit);
+        System.err.println( "setup done.");
     }
 
     @AfterMethod

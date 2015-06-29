@@ -9,6 +9,7 @@ public abstract class Verifier extends ElementalLister {
 
     public Verifier( Element element ) throws InvalidXMLException{
         super( element );
+//        System.err.println( "F" );
     }
 
     /**

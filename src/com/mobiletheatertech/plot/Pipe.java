@@ -1,6 +1,8 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
 
@@ -10,6 +12,13 @@ import java.awt.geom.Rectangle2D;
  * XML tag is 'pipe'. Required attributes are 'length', 'x', 'y', and 'z'.
  * Coordinates are relative
  * to the {@code Proscenium} origin, if any, otherwise relative to the page origin.
+ *
+ * If the pipe location is specified with a point, it is presumed to be horizontal
+ * and aligned along the x axis.
+ *
+ * If the pipe is specified with a pair of anchor points, then the pipe can be in any
+ * orientation. The start end is towards the lesser X value, or the lesser Y value,
+ * or the lesser Z value, in that order.
  *
  * @author dhs
  * @since 0.0.6
@@ -31,7 +40,11 @@ public class Pipe extends Mountable implements Schematicable {
      */
     public static final Double DIAMETER = 2.0;
 
+    protected static final String CHEESEBOROUGH = "cheeseborough";
+
 //    private static ArrayList<Pipe> PIPELIST = new ArrayList<>();
+
+    private Element element = null;
 
 
     private PagePoint schematicPosition = null;
@@ -59,6 +72,13 @@ public class Pipe extends Mountable implements Schematicable {
 
     private static final String COLOR = "black";
 
+    private Cheeseborough support1 = null;
+    private Cheeseborough support2 = null;
+    private Point point1 = null;
+    private Point point2 = null;
+    private Double rotation = null;
+    private Double overHang = null;
+
 
     /**
      * Construct a {@code Pipe} from an XML Element.
@@ -76,18 +96,29 @@ public class Pipe extends Mountable implements Schematicable {
      */
     public Pipe(Element element)
             throws AttributeMissingException, DataException,
-            InvalidXMLException, SizeException
+            InvalidXMLException, MountingException, SizeException
     {
         super(element);
 
 //        System.out.println( "Just inside Pipe constructor." );
 
+        this.element = element;
 //        id = element.attribute( "id" );
         length = getDoubleAttribute(element, "length");
-        Double x = getDoubleAttribute(element, "x");
-        Double y = getDoubleAttribute(element, "y");
-        Double z = getDoubleAttribute(element, "z");
-        start = new Point(x, y, z);
+        Double x = getOptionalDoubleAttributeOrNull(element, "x");
+        Double y = getOptionalDoubleAttributeOrNull(element, "y");
+        Double z = getOptionalDoubleAttributeOrNull( element, "z" );
+
+        try {
+            start = new Point(x, y, z);
+        }
+        catch ( NullPointerException e ) {
+            if ( null != x || null != y || null != z ) {
+                    throw new InvalidXMLException(
+                            "Pipe (" + id + ") explicitly positioned must have x, y, and z coordinates" );
+//            positioned = true;
+            }
+        }
 
         if (0 >= length) {
             Mountable.Remove(this);
@@ -100,15 +131,6 @@ public class Pipe extends Mountable implements Schematicable {
         new Layer(LAYERTAG, LAYERNAME, COLOR );
     }
 
-    public static void SchematicPositionReset() {
-        for( Mountable mountable : MountableList() ) {
-            if (Pipe.class.isInstance( mountable ) ) {
-                Pipe pipe = (Pipe) mountable;
-                pipe.schematicPosition = null;
-            }
-        }
-    }
-
     /**
      * Confirm that this {@code Pipe}'s specification works with other Plot items.
      *
@@ -116,14 +138,18 @@ public class Pipe extends Mountable implements Schematicable {
      */
     @Override
     public void verify() throws LocationException, ReferenceException {
-//        System.err.println( "Pipe starting.");
-//        assert( null != id ) : "Id is null at top of verify()";
+        System.err.println( "Pipe starting.");
+        if( null == start ) { System.err.println( "start is null at top of Pipe.verify()" ); }
+        assert( null != id ) : "Id is null at top of verify()";
 
-        String identity = (id.equals(""))
-                ? this.toString()
-                : "Pipe (" + id + ")";
+        String identity = "Pipe (" + id + ")";
 
 //        System.err.println( "Identity: "+ identity );
+
+        NodeList cheeseboroughList = element.getElementsByTagName( CHEESEBOROUGH );
+        if( 2 == cheeseboroughList.getLength() ) {
+            calculateLocationFromSupports( cheeseboroughList );
+        }
 
         if (Proscenium.Active()) {
 //            System.err.println( "Proscenium.Active()" );
@@ -169,8 +195,8 @@ public class Pipe extends Mountable implements Schematicable {
 //                System.err.println( "90.0 == orientation" );
                 throw new ReferenceException("90-degree oriented only implemented with proscenium.");
             } else {
-//                System.err.println( "90.0 != orientation" );
-
+                System.err.println( "90.0 != orientation" );
+//Fails right here:
                 boxOrigin = new Point(start.x(), start.y() - 1, start.z() - 1);
 
                 Space space = new Space(boxOrigin, length, DIAMETER, DIAMETER);
@@ -183,6 +209,50 @@ public class Pipe extends Mountable implements Schematicable {
             }
         }
 //        System.err.println( "Pipe verified.");
+    }
+
+    public void calculateLocationFromSupports( NodeList cheeseboroughList ) {
+        support1 = findCheeseborough(0, cheeseboroughList);
+        support2 = findCheeseborough(1, cheeseboroughList);
+
+        point1 = support1.locate();
+        point2 = support2.locate();
+        Double slope = slope(point1, point2);
+//        rotation = Math.toDegrees(Math.atan(slope));
+
+        Double supportSpan = point1.distance(point2);
+        Long span = Math.round(supportSpan);
+        overHang = (length - span.intValue()) / 2;
+
+        start = slopeToPoint( slope, overHang );
+    }
+
+    Point slopeToPoint( Double slope, Double overHang ) {
+        return null;
+    }
+
+    private Cheeseborough findCheeseborough(int item, NodeList cheeseboroughList) {
+        Node node = cheeseboroughList.item(item);
+        // Much of this code is copied from HangPoint.ParseXML - refactor
+        if (null != node) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                String reference = element.getAttribute("ref");
+                Cheeseborough found = Cheeseborough.Find(reference);
+
+                return found;
+            }
+        }
+        return null;
+    }
+
+    public static void SchematicPositionReset() {
+        for( Mountable mountable : MountableList() ) {
+            if (Pipe.class.isInstance( mountable ) ) {
+                Pipe pipe = (Pipe) mountable;
+                pipe.schematicPosition = null;
+            }
+        }
     }
 
     @Override
@@ -324,6 +394,7 @@ public class Pipe extends Mountable implements Schematicable {
                     group.rectangle( draw, drawBox.x(), drawBox.y(), DIAMETER, length, COLOR );
                 } else {
                     group.rectangle( draw, drawBox.x(), drawBox.y(), length, DIAMETER, COLOR );
+                    group.text( draw, id, 38.0, drawBox.y() + DIAMETER, COLOR);
                 }
                 break;
             case SCHEMATIC:

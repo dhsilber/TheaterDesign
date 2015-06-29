@@ -26,10 +26,14 @@ public class SuspendTest {
     }
 
     @Test
-    public void isMinderDom() throws Exception {
-        Suspend suspend = new Suspend( element );
+    public void isA() throws Exception {
+        Suspend instance = new Suspend( element );
 
-        assert MinderDom.class.isInstance( suspend );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
     }
 
     @Test
@@ -49,7 +53,6 @@ public class SuspendTest {
     }
 
 /*
-
     @Test
     public void storesSelf() throws Exception
     {
@@ -208,13 +211,6 @@ public class SuspendTest {
         assertEquals( location.y(), 200.0 );
         assertEquals( location.z(), 208.0 );
     }
-
-//    @Test
-//    public void drawUnused() throws Exception {
-//        Suspend suspend = new Suspend( baseElement );
-//
-//        suspend.drawPlan( null );
-//    }
 
     @Test
     public void domUnused() throws Exception {

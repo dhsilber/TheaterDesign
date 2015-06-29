@@ -75,7 +75,8 @@ public class Truss extends Mountable implements Legendable, Schematicable {
      * @throws KindException
      */
     public Truss(Element element)
-            throws AttributeMissingException, DataException, InvalidXMLException, KindException {
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            KindException, MountingException {
         super(element);
 
         if (Proscenium.Active()) {
@@ -95,7 +96,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
         if ( null != x || null != y || null != z ) {
             if ( null == x || null == y || null == z ) {
-                throw new InvalidXMLException("Truss (" + id + ") must have x, y, and z coordinates or exactly two suspend children");
+                throw new InvalidXMLException( "Truss (" + id + ") explicitly positioned must have x, y, and z coordinates" );
             }
             positioned = true;
         }
@@ -120,6 +121,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
         if (2 == suspendList.getLength()) {
 
+            // ToDo The processedMark thing is really bogus. We should just create the objects found in the suspend list as they are encountered here.
             suspend1 = findSuspend(0, suspendList);
             suspend2 = findSuspend(1, suspendList);
 
@@ -134,6 +136,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             // Given suspend1 and the slope, find where the start of the truss will end up.
         }
         else if ( 1 == baseList.getLength() ) {
+            // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
             base = findBase( baseList );
 
             verticalCenter = new Point( base.x(), base.y(), 0.0 );
@@ -152,10 +155,11 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         else {
             System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
             System.err.println("Found " + baseList.getLength() + " base child nodes");
-            throw new InvalidXMLException("Truss (" + id + ") must have a base or exactly two suspend children");
+            throw new InvalidXMLException("Truss (" + id + ") must have position, base, or exactly two suspend children");
         }
     }
 
+    // ToDo The processedMark thing is really bogus. We should just create the objects found in the suspend list as they are encountered here.
     private Suspend findSuspend(int item, NodeList suspendList) {
         Node node = suspendList.item(item);
         // Much of this code is copied from HangPoint.ParseXML - refactor
@@ -171,6 +175,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         return null;
     }
 
+    // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
     private Base findBase( NodeList baseList ) {
         Node node = baseList.item( 0 );
         // Much of this code is copied from HangPoint.ParseXML - refactor
@@ -184,19 +189,6 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             }
         }
         return null;
-    }
-
-    // Totally untested. Yar!
-    private Double slope(Point point1, Point point2) {
-        Double x1 = point1.x();
-        Double y1 = point1.y();
-        Double x2 = point2.x();
-        Double y2 = point2.y();
-
-        Double changeInX = x1 - x2;
-        Double changeInY = y1 - y2;
-
-        return changeInY / changeInX;
     }
 
     @Override
@@ -348,7 +340,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         try {
             distance = new Integer(distanceString.trim());
         } catch (NumberFormatException exception) {
-            throw new InvalidXMLException("Truss (" + id + ") location not correctly formatted.");
+            throw new InvalidXMLException("Truss (" + id + ") location must include vertex and distance.");
         }
 
         if (0 > distance || distance > length) {
@@ -437,11 +429,11 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
             return new Place(mountableLocation(location), origin, base.rotation() );
         }
         else {
-//            System.err.println( "standard" );
+            System.err.println( "standard" );
             Double transformX = point1.x() + SvgElement.OffsetX();
             Double transformY = point1.y() + SvgElement.OffsetY();
             Point origin = new Point( transformX, transformY, point1.z() );
-//            System.err.println( "standard end" );
+            System.err.println( "standard end" );
             return new Place(mountableLocation(location), origin, rotation);
         }
     }

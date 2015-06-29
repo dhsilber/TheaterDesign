@@ -73,6 +73,19 @@ public class TestResets {
         countField.set(count, 0);
     }
 
+    /**
+     * Reset the CHEESEBOROUGHLIST maintained by {@link Cheeseborough} to its initial empty state.
+     *
+     * @throws NoSuchFieldException   if the {@code CHEESEBOROUGHLIST} field isn't there.
+     * @throws IllegalAccessException if the {@code CHEESEBOROUGHLIST} field cannot be accessed.
+     */
+    public static void CheeseboroughReset() throws NoSuchFieldException, IllegalAccessException {
+        Field field = Cheeseborough.class.getDeclaredField( "CHEESEBOROUGHLIST" );
+        field.setAccessible( true );
+        ArrayList<Cheeseborough> cheeseboroughList = (ArrayList<Cheeseborough>) field.get( Cheeseborough.class );
+        cheeseboroughList.clear();
+    }
+
     public static void DeviceReset()
             throws NoSuchFieldException, IllegalAccessException
     {

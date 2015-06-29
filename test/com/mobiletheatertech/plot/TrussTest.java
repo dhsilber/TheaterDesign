@@ -56,6 +56,7 @@ public class TrussTest {
         assert Mountable.class.isInstance( instance );
 
         assert Legendable.class.isInstance( instance );
+        assert Schematicable.class.isInstance( instance );
     }
 
     @Test
@@ -91,7 +92,8 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have x, y, and z coordinates or exactly two suspend children")
+            expectedExceptionsMessageRegExp =
+                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoX() throws Exception {
         element.setAttribute( "y", y.toString() );
         element.setAttribute( "z", z.toString() );
@@ -99,7 +101,8 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have x, y, and z coordinates or exactly two suspend children")
+            expectedExceptionsMessageRegExp =
+                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoY() throws Exception {
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "z", z.toString() );
@@ -107,7 +110,8 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have x, y, and z coordinates or exactly two suspend children")
+            expectedExceptionsMessageRegExp =
+                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoZ() throws Exception {
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -115,7 +119,8 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have x, y, and z coordinates or exactly two suspend children")
+            expectedExceptionsMessageRegExp =
+                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoXY() throws Exception {
         element.setAttribute( "z", z.toString() );
         new Truss( element );
@@ -216,8 +221,8 @@ public class TrussTest {
         Field suspendField2 = TestHelpers.accessField( truss, "suspend2" );
         Suspend suspend2 = (Suspend) suspendField2.get( truss );
 
-        assert Suspend.class.isInstance( suspend1 );
-        assert Suspend.class.isInstance( suspend2 );
+        assertTrue( Suspend.class.isInstance( suspend1 ) );
+        assertTrue( Suspend.class.isInstance( suspend2 ) );
 
         Field baseField = TestHelpers.accessField( truss, "base" );
         Object baseReference = baseField.get(truss);
@@ -246,7 +251,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have a base or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
     public void verifyNoSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         element.removeChild( suspendElement2 );
@@ -256,7 +261,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have a base or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
     public void verifyTooFewSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         Truss truss = new Truss( element );
@@ -265,7 +270,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have a base or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
     public void verifyTooManySuspends() throws Exception {
         Element suspendElement3 = new IIOMetadataNode( "suspend" );
         suspendElement3.setAttribute( "ref", "joan" );
@@ -404,7 +409,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location not correctly formatted.")
+            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location must include vertex and distance.")
     public void locationFormatNoDistance() throws Exception{
         Truss truss = new Truss( element );
 
@@ -492,7 +497,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location not correctly formatted.")
+            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location must include vertex and distance.")
     public void locationPositionedFormatNoDistance() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );

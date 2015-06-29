@@ -30,7 +30,10 @@ public class LuminaireInformationTest {
 
     @Test
     public void isA() throws Exception {
-        LuminaireInformation instance = new LuminaireInformation( element, luminaire );
+        System.err.println( "A" );
+        LuminaireInformation instance = new LuminaireInformation( element, null );
+//        LuminaireInformation instance = new LuminaireInformation( element, luminaire );
+        System.err.println( "B" );
 
         assert Elemental.class.isInstance( instance );
         assert ElementalLister.class.isInstance( instance );
@@ -58,46 +61,46 @@ public class LuminaireInformationTest {
     public void setUpMethod() throws Exception {
         element = new IIOMetadataNode( "bogus" );
 
-        TestResets.VenueReset();
-        TestResets.MinderDomReset();
-        TestResets.MountableReset();
-        TestResets.LuminaireReset();
-
-        venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        Venue venue = new Venue( venueElement );
-        venue.verify();
-
-        Element pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", pipeName );
-        pipeElement.setAttribute( "length", "120" );
-        pipeElement.setAttribute( "x", "12" );
-        pipeElement.setAttribute( "y", "34" );
-        pipeElement.setAttribute( "z", "56" );
-        Pipe pipe = new Pipe( pipeElement );
-        pipe.verify();
-
-        Integer width = 13;
-        Integer length = 27;
-        definitionElement = new IIOMetadataNode( "luminaire-definition" );
-        definitionElement.setAttribute( "name", "6x9" );
-        definitionElement.setAttribute( "width", width.toString() );
-        definitionElement.setAttribute( "length", length.toString() );
-        new LuminaireDefinition( definitionElement );
-
-        elementOnPipe = new IIOMetadataNode( "luminaire" );
-        elementOnPipe.setAttribute( "type", type );
-        elementOnPipe.setAttribute("on", pipeName);
-        elementOnPipe.setAttribute("location", pipeLocation );
-        elementOnPipe.setAttribute("dimmer", dimmer);
-        elementOnPipe.setAttribute("circuit", circuit);
-        elementOnPipe.setAttribute("channel", channel);
-        elementOnPipe.setAttribute("color", color);
-        elementOnPipe.setAttribute("unit", unit);
-        luminaire = new Luminaire( elementOnPipe );
+//        TestResets.VenueReset();
+//        TestResets.MinderDomReset();
+//        TestResets.MountableReset();
+//        TestResets.LuminaireReset();
+//
+//        venueElement = new IIOMetadataNode( "venue" );
+//        venueElement.setAttribute( "room", "Test Name" );
+//        venueElement.setAttribute( "width", "350" );
+//        venueElement.setAttribute( "depth", "400" );
+//        venueElement.setAttribute( "height", "240" );
+//        Venue venue = new Venue( venueElement );
+//        venue.verify();
+//
+//        Element pipeElement = new IIOMetadataNode( "pipe" );
+//        pipeElement.setAttribute( "id", pipeName );
+//        pipeElement.setAttribute( "length", "120" );
+//        pipeElement.setAttribute( "x", "12" );
+//        pipeElement.setAttribute( "y", "34" );
+//        pipeElement.setAttribute( "z", "56" );
+//        Pipe pipe = new Pipe( pipeElement );
+//        pipe.verify();
+//
+////        Integer width = 13;
+////        Integer length = 27;
+////        definitionElement = new IIOMetadataNode( "luminaire-definition" );
+////        definitionElement.setAttribute( "name", "6x9" );
+////        definitionElement.setAttribute( "width", width.toString() );
+////        definitionElement.setAttribute( "length", length.toString() );
+////        new LuminaireDefinition( definitionElement );
+//
+//        elementOnPipe = new IIOMetadataNode( "luminaire" );
+//        elementOnPipe.setAttribute( "type", type );
+//        elementOnPipe.setAttribute("on", pipeName);
+//        elementOnPipe.setAttribute("location", pipeLocation );
+//        elementOnPipe.setAttribute("dimmer", dimmer);
+//        elementOnPipe.setAttribute("circuit", circuit);
+//        elementOnPipe.setAttribute("channel", channel);
+//        elementOnPipe.setAttribute("color", color);
+//        elementOnPipe.setAttribute("unit", unit);
+//        luminaire = new Luminaire( elementOnPipe );
     }
 
     @AfterMethod

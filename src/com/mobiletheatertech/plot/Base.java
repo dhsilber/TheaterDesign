@@ -10,6 +10,8 @@ import java.awt.*;
 /**
 * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:05 PM To change this template use
 * File | Settings | File Templates.
+ *
+ * This is a square base for truss.
 *
 * @author dhs
 * @since 0.0.5
@@ -34,6 +36,8 @@ public class Base extends MinderDom {
         y = getDoubleAttribute( element, "y" );
         rotation = getOptionalDoubleAttributeOrZero( element, "rotation" );
 
+        // Give the base's element a unique id so that its Plot object can be recognized
+        // and used.
         processedMark = Mark.Generate();
         element.setAttribute( "processedMark", processedMark );
     }

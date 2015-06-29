@@ -15,7 +15,7 @@ import org.w3c.dom.NodeList;
 
 // Should extend ElementalLister rather than MinderDom
 
-public class Suspend extends MinderDom {
+public class Suspend extends MinderDom /*implements Anchor*/ {
 
     private String refId = null;
     private Integer distance = null;

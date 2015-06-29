@@ -27,7 +27,9 @@ public class MountableTest {
      */
     private class Mounted extends Mountable {
 
-        public Mounted( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
+        public Mounted( Element element )
+                throws AttributeMissingException, DataException,
+                InvalidXMLException, MountingException {
             super( element );
         }
 
@@ -170,9 +172,10 @@ public class MountableTest {
         assertEquals(list.size(), 0);
     }
 
-    @Test
-    public void recallsNull() {
-        assertNull( Mountable.Select( "bogus" ) );
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp = "'bogus' is not a mountable object.")
+    public void recallsBogus() throws Exception {
+        Mountable.Select("bogus");
     }
 
     @Test

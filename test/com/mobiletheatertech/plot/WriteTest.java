@@ -50,7 +50,7 @@ public class WriteTest {
     public void directory() throws Exception {
         Random random = new Random();
         String directoryName = ((Integer) random.nextInt()).toString();
-        String pathName = System.getProperty( "user.home" ) + "/Plot/out/" + directoryName;
+        String pathName = System.getProperty( "user.home" ) + "/Dropbox/Plot/out/" + directoryName;
         System.err.println( "Pathname: " + pathName );
         File tmp = new File( pathName );
         assertFalse( tmp.exists() );
@@ -60,8 +60,11 @@ public class WriteTest {
         assertTrue( tmp.exists() );
         assertTrue( tmp.isDirectory() );
 
-        File index = new File( pathName + "/index.html" );
-        assertTrue( index.exists() );
+        File drawings = new File( pathName + "/drawings.html" );
+        assertTrue( drawings.exists() );
+
+        File designer = new File( pathName + "/designer.html" );
+        assertTrue( designer.exists() );
 
         File css = new File( pathName + "/styles.css" );
         assertTrue( css.exists() );
@@ -75,8 +78,11 @@ public class WriteTest {
         File front = new File( pathName + "/front.svg" );
         assertTrue( front.exists() );
 
+        File truss = new File( pathName + "/truss.svg" );
+        assertTrue( truss.exists() );
+
         File[] contents = tmp.listFiles();
-        assertEquals( contents.length, 5 );
+        assertEquals( contents.length, 7 );
     }
 
 //    TODO    Test that correct HTML/Javascript bits are generated for active layers.

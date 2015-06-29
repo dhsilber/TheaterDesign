@@ -89,6 +89,9 @@ public class GridTest {
         NodeList list = draw.root().getElementsByTagName( "line" );
 //        assertEquals( list.getLength(), 17 );
 
+        //  scale line
+
+        // vertical lines
         Double x1 = 1 + SvgElement.OffsetX();
         Double y1 = SvgElement.OffsetY();
         Double x2 = 1 + SvgElement.OffsetX();

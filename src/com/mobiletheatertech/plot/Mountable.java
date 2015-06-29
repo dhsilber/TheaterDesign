@@ -24,13 +24,13 @@ public abstract class Mountable extends MinderDom implements Schematicable {
      * @param id of {@code Mountable} to find
      * @return {@code Mountable} instance, or {@code null} if not found
      */
-    public static Mountable Select(String id) {
+    public static Mountable Select(String id) throws MountingException {
         for (Mountable selection : MOUNTABLELIST) {
             if (selection.id.equals( id )) {
                 return selection;
             }
         }
-        return null;
+        throw new MountingException( "'" + id + "' is not a mountable object." );
     }
 
     public static ArrayList<Mountable> MountableList() { return MOUNTABLELIST; }
@@ -59,14 +59,19 @@ public abstract class Mountable extends MinderDom implements Schematicable {
      * @throws InvalidXMLException if null element is somehow presented to constructor
      *                             // * @throws SizeException             if the length is too short
      */
-    public Mountable(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
+    public Mountable(Element element)
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException {
         super(element);
 
         id = getStringAttribute(element, "id");
 
-        if( null != Select( id )){
+        try {
+            Select( id );
             throw new InvalidXMLException(
                     this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
+        }
+        catch (MountingException e) {
         }
 
         MOUNTABLELIST.add(this);
@@ -85,4 +90,17 @@ public abstract class Mountable extends MinderDom implements Schematicable {
     public abstract PagePoint schematicLocation( String location ) throws InvalidXMLException, MountingException; //, MountingException, ReferenceException;
 
     public abstract Place rotatedLocation( String location ) throws InvalidXMLException, MountingException, ReferenceException;
+
+    // Totally untested. Yar!
+    Double slope(Point point1, Point point2) {
+        Double x1 = point1.x();
+        Double y1 = point1.y();
+        Double x2 = point2.x();
+        Double y2 = point2.y();
+
+        Double changeInX = x1 - x2;
+        Double changeInY = y1 - y2;
+
+        return changeInY / changeInX;
+    }
 }

@@ -200,6 +200,9 @@ class SvgElement {
         return element;
     }
 
+    /*
+    For use by Grid.
+     */
     public SvgElement scaleLine( Draw draw, Point start, Double width, Double height ){
         String color = "blue";
         Double thickness = 19.0;  // width of two lines and numbers
@@ -290,7 +293,8 @@ class SvgElement {
         return scale;
     }
 
-    void bumpyLine(Draw draw, SvgElement parent, Double startX, Double startY, Double endX, Double endY, String color, Integer dashOffset) {
+    void bumpyLine(Draw draw, SvgElement parent, Double startX, Double startY, Double endX, Double endY, String color,
+                   Integer dashOffset) {
         SvgElement topBumps = parent.lineAbsolute( draw,
                 startX,
                 startY,

@@ -26,4 +26,12 @@ public class Place {
     public Double rotation() {
         return rotation;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Location: " + location.toString() +
+                "  Origin: " + origin.toString() +
+                "  Rotation: " + rotation.toString();
+    }
 }

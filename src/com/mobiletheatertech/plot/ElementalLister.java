@@ -16,6 +16,7 @@ public class ElementalLister extends Elemental {
 
     public ElementalLister( Element element ) throws InvalidXMLException {
         super (element);
+//        System.err.println("G");
 
         LIST.add( this );
     }

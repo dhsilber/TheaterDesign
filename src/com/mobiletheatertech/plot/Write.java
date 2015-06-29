@@ -76,7 +76,7 @@ public class Write {
         writeDrawings( pathname );
 //        System.err.println( " Spreadsheet");
 //        writeGearSpreadsheet(pathname + "/gear.ods");
-        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
+//        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {

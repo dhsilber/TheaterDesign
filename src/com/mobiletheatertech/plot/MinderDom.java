@@ -25,6 +25,8 @@ public abstract class MinderDom extends Layerer {
      */
     public MinderDom( Element element ) throws DataException, InvalidXMLException {
         super (element);
+//        System.err.println( "D" );
+
 //
 //        String name = this.getClass().getSimpleName();
 //        layer = Layer.Register( name, name );

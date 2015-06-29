@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +25,27 @@ public class PipeTest {
 
     Element element = null;
     Element prosceniumElement = null;
-
+    
+    Element baseElement = null;
+    Element trussElement = null;
+    Element cheeseborough1Element = null;
+    Element cheeseborough2Element = null;
+    Element pipeOnCheeseboroughsElement = null;
+    
+    Double baseSize = 36.0;
+    Double baseX = 40.0;
+    Double baseY = 50.0;
+    String trussID = "trussID";
+    Double trussSize = 12.0;
+    Double trussLength = 120.0;
+    String cheeseborough1Id = "chedder";
+    String cheeseborough2Id = "brie";
+    String cheeseborough1Location = "a 112";
+    String cheeseborough2Location = "b 112";
+    String pipeOnCheeseboroughsId = "pipeId";
+    Double pipeOnCheeseboroughsLength = 100.0;
+    
+    
     Double x = 12.0;
     Double y = 23.0;
     Double z = 34.0;
@@ -35,11 +56,19 @@ public class PipeTest {
     Integer prosceniumZ = 12;
     final String pipeId = "balconyId";
 
-    @Test
-    public void isMountable() throws Exception {
-        Pipe pipe = new Pipe(element);
 
-        assert Mountable.class.isInstance(pipe);
+    @Test
+    public void isA() throws Exception {
+        Pipe instance = new Pipe(element);
+
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
+        assert Mountable.class.isInstance( instance );
+
+        assert Schematicable.class.isInstance( instance );
     }
 
     @Test
@@ -58,31 +87,23 @@ public class PipeTest {
     }
 
     @Test
-    public void storesAttributes() throws Exception {
-        // These are optional, so their absence should not cause a problem:
-//        diversionElement.removeAttribute("orientation");
-//        diversionElement.removeAttribute("offsetx");
+    public void constantCheeseborough() {
+        assertEquals(Pipe.CHEESEBOROUGH, "cheeseborough");
+    }
 
+    @Test
+    public void storesAttributes() throws Exception {
+        element.removeAttribute( "x" );
+        element.removeAttribute( "y" );
+        element.removeAttribute( "z" );
         Pipe pipe = new Pipe(element);
 
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
-        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
-//        assertEquals( TestHelpers.accessString( pipe, "x" ), x.toString() );
-//        assertEquals( TestHelpers.accessString( pipe, "y" ), y.toString() );
-//        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
-        assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
+        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );;
+        assertNull( TestHelpers.accessPoint( pipe, "start" ) );
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), 0.0 );
     }
-//    @Test
-//    public void storesAttributes() throws Exception {
-//        Pipe pipe = new Pipe(diversionElement);
-//
-//        assertEquals(TestHelpers.accessInteger(pipe, "length"), (Integer) 120);
-//        assertTrue(new Point(12, 23, 34).equals(TestHelpers.accessPoint(pipe, "start")));
-//        assertEquals(TestHelpers.accessString(pipe, "id"), balconyId);
-//    }
-
 
     @Test
     public void storesOptionalAttributes() throws Exception {
@@ -97,23 +118,24 @@ public class PipeTest {
 //        assertEquals( TestHelpers.accessString( pipe, "x" ), x.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "y" ), y.toString() );
 //        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
-        assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point(12, 23, 34));
+        assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point( x, y, z ));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), -90.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50.0 );
     }
 
-    @Test
-    public void stores() throws Exception {
-        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
-
-        Pipe pipe = new Pipe(element);
-
-        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
-        assert list2.contains(pipe);
-    }
+    // Tested in MountableTest
+//    @Test
+//    public void stores() throws Exception {
+//        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
+//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+//        assertEquals(list1.size(), 0);
+//
+//        Pipe pipe = new Pipe(element);
+//
+//        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
+//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+//        assert list2.contains(pipe);
+//    }
 
     @Test
     public void storesOnlyWhenGood() throws Exception {
@@ -181,11 +203,6 @@ public class PipeTest {
 
         assertTrue(layers.containsKey(Pipe.LAYERTAG));
         assertEquals(layers.get(Pipe.LAYERTAG).name(), Pipe.LAYERNAME);
-    }
-
-    @Test
-    public void recallsNull() {
-        assertNull(Mountable.Select("bogus"));
     }
 
     @Test
@@ -262,23 +279,23 @@ public class PipeTest {
         new Pipe(element);
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) is missing required 'x' attribute.")
-    public void noX() throws Exception {
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) explicitly positioned must have x, y, and z coordinates")
+    public void positionedNoX() throws Exception {
         element.removeAttribute("x");
         new Pipe(element);
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) is missing required 'y' attribute.")
-    public void noY() throws Exception {
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) explicitly positioned must have x, y, and z coordinates")
+    public void positionedNoY() throws Exception {
         element.removeAttribute("y");
         new Pipe(element);
     }
 
-    @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) is missing required 'z' attribute.")
-    public void noZ() throws Exception {
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) explicitly positioned must have x, y, and z coordinates")
+    public void positionedNoZ() throws Exception {
         element.removeAttribute("z");
         new Pipe(element);
     }
@@ -371,6 +388,32 @@ public class PipeTest {
         element.setAttribute("z", "241");
         Pipe pipe = new Pipe(element);
         pipe.verify();
+    }
+
+    /*
+            Make a couple of suspend objects that are children of this truss
+            and confirm that they are properly associated
+     */
+    @Test
+    public void verifyCheeseboroughReferences() throws Exception {
+        Base base = new Base( baseElement );
+        base.verify();
+        Truss truss = new Truss( trussElement );
+        truss.verify();
+        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+        c1.verify();
+        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
+        c2.verify();
+        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+        pipe.verify();
+
+        Field cheeseborough1Field = TestHelpers.accessField( pipe, "cheeseborough1" );
+        Cheeseborough cheeseborough1 = (Cheeseborough) cheeseborough1Field.get( pipe );
+        assertTrue(Cheeseborough.class.isInstance(cheeseborough1));
+
+        Field cheeseborough2Field = TestHelpers.accessField( pipe, "cheeseborough2" );
+        Cheeseborough cheeseborough2 = (Cheeseborough) cheeseborough2Field.get( pipe );
+        assertTrue( Cheeseborough.class.isInstance( cheeseborough2 ) );
     }
 
     @Test
@@ -703,14 +746,14 @@ public class PipeTest {
         assertEquals( list.size(), 1 );
     }
 
-    @Test
-    public void parseWithSuspends() throws Exception {
+    @Test(enabled = false)
+    public void parseWithAnchors() throws Exception {
         String xml = "<plot>" +
-                "<hangpoint id=\"bill\" x=\"7\" y=\"8\" />" +
-                "<hangpoint id=\"betty\" x=\"7\" y=\"8\" />" +
+//                "<hangpoint id=\"bill\" x=\"7\" y=\"8\" />" +
+//                "<hangpoint id=\"betty\" x=\"7\" y=\"8\" />" +
                 "<pipe id=\"fineMe\" length=\"17\" >" +
-                "<suspend ref=\"bill\" />" +
-                "<suspend ref=\"betty\" />" +
+                "<anchor ref=\"bill\" />" +
+                "<anchor ref=\"betty\" />" +
                 "</pipe>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -758,6 +801,45 @@ public class PipeTest {
         element.setAttribute("x", x.toString());
         element.setAttribute("y", y.toString());
         element.setAttribute("z", z.toString());
+
+//        anchorElementA = new IIOMetadataNode( "anchor" );
+//        Make an anchor element, which is anything that can hold a pipe.
+//                Perhaps it should just be called "pipeclamp" and a cheeseborough is
+//                made up outof a pair of them
+//                and a half-borough or an lighting hanger is a pipeClamp with a bolt
+//
+//        anchoredElement = new IIOMetadataNode( "pipe" );
+//        anchoredElement.setAttribute("id", pipeId);
+//        anchoredElement.setAttribute("length", length.toString());
+//        anchoredElement.setAttribute("");
+        
+        
+        baseElement = new IIOMetadataNode( "base" );
+        baseElement.setAttribute( "size", baseSize.toString() );
+        baseElement.setAttribute( "x", baseX.toString() );
+        baseElement.setAttribute( "y", baseY.toString() );
+        
+        trussElement = new IIOMetadataNode( "truss" );
+        trussElement.setAttribute( "id", trussID );
+        trussElement.setAttribute( "size", trussSize.toString() );
+        trussElement.setAttribute( "length", trussLength.toString() );
+        trussElement.appendChild( baseElement );
+
+        cheeseborough1Element = new IIOMetadataNode( "cheeseborough" );
+        cheeseborough1Element.setAttribute( "id", cheeseborough1Id );
+        cheeseborough1Element.setAttribute( "on", trussID );
+        cheeseborough1Element.setAttribute( "location", cheeseborough1Location );
+
+        cheeseborough2Element = new IIOMetadataNode( "cheeseborough" );
+        cheeseborough2Element.setAttribute( "id", cheeseborough2Id );
+        cheeseborough2Element.setAttribute( "on", trussID );
+        cheeseborough2Element.setAttribute( "location", cheeseborough2Location );
+
+        pipeOnCheeseboroughsElement = new IIOMetadataNode( "pipe" );
+        pipeOnCheeseboroughsElement.setAttribute( "id", pipeOnCheeseboroughsId );
+        pipeOnCheeseboroughsElement.setAttribute( "length", pipeOnCheeseboroughsLength.toString() );
+        pipeOnCheeseboroughsElement.appendChild( cheeseborough1Element );
+        pipeOnCheeseboroughsElement.appendChild( cheeseborough2Element );
     }
 
     @AfterMethod

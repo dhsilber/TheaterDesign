@@ -4,11 +4,10 @@ import org.testng.annotations.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Created by dhs on 10/26/14.
@@ -17,7 +16,9 @@ public class CheeseboroughTest {
 
     Element venueElement;
     Element elementOnTruss = null;
-    final String type = "swivel";
+    Element elementReference = null;
+    final private String id = "CheeseboroughMountedID";
+//    final String type = "swivel";
     final String trussId = "cheeseboroughTestTruss";
     Integer hangPoint1X=50;
     Integer hangPointY=40;
@@ -25,12 +26,17 @@ public class CheeseboroughTest {
     Integer trussSize=12;
     Integer trussLength=120;
     String trussLocation = "c 45";
+    Truss truss = null;
 
     @Test
     public void isA() throws Exception {
-        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+        Cheeseborough instance = new Cheeseborough(elementOnTruss);
 
-        assert MinderDom.class.isInstance( cheeseborough );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
     }
 
     @Test
@@ -71,17 +77,45 @@ public class CheeseboroughTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Cheeseborough instance is missing required 'on' attribute.")
+            expectedExceptionsMessageRegExp = "Cheeseborough instance is missing required 'id' attribute.")
+    public void noId() throws Exception {
+        elementOnTruss.removeAttribute("id");
+        new Cheeseborough(elementOnTruss);
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough \\(" + id + "\\) is missing required 'on' attribute.")
     public void noOn() throws Exception {
         elementOnTruss.removeAttribute("on");
         new Cheeseborough(elementOnTruss);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Cheeseborough instance is missing required 'location' attribute.")
+            expectedExceptionsMessageRegExp = "Cheeseborough \\(" + id + "\\) is missing required 'location' attribute.")
     public void noLocation() throws Exception {
         elementOnTruss.removeAttribute("location");
         new Cheeseborough(elementOnTruss);
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough reference \\(" + id + "\\) should not also have 'id' attribute")
+    public void referenceId() throws Exception {
+        elementReference.setAttribute("id", "extra ID");
+        new Cheeseborough( elementReference );
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough reference \\(" + id + "\\) should not also have 'on' attribute")
+    public void referenceOn() throws Exception {
+        elementReference.setAttribute( "on", trussId );
+        new Cheeseborough( elementReference );
+    }
+
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough reference \\(" + id + "\\) should not also have 'location' attribute")
+    public void referenceLocation() throws Exception {
+        elementReference.setAttribute( "location", trussLocation );
+        new Cheeseborough( elementReference );
     }
 
 //    @Test(expectedExceptions = AttributeMissingException.class,
@@ -112,7 +146,7 @@ public class CheeseboroughTest {
 
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp = "Cheeseborough has location '1'" +
-                    " which caused: Truss \\(" + trussId + "\\) location does not include a valid vertex.")
+                    " which caused: Truss \\(" + trussId + "\\) location must include vertex and distance.")
     public void locationMissingVertex() throws Exception {
         elementOnTruss.setAttribute("location", "1");
         Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
@@ -120,8 +154,17 @@ public class CheeseboroughTest {
     }
 
     @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough has location 'e 1'" +
+                    " which caused: Truss \\(" + trussId + "\\) location does not include a valid vertex.")
+    public void locationInvalidVertex() throws Exception {
+        elementOnTruss.setAttribute("location", "e 1");
+        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+        cheeseborough.verify();
+    }
+
+    @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp = "Cheeseborough has location 'b'" +
-                    " which caused: Truss \\(" + trussId + "\\) location not correctly formatted.")
+                    " which caused: Truss \\(" + trussId + "\\) location must include vertex and distance.")
     public void badLocationMissingPosition() throws Exception {
         elementOnTruss.setAttribute("location", "b");
         Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
@@ -147,6 +190,28 @@ public class CheeseboroughTest {
     }
 
     @Test
+    public void on() throws Exception {
+        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+
+        assertEquals(trussId, cheeseborough.on());
+    }
+
+    @Test
+    public void location() throws Exception {
+        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+
+        assertEquals( trussLocation, cheeseborough.location() );
+    }
+
+    @Test
+    public void mount() throws Exception {
+        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+        cheeseborough.verify();
+
+        assertSame( truss, cheeseborough.mount() );
+    }
+
+    @Test
     public void locate() throws Exception {
         Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
         cheeseborough.verify();
@@ -159,9 +224,35 @@ public class CheeseboroughTest {
         assertEquals( point.x(), 65.0 );
         assertEquals( point.z(), 226.0 );
 
-        assertEquals( origin.x(), 65.0 );
-        assertEquals( origin.y(), 34.0 );
-        assertEquals( origin.z(), 226.0 );
+        assertEquals( origin.x(), 50.0 );
+        assertEquals( origin.y(), 40.0 );
+        assertEquals(origin.z(), 238.0);
+    }
+
+    @Test
+    public void mountableLocation() throws Exception {
+        Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
+        cheeseborough.verify();
+
+        Point point = cheeseborough.mountableLocation();
+
+        assertEquals( point.y(), 34.0 );
+        assertEquals( point.x(), 65.0 );
+        assertEquals( point.z(), 226.0 );
+    }
+
+    @Test
+    public void referenceMountableLocation() throws Exception {
+        Cheeseborough basis = new Cheeseborough(elementOnTruss);
+        basis.verify();
+        Cheeseborough cheeseborough = new Cheeseborough(elementReference);
+        cheeseborough.verify();
+
+        Point point = cheeseborough.mountableLocation();
+
+        assertEquals( point.y(), 34.0 );
+        assertEquals( point.x(), 65.0 );
+        assertEquals( point.z(), 226.0 );
     }
 
     @Test
@@ -180,6 +271,26 @@ public class CheeseboroughTest {
 //        assertNotNull(TestHelpers.accessPoint(cheeseborough, "point"));
 //    }
 
+    @Test
+    public void stores() throws Exception {
+        ArrayList<Cheeseborough> list1 = (ArrayList<Cheeseborough>) TestHelpers.accessStaticObject(
+                "com.mobiletheatertech.plot.Cheeseborough", "CHEESEBOROUGHLIST" );
+        assertEquals( list1.size(), 0 );
+
+        Cheeseborough instance = new Cheeseborough( elementOnTruss );
+
+        ArrayList<Cheeseborough> list2 = (ArrayList<Cheeseborough>) TestHelpers.accessStaticObject(
+                "com.mobiletheatertech.plot.Cheeseborough", "CHEESEBOROUGHLIST" );
+        assert list2.contains( instance );
+    }
+
+    @Test
+    public void references() throws Exception {
+        Cheeseborough instance = new Cheeseborough( elementOnTruss );
+        Cheeseborough reference = new Cheeseborough( elementReference );
+
+        assertSame( instance, TestHelpers.accessObject( reference, "reference" ) );
+    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -194,6 +305,7 @@ public class CheeseboroughTest {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
         TestResets.MountableReset();
+        TestResets.CheeseboroughReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -240,18 +352,17 @@ public class CheeseboroughTest {
         trussElement.setAttribute("length", trussLength.toString());
         trussElement.appendChild( suspendElement1 );
         trussElement.appendChild( suspendElement2 );
-        Truss truss = new Truss( trussElement );
+        truss = new Truss( trussElement );
         truss.verify();
 
         elementOnTruss = new IIOMetadataNode( "cheeseborough" );
-        elementOnTruss.setAttribute( "type", type );
+        elementOnTruss.setAttribute( "id", id );
+//        elementOnTruss.setAttribute( "type", type );
         elementOnTruss.setAttribute("on", trussId);
         elementOnTruss.setAttribute("location", trussLocation );
 
-        elementOnTruss = new IIOMetadataNode( "cheeseborough" );
-        elementOnTruss.setAttribute( "type", type );
-        elementOnTruss.setAttribute("on", trussId);
-        elementOnTruss.setAttribute("location", trussLocation );
+        elementReference = new IIOMetadataNode( "cheeseborough" );
+        elementReference.setAttribute( "ref", id );
     }
 
     @AfterMethod

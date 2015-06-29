@@ -139,7 +139,7 @@ public class HangPointTest {
      * @throws Exception
      */
     @Test
-    public void noId() throws Exception {
+    public void noUnused() throws Exception {
         element.removeAttribute( "id" );
         new HangPoint( element );
     }

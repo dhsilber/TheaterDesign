@@ -1,8 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /*
 
@@ -33,10 +31,12 @@ public class Elemental {
     public String id = null;
 
     public Elemental( Element element) throws InvalidXMLException{
+//        System.err.println( "H" );
 
         if (null == element) {
             throw new InvalidXMLException( this.getClass().getSimpleName() + " element unexpectedly null!" );
         }
+//        System.err.println( "I" );
 
     }
 
@@ -53,10 +53,7 @@ public class Elemental {
             throws AttributeMissingException
     {
         String value = element.getAttribute( name );
-        if (value.isEmpty()) {
-            throw new AttributeMissingException(
-                    this.getClass().getSimpleName(), id, name );
-        }
+        checkAttribute(name, value);
 
         return new Integer( value );
     }
@@ -131,10 +128,7 @@ public class Elemental {
             throws AttributeMissingException
     {
         String value = element.getAttribute( name );
-        if (value.isEmpty()) {
-            throw new AttributeMissingException(
-                    this.getClass().getSimpleName(), id, name );
-        }
+        checkAttribute(name, value);
 
         return new Double( value );
     }
@@ -188,12 +182,23 @@ public class Elemental {
             throws AttributeMissingException
     {
         String value = element.getAttribute( name );
+        checkAttribute(name, value);
+
+        return value;
+    }
+
+    protected void checkAttribute(String name, String value) throws AttributeMissingException {
         if (value.isEmpty()) {
             throw new AttributeMissingException(
                     this.getClass().getSimpleName(), id, name );
         }
+    }
 
-        return value;
+    protected void checkNotAttribute(String name, String value, String message ) throws InvalidXMLException {
+        if ( ! value.isEmpty()) {
+            throw new InvalidXMLException(
+                    this.getClass().getSimpleName() + " " + message );
+        }
     }
 
     /**
