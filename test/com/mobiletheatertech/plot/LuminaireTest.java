@@ -144,11 +144,13 @@ public class LuminaireTest {
         assertEquals( layers.get( Luminaire.LAYERTAG ).name(), Luminaire.LAYERNAME );
     }
 
-//    @Test
-//    public void registersOnMountable() throws Exception {
-//        Luminaire luminaire = new Luminaire(elementOnPipe);
-//        assertTrue( pipe.loads().contains( luminaire ) );
-//    }
+    @Test
+    public void registersOnMountable() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+        luminaire.verify();
+
+        assertTrue(pipe.loads().contains(luminaire));
+    }
 
     /*
      * This is to ensure that no exception is thrown if data is OK.
@@ -193,7 +195,8 @@ public class LuminaireTest {
         public void badLocation() throws Exception {
             elementOnPipe.setAttribute("on", "bloorglew");
             Luminaire luminaire = new Luminaire(elementOnPipe);
-            luminaire.drawingLocation();
+            luminaire.verify();
+//            luminaire.drawingLocation();
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -204,7 +207,8 @@ public class LuminaireTest {
         elementOnPipe.setAttribute("on", "bloorglew");
 //        new Luminaire( baseElement );
         Luminaire luminaire = new Luminaire(elementOnPipe);
-        luminaire.drawingLocation();
+        luminaire.verify();
+//            luminaire.drawingLocation();
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -213,7 +217,8 @@ public class LuminaireTest {
     public void locateOffPipe() throws Exception {
         elementOnPipe.setAttribute("location", "-1");
         Luminaire luminaire = new Luminaire(elementOnPipe);
-        luminaire.drawingLocation();
+        luminaire.verify();
+//            luminaire.drawingLocation();
     }
 
     @Test

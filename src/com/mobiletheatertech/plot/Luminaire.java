@@ -66,7 +66,6 @@ public class Luminaire extends MinderDom implements Schematicable {
 
     CableCounter cableCounter = new CableCounter();
 
-
     /**
      * Construct a {@code Luminaire} from an XML element.
      *
@@ -160,16 +159,6 @@ public class Luminaire extends MinderDom implements Schematicable {
     @Override
     public Place drawingLocation()
             throws InvalidXMLException, MountingException, ReferenceException {
-
-        try {
-            mount = Mountable.Select(on);
-        }
-        catch ( MountingException e ) {
-            throw new MountingException(
-                    "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
-        }
-
-
         Place result;
         try {
             result = mount.rotatedLocation(location);
@@ -183,6 +172,15 @@ public class Luminaire extends MinderDom implements Schematicable {
 
     @Override
     public void verify() throws InvalidXMLException, MountingException, ReferenceException {
+        try {
+            mount = Mountable.Select(on);
+        }
+        catch ( MountingException e ) {
+            throw new MountingException(
+                    "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
+        }
+        mount.hang( this );
+
         place = drawingLocation();
         point=place.location();
         origin=place.origin();
