@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Defines a box truss. <p> XML tag is 'truss'. Required children are 'suspend' or 'base' elements. Required

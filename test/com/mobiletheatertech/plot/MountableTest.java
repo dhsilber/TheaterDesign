@@ -60,6 +60,7 @@ public class MountableTest {
                     "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @Override
         public PagePoint schematicPosition() { return null; }
 
         /**
@@ -68,24 +69,29 @@ public class MountableTest {
          *
          * @return a position along the edge of a thing
          */
+        @Override
         public PagePoint schematicCableIntersectPosition( CableRun run )
                 throws CorruptedInternalInformationException, ReferenceException
         { return null; }
 
+        @Override
         public Rectangle2D.Double schematicBox()
         { return null; }
 
+        @Override
         public void schematicReset()  {}
 
+        @Override
         public void useCount( Direction direction, CableRun run ) {}
 
+        @Override
         public void preview( View view )
                 throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
         {}
 
+        @Override
         public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException
         { return null; }
-
     }
 
     //    private static Draw draw = null;
@@ -229,6 +235,37 @@ public class MountableTest {
             expectedExceptionsMessageRegExp = "Mounted element unexpectedly null!" )
     public void NullElement() throws Exception {
         new Mounted( null );
+    }
+
+    @Test
+    public void registersOnMountable() throws Exception {
+        Integer width = 13;
+        Integer length = 27;
+        Double weight = 9.4;
+        String type = "6x9";
+        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", type );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.setAttribute( "weight", weight.toString() );
+        definitionElement.appendChild(new IIOMetadataNode("svg"));
+        LuminaireDefinition luminaireDefinition = new LuminaireDefinition( definitionElement );
+
+        Element luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute( "type", type );
+        luminaireElement.setAttribute( "on", id );
+        luminaireElement.setAttribute( "location", "12" );
+//        luminaireElement.setAttribute("dimmer", dimmer);
+//        luminaireElement.setAttribute("circuit", circuit);
+//        luminaireElement.setAttribute("channel", channel);
+//        luminaireElement.setAttribute("color", color);
+        luminaireElement.setAttribute("unit", "7" );
+        Luminaire luminaire = new Luminaire( luminaireElement );
+
+        Mounted pipe = new Mounted( element );
+        pipe.hang( luminaire );
+
+        assertTrue(pipe.loads().contains(luminaire));
     }
 
     @BeforeClass

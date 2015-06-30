@@ -96,10 +96,13 @@ public class Parse {
         parseXML( Event.class, "event" );
         parseXML( Base.class, "base" );
         parseXML( Cheeseborough.class, "cheeseborough" );
+
+        // Mountable
         parseXML( Truss.class, "truss" );
         parseXML( LightingStand.class, LightingStand.TAG );
-        parseXML( Suspend.class, "suspend" );
         parseXML( Pipe.class, "pipe" );
+
+        parseXML( Suspend.class, "suspend" );
         parseXML( Zone.class, "zone" );
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );

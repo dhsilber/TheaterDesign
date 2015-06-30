@@ -307,10 +307,12 @@ public class UserCableRunTest {
 
         Integer width = 13;
         Integer length = 27;
+        Double weight = 17.6;
         Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
         definitionElement.setAttribute( "name", luminaireType );
         definitionElement.setAttribute( "width", width.toString() );
         definitionElement.setAttribute("length", length.toString());
+        definitionElement.setAttribute( "weight", weight.toString() );
         definitionElement.appendChild( new IIOMetadataNode( "svg" ) );
         luminaireDefinition = new LuminaireDefinition( definitionElement );
         luminaireDefinition.verify();

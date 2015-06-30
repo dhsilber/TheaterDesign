@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Generic pipe.

@@ -5,9 +5,12 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 
 /**
- * Manage the list of things that can have {@code Luminaire}s (and eventually other hangable things) attached to them.
- * <p/>
- * Initially this will be {@code Pipe} and {@code Truss} objects.
+ * Describes a device (such as a {@code Pipe}, {@code Truss}, or {@code LightingStand})
+ * that holds hanging things. (Currently just {@code Luminaire}s, but eventually other
+ * hangable things as well.)
+ *
+ * Manage the list of things that can have {@code Luminaire}s (and eventually other
+ * hangable things) attached to them.
  * <p/>
  * Created by dhs on 12/16/13.
  *
@@ -17,6 +20,8 @@ import java.util.ArrayList;
 public abstract class Mountable extends MinderDom implements Schematicable {
 
     private static ArrayList<Mountable> MOUNTABLELIST = new ArrayList<>();
+
+    private ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
 
     /**
      * Find a specific {@code Mountable} from all that have been constructed.
@@ -90,6 +95,14 @@ public abstract class Mountable extends MinderDom implements Schematicable {
     public abstract PagePoint schematicLocation( String location ) throws InvalidXMLException, MountingException; //, MountingException, ReferenceException;
 
     public abstract Place rotatedLocation( String location ) throws InvalidXMLException, MountingException, ReferenceException;
+
+    public void hang( Luminaire luminaire ) {
+        LUMINAIRELIST.add( luminaire );
+    }
+
+    public ArrayList<Luminaire> loads() {
+        return LUMINAIRELIST;
+    }
 
     // Totally untested. Yar!
     Double slope(Point point1, Point point2) {

@@ -44,6 +44,7 @@ public class LuminaireTest {
     String trussLocation = "a 12";
     String lightingStandLocation = "b";
 
+    Pipe pipe = null;
     LightingStand lightingStand = null;
     LuminaireDefinition luminaireDefinition = null;
 
@@ -142,6 +143,12 @@ public class LuminaireTest {
         assertTrue( layers.containsKey( Luminaire.LAYERTAG ) );
         assertEquals( layers.get( Luminaire.LAYERTAG ).name(), Luminaire.LAYERNAME );
     }
+
+//    @Test
+//    public void registersOnMountable() throws Exception {
+//        Luminaire luminaire = new Luminaire(elementOnPipe);
+//        assertTrue( pipe.loads().contains( luminaire ) );
+//    }
 
     /*
      * This is to ensure that no exception is thrown if data is OK.
@@ -744,7 +751,7 @@ public class LuminaireTest {
         pipeElement.setAttribute( "x", "12" );
         pipeElement.setAttribute( "y", "34" );
         pipeElement.setAttribute( "z", "56" );
-        Pipe pipe = new Pipe( pipeElement );
+        pipe = new Pipe( pipeElement );
         pipe.verify();
 
         Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
@@ -788,10 +795,12 @@ public class LuminaireTest {
 
         Integer width = 13;
         Integer length = 27;
+        Double weight = 21.7;
         definitionElement = new IIOMetadataNode( "luminaire-definition" );
         definitionElement.setAttribute( "name", "6x9" );
         definitionElement.setAttribute( "width", width.toString() );
         definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.setAttribute( "weight", weight.toString() );
         definitionElement.appendChild(new IIOMetadataNode("svg"));
         luminaireDefinition = new LuminaireDefinition( definitionElement );
 
