@@ -33,6 +33,7 @@ public class Write {
             + "}\n";
 
 
+
     /**
      * Draw each of the Plot items that have been defined to a SVG file.
      * <p/>
@@ -72,8 +73,10 @@ public class Write {
         drawFront().create( pathname + "/front.svg" );
 //        System.err.println( " Create");
         drawTruss().create( pathname + "/truss.svg" );
+
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
+        writeWeightCalculations( pathname );
 //        System.err.println( " Spreadsheet");
 //        writeGearSpreadsheet(pathname + "/gear.ods");
 //        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
@@ -489,6 +492,18 @@ public class Write {
         CableRun.DomAll( draw, view );
 
         return draw;
+    }
+
+    protected void writeWeightCalculations( String pathname ) {
+        String weightsPath = pathname + "/weights";
+
+        writeDirectory( weightsPath );
+
+        for( Mountable mount : Mountable.MountableList() ) {
+            String text = mount.weights();
+            String name = mount.id();
+            writeFile( weightsPath, name, text );
+        }
     }
 
     private void writeGearSpreadsheet( String pathname) {

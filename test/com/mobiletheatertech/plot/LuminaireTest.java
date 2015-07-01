@@ -35,6 +35,7 @@ public class LuminaireTest {
     final String channel = "channel";
     final String color = "color";
     final String unit = "unit";
+    Double weight = 21.7;
     Integer hangPoint1X=20;
     Integer hangPoint1Y=40;
     Integer hangPoint2X=30;
@@ -149,7 +150,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
 
-        assertTrue(pipe.loads().contains(luminaire));
+        assertTrue( pipe.loads().contains(luminaire) );
     }
 
     /*
@@ -243,6 +244,21 @@ public class LuminaireTest {
         luminaire.verify();
 
         assertNotNull(TestHelpers.accessPoint(luminaire, "point"));
+    }
+
+    @Test
+    public void unit() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.unit(), unit );
+    }
+
+    @Test
+    public void weight() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+        luminaire.verify();
+
+        assertEquals( luminaire.weight(), weight );
     }
 
     @Test
@@ -800,7 +816,6 @@ public class LuminaireTest {
 
         Integer width = 13;
         Integer length = 27;
-        Double weight = 21.7;
         definitionElement = new IIOMetadataNode( "luminaire-definition" );
         definitionElement.setAttribute( "name", "6x9" );
         definitionElement.setAttribute( "width", width.toString() );

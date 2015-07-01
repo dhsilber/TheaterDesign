@@ -163,6 +163,7 @@ public class Luminaire extends MinderDom implements Schematicable {
         try {
             result = mount.rotatedLocation(location);
         } catch (MountingException e) {
+            System.err.println( e.toString() );
             throw new MountingException(
                     "Luminaire of type '" + type + "' has location " + location + " which is " +
                             e.getMessage() + " '" + on + "'.");
@@ -229,6 +230,18 @@ public class Luminaire extends MinderDom implements Schematicable {
 
     String info() {
         return info;
+    }
+
+    String unit() { return unit; }
+
+    Double weight() {
+        Double result = 0.0;
+
+        if( null != definition ) {
+            result = definition.weight();
+        }
+
+        return result;
     }
 
     /**

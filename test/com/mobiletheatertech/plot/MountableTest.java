@@ -40,13 +40,19 @@ public class MountableTest {
 
         @Override
         public Point mountableLocation(String location) {
-            return null;
+            return new Point( 3.1, 4.1, 5.1 );
         }
 
         @Override
         public Place rotatedLocation(String location)
                 throws InvalidXMLException, MountingException, ReferenceException {
-            return null;
+            Point locationPoint = new Point( 11, 12, 13 );
+            Point origin = new Point( 14, 15, 16 );
+            Double rotation = 17.8;
+            Place here = new Place( locationPoint, origin, rotation );
+
+            System.err.print( "Here: " + here.toString() );
+            return here;
         }
 
         @Override
@@ -90,13 +96,26 @@ public class MountableTest {
         {}
 
         @Override
-        public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException
-        { return null; }
+        public Place drawingLocation()
+                throws InvalidXMLException, MountingException, ReferenceException
+        {
+            Point location = new Point( 1, 2, 3 );
+            Point origin = new Point( 4, 5, 6 );
+            Double rotation = 7.8;
+            Place here = new Place( location, origin, rotation );
+
+            System.err.print( "Here: " + here.toString() );
+            return here;
+        }
     }
 
     //    private static Draw draw = null;
     private Element element = null;
     private String id = "MountedID";
+
+    Element luminaireElement;
+    Double weight = 9.4;
+    String unit = "7";
 
     public MountableTest() {
     }
@@ -239,33 +258,27 @@ public class MountableTest {
 
     @Test
     public void registersOnMountable() throws Exception {
-        Integer width = 13;
-        Integer length = 27;
-        Double weight = 9.4;
-        String type = "6x9";
-        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
-        definitionElement.setAttribute( "name", type );
-        definitionElement.setAttribute( "width", width.toString() );
-        definitionElement.setAttribute( "length", length.toString() );
-        definitionElement.setAttribute( "weight", weight.toString() );
-        definitionElement.appendChild(new IIOMetadataNode("svg"));
-        LuminaireDefinition luminaireDefinition = new LuminaireDefinition( definitionElement );
-
-        Element luminaireElement = new IIOMetadataNode( "luminaire" );
-        luminaireElement.setAttribute( "type", type );
-        luminaireElement.setAttribute( "on", id );
-        luminaireElement.setAttribute( "location", "12" );
-//        luminaireElement.setAttribute("dimmer", dimmer);
-//        luminaireElement.setAttribute("circuit", circuit);
-//        luminaireElement.setAttribute("channel", channel);
-//        luminaireElement.setAttribute("color", color);
-        luminaireElement.setAttribute("unit", "7" );
         Luminaire luminaire = new Luminaire( luminaireElement );
 
         Mounted pipe = new Mounted( element );
         pipe.hang( luminaire );
 
         assertTrue(pipe.loads().contains(luminaire));
+    }
+
+    @Test
+    public void WeightsText() throws Exception {
+        String weightsText = "Weights for " + id + "\n\n"
+                + unit + " weighs " + weight + " pounds\n"
+                + "\nTotal: " + weight + " pounds\n";
+
+        Mounted pipe = new Mounted( element );
+        Luminaire luminaire = new Luminaire( luminaireElement );
+        luminaire.verify();
+
+//        pipe.hang( luminaire );
+
+        assertEquals( pipe.weights(), weightsText );
     }
 
     @BeforeClass
@@ -280,9 +293,31 @@ public class MountableTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.MountableReset();
+        TestResets.LuminaireReset();
 
         element = new IIOMetadataNode( "mounted" );
         element.setAttribute( "id", id );
+
+        Integer width = 13;
+        Integer length = 27;
+        String type = "6x9";
+        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", type );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.setAttribute( "weight", weight.toString() );
+        definitionElement.appendChild(new IIOMetadataNode("svg"));
+        new LuminaireDefinition( definitionElement );
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute( "type", type );
+        luminaireElement.setAttribute( "on", id );
+        luminaireElement.setAttribute( "location", "12" );
+//        luminaireElement.setAttribute("dimmer", dimmer);
+//        luminaireElement.setAttribute("circuit", circuit);
+//        luminaireElement.setAttribute("channel", channel);
+//        luminaireElement.setAttribute("color", color);
+        luminaireElement.setAttribute("unit", unit );
     }
 
     @AfterMethod

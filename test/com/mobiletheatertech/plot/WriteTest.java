@@ -81,8 +81,27 @@ public class WriteTest {
         File truss = new File( pathName + "/truss.svg" );
         assertTrue( truss.exists() );
 
+        File weight = new File( pathName + "/weights" );
+        assertTrue( weight.exists() );
+
         File[] contents = tmp.listFiles();
-        assertEquals( contents.length, 7 );
+        assertEquals( contents.length, 8 );
+    }
+
+    @Test
+    public void weightCalculations() {
+        Random random = new Random();
+        String directoryName = ((Integer) random.nextInt()).toString();
+        String pathName = System.getProperty( "user.home" ) + "/Dropbox/Plot/out/" + directoryName;
+        System.err.println( "Pathname: " + pathName );
+        File parentDirectory = new File( pathName );
+        parentDirectory.mkdir();
+        String weightsPath = pathName + "/weights";
+
+        new Write().writeWeightCalculations( pathName );
+        File checkDirectory = new File( weightsPath );
+        assertTrue( checkDirectory.exists() );
+        assertTrue( checkDirectory.isDirectory() );
     }
 
 //    TODO    Test that correct HTML/Javascript bits are generated for active layers.

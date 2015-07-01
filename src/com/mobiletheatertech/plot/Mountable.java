@@ -104,6 +104,30 @@ public abstract class Mountable extends MinderDom implements Schematicable {
         return LUMINAIRELIST;
     }
 
+    public String id() { return id; }
+
+    public String weights() {
+        StringBuilder text = new StringBuilder();
+
+        text.append( "Weights for " );
+        text.append( id );
+        text.append( "\n\n" );
+        Double totalWeight = 0.0;
+        for( Luminaire lumi : loads() ) {
+            text.append( lumi.unit() );
+            text.append( " weighs " );
+            Double weight = lumi.weight();
+            totalWeight += weight;
+            text.append( weight.toString() );
+            text.append( " pounds\n" );
+        }
+        text.append( "\nTotal: " );
+        text.append( totalWeight.toString() );
+        text.append( " pounds\n" );
+
+        return text.toString();
+    }
+
     // Totally untested. Yar!
     Double slope(Point point1, Point point2) {
         Double x1 = point1.x();
