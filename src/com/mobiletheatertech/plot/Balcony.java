@@ -29,10 +29,10 @@ public class Balcony extends MinderDom{
     public static final String LAYERNAME = "Balconies";
     public static final String LAYERTAG = "balcony";
 
-    private Integer floorHeight = null;
-    private Integer underHeight = null;
-    private Integer wallHeight = null;
-    private Integer railHeight = null;
+    private Double floorHeight = null;
+    private Double underHeight = null;
+    private Double wallHeight = null;
+    private Double railHeight = null;
 
 //    /*
 //    This ends up copied to each thing that inherits from
@@ -67,10 +67,10 @@ public class Balcony extends MinderDom{
             InvalidXMLException {
         super( element );
 
-        floorHeight = getPositiveIntegerAttribute( element, "floor-height" );
-        underHeight = getPositiveIntegerAttribute( element, "under-height" );
-        wallHeight = getPositiveIntegerAttribute( element, "wall-height" );
-        railHeight = getPositiveIntegerAttribute( element, "rail-height" );
+        floorHeight = getDoubleAttribute( element, "floor-height" );
+        underHeight = getDoubleAttribute(element, "under-height");
+        wallHeight = getDoubleAttribute(element, "wall-height");
+        railHeight = getDoubleAttribute( element, "rail-height" );
 
 //        NodeList openings = element.getElementsByTagName( "opening" );
 //        int length = openings.getLength();

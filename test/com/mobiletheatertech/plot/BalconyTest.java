@@ -61,10 +61,10 @@ public class BalconyTest {
         Balcony balcony = new Balcony(element);
 
 //        assertEquals( TestHelpers.accessString( balcony, "id" ), balconyId);
-        assertEquals( TestHelpers.accessInteger( balcony, "floorHeight" ), floorHeight);
-        assertEquals( TestHelpers.accessInteger( balcony, "underHeight" ), underHeight);
-        assertEquals( TestHelpers.accessInteger( balcony, "wallHeight" ), wallHeight);
-        assertEquals( TestHelpers.accessInteger( balcony, "railHeight" ), railHeight);
+        assertEquals( TestHelpers.accessDouble(balcony, "floorHeight"), floorHeight);
+        assertEquals( TestHelpers.accessDouble(balcony, "underHeight"), underHeight);
+        assertEquals( TestHelpers.accessDouble(balcony, "wallHeight"), wallHeight);
+        assertEquals( TestHelpers.accessDouble( balcony, "railHeight" ), railHeight);
     }
 
 //    @Test

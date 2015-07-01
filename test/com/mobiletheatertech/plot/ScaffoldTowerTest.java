@@ -45,12 +45,12 @@ public class ScaffoldTowerTest {
     public void storesAttributes() throws Exception {
         Table table = new Table(element);
 
-        assertEquals(TestHelpers.accessInteger(table, "width"), (Integer) 288);
-        assertEquals(TestHelpers.accessInteger(table, "depth"), (Integer) 144);
-        assertEquals(TestHelpers.accessInteger(table, "x"), (Integer) 56);
-        assertEquals(TestHelpers.accessInteger(table, "y"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(table, "z"), (Integer) 16);
-        assertEquals(TestHelpers.accessInteger(table, "height"), (Integer) 12);
+        assertEquals(TestHelpers.accessDouble(table, "width"), 288.0);
+        assertEquals(TestHelpers.accessDouble(table, "depth"), 144.0);
+        assertEquals(TestHelpers.accessDouble(table, "x"), 56.0);
+        assertEquals(TestHelpers.accessDouble(table, "y"), 16.0);
+        assertEquals(TestHelpers.accessDouble(table, "z"), 16.0);
+        assertEquals(TestHelpers.accessDouble(table, "height"), 12.0);
     }
 
     // Until such time as I properly implement this class' use of id.

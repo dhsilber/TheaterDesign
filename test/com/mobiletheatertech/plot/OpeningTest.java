@@ -18,9 +18,9 @@ public class OpeningTest {
 
     Element element = null;
 
-    Integer height = 23;
-    Integer width = 25;
-    Integer start = 2;
+    Double height = 23.0;
+    Double width = 25.0;
+    Double start = 2.0;
 
 
     @Test
@@ -34,9 +34,9 @@ public class OpeningTest {
     public void storesAttributes() throws Exception {
         Opening opening = new Opening( element );
 
-        assertEquals( TestHelpers.accessInteger( opening, "height" ), height );
-        assertEquals( TestHelpers.accessInteger( opening, "width" ), width );
-        assertEquals( TestHelpers.accessInteger( opening, "start" ), start );
+        assertEquals( TestHelpers.accessDouble(opening, "height"), height );
+        assertEquals( TestHelpers.accessDouble(opening, "width"), width );
+        assertEquals( TestHelpers.accessDouble( opening, "start" ), start );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,

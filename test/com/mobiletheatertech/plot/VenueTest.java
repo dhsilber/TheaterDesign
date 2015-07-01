@@ -62,9 +62,9 @@ public class VenueTest {
 
         assertEquals( TestHelpers.accessString( venue, "building" ), "" );
         assertEquals( TestHelpers.accessString( venue, "room" ), room );
-        assertEquals( TestHelpers.accessInteger( venue, "width" ), (Integer) 1296 );
-        assertEquals( TestHelpers.accessInteger( venue, "depth" ), (Integer) 1320 );
-        assertEquals( TestHelpers.accessInteger( venue, "height" ), (Integer) 240 );
+        assertEquals( TestHelpers.accessDouble(venue, "width"), 1296.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "depth"), 1320.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "height"), 240.0 );
         assertEquals( TestHelpers.accessString( venue, "circuiting" ), "" );
     }
 
@@ -76,9 +76,9 @@ public class VenueTest {
 
         assertEquals( TestHelpers.accessString( venue, "building" ), building );
         assertEquals( TestHelpers.accessString( venue, "room" ), room );
-        assertEquals( TestHelpers.accessInteger( venue, "width" ), (Integer) 1296 );
-        assertEquals( TestHelpers.accessInteger( venue, "depth" ), (Integer) 1320 );
-        assertEquals( TestHelpers.accessInteger( venue, "height" ), (Integer) 240 );
+        assertEquals( TestHelpers.accessDouble(venue, "width"), 1296.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "depth"), 1320.0 );
+        assertEquals( TestHelpers.accessDouble( venue, "height" ), 240.0 );
         assertEquals( TestHelpers.accessString( venue, "circuiting" ), "one-to-one" );
     }
 
@@ -162,12 +162,12 @@ public class VenueTest {
 
         new Venue( element );
 
-        assertEquals( Point.LargeX(), 1296 );
-        assertEquals( Point.LargeY(), 1320 );
-        assertEquals( Point.LargeZ(), 240 );
-        assertEquals( Point.SmallX(), 0 );
-        assertEquals( Point.SmallY(), 0 );
-        assertEquals( Point.SmallZ(), 0 );
+        assertEquals( Point.LargeX(), 1296.0 );
+        assertEquals( Point.LargeY(), 1320.0 );
+        assertEquals( Point.LargeZ(), 240.0 );
+        assertEquals( Point.SmallX(), 0.0 );
+        assertEquals( Point.SmallY(), 0.0 );
+        assertEquals( Point.SmallZ(), 0.0 );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,
@@ -321,11 +321,11 @@ public class VenueTest {
 
         new Venue( venueElement );
 
-        assertEquals( Venue.Height(), 24 );
+        assertEquals( Venue.Height(), 24.0 );
 
         new Venue( element );
 
-        assertEquals( Venue.Height(), 240 );
+        assertEquals( Venue.Height(), 240.0 );
     }
 
     @Test
@@ -338,11 +338,11 @@ public class VenueTest {
 
         new Venue( venueElement );
 
-        assertEquals( Venue.Width(), 129 );
+        assertEquals( Venue.Width(), 129.0 );
 
         new Venue( element );
 
-        assertEquals( Venue.Width(), 1296 );
+        assertEquals( Venue.Width(), 1296.0 );
     }
 
     @Test
@@ -355,11 +355,11 @@ public class VenueTest {
 
         new Venue( venueElement );
 
-        assertEquals( Venue.Depth(), 132 );
+        assertEquals( Venue.Depth(), 132.0 );
 
         new Venue( element );
 
-        assertEquals( Venue.Depth(), 1320 );
+        assertEquals( Venue.Depth(), 1320.0 );
     }
 
     @Test
@@ -518,8 +518,8 @@ public class VenueTest {
         Node groupNode = rectangles.item(0);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element tableElement = (Element) groupNode;
-        assertEquals(tableElement.getAttribute("x"), "0" );
-        assertEquals(tableElement.getAttribute("y"), "0" );
+        assertEquals(tableElement.getAttribute("x"), "0.0" );
+        assertEquals(tableElement.getAttribute("y"), "0.0" );
         assertEquals(tableElement.getAttribute("width"), width.toString() );
         // Plot attribute is 'depth'. SVG attribute is 'height'.
         assertEquals(tableElement.getAttribute("height"), height.toString() );
@@ -544,8 +544,8 @@ public class VenueTest {
         Node groupNode = rectangles.item(0);
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element tableElement = (Element) groupNode;
-        assertEquals(tableElement.getAttribute("x"), "0" );
-        assertEquals(tableElement.getAttribute("y"), "0" );
+        assertEquals(tableElement.getAttribute("x"), "0.0" );
+        assertEquals(tableElement.getAttribute("y"), "0.0" );
         assertEquals(tableElement.getAttribute("width"), depth.toString() );
         // Plot attribute is 'depth'. SVG attribute is 'height'.
         assertEquals(tableElement.getAttribute("height"), height.toString() );

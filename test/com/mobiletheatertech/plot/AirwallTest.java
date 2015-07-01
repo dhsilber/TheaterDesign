@@ -24,8 +24,8 @@ public class AirwallTest {
 
     Element element = null;
 
-    private Integer depth = 77;
-    Integer width = 350;
+    private Double depth = 77.0;
+    Double width = 350.0;
 
     @Test
     public void isA() throws Exception {
@@ -38,7 +38,7 @@ public class AirwallTest {
     public void storesAttributes() throws Exception {
         Airwall airwall = new Airwall( element );
 
-        assertEquals( TestHelpers.accessInteger( airwall, "depth" ), (Integer) 77 );
+        assertEquals( TestHelpers.accessDouble( airwall, "depth" ), 77.0 );
     }
 
     @Test(expectedExceptions = LocationException.class,
@@ -73,7 +73,7 @@ public class AirwallTest {
         assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
         Element tableElement = (Element) groupNode;
 //        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
-        assertEquals(tableElement.getAttribute("x1"), "0" );
+        assertEquals(tableElement.getAttribute("x1"), "0.0" );
         assertEquals(tableElement.getAttribute("y1"), depth.toString() );
         assertEquals(tableElement.getAttribute("x2"), width.toString() );
         // Plot attribute is 'depth'. SVG attribute is 'height'.

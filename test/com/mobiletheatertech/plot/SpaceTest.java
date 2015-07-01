@@ -21,9 +21,9 @@ public class SpaceTest {
         Space space = new Space( point, 12, 13, 14 );
 
         assertEquals( TestHelpers.accessPoint( space, "origin" ), point );
-        assertEquals( TestHelpers.accessInteger( space, "width" ), (Integer) 12 );
-        assertEquals( TestHelpers.accessInteger( space, "depth" ), (Integer) 13 );
-        assertEquals( TestHelpers.accessInteger( space, "height" ), (Integer) 14 );
+        assertEquals( TestHelpers.accessDouble(space, "width"), 12.0 );
+        assertEquals( TestHelpers.accessDouble(space, "depth"), 13.0 );
+        assertEquals( TestHelpers.accessDouble(space, "height"), 14.0 );
     }
 
     @Test
@@ -33,16 +33,16 @@ public class SpaceTest {
         Space space1 = new Space( point1, 12, 13, 14 );
 
         assertEquals( TestHelpers.accessPoint( space1, "origin" ), point1 );
-        assertEquals( TestHelpers.accessInteger( space1, "width" ), (Integer) 12 );
-        assertEquals( TestHelpers.accessInteger( space1, "depth" ), (Integer) 13 );
-        assertEquals( TestHelpers.accessInteger( space1, "height" ), (Integer) 14 );
+        assertEquals( TestHelpers.accessDouble(space1, "width"), 12.0 );
+        assertEquals( TestHelpers.accessDouble(space1, "depth"), 13.0 );
+        assertEquals( TestHelpers.accessDouble(space1, "height"), 14.0 );
 
         Space space2 = new Space( point2, 22, 23, 24 );
 
         assertEquals( TestHelpers.accessPoint( space2, "origin" ), point2 );
-        assertEquals( TestHelpers.accessInteger( space2, "width" ), (Integer) 22 );
-        assertEquals( TestHelpers.accessInteger( space2, "depth" ), (Integer) 23 );
-        assertEquals( TestHelpers.accessInteger( space2, "height" ), (Integer) 24 );
+        assertEquals( TestHelpers.accessDouble(space2, "width"), 22.0 );
+        assertEquals( TestHelpers.accessDouble(space2, "depth"), 23.0 );
+        assertEquals( TestHelpers.accessDouble( space2, "height" ), 24.0 );
     }
 
     @Test

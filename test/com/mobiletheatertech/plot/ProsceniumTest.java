@@ -242,9 +242,9 @@ public class ProsceniumTest {
         new Proscenium( element );
         Point fixed = Proscenium.Locate( new Point( 100, 120, 60 ) );
 //        assert new Point( 150, 24, 72 ).equals( fixed );
-        assertEquals( fixed.x(), (Integer) 350, "X" );
-        assertEquals( fixed.y(), (Integer) 24, "Y" );
-        assertEquals( fixed.z(), (Integer) 72, "Z" );
+        assertEquals( fixed.x(), 350.0, "X" );
+        assertEquals( fixed.y(), 24.0, "Y" );
+        assertEquals( fixed.z(), 72.0, "Z" );
     }
 
     @Test
@@ -322,10 +322,10 @@ public class ProsceniumTest {
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), "85" );
-        assertEquals( element.getAttribute( "y1" ), "144" );
-        assertEquals( element.getAttribute( "x2" ), "85" );
-        assertEquals( element.getAttribute( "y2" ), "166" );
+        assertEquals( element.getAttribute( "x1" ), "85.0" );
+        assertEquals( element.getAttribute( "y1" ), "144.0" );
+        assertEquals( element.getAttribute( "x2" ), "85.0" );
+        assertEquals( element.getAttribute( "y2" ), "166.0" );
         assertEquals( element.getAttribute( "stroke" ), "black" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "" );
         assertEquals( element.getAttribute( "stroke-width" ), "1" );

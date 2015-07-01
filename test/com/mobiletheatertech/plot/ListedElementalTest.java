@@ -53,7 +53,7 @@ public class ListedElementalTest {
     to test here as well?
      */
     @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Listed diversionElement unexpectedly null!" )
+            expectedExceptionsMessageRegExp = "Listed element unexpectedly null!" )
     public void nullElement() throws Exception {
         new Listed( null );
     }

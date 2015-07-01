@@ -74,7 +74,6 @@ public class WriteTest {
 
         File section = new File( pathName + "/section.svg" );
         assertTrue( section.exists() );
-
         File front = new File( pathName + "/front.svg" );
         assertTrue( front.exists() );
 
@@ -87,7 +86,6 @@ public class WriteTest {
         File[] contents = tmp.listFiles();
         assertEquals( contents.length, 8 );
     }
-
     @Test
     public void weightCalculations() {
         Random random = new Random();
