@@ -263,12 +263,12 @@ public class CableRun implements Schematicable {
         sinkPoint = sinkThingy.schematicPosition();
 
         if( null == sourcePoint ) {
-            System.out.println( sourceThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
+//            System.out.println( sourceThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
             return;
         }
 
         if( null == sinkPoint ) {
-            System.out.println( sinkThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
+//            System.out.println( sinkThingy.toString() + "is not shown, so no cables will be drawn in or out of it.");
             return;
         }
 

@@ -97,7 +97,7 @@ public class Luminaire extends MinderDom implements Schematicable {
 
         id = on + ":" + unit;
 
-        System.err.println("Got to middle of constructor");
+//        System.err.println("Got to middle of constructor");
 
         if( null != Select( id )){
             throw new InvalidXMLException(
@@ -105,17 +105,17 @@ public class Luminaire extends MinderDom implements Schematicable {
         }
 
 
-        System.err.println("selected");
+//        System.err.println("selected");
         new Layer( LAYERTAG, LAYERNAME, COLOR );
-        System.err.println("Made Layer");
+//        System.err.println("Made Layer");
 //        new LuminaireInformation( element, this );
-        System.err.println("Made Information");
+//        System.err.println("Made Information");
 
         GearList.Add(type);
-        System.err.println("Added to gear list");
+//        System.err.println("Added to gear list");
 
         LUMINAIRELIST.add( this );
-        System.err.println("added to luminaire list");
+//        System.err.println("added to luminaire list");
     }
 
     public static Luminaire Select( String identifier ) {
@@ -233,6 +233,8 @@ public class Luminaire extends MinderDom implements Schematicable {
     }
 
     String unit() { return unit; }
+
+    String type() { return type; }
 
     Double weight() {
         Double result = 0.0;

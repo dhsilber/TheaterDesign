@@ -106,15 +106,21 @@ public abstract class Mountable extends MinderDom implements Schematicable {
 
     public String id() { return id; }
 
+//    public abstract String suspensionPoints( ArrayList<Anchor> suspensions );
+
     public String weights() {
         StringBuilder text = new StringBuilder();
 
         text.append( "Weights for " );
         text.append( id );
+//        text.append( "\n\n" );
+//        text.append( "Suspension points are at " +  );
         text.append( "\n\n" );
         Double totalWeight = 0.0;
         for( Luminaire lumi : loads() ) {
             text.append( lumi.unit() );
+            text.append( " " );
+            text.append( lumi.type() );
             text.append( " weighs " );
             Double weight = lumi.weight();
             totalWeight += weight;

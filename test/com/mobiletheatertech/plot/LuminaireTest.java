@@ -254,6 +254,13 @@ public class LuminaireTest {
     }
 
     @Test
+    public void type() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.type(), type );
+    }
+
+    @Test
     public void weight() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();

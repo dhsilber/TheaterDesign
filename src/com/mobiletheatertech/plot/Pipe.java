@@ -139,8 +139,10 @@ public class Pipe extends Mountable implements Schematicable {
      */
     @Override
     public void verify() throws LocationException, ReferenceException {
-        System.err.println( "Pipe starting.");
-        if( null == start ) { System.err.println( "start is null at top of Pipe.verify()" ); }
+//        System.err.println( "Pipe starting.");
+        if( null == start ) {
+            System.err.println( "start is null at top of Pipe.verify()" );
+        }
         assert( null != id ) : "Id is null at top of verify()";
 
         String identity = "Pipe (" + id + ")";
@@ -196,7 +198,7 @@ public class Pipe extends Mountable implements Schematicable {
 //                System.err.println( "90.0 == orientation" );
                 throw new ReferenceException("90-degree oriented only implemented with proscenium.");
             } else {
-                System.err.println( "90.0 != orientation" );
+//                System.err.println( "90.0 != orientation" );
 //Fails right here:
                 boxOrigin = new Point(start.x(), start.y() - 1, start.z() - 1);
 

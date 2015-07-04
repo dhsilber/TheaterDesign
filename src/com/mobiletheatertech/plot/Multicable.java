@@ -68,7 +68,7 @@ public class Multicable implements Schematicable {
     @Override
     public PagePoint schematicPosition() {
         if (null == schematicPosition) {
-            System.err.println( this.toString() + " has no schematic position.");
+//            System.err.println( this.toString() + " has no schematic position.");
         }
         return schematicPosition;
     }

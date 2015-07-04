@@ -116,6 +116,7 @@ public class MountableTest {
     Element luminaireElement;
     Double weight = 9.4;
     String unit = "7";
+    String type = "6x9";
 
     public MountableTest() {
     }
@@ -269,7 +270,7 @@ public class MountableTest {
     @Test
     public void WeightsText() throws Exception {
         String weightsText = "Weights for " + id + "\n\n"
-                + unit + " weighs " + weight + " pounds\n"
+                + unit + " " + type + " weighs " + weight + " pounds\n"
                 + "\nTotal: " + weight + " pounds\n";
 
         Mounted pipe = new Mounted( element );
@@ -300,7 +301,6 @@ public class MountableTest {
 
         Integer width = 13;
         Integer length = 27;
-        String type = "6x9";
         Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
         definitionElement.setAttribute( "name", type );
         definitionElement.setAttribute( "width", width.toString() );

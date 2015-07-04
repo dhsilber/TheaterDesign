@@ -430,11 +430,11 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
             return new Place(mountableLocation(location), origin, base.rotation() );
         }
         else {
-            System.err.println( "standard" );
+//            System.err.println( "standard" );
             Double transformX = point1.x() + SvgElement.OffsetX();
             Double transformY = point1.y() + SvgElement.OffsetY();
             Point origin = new Point( transformX, transformY, point1.z() );
-            System.err.println( "standard end" );
+//            System.err.println( "standard end" );
             return new Place(mountableLocation(location), origin, rotation);
         }
     }
