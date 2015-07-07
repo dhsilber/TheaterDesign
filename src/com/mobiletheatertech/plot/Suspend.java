@@ -15,13 +15,15 @@ import org.w3c.dom.NodeList;
 
 // Should extend ElementalLister rather than MinderDom
 
-public class Suspend extends MinderDom /*implements Anchor*/ {
+public class Suspend extends MinderDom implements Anchor {
 
     private String refId = null;
     private Integer distance = null;
     private HangPoint hangPoint = null;
     //    private Truss truss = null;        // Should reference Truss which is suspended by this.
     private String processedMark = null;
+    private Double load = 0.0;
+    private Double location = 0.0;
 
 
     public Suspend( Element element )
@@ -72,8 +74,28 @@ public class Suspend extends MinderDom /*implements Anchor*/ {
         return refId;
     }
 
+    public void location( Double location ) {
+        this.location = location;
+    }
+
+    public Double location() {
+        return location;
+    }
+
     @Override
     public void verify() {
+    }
+
+    public void load( Double increment ) {
+        load += increment;
+    }
+
+    public Double load() {
+        return load;
+    }
+
+    public String refId() {
+        return refId;
     }
 
     @Override

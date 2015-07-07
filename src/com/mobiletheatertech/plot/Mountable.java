@@ -23,6 +23,9 @@ public abstract class Mountable extends MinderDom implements Schematicable {
 
     private ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
 
+    protected ArrayList<Suspend> suspensions = new ArrayList<>();
+    protected Double span = 0.0;
+
     /**
      * Find a specific {@code Mountable} from all that have been constructed.
      *
@@ -38,7 +41,7 @@ public abstract class Mountable extends MinderDom implements Schematicable {
         throw new MountingException( "'" + id + "' is not a mountable object." );
     }
 
-    public static ArrayList<Mountable> MountableList() { return MOUNTABLELIST; }
+    static ArrayList<Mountable> MountableList() { return MOUNTABLELIST; }
 
 //    public static void Remove( String id ) {
 //        Mountable candidate = null;
@@ -62,7 +65,7 @@ public abstract class Mountable extends MinderDom implements Schematicable {
      * @param element DOM Element defining a {@code Mountable} object
      *                // * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException if null element is somehow presented to constructor
-     *                             // * @throws SizeException             if the length is too short
+     *                             // * @throws Sizthrows InvalidXMLException, MountingExceptioneException             if the length is too short
      */
     public Mountable(Element element)
             throws AttributeMissingException, DataException,
@@ -82,7 +85,8 @@ public abstract class Mountable extends MinderDom implements Schematicable {
         MOUNTABLELIST.add(this);
     }
 
-    public abstract Point mountableLocation(String location) throws InvalidXMLException, MountingException, ReferenceException;
+    public abstract Point mountableLocation(String location)
+            throws InvalidXMLException, MountingException, ReferenceException;
 
     /**
      * Provide the page location for the object at the location specified.
@@ -106,30 +110,40 @@ public abstract class Mountable extends MinderDom implements Schematicable {
 
     public String id() { return id; }
 
-//    public abstract String suspensionPoints( ArrayList<Anchor> suspensions );
+    public abstract String suspensionPoints( /*ArrayList<Anchor> suspensions*/ );
 
-    public String weights() {
+    public abstract String calculateIndividualLoad( Luminaire luminaire ) throws InvalidXMLException, MountingException;
+
+    public abstract String totalSuspendLoads();
+
+    public String weights() throws InvalidXMLException, MountingException {
         StringBuilder text = new StringBuilder();
 
         text.append( "Weights for " );
         text.append( id );
-//        text.append( "\n\n" );
-//        text.append( "Suspension points are at " +  );
+        text.append( "\n\n" );
+        text.append( suspensionPoints() );
         text.append( "\n\n" );
         Double totalWeight = 0.0;
         for( Luminaire lumi : loads() ) {
             text.append( lumi.unit() );
-            text.append( " " );
+            text.append( ": " );
             text.append( lumi.type() );
+            text.append( " at " );
+            text.append( lumi.locationValue() );
             text.append( " weighs " );
             Double weight = lumi.weight();
             totalWeight += weight;
             text.append( weight.toString() );
-            text.append( " pounds\n" );
+            text.append( " pounds" );
+            text.append( calculateIndividualLoad( lumi ) );
+            text.append( " \n" );
         }
         text.append( "\nTotal: " );
         text.append( totalWeight.toString() );
-        text.append( " pounds\n" );
+        text.append( " pounds " );
+        text.append( totalSuspendLoads() );
+        text.append( "\n" );
 
         return text.toString();
     }

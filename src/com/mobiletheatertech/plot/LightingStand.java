@@ -120,6 +120,37 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
         return null;
     }
 
+    /**
+     * Elucidate the support for this.
+     *
+     * @return
+     */
+    @Override
+    public String suspensionPoints() {
+//        if( positioned ) {
+//            return "Truss is positioned.";
+//        }
+//        else if( null != base ) {
+//            return "Truss is set on end, on a base.";
+//        }
+//        else if( (null != suspend1) && (null != suspend2) ) {
+//            return "Truss is suspended at " + overHang + " and at " + (length - overHang);
+//        }
+//        else {
+            return "Cannot figure out how this LightingStand is held up";
+//        }
+    }
+
+    @Override
+    public String calculateIndividualLoad( Luminaire luminaire ) {
+        return "";
+    }
+
+    @Override
+    public String totalSuspendLoads() {
+        return "";
+    }
+
     @Override
     public void dom( Draw draw, View view ) {
         SvgElement group;

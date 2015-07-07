@@ -494,13 +494,20 @@ public class Write {
         return draw;
     }
 
-    protected void writeWeightCalculations( String pathname ) {
+    protected void writeWeightCalculations( String pathname )  {
         String weightsPath = pathname + "/weights";
 
         writeDirectory( weightsPath );
 
         for( Mountable mount : Mountable.MountableList() ) {
-            String text = mount.weights();
+            String text = "";
+            try {
+                text = mount.weights();
+            }
+            catch (Exception e) {
+                System.err.println( mount.id() + "  " + e.getMessage() );
+                continue;
+            }
             String name = mount.id();
             writeFile( weightsPath, name, text );
         }

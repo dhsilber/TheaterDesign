@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -107,7 +108,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
 //        new Category( CATEGORY, this.getClass() );
     }
-
+//
 
     public void verify() throws InvalidXMLException, ReferenceException {
 //        NodeList baseList = element.getElementsByTagName( "base" );
@@ -123,18 +124,26 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         if (2 == suspendList.getLength()) {
 
             // ToDo The processedMark thing is really bogus. We should just create the objects found in the suspend list as they are encountered here.
-            suspend1 = findSuspend(0, suspendList);
+            suspend1 = findSuspend(0, suspendList);/*ArrayList<Anchor> suspensions*/
             suspend2 = findSuspend(1, suspendList);
+
+            assert (suspend1.locate().x() < suspend2.locate().x());
+
+            suspensions.add( suspend1 );
+            suspensions.add( suspend2 );
 
             point1 = suspend1.locate();
             point2 = suspend2.locate();
             Double slope = slope(point1, point2);
             rotation = Math.toDegrees(Math.atan(slope));
 
-            Double supportSpan = point1.distance(point2);
-            Long span = Math.round(supportSpan);
-            overHang = (length - span.intValue()) / 2;
+            span = point1.distance(point2);
+//            Long span = Math.round(span);
+            overHang = (length - span) / 2;
             // Given suspend1 and the slope, find where the start of the truss will end up.
+
+            suspend1.location( overHang );
+            suspend2.location( overHang + span );
         }
         else if ( 1 == baseList.getLength() ) {
             // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
@@ -327,7 +336,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
                         verticalOffset += size;
                         break;
                     default:
-                        throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.");
+                        throw new InvalidXMLException( "Truss (" + id + ") location does not include a valid vertex.");
                 }
 
                 return new Point(point.x() - overHang + distance, point.y() + offset, point.z() - verticalOffset );
@@ -357,7 +366,8 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         Double y;
 
         Character vertex = location.charAt(0);
-        Double offset = size / 2;
+        Double offset = size / 2;     //         * @param suspensions
+
         switch (vertex) {
             case 'a':
                 offset *= -1;
@@ -412,6 +422,10 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     Everything that location() does, bundled with the information a hanged thing needs to position itself.
      */
     @Override
+
+
+
+
     public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
         verify();
 
@@ -454,6 +468,61 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     @Override
     public Place drawingLocation() {
         return null;
+    }
+
+    /**
+     * Elucidate the support for this.
+     *
+     * @return
+     */
+    @Override
+    public String suspensionPoints() {
+        if( positioned ) {
+            return "Truss is positioned.";
+        }
+        else if( null != base ) {
+            return "Truss is set on end, on a base.";
+        }
+        else if( (null != suspend1) && (null != suspend2) ) {
+            return "Truss is suspended at " + overHang + " and at " + (length - overHang);
+        }
+        else {
+            return "Cannot figure out how this Truss is held up";
+        }
+    }
+
+    @Override
+    public String calculateIndividualLoad( Luminaire luminaire ) throws InvalidXMLException, MountingException {
+        assert ( 2 == suspensions.size() );
+
+        Suspend one = suspensions.get(0);
+        Suspend two = suspensions.get(1);
+
+        Integer locationDistance = locationDistance( luminaire.locationValue() );
+        Double oneDistance = one.location() - locationDistance;
+        Double twoDistance = two.location() - locationDistance;
+
+        Double load = luminaire.weight();
+        Double first = (load * twoDistance) / span;
+        one.load( first );
+        Double second = - (load * oneDistance) / span;
+        two.load( second );
+
+        DecimalFormat fourPlaces = new DecimalFormat( "###.####" );
+        return " " + fourPlaces.format( first ) + " on " + one.refId() + ". "
+                + fourPlaces.format( second ) + " on " + two.refId() + ".";
+    }
+
+    @Override
+    public String totalSuspendLoads() {
+        assert ( 2 == suspensions.size() );
+
+        Suspend one = suspensions.get(0);
+        Suspend two = suspensions.get(1);
+
+        DecimalFormat fourPlaces = new DecimalFormat( "###.####" );
+        return " " + fourPlaces.format( one.load() ) + " on " + one.refId() + ". "
+                + fourPlaces.format( two.load() ) + " on " + two.refId() + ".";
     }
 
     @Override

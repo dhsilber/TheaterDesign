@@ -107,6 +107,26 @@ public class MountableTest {
             System.err.print( "Here: " + here.toString() );
             return here;
         }
+
+        /**
+         * Elucidate the support for this.
+//         * @param suspensions
+         * @return
+         */
+        @Override
+        public String suspensionPoints( /*ArrayList<Anchor> suspensions*/ ) {
+            return "Just a test class, honest.\n";
+        }
+
+        @Override
+        public String calculateIndividualLoad( Luminaire luminaire ) throws InvalidXMLException, MountingException {
+            return "";
+        }
+
+        @Override
+        public String totalSuspendLoads() {
+            return "";
+        }
     }
 
     //    private static Draw draw = null;

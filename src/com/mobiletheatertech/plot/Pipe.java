@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -368,6 +369,37 @@ public class Pipe extends Mountable implements Schematicable {
     @Override
     public Place drawingLocation() {
         return null;
+    }
+
+    /**
+     * Elucidate the support for this.
+     *
+     * @return
+     */
+    @Override
+    public String suspensionPoints() {
+//        if( positioned ) {
+//            return "Truss is positioned.";
+//        }
+//        else if( null != base ) {
+//            return "Truss is set on end, on a base.";
+//        }
+//        else if( (null != suspend1) && (null != suspend2) ) {
+//            return "Truss is suspended at " + overHang + " and at " + (length - overHang);
+//        }
+//        else {
+            return "Cannot figure out how this Pipe is held up";
+//        }
+    }
+
+    @Override
+    public String calculateIndividualLoad( Luminaire luminaire ) {
+        return "";
+    }
+
+    @Override
+    public String totalSuspendLoads() {
+        return "";
     }
 
     /**
