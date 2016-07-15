@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Collect lists of gear.
  *
- * Constructor accepts a string and keeps a COUNT of how many times
+ * Constructor accepts a string and keeps a CHAIRCOUNT of how many times
  * that string has been seen.
  *
  * Created by dhs on 4/12/14.
@@ -56,8 +56,8 @@ public class GearList {
             dataIndex++;
         }
 
-//        data[0] = new Object[] { GEARS.get(0), COUNT.get(0) };
-//        data[1] = new Object[] { GEARS.get(1), COUNT.get(1) };
+//        data[0] = new Object[] { GEARS.get(0), CHAIRCOUNT.get(0) };
+//        data[1] = new Object[] { GEARS.get(1), CHAIRCOUNT.get(1) };
 
         return data;
     }

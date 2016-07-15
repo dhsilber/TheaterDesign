@@ -14,6 +14,7 @@ public class Drawing extends ElementalLister {
     String filename = null;
     View view = null;
     String viewString = null;
+    String legend = null;
 
     public ArrayList<String> layers = new ArrayList<>();
     public ArrayList<String> devices = new ArrayList<>();
@@ -25,6 +26,11 @@ public class Drawing extends ElementalLister {
         id = getStringAttribute( element, "id" );
         filename = getStringAttribute( element, "filename" );
         viewString = getOptionalStringAttribute( element, "view" );
+        legend = getOptionalStringAttribute( element, "legend" );
+        if ( "".equals( legend ) ) {
+            legend = id;
+        }
+
         switch ( viewString ) {
             case "schematic":
                 view = View.SCHEMATIC;
@@ -70,4 +76,6 @@ public class Drawing extends ElementalLister {
     public View view() {
         return view;
     }
+
+    public String legend() { return legend; }
 }

@@ -40,6 +40,8 @@ public class ChairTest {
     String layerTag = "fred";
     Double radius = 17.8;
     Double space = 34.7;
+    Double opening = 33.33;
+    Integer count = 75;
 
     @Test
     public void isA() throws Exception {
@@ -60,10 +62,12 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
         assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
     }
 
     @Test
@@ -73,10 +77,12 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
         assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), orientation.doubleValue() );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
     }
 
     @Test
@@ -86,10 +92,12 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
         assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
         assertEquals( TestHelpers.accessInteger(chair, "line"), line );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
     }
 
     @Test
@@ -99,11 +107,13 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
         assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0);
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals( TestHelpers.accessString(chair, "layerName"), layerTag );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
     }
 
     @Test
@@ -113,11 +123,13 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(chair, "r"), radius);
+        assertEquals(TestHelpers.accessDouble(chair, "radius"), radius);
         assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
     }
 
     @Test
@@ -127,11 +139,45 @@ public class ChairTest {
 
         assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
-        assertNull(TestHelpers.accessDouble(chair, "r"));
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
         assertEquals(TestHelpers.accessDouble(chair, "space"), space );
         assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
         assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
         assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertNull(TestHelpers.accessInteger(chair, "count"));
+    }
+
+    @Test
+    public void storesOptionalOpeningAttribute() throws Exception {
+        element.setAttribute("opening", opening.toString() );
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
+        assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
+        assertEquals(TestHelpers.accessDouble(chair, "opening"), opening );
+        assertNull(TestHelpers.accessInteger(chair, "count"));
+    }
+
+    @Test
+    public void storesOptionalCountAttribute() throws Exception {
+        element.setAttribute("count", count.toString() );
+        Chair chair = new Chair(element);
+
+        assertEquals(TestHelpers.accessDouble(chair, "x"), x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(chair, "y"), y.doubleValue());
+        assertNull(TestHelpers.accessDouble(chair, "radius"));
+        assertEquals(TestHelpers.accessDouble(chair, "space"), 0.0);
+        assertEquals(TestHelpers.accessDouble(chair, "orientation"), 0.0 );
+        assertEquals( TestHelpers.accessInteger(chair, "line"), (Integer) 0 );
+        assertEquals( TestHelpers.accessString(chair, "layerName"), Chair.LAYERTAG );
+        assertNull(TestHelpers.accessDouble(chair, "opening"));
+        assertEquals(TestHelpers.accessInteger(chair, "count"), count );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -146,6 +192,40 @@ public class ChairTest {
     public void noY() throws Exception {
         element.removeAttribute("y");
         new Chair(element);
+    }
+
+    @Test
+    public void verifyRadiusCircle() throws Exception {
+        element.setAttribute( "r", "60" );
+        Chair chair = new Chair( element );
+        chair.verify();
+        Double chairFitDouble = (2 * Math.PI * 60) / CHAIRWIDTH;
+        Integer chairFit = chairFitDouble.intValue();
+        assertEquals(TestHelpers.accessInteger(chair, "chairFit"), chairFit );
+//        assertEquals(TestHelpers.accessDouble(chair, "angle"), (CHAIRWIDTH * 10) / (2 * Math.PI) );
+    }
+
+    @Test
+    public void verifyCountCircle() throws Exception {
+        element.setAttribute( "count", "10" );
+        Chair chair = new Chair( element );
+        chair.verify();
+        assertEquals(TestHelpers.accessDouble(chair, "radius"), (CHAIRWIDTH * 10.0) / (2.0 * Math.PI) );
+        assertEquals(TestHelpers.accessInteger(chair, "chairFit"), (Integer) 10 );
+        assertEquals(TestHelpers.accessDouble(chair, "angle"), 36.0 );
+        assertEquals(TestHelpers.accessDouble(chair, "circumference"), CHAIRWIDTH * 10.0 );
+    }
+
+    @Test
+    public void verifyCountOpeningCircle() throws Exception {
+        element.setAttribute( "count", "3" );
+        element.setAttribute( "opening", "25" );
+        Chair chair = new Chair( element );
+        chair.verify();
+        assertEquals(TestHelpers.accessInteger(chair, "chairFit"), (Integer) 3 );
+        assertEquals(TestHelpers.accessDouble(chair, "circumference"), CHAIRWIDTH * 4.0 );
+        assertEquals(TestHelpers.accessDouble(chair, "angle"), 90.0 );
+        assertEquals(TestHelpers.accessDouble(chair, "radius"), (CHAIRWIDTH * 4) / (2 * Math.PI) );
     }
 
     @Test
@@ -248,7 +328,7 @@ public class ChairTest {
 
         Chair chair = new Chair( element );
         chair.verify();
-        Chair.COUNT++;
+        Chair.CHAIRCOUNT++;
 
         PagePoint finish = chair.domLegendItem( draw, start );
 
@@ -265,7 +345,7 @@ public class ChairTest {
         element.setAttribute( "line", eleven );
         Chair chair = new Chair( element );
         chair.verify();
-        Chair.COUNT++;
+        Chair.CHAIRCOUNT++;
 
         chair.domLegendItem( draw, start );
 
@@ -514,6 +594,16 @@ public class ChairTest {
     }
 
     @Test
+    public void domPlanCountedCircle() throws Exception {
+        draw.establishRoot();
+
+        Double fourChairRadius = 4 * Chair.CHAIRWIDTH / 2 / Math.PI;
+
+        element.setAttribute( "count", "4" );
+        checkCircle(fourChairRadius);
+    }
+
+    @Test
     public void domPlanCircleSpace() throws Exception {
         draw.establishRoot();
 
@@ -626,6 +716,43 @@ public class ChairTest {
         assertEquals( lastY, expectedLastY );
         assertEquals( lastElement.getAttribute( "transform" ),
                 "rotate(60.0," + expectedLastX + "," + expectedLastY + ")" );
+    }
+
+    @Test
+    public void domPlanCountedCircleWithOpening() throws Exception {
+        draw.establishRoot();
+
+        Double fourChairRadius = 4 * Chair.CHAIRWIDTH / 2 / Math.PI;
+
+        element.setAttribute( "count", "3" );
+        element.setAttribute( "opening", "25");
+        Chair chair = new Chair(element);
+        chair.verify();
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        chair.dom(draw, View.PLAN);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 2);
+        Node groupNode = group.item(1);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element groupElement = (Element) groupNode;
+        assertEquals(groupElement.getAttribute("class"), Chair.LAYERTAG);
+
+        NodeList list = groupElement.getElementsByTagName("use");
+        assertEquals( list.getLength(), 3 );
+
+        Double expectX = x;
+        Double expectY = y + fourChairRadius;
+        checkRotatedChair(list, 0, expectX, expectY, 0.0 );
+        expectX = x - fourChairRadius;
+        expectY = y;
+        checkRotatedChair(list, 1, expectX, expectY, 90.0 );
+        expectX = x + fourChairRadius;
+        expectY = y;
+        checkRotatedChair(list, 2, expectX, expectY, 270.0 );
     }
 
     @Test

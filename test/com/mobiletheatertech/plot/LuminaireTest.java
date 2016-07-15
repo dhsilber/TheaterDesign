@@ -25,6 +25,7 @@ public class LuminaireTest {
     Element elementOnLightingStand = null;
     Element definitionElement = null;
 
+    final String unit = "unit";
     final String type = "6x9";
     final String pipeName = "luminaireTestPipe";
     final String lightingStandName = "luminaireTestLightingStand";
@@ -34,7 +35,8 @@ public class LuminaireTest {
     final String circuit = "circuit";
     final String channel = "channel";
     final String color = "color";
-    final String unit = "unit";
+    final String address = "address";
+    final String info = "info";
     Double weight = 21.7;
     Integer hangPoint1X=20;
     Integer hangPoint1Y=40;
@@ -44,6 +46,8 @@ public class LuminaireTest {
     String pipeLocation = "12";
     String trussLocation = "a 12";
     String lightingStandLocation = "b";
+    String callShowData = "showData(evt)";
+    String callHideData = "hideData(evt)";
 
     Pipe pipe = null;
     LightingStand lightingStand = null;
@@ -261,6 +265,70 @@ public class LuminaireTest {
     }
 
     @Test
+    public void on() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.on(), pipeName );
+    }
+
+    @Test
+    public void location() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.locationValue(), pipeLocation );
+    }
+
+    @Test
+    public void circuit() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.circuit(), circuit );
+    }
+
+    @Test
+    public void dimmer() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.dimmer(), dimmer );
+    }
+
+    @Test
+    public void channel() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.channel(), channel );
+    }
+
+    @Test
+    public void color() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.color(), color );
+    }
+
+    @Test
+    public void target() throws Exception {
+        elementOnPipe.setAttribute("target", target);
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.target(), target );
+    }
+
+    @Test
+    public void address() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.address(), address );
+    }
+
+    @Test
+    public void info() throws Exception {
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+
+        assertEquals( luminaire.info(), info );
+    }
+
+    @Test
     public void weight() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
@@ -293,65 +361,70 @@ public class LuminaireTest {
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
         assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+        assertEquals( diversionElement.getAttribute( "id" ), id );
+        assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
+        assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
 
-        list = groupElement.getElementsByTagName( "path" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "x" ), "15" );
-        assertEquals( diversionElement.getAttribute( "y" ), "9" );
-        assertEquals( diversionElement.getAttribute( "width" ), "18" );
-        assertEquals( diversionElement.getAttribute( "height" ), "12" );
-        assertEquals( diversionElement.getAttribute( "fill" ), "none" );
-        assertEquals( diversionElement.getAttribute( "stroke" ), "black" );
-        assertEquals( diversionElement.getAttribute( "stroke-width" ), "1" );
-        assertEquals( diversionElement.getAttribute( "d" ),
-                      "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
-
-        list = groupElement.getElementsByTagName( "rect" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
-
-        list = groupElement.getElementsByTagName( "circle" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
+//        list = groupElement.getElementsByTagName( "path" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        assertEquals( diversionElement.getAttribute( "x" ), "15" );
+//        assertEquals( diversionElement.getAttribute( "y" ), "9" );
+//        assertEquals( diversionElement.getAttribute( "width" ), "18" );
+//        assertEquals( diversionElement.getAttribute( "height" ), "12" );
+//        assertEquals( diversionElement.getAttribute( "fill" ), "none" );
+//        assertEquals( diversionElement.getAttribute( "stroke" ), "black" );
+//        assertEquals( diversionElement.getAttribute( "stroke-width" ), "1" );
+//        assertEquals( diversionElement.getAttribute( "d" ),
+//                      "M 16 14 L 19 9 L 29 9 L 32 14 L 29 19 L 19 19 Z" );
+//
+//        list = groupElement.getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
+//
+//        list = groupElement.getElementsByTagName( "circle" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
 
         list = groupElement.getElementsByTagName( "text" );
-        assertEquals( list.getLength(), 5 );
+        assertEquals( list.getLength(), 1 );
 /*
        Issue is that circuit text is not displayed.
        Root cause is that the code to modify the output based on Venue Circuiting is too complex and a bit broken.
 */
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        String text = diversionElement.getTextContent();
-        assertEquals( text, circuit );
-        node = list.item( 1 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, dimmer );
-        node = list.item( 2 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, channel );
-        node = list.item( 3 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, unit );
-        node = list.item( 4 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, color );
+        Element textElement = (Element) node;
+        assertEquals( textElement.getTextContent(), unit );
+
+        domGeneratesData( groupElement, luminaire );
+
+//        node = list.item( 1 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, dimmer );
+//        node = list.item( 2 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, channel );
+//        node = list.item( 3 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, unit );
+//        node = list.item( 4 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, color );
     }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
@@ -414,7 +487,6 @@ public class LuminaireTest {
         assertEquals( text, color );
     }
 
-    // TODO: commented out 2014-04-22 as it was hanging the whole test run.
     @Test
     public void domPlanCircuitingMany() throws Exception {
         venueElement.setAttribute( "circuiting", "one-to-many" );
@@ -747,6 +819,24 @@ public class LuminaireTest {
 //                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
     }
 
+    void domGeneratesData( Element group, Luminaire luminaire ) {
+        Node protoData = group.getLastChild();
+        assertNotNull( protoData );
+        assertEquals( protoData.getNodeType(), Node.ELEMENT_NODE );
+        Element data = (Element) protoData;
+        assertEquals( data.getTagName(), "plot:luminaire" );
+        TestHelpers.checkAttribute( data, "type", luminaire.type() );
+        TestHelpers.checkAttribute( data, "on", luminaire.on() );
+        TestHelpers.checkAttribute( data, "location", luminaire.locationValue() );
+        TestHelpers.checkAttribute( data, "circuit", luminaire.circuit() );
+        TestHelpers.checkAttribute( data, "dimmer", luminaire.dimmer() );
+        TestHelpers.checkAttribute( data, "channel", luminaire.channel() );
+        TestHelpers.checkAttribute( data, "color", luminaire.color() );
+        TestHelpers.checkAttribute( data, "target", luminaire.target() );
+        TestHelpers.checkAttribute( data, "address", luminaire.address() );
+        TestHelpers.checkAttribute( data, "info", luminaire.info() );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -833,14 +923,16 @@ public class LuminaireTest {
 
 
         elementOnPipe = new IIOMetadataNode( "luminaire" );
+        elementOnPipe.setAttribute("unit", unit);
         elementOnPipe.setAttribute( "type", type );
         elementOnPipe.setAttribute("on", pipeName);
         elementOnPipe.setAttribute("location", pipeLocation );
-        elementOnPipe.setAttribute("dimmer", dimmer);
         elementOnPipe.setAttribute("circuit", circuit);
+        elementOnPipe.setAttribute("dimmer", dimmer);
         elementOnPipe.setAttribute("channel", channel);
         elementOnPipe.setAttribute("color", color);
-        elementOnPipe.setAttribute("unit", unit);
+        elementOnPipe.setAttribute("address", address);
+        elementOnPipe.setAttribute("info", info);
 
         elementOnTruss = new IIOMetadataNode( "luminaire" );
         elementOnTruss.setAttribute( "type", type );

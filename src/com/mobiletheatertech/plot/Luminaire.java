@@ -1,6 +1,7 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.svg.SVGElement;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class Luminaire extends MinderDom implements Schematicable {
     private PagePoint schematicPosition = null;
     private Rectangle2D.Double schematicBox = null;
 
+    private String unit;
     private String type;
     private String on;
     private String location;
@@ -50,10 +52,9 @@ public class Luminaire extends MinderDom implements Schematicable {
     private String dimmer;
     private String channel;
     private String color;
-    private String unit;
     private String target;
-    private String info;
     private String address;
+    private String info;
     private Double rotation = 0.0;
     private Point point;
     private Place place;
@@ -88,8 +89,8 @@ public class Luminaire extends MinderDom implements Schematicable {
         channel = getOptionalStringAttribute(element, "channel");
         color = getOptionalStringAttribute(element, "color");
         target = getOptionalStringAttribute(element, "target");
-        info = getOptionalStringAttribute( element, "info" );
         address = getOptionalStringAttribute( element, "address" );
+        info = getOptionalStringAttribute( element, "info" );
         String rotate = getOptionalStringAttribute(element, "rotation");
         if (null != rotate && ! rotate.isEmpty() ) {
             rotation = new Double(rotate);
@@ -108,7 +109,7 @@ public class Luminaire extends MinderDom implements Schematicable {
 //        System.err.println("selected");
         new Layer( LAYERTAG, LAYERNAME, COLOR );
 //        System.err.println("Made Layer");
-//        new LuminaireInformation( element, this );
+        new LuminaireInformation( element, this );
 //        System.err.println("Made Information");
 
         GearList.Add(type);
@@ -144,8 +145,8 @@ public class Luminaire extends MinderDom implements Schematicable {
             dataIndex++;
         }
 
-//        data[0] = new Object[] { GEARS.get(0), COUNT.get(0) };
-//        data[1] = new Object[] { GEARS.get(1), COUNT.get(1) };
+//        data[0] = new Object[] { GEARS.get(0), CHAIRCOUNT.get(0) };
+//        data[1] = new Object[] { GEARS.get(1), CHAIRCOUNT.get(1) };
 
         return data;
     }
@@ -212,6 +213,12 @@ public class Luminaire extends MinderDom implements Schematicable {
         return mount;
     }
 
+    String unit() { return unit; }
+
+    String type() { return type; }
+
+    String on() { return on; }
+
     String locationValue() {
         return location;
     }
@@ -228,13 +235,21 @@ public class Luminaire extends MinderDom implements Schematicable {
         return channel;
     }
 
+    String color() {
+        return color;
+    }
+
+    String target() {
+        return target;
+    }
+
     String info() {
         return info;
     }
 
-    String unit() { return unit; }
-
-    String type() { return type; }
+    String address() {
+        return address;
+    }
 
     Double weight() {
         Double result = 0.0;
@@ -366,15 +381,53 @@ public class Luminaire extends MinderDom implements Schematicable {
                             "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")");
                 }
 
-                // Unit number to overlay on icon
+                // Unit number to draw under icon
                 SvgElement unitText = group.textAbsolute(draw, unit,
-                        schematicPosition.x() - 1, schematicPosition.y() + 2, COLOR);
-                unitText.attribute("fill", "none");
-                unitText.attribute("stroke", "green");
+                        schematicPosition.x() - 1, schematicPosition.y() + 2 + definition.length(), COLOR);
+                unitText.attribute("fill", "green");
+                unitText.attribute("stroke", "nonef");
                 unitText.attribute("font-family", "sans-serif");
                 unitText.attribute("font-weight", "100");
                 unitText.attribute("font-size", "6");
                 unitText.attribute("text-anchor", "middle");
+
+                // Location to draw over icon
+                Double locationX = schematicPosition.x() + 2;
+                Double locationY = schematicPosition.y() - 4 - definition.length();
+                Distance place = new Distance( mount.locationDistance( location ) );
+                SvgElement locationText = group.textAbsolute(draw, place.toString(), locationX, locationY, COLOR);
+                locationText.attribute("fill", "black");
+                locationText.attribute("stroke", "none");
+                locationText.attribute("font-family", "sans-serif");
+                locationText.attribute("font-weight", "100");
+                locationText.attribute("font-size", "6");
+//                locationText.attribute("text-anchor", "middle");
+                locationText.attribute("transform",
+                        "rotate(" + -90 + "," + locationX + "," + locationY + ")");
+
+                StringBuilder information = new StringBuilder (unit + ": " + type + " :: " );
+                if( (null != target) && (target.length() > 0) ) {
+                    information.append(", target: " + target);
+                }
+                if ( null != circuit && circuit.length() > 0) {
+                    information.append(", circuit: " + circuit);
+                }
+                if ( null != dimmer && dimmer.length() > 0) {
+                    information.append(", dimmer: " + dimmer);
+                }
+                if( null != channel && channel.length() > 0) {
+                    information.append(", channel: " + channel);
+                }
+                if ( null != address && address.length() > 0) {
+                    information.append(", address: " + address);
+                }
+                if( null != color && color.length() > 0) {
+                    information.append(", color: " + color);
+                }
+                if( null != info && info.length() > 0) {
+                    information.append(", info: " + info);
+                }
+                LuminaireTable.add(information.toString());
                 break;
             default:
                 return;
@@ -389,8 +442,10 @@ public class Luminaire extends MinderDom implements Schematicable {
         Double y = point.y();
 
         group.attribute("transform", transform);
+        group.mouseover( "showData(evt)", "hideData(evt)" );
 
-        use = group.use( draw, type, x, y );
+        use = group.use( draw, type, x, y, id );
+        use.mouseover( "showData(evt)", "hideData(evt)" );
 
         // This transform is to orient the luminaire.
         // See verify() for the transform that rotates the position of the luminaire to
@@ -409,13 +464,29 @@ public class Luminaire extends MinderDom implements Schematicable {
         use.attribute("transform", transform );
 
         // Unit number to overlay on icon
-        SvgElement unitText = group.text( draw, unit, x, y, "green" );
-//        unitText.attribute("fill", "green");
-        unitText.attribute("stroke", "green");
-//        unitText.attribute("font-family", "sans-serif");
-//        unitText.attribute("font-weight", "100");
+        SvgElement unitText = group.text( draw, unit, x, y + 3, "green" );
         unitText.attribute("font-size", "7");
         unitText.attribute("text-anchor", "middle");
+        unitText.mouseover( "showData(evt)", "hideData(evt)" );
+
+        this.data( draw, group );
+    }
+
+    SvgElement data( Draw draw, SvgElement parent ) {
+        SvgElement data = parent.data( draw, "luminaire" );
+
+        data.attribute( "type", this.type() );
+        data.attribute( "on", this.on() );
+        data.attribute( "location", this.locationValue() );
+        data.attribute( "circuit", this.circuit() );
+        data.attribute( "dimmer", this.dimmer() );
+        data.attribute( "channel", this.channel() );
+        data.attribute( "color", this.color() );
+        data.attribute( "target", this.target() );
+        data.attribute( "address", this.address() );
+        data.attribute( "info", this.info() );
+
+        return data;
     }
 
     /**

@@ -94,6 +94,19 @@ public class Point {
         return z;
     }
 
+
+    // Totally untested. Yar!
+    Double slope( Point other) {
+        Double x2 = other.x();
+        Double y2 = other.y();
+
+        Double changeInX = x - x2;
+        Double changeInY = y - y2;
+
+        return changeInY / changeInX;
+    }
+
+
     /**
      * Provide the largest X value that has been used.
      *
@@ -160,6 +173,26 @@ public class Point {
         double legZ = z - point.z();
 
         return Math.sqrt( legX * legX + legY * legY + legZ * legZ );
+    }
+
+    public static Point OnALine( Point first, Point second, Double distanceFromFirst ) {
+
+        // a. calculate the vector from o to g:
+        Double vectorX = second.x() - first.x();
+        Double vectorY = second.y() - first.y();
+        Double vectorZ = second.z() - first.z();
+
+        // b. calculate the proportion of hypotenuse
+        Double factor = distanceFromFirst /
+                Math.sqrt( vectorX * vectorX + vectorY * vectorY + vectorZ * vectorZ );
+
+        // c. factor the lengths
+        vectorX *= factor;
+        vectorY *= factor;
+        vectorZ *= factor;
+
+        // d. calculate and Draw the new vector,
+        return new Point( first.x() + vectorX, first.y() + vectorY, first.z() + vectorZ  );
     }
 
     /*

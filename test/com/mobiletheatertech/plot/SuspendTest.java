@@ -34,8 +34,8 @@ public class SuspendTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-
-        assertTrue( Anchor.class.isInstance( instance ) );
+//
+//        assertTrue( Anchor.class.isInstance( instance ) );
     }
 
     @Test

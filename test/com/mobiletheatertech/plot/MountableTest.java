@@ -127,6 +127,11 @@ public class MountableTest {
         public String totalSuspendLoads() {
             return "";
         }
+
+        @Override
+        public Integer locationDistance( String location ) {
+            return 0;
+        }
     }
 
     //    private static Draw draw = null;

@@ -3,6 +3,7 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.w3c.dom.svg.SVGElement;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -63,11 +64,27 @@ class SvgElement {
         return element.getTagName();
     }
 
+    public SvgElement data( Draw draw, String tag ) {
+        SvgElement element = draw.element( "plot:" + tag );
+
+        this.appendChild( element );
+
+        return element;
+    }
+
     public SvgElement svgClass( String name ) {
         this.attribute("class", name);
 
         return this;
     }
+
+//    public SvgElement svgClassGroup( Draw draw,
+//                                            String className ) {
+//        SvgElement element = draw.element("g");
+//        element.attribute("class", className);
+//
+//        return element;
+//    }
 
     public SvgElement circle( Draw draw,
                               Double x, Double y, Double r,
@@ -158,6 +175,10 @@ class SvgElement {
         return element;
     }
 
+    /*
+    There is no version of this that corrects a path for tbe current offset.
+    If I ever need to make that happen, see SvgElementTest.svgPathOffset()
+     */
     public SvgElement path( Draw draw,
                                       String path,
                                       String color) {
@@ -187,7 +208,9 @@ class SvgElement {
 
     }
 
-    SvgElement rectangleAbsolute(Draw draw, Double x, Double y, Double width, Double height, String color) {
+    SvgElement rectangleAbsolute(Draw draw,
+                                 Double x, Double y, Double width, Double height,
+                                 String color) {
         SvgElement element = draw.element("rect");
         element.attribute("x", x.toString());
         element.attribute("y", y.toString());
@@ -370,8 +393,19 @@ class SvgElement {
     }
 
     public SvgElement use( Draw draw,
-                                     String id,
-                                     Double x, Double y ) {
+                           String type,
+                           Double x, Double y,
+                           String id ) {
+
+        SvgElement element = use( draw, type, x, y );
+        element.attribute("id", id);
+
+        return element;
+    }
+
+    public SvgElement use( Draw draw,
+                           String type,
+                           Double x, Double y ) {
         Double xSet = x;
         Double ySet = y;
         if( ! descendantOf( "symbol" )) {
@@ -379,14 +413,14 @@ class SvgElement {
             ySet += yOffset;
         }
 
-        SvgElement element = useAbsolute(draw, id, xSet, ySet);
+        SvgElement element = useAbsolute(draw, type, xSet, ySet);
 
         return element;
     }
 
-    SvgElement useAbsolute(Draw draw, String id, Double x, Double y) {
+    SvgElement useAbsolute(Draw draw, String type, Double x, Double y) {
         SvgElement element = draw.element("use");
-        element.attribute("xlink:href", "#" + id);
+        element.attribute("xlink:href", "#" + type);
         element.attribute("x", x.toString());
         element.attribute("y", y.toString());
 
@@ -394,6 +428,10 @@ class SvgElement {
         return element;
     }
 
+    void mouseover( String overscript, String outscript ) {
+        this.attribute( "onmouseover", overscript);
+        this.attribute( "onmouseout", outscript);
+    }
 
     /*
     TODO I'm not sure that all this is actually needed.

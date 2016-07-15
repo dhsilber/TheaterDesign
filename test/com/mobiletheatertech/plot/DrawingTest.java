@@ -24,6 +24,7 @@ public class DrawingTest {
     final String id = "Name";
     String filename = "filename";
     String schematic = "schematic";
+    String legend = "legend text";
 
     @Test
     public void isa() throws Exception {
@@ -40,6 +41,7 @@ public class DrawingTest {
         assertEquals( TestHelpers.accessString( instance, "id"), id);
         assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
         assertSame(TestHelpers.accessView(instance, "view"), View.PLAN );
+        assertEquals( TestHelpers.accessString( instance, "legend" ), legend );
     }
 
     @Test
@@ -50,6 +52,7 @@ public class DrawingTest {
         assertEquals( TestHelpers.accessString( instance, "id"), id);
         assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
         assertSame(TestHelpers.accessView(instance, "view"), View.SCHEMATIC );
+        assertEquals( TestHelpers.accessString( instance, "legend" ), legend );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
@@ -88,6 +91,21 @@ public class DrawingTest {
         Drawing drawing = new Drawing( drawingElement );
 
         assertEquals( drawing.view(), View.SCHEMATIC );
+    }
+
+    @Test
+    public void legend() throws Exception {
+        Drawing drawing = new Drawing( drawingElement );
+
+        assertEquals( drawing.legend(), legend );
+    }
+
+    @Test
+    public void legendDefault() throws Exception {
+        drawingElement.removeAttribute( "legend" );
+        Drawing drawing = new Drawing( drawingElement );
+
+        assertEquals( drawing.legend(), id );
     }
 
     @Test
@@ -160,6 +178,7 @@ public class DrawingTest {
         drawingElement = new IIOMetadataNode( "drawing" );
         drawingElement.setAttribute( "id", id );
         drawingElement.setAttribute( "filename", filename );
+        drawingElement.setAttribute( "legend", legend );
     }
 
     @AfterMethod

@@ -99,7 +99,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
                             ? length
                             : width);
         if (complete) {
-            Legend.Register( this, 130.0, legendHeight, LegendOrder.Luminaire );
+            Legend.Register( this, id.length() * 6.5, legendHeight, LegendOrder.Luminaire );
         }
     }
 
@@ -182,7 +182,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
 
         group.textAbsolute( draw, id, Legend.TEXTOFFSET, 3.0, COLOR );
 
-        group.textAbsolute( draw, count.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR );
+        group.textAbsolute( draw, count.toString(), Legend.QuantityOffset(), 7.0, Legend.TEXTCOLOR );
 
         return new PagePoint( start.x(), start.y() + legendHeight );
     }

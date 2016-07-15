@@ -9,12 +9,15 @@ package com.mobiletheatertech.plot;
  * @since 0.0.1
  */
 public class Main {
-
     /**
      * Kick off a run of Plot.
      * <p/>
-     * Expects only one argument which names the description file without any extension. This same
-     * name is used for the output file.
+     * With only one argument, it names the description file without any extension. This same
+     * name is used for the output directory. Input and output root directories are built in.
+     * <p/>
+     * If that single argument has a path component, the default input directory is ignored.
+     * <p/>
+     * If a second argument is present, it specifies that output root directory.
      * <p/>
      * {@link Read Reads} the Plot description.
      * <p/>
@@ -26,22 +29,17 @@ public class Main {
     public static void main( String[] args )
             throws ArgumentException
     {
-
-        if (args.length < 1) {
-            throw new ArgumentException( "Not enough arguments" );
-        }
-        if (args.length > 1) {
-            throw new ArgumentException( "Too many arguments" );
-        }
-
         try {
-            new Read( args[0] );
+            Configuration.Initialize( args );
 
-            new Write().init( args[0] );
+            new Read();
+
+            new Write().init();
         }
         catch ( Exception e ) {
-            System.err.println( e.getMessage() );
-            System.err.println( e.getStackTrace().toString() );
+//            System.err.println( e.getMessage() );
+            e.printStackTrace( System.err );
+//            System.err.println(e.getStackTrace().toString());
             System.exit( 1 );
         }
     }

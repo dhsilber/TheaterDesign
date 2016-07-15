@@ -8,8 +8,8 @@ import java.util.ArrayList;
 /**
  * Created by dhs on 10/26/14.
  *
- * Note that as of 2015-06-22, the way that attribute checking is handled seems like the way to go to deal with sets of
- * attributes which are required in some cases and optional in others.
+ * Note that as of 2015-06-22, the way that attribute checking is handled here seems like the way to go
+ * to deal with sets of attributes which are required in some cases and optional in others.
  */
 public class Cheeseborough extends MinderDom {
 
@@ -48,9 +48,11 @@ public class Cheeseborough extends MinderDom {
             for( Cheeseborough item : CHEESEBOROUGHLIST ) {
                 if ( ref.equals( item.id ) ) {
                     reference = item;
-                    break;
+                    return;
                 }
             }
+
+            throw new InvalidXMLException( "Cheeseborough reference (" + ref + ") does not exist" );
         }
     }
 
@@ -151,7 +153,8 @@ public class Cheeseborough extends MinderDom {
             case PLAN:
                 SvgElement group = svgClassGroup( draw, Truss.LAYERTAG );
                 draw.appendRootChild( group );
-                SvgElement base = group.circle(draw, place.location().x(), place.location().y(), 5.0, color);
+                System.err.println( "Cheeseborough (not drawn) place: " + place.toString() );
+//                SvgElement base = group.circle(draw, place.location().x(), place.location().y(), 50.0, color);
         }
     }
 

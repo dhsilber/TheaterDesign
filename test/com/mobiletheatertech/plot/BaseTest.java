@@ -168,6 +168,26 @@ public class BaseTest {
     }
 
     @Test
+    public void parseBaseOnly() throws Exception {
+        String xml = "<plot>" +
+                "<base size=\"24\" x=\"4\" y=\"1\" />" +
+                "</plot>";
+        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
+
+//        TestHelpers.MinderDomReset();
+
+        new Parse( stream );
+
+        // Final size of list
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        assertEquals( list.size(), 2 );
+
+        ElementalLister truss = list.get( 0 );
+        assert MinderDom.class.isInstance( truss );
+        assert Truss.class.isInstance( truss );
+    }
+
+    @Test
     public void parse() throws Exception {
         String xml = "<plot>" +
                 "<truss id=\"trussID\" size=\"12\" length=\"10\" >" +

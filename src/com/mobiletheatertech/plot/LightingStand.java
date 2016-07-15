@@ -60,6 +60,11 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
     }
 
     @Override
+    public Integer locationDistance(String location) throws InvalidXMLException, MountingException {
+        return 0;
+    }
+
+    @Override
     public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
 
     @Override

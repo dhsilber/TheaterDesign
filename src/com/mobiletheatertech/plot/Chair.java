@@ -12,10 +12,13 @@ import org.w3c.dom.Element;
  * <p/>
  * XML tag is 'chair'. Required attributes are: 'x' and 'y', which specify the location of a single chair as real numbers of inches from the origin.
  * An optional 'orientation' attribute may be specified, which is an angle in degrees by which the chair should be rotated from its default of facing up on the page.
+ * In the case of a circle with an opening, 'orientation' indicates the direction that opening faces. <- - Not yet implemented
  * An optional 'line' attribute may be specified to set an integer count of chairs that will be set out instead of just a single one. In this case, the coordinates will be for the leftmost chair in the line.
  * An optional 'r' attribute may be specified to set the radius as a real number of inches of a circle of chairs. The coordinates are for the center of the circle. The number of chairs put out is calculated by the software.
  * An optional 'space' attribute may be specified to allow extra space as a real number of inches between the chairs in a circle.
  * An optional 'layer' attribute may be specified as the name of an existing {@code Layer} to orverride the default layer.
+ * An optional 'count' attribute sets the number of chairs to be drawn in a circle. In this case a radius is ignored.
+ * An optional 'opening' attribute sets the percentage of a circle of chairs that is left unfilled. <- - Not yet implemented
  */
 // Note that 'space' only applies to circles. It ought to be trivial to make it also apply to lines.
 public class Chair extends MinderDom implements Legendable {
@@ -31,30 +34,36 @@ public class Chair extends MinderDom implements Legendable {
 
     static boolean SYMBOLGENERATED = false;
     static boolean LEGENDREGISTERED = false;
-    static Integer COUNT = 0;
+    static Integer CHAIRCOUNT = 0;
 
     Double x = null;
     Double y = null;
-    Double r = null;
+    Double radius = null;
     Double orientation = null;
     Integer line = null;
     String layerName = null;
     Double space = null;
+    Double opening = null;
+    Integer count = null;
 
+    Double circumference = null;
     Integer chairFit = null;
     Double chairWidth = CHAIRWIDTH.doubleValue();
-
+    Double angle = null;
+    Double section = 0.0;
 
     public Chair(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
         x = getDoubleAttribute(element, "x");
         y = getDoubleAttribute(element, "y");
-        r = getOptionalDoubleAttributeOrNull( element, "r" );
+        radius = getOptionalDoubleAttributeOrNull( element, "r" );
         space = getOptionalDoubleAttributeOrZero( element, "space" );
         orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
         line = getOptionalIntegerAttributeOrZero( element, "line" );
         layerName = getOptionalStringAttribute( element, "layer" );
+        count = getOptionalIntegerAttributeOrNull(element, "count");
+        opening = getOptionalDoubleAttributeOrNull(element, "opening");
 
         layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
         if ( ! "".equals( layerName )) {
@@ -76,18 +85,30 @@ public class Chair extends MinderDom implements Legendable {
     }
 
     static int Count() {
-        return COUNT;
+        return CHAIRCOUNT;
     }
 
     @Override
     public void verify() throws FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException {
-        Double circumference = null;
-//        Double angle = null;
-        if( null != r ) {
-            circumference = 2 * Math.PI * r;
+        circumference = null;
+
+        if( null != radius ) {
+            circumference = 2 * Math.PI * radius;
             chairFit = (int) (circumference / chairWidth);
-//            angle = 360.0 / chairFit;
+            angle = 360.0 / chairFit;
+        }
+
+        if (null != count ) {
+            circumference = chairWidth * count;
+            chairFit = count;
+            angle = 360.0 / chairFit;
+            if( null != opening) {
+                section = 100 - opening;
+                circumference += circumference * opening / section;
+                angle = 360.0 / (circumference / chairWidth);
+            }
+            radius =  circumference / (2 * Math.PI);
         }
     }
 
@@ -100,16 +121,15 @@ public class Chair extends MinderDom implements Legendable {
 
         Double interimX = x;
         Double interimY = y;
-        if ( null != r ) {
-            Double angle = 360.0 / chairFit;
+        if ( ( null != radius ) || ( null != count ) ) {
 
             for ( int chairCount = 0; chairCount < chairFit; chairCount++ ) {
-                Double thisAngle = angle * chairCount;
-                interimX = x - r * Math.sin(Math.toRadians(thisAngle));
-                interimY = y + r * Math.cos(Math.toRadians(thisAngle));
+                Double thisAngle = angle * chairCount - section / 2;
+                interimX = x - radius * Math.sin(Math.toRadians(thisAngle));
+                interimY = y + radius * Math.cos(Math.toRadians(thisAngle));
                 useChair(draw, group, interimX, interimY, thisAngle );
             }
-//            COUNT += chairFit;
+//            CHAIRCOUNT += chairFit;
         }
         else {
             useChair(draw, group, x, y, orientation );
@@ -118,7 +138,7 @@ public class Chair extends MinderDom implements Legendable {
                 interimY += Math.sin(Math.toRadians(orientation)) * CHAIRWIDTH;
                 useChair(draw, group, interimX, interimY, orientation );
             }
-//            COUNT += (0 == line) ? 1: line;
+//            CHAIRCOUNT += (0 == line) ? 1: line;
         }
     }
 
@@ -147,17 +167,17 @@ public class Chair extends MinderDom implements Legendable {
         SvgElement use = parent.use( draw, CHAIR, interimX, interimY );
         use.attribute( "transform", "rotate("+rotation+","+(interimX+SvgElement.OffsetX())+","+(interimY+SvgElement.OffsetY())+")" );
 
-        COUNT++;
+        CHAIRCOUNT++;
     }
 
     @Override
     public void countReset() {
-        COUNT = 0;
+        CHAIRCOUNT = 0;
     }
 
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
-        if ( 0 >= COUNT ) { return start; }
+        if ( 0 >= CHAIRCOUNT) { return start; }
 
         generateSymbol(draw);
 
@@ -170,7 +190,7 @@ public class Chair extends MinderDom implements Legendable {
 
         group.textAbsolute(draw, CHAIR, Legend.TEXTOFFSET, 7.0, Legend.TEXTCOLOR);
 
-        group.textAbsolute(draw, COUNT.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR);
+        group.textAbsolute(draw, CHAIRCOUNT.toString(), Legend.QUANTITYOFFSET, 7.0, Legend.TEXTCOLOR);
 
         return new PagePoint( start.x(), start.y() + 7.0 );
     }

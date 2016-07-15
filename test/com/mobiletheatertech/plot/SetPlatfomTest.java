@@ -68,7 +68,8 @@ public class SetPlatfomTest {
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "SetPlatform \\("+id+"\\) location must specify a letter in the range of 'a' to 'd'.")
+            expectedExceptionsMessageRegExp =
+                    "SetPlatform \\("+id+"\\) location must specify a letter in the range of 'a' to 'd'.")
     public void noLocation() throws Exception {
         SetPlatform instance = new SetPlatform( element );
 //        instance.verify();

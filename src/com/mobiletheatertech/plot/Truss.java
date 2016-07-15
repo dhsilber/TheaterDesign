@@ -134,7 +134,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
             point1 = suspend1.locate();
             point2 = suspend2.locate();
-            Double slope = slope(point1, point2);
+            Double slope = point1.slope( point2 );
             rotation = Math.toDegrees(Math.atan(slope));
 
             span = point1.distance(point2);
@@ -344,7 +344,8 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         }
     }
 
-    Integer locationDistance(String location) throws InvalidXMLException, MountingException {
+    @Override
+    public Integer locationDistance(String location) throws InvalidXMLException, MountingException {
         String distanceString = location.substring(1);
         Integer distance;
         try {

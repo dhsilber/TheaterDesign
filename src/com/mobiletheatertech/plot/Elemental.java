@@ -99,14 +99,6 @@ public class Elemental {
         return value;
     }
 
-    /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
-     * convert it to an {@code Integer}.
-     *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute - zero if attribute is not set
-     */
     protected Integer getOptionalIntegerAttributeOrZero(Element element, String name) {
         String value = element.getAttribute( name );
         if (value.isEmpty()) {
@@ -116,14 +108,15 @@ public class Elemental {
         return new Integer( value );
     }
 
-    /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
-     * convert it to an {@code Integer}.
-     *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute - zero if attribute is not set
-     */
+    protected Integer getOptionalIntegerAttributeOrNull(Element element, String name) {
+        String value = element.getAttribute( name );
+        if (value.isEmpty()) {
+            return null;
+        }
+
+        return new Integer( value );
+    }
+
     protected Double getDoubleAttribute( Element element, String name )
             throws AttributeMissingException
     {
@@ -134,14 +127,6 @@ public class Elemental {
     }
 
 
-    /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
-     * convert it to an {@code Integer}.
-     *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute - zero if attribute is not set
-     */
     protected Double getOptionalDoubleAttributeOrNull( Element element, String name ) {
         String value = element.getAttribute( name );
         if (value.isEmpty()) {
@@ -152,14 +137,6 @@ public class Elemental {
     }
 
 
-    /**
-     * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present and
-     * convert it to an {@code Integer}.
-     *
-     * @param element DOM Element defining a venue.
-     * @param name    name of attribute.
-     * @return Integer value of attribute - zero if attribute is not set
-     */
     protected Double getOptionalDoubleAttributeOrZero( Element element, String name ) {
         String value = element.getAttribute( name );
         if (value.isEmpty()) {

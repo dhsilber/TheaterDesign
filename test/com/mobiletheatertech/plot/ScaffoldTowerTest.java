@@ -294,13 +294,13 @@ public class ScaffoldTowerTest {
         assertEquals(tableElement.getAttribute("fill"), "none");
         assertEquals(tableElement.getAttribute("stroke"), "brown");
 
-//        int COUNT = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
+//        int CHAIRCOUNT = (WIDTH / CHAIRWIDTH) * (DEPTH / (CHAIRDEPTH + FOOTSPACE));
 //        String expectedX = Integer.toString( X + CHAIRWIDTH / 2 + 2 );
 //        String expectedY = Integer.toString( Y + CHAIRDEPTH / 2 + FOOTSPACE );
-//        assert (COUNT > 0);
+//        assert (CHAIRCOUNT > 0);
 //
 //        NodeList list = groupElement.getElementsByTagName( "use" );
-//        assertEquals( list.getLength(), COUNT );
+//        assertEquals( list.getLength(), CHAIRCOUNT );
 //
 //        Node node = list.item( 0 );
 //        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );

@@ -67,7 +67,7 @@ public class TestResets {
         boolean regisitered = registeredField.getBoolean( Chair.class );
         registeredField.set( regisitered, false );
 
-        Field countField = Chair.class.getDeclaredField( "COUNT" );
+        Field countField = Chair.class.getDeclaredField("CHAIRCOUNT");
         countField.setAccessible( true );
         Integer count = (Integer) countField.get( Chair.class );
         countField.set(count, 0);

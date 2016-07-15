@@ -25,6 +25,8 @@ public class Legend {
 
     private static PagePoint INITIAL;
     private static Draw DRAW;
+    private static Double Y;
+    private static Double Center;
 
     static final String CATEGORY = "legend";
 
@@ -56,36 +58,52 @@ public class Legend {
      */
     public static void Startup( Draw draw, View mode, Double x, Integer width )
             throws ReferenceException {
-        DRAW = draw;
+        Element group = MainHeaders(draw, x, width);
 
-        Element group = draw.document().createElement( "g" );
-        group.setAttribute( "class", "legend" );
-        draw.appendRootChild( group );
+        DrawBox(draw, x, width, group);
+    }
 
-//        Double x = start;
-        Double y = 17.0;
-
-        Double center = x + (width / 2);
-        headerText( draw, group, center, y, Event.Name() );
-        y += 17;
-        headerText( draw, group, center, y, Venue.Building() );
-        y += 17;
-        headerText( draw, group, center, y, Venue.Name() );
-        y += 17;
-
-        INITIAL = new PagePoint( x + 25, y );
+    static void DrawBox(Draw draw, Double x, Integer width, Element group) {
+        INITIAL = new PagePoint(x + 25, Y);
 
         // TODO Adding the Y offset to the box height is really cheating
-        Double boxHeight = y + HEIGHT + SvgElement.OffsetY();
+        Double boxHeight = Y + HEIGHT + SvgElement.OffsetY();
 
-        Element box = draw.document().createElement( "rect" );
-        box.setAttribute( "fill", "none" );
-        box.setAttribute( "x", x.toString() );
-        box.setAttribute( "y", "1" );
-        box.setAttribute( "width", width.toString() );
-        box.setAttribute( "height", boxHeight.toString() );
+        Element box = draw.document().createElement("rect");
+        box.setAttribute("fill", "none");
+        box.setAttribute("x", x.toString());
+        box.setAttribute("y", "1");
+        box.setAttribute("width", width.toString());
+        box.setAttribute("height", boxHeight.toString());
 
-        group.appendChild( box );
+        group.appendChild(box);
+    }
+
+    static Element MainHeaders(Draw draw, Double x, Integer width) throws ReferenceException {
+        DRAW = draw;
+
+        Element group = draw.document().createElement("g");
+        group.setAttribute("class", "legend");
+        draw.appendRootChild(group);
+
+//        Double x = start;
+        Y = 17.0;
+
+        Center = x + (width / 2);
+        headerText(draw, group, Center, Y, Event.Name());
+        headerText(draw, group, Center, Y, Venue.Building());
+        headerText(draw, group, Center, Y, Venue.Name());
+
+        return group;
+    }
+
+    public static void Startup( Draw draw, Drawing drawing, View mode, Double x, Integer width )
+            throws ReferenceException {
+        Element group = MainHeaders(draw, x, width);
+
+        headerText(draw, group, Center, Y, drawing.legend() );
+
+        DrawBox(draw, x, width, group);
     }
 
     /**
@@ -109,6 +127,8 @@ public class Legend {
         element.attribute( "y", y.toString() );
         element.appendChild( textNode );
         parent.appendChild( element.element() );
+
+        Y += 17;
     }
 
     /**
@@ -120,6 +140,8 @@ public class Legend {
     public static Double Widest() {
         return WIDEST;
     }
+
+    public static Double QuantityOffset() { return TEXTOFFSET + WIDEST; }
 
     /**
      * Provide a width for the Legend box which will give the completed

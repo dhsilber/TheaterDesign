@@ -118,6 +118,13 @@ public class CheeseboroughTest {
         new Cheeseborough( elementReference );
     }
 
+    @Test( expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Cheeseborough reference \\(bogus reference\\) does not exist" )
+    public void referenceToNothing() throws Exception {
+        elementReference.setAttribute( "ref", "bogus reference" );
+        new Cheeseborough( elementReference );
+    }
+
 //    @Test(expectedExceptions = AttributeMissingException.class,
 //            expectedExceptionsMessageRegExp = "Cheeseborough instance is missing required 'type' attribute.")
 //    public void noType() throws Exception {

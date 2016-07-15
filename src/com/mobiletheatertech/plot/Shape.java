@@ -95,11 +95,11 @@ public class Shape {
         StringBuilder result = new StringBuilder( "M " );
 
         for( int index = 0; index < xPoints.length; index++ ) {
-            Double x = new Double( xPoints[index] ) + startX;
+            Double x = new Double( xPoints[index] ) + startX + SvgElement.OffsetX();
             result.append( x.toString() );
             result.append( " " );
 
-            Double y = new Double( yPoints[index] ) + startY;
+            Double y = new Double( yPoints[index] ) + startY + SvgElement.OffsetY();
             result.append(y.toString());
             result.append( " " );
         }

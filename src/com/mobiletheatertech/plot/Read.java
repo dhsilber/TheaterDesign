@@ -25,27 +25,29 @@ public class Read {
      * The complete pathname is built as {@literal <user's home directory>}{@code
      * /Plot/plotfiles/}{@literal <basename>}{@code .xml}
      *
-     * @param basename basename of the file to be read.
+//     * @param basename basename of the file to be read.
      * @throws FileNotFoundException if the file cannot be found
      */
-    public Read(String basename) throws Exception {
+    public Read() throws Exception {
 
-        ReadPlotfile( basename );
+        ReadPlotfile();
 //        ReadInferenceSpreadsheet();
 //        ReadEventSpreadsheet( basename );
 ////        Inference.Dump();
     }
 
-    public static void ReadPlotfile(String basename) throws Exception {
+    public static void ReadPlotfile() throws Exception {
+        String pathname = Configuration.SourceDirectory();
+        String basename = Configuration.BaseName();
 
-        String home = System.getProperty("user.home");
-        if (null == home) {
-            // throw exception
-        }
+//        String home = System.getProperty("user.home");
+//        if (null == home) {
+//            // throw exception
+//        }
+//
+//        String pathname = home + "/Dropbox/Plot/plotfiles/" + basename + ".xml";
 
-        String pathname = home + "/Dropbox/Plot/plotfiles/" + basename + ".xml";
-
-        InputStream stream = new FileInputStream(pathname);
+        InputStream stream = new FileInputStream( pathname + basename + ".xml" );
 
         new Parse(stream);
     }

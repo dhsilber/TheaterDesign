@@ -6,7 +6,6 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -25,13 +24,53 @@ public class Write {
 
     private String home = null;
 
-    private String CSS = "\n"
+    static String CSS = "\n"
             + ".heading { font-size: 14pt; text-anchor: middle; font-weight: bold; stroke: none }\n"
             + "iframe { display: inline }\n"
             + "@media print {\n"
             + "  .noprint { display: none }"
             + "}\n";
 
+    static String ECMAScript = "\n"
+            + "    function showData(evt) {\n"
+            + "        var box = evt.target.getBoundingClientRect();\n"
+            + "        var id = evt.target.getAttributeNS( null, \"id\" );\n"
+            + "        var textElement = document.getElementById( \"persistent\" );\n"
+            + "        textElement.textContent = id;\n"
+            + "        textElement.setAttributeNS( null,  \"visibility\", \"visible\" );\n"
+            + "        var box = evt.target.getBoundingClientRect();\n"
+            + "        textElement.setAttributeNS( null,  \"x\", box.left );\n"
+            + "        textElement.setAttributeNS( null,  \"y\", box.top );\n"
+            + "    }\n"
+            + "\n"
+            + "    function showData_didnotwork(evt) {\n"
+            + "        var id = evt.target.getAttributeNS( null, \"id\" );\n"
+            + "        var textElement = document.createElementNS(null,\"text\" );\n"
+            + "        var textNode = document.createTextNode( id );\n"
+            + "        textElement.setAttributeNS( null,  \"font-size\", \"12\" );\n"
+            + "        textElement.setAttributeNS( null,  \"fill\", \"blacK\" );\n"
+            + "        textElement.setAttributeNS( null,  \"stroke\", \"blacK\" );\n"
+            + "        textElement.setAttributeNS( null,  \"text-anchor\", \"left\" );\n"
+            + "        textElement.setAttributeNS( null,  \"visibility\", \"visible\" );\n"
+            + "        textElement.appendChild( textNode );\n"
+            + "        var svgRoot = document.getElementsByTagName(\"svg\")[0];\n"
+            + "        svgRoot.appendChild( textElement );\n"
+            + "    }\n"
+            + "\n"
+            + "    function hideData(evt) {\n"
+            + "        var textElement = document.getElementById( \"persistent\" );\n"
+            + "        textElement.setAttributeNS( null,  \"visibility\", \"hidden\" );\n"
+            + "    }\n"
+            + "\n"
+            + "    function fragments(evt) {\n"
+            + "        textElement.setAttributeNS( null,  \"x\", \"100\" );\n"
+            + "        textElement.setAttributeNS( null,  \"y\", \"100\" );\n"
+            + "        textElement.setAttribute( \"transform\", \"translate(\" + box.left + \", \" + box.top + \")\" );\n"
+            + "        var data = evt.target.nextElementSibling();\n"
+            + "        var reference = evt.target.getAttributeNS( null, \"id\" );\n"
+            + "        document.appendChild( textElement );\n"
+            + "    }\n"
+            + "// ";
 
 
     /**
@@ -48,22 +87,24 @@ public class Write {
      * @throws MountingException
      * @throws ReferenceException
      */
-    public void init( String basename )
+    public void init( /*String basename*/ )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
     {
-        home = System.getProperty("user.home");
+//        home = System.getProperty("user.home");
+//
+//        // TODO Is it even possible for this to happen?
+////        if (null == home) {
+////            // throw exception
+////        }
 
-        // TODO Is it even possible for this to happen?
-//        if (null == home) {
-//            // throw exception
-//        }
+        String pathname = Configuration.SinkDirectory();
 
-        String pathname = home + "/Dropbox/Plot/out/" + basename;
+        System.out.println( "Write path: " + pathname );
 
-        writeDirectory( pathname );
-        writeFile(pathname, "drawings.html", generateHTMLDrawingList( basename ) );
-        writeFile(pathname, "designer.html", generateDesigner() );
-        writeFile(pathname, "styles.css", CSS );
+        writeDirectory(pathname);
+        writeFile( pathname, "drawings.html", generateHTMLDrawingList( Configuration.BaseName() ) );
+        writeFile( pathname, "designer.html", generateDesigner() );
+        writeFile( pathname, "styles.css", CSS );
         // TODO factor out heading generation for these:
 //        System.err.println( " Plan");
         drawPlan().create( pathname + "/plan.svg" );
@@ -264,13 +305,14 @@ public class Write {
         return draw;
     }
 
-    private Draw startFile() throws ReferenceException {
+    Draw startFile() throws ReferenceException {
         Draw draw = new Draw();
         draw.establishRoot();
 
         // Specify the size of the generated SVG so that when it is larger than the display area,
         // scrollbars will be provided.
         Element rootElement = draw.root();
+        rootElement.setAttribute( "xmlns:plot", "http://www.davidsilber.name/namespaces/plot" );
 
         Double width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 5;
         width += width / 100 + 5;
@@ -282,11 +324,27 @@ public class Write {
 
 //        rootElement.setAttribute( "overflow", "visible" );
 
-        Text textNode = draw.document().createCDATASection(CSS);
         SvgElement style = draw.element("style");
         style.attribute("type", "text/css");
-        style.appendChild(textNode);
+        Text cssText = draw.document().createCDATASection(CSS);
+        style.appendChild(cssText);
         rootElement.appendChild(style.element());
+
+        SvgElement script = draw.element("script");
+        script.attribute("type", "text/ecmascript");
+        Text scriptText = draw.document().createCDATASection(ECMAScript);
+        script.appendChild(scriptText);
+        rootElement.appendChild(script.element());
+
+        SvgElement textBox = draw.element("text");
+        textBox.attribute("id", "persistent");
+        textBox.attribute("fill", "black");
+        textBox.attribute("stroke", "none");
+        textBox.attribute("font-size", "12");
+        textBox.attribute("visibility", "hidden");
+        Text innerText = draw.document().createTextNode( "initial content" );
+        textBox.appendChild( innerText );
+        rootElement.appendChild(textBox.element());
 
         return draw;
     }
@@ -392,6 +450,8 @@ public class Write {
     Draw writeIndividualDrawing( Drawing drawing )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
     {
+System.out.println( "Drawing: " + drawing.filename() );
+
         resetOneOffs();
 
         Draw draw = startFile();
@@ -432,7 +492,6 @@ public class Write {
                     thingy.preview( view );
                 }
             }
-
         }
         Multicable.PreviewAll( view );
 
@@ -461,19 +520,25 @@ public class Write {
         }
 
         for ( String layerName : drawing.layers ) {
+System.out.println( "LayerName: " + layerName );
             if ( layerName.equals( Legend.CATEGORY )) {
                 switch (view) {
                     case PLAN:
-                        Legend.Startup(draw, View.PLAN,
+                        Legend.Startup(draw, drawing, View.PLAN,
                                 Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
                                 Legend.PlanWidth() );
                         break;
                     case SCHEMATIC:
-                        Legend.Startup(draw, View.SCHEMATIC,
+                        Legend.Startup(draw, drawing, View.SCHEMATIC,
                                 Schematic.TotalWidth + 100, Legend.PlanWidth() );
                         break;
                 }
                 Legend.Callback();
+                continue;
+            }
+
+            if ( layerName.equals( "LuminaireTable" )) {
+                LuminaireTable.dom( draw, View.SCHEMATIC );
                 continue;
             }
 
@@ -482,14 +547,20 @@ public class Write {
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
+System.out.println( "Item: " + item.id );
                 if( MinderDom.class.isInstance( item ) ) {
                     MinderDom thingy = (MinderDom) item;
                     thingy.dom( draw, view );
                 }
             }
+
+            if ( layerName.equals( "LuminaireTable" )) {
+                LuminaireTable.dom( draw, View.SCHEMATIC );
+                continue;
+            }
         }
-        Multicable.DomAll( draw, view );
-        CableRun.DomAll( draw, view );
+//        Multicable.DomAll( draw, view );
+//        CableRun.DomAll( draw, view );
 
         return draw;
     }
@@ -505,7 +576,7 @@ public class Write {
                 text = mount.weights();
             }
             catch (Exception e) {
-                System.err.println( mount.id() + "  " + e.getMessage() );
+                System.err.println( "writing weights: " + mount.id() + "  " + e.getMessage() );
                 continue;
             }
             String name = mount.id();
@@ -586,7 +657,7 @@ public class Write {
         HangPoint.SYMBOLGENERATED = false;
         Chair.SYMBOLGENERATED = false;
 //        Chair.LEGENDREGISTERED = false;
-        Chair.COUNT = 0;
+        Chair.CHAIRCOUNT = 0;
         LuminaireDefinition.CountReset();
         DeviceTemplate.CountReset();
         DanceTile.Count = 0;
@@ -598,6 +669,7 @@ public class Write {
         Schematic.Reset();
         CableRun.Reset();
         Pipe.SchematicPositionReset();
+        LuminaireTable.clear();
     }
 
 //

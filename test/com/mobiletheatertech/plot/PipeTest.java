@@ -25,12 +25,15 @@ public class PipeTest {
 
     Element element = null;
     Element prosceniumElement = null;
-    
-    Element baseElement = null;
+
+//    Element baseElement = null;
+    Element trussBaseElement = null;
     Element trussElement = null;
     Element cheeseborough1Element = null;
     Element cheeseborough2Element = null;
     Element pipeOnCheeseboroughsElement = null;
+    Element baseForPipeElement = null;
+    Element pipeOnBaseElement = null;
     
     Double baseSize = 36.0;
     Double baseX = 40.0;
@@ -114,10 +117,6 @@ public class PipeTest {
 
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
-//        assertEquals( TestHelpers.accessInteger( pipe, "length" ), length );
-//        assertEquals( TestHelpers.accessString( pipe, "x" ), x.toString() );
-//        assertEquals( TestHelpers.accessString( pipe, "y" ), y.toString() );
-//        assertEquals( TestHelpers.accessString( pipe, "z" ), z.toString() );
         assertEquals(TestHelpers.accessPoint(pipe, "start"), new Point( x, y, z ));
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), -90.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50.0 );
@@ -302,7 +301,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=0 \\} should have a positive length.")
+                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=0.0 \\} should have a positive length.")
     public void tooSmallLengthZero() throws Exception {
         element.setAttribute("length", "0");
         new Pipe(element);
@@ -310,7 +309,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=-1 \\} should have a positive length.")
+                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=-1.0 \\} should have a positive length.")
     public void tooSmallLength() throws Exception {
         element.setAttribute("length", "-1");
         new Pipe(element);
@@ -390,13 +389,71 @@ public class PipeTest {
         pipe.verify();
     }
 
+    @Test
+    public void verifyBaseReference() throws Exception {
+        Pipe pipe = new Pipe( pipeOnBaseElement );
+        new PipeBase( baseForPipeElement );
+
+        pipe.verify();
+
+        Field baseField = TestHelpers.accessField( pipe, "base" );
+        PipeBase base = (PipeBase) baseField.get( pipe );
+        assert PipeBase.class.isInstance( base );
+
+        Field boxOriginField = TestHelpers.accessField( pipe, "boxOrigin" );
+        Point boxOrigin = (Point) boxOriginField.get( pipe );
+        assertNotNull( boxOrigin );
+        assertEquals( boxOrigin.z(), 0.0 );
+        assertEquals( boxOrigin.y(), 49.0 );
+        assertEquals( boxOrigin.x(), 39.0 );
+    }
+
+
+    @Test
+    public void verifyBaseReferenceProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( pipeOnBaseElement );
+        baseForPipeElement.setAttribute( "z", "-12" );
+        new PipeBase( baseForPipeElement );
+
+        pipe.verify();
+
+        Field baseField = TestHelpers.accessField( pipe, "base" );
+        PipeBase base = (PipeBase) baseField.get( pipe );
+        assert PipeBase.class.isInstance( base );
+
+        Field boxOriginField = TestHelpers.accessField( pipe, "boxOrigin" );
+        Point boxOrigin = (Point) boxOriginField.get( pipe );
+        assertNotNull( boxOrigin );
+        assertEquals( boxOrigin.z(), 0.0 );
+        assertEquals( boxOrigin.y(), 93.0 );
+        assertEquals( boxOrigin.x(), 239.0 );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not have more than one base.")
+    public void tooManyBases() throws Exception {
+        Element secondBaseElement = new IIOMetadataNode( "pipebase" );
+//        secondBaseElement.setAttribute( "size", baseSize.toString() );
+        secondBaseElement.setAttribute( "x", baseX.toString() );
+        secondBaseElement.setAttribute( "y", baseY.toString() );
+        new PipeBase( secondBaseElement );
+        pipeOnBaseElement.appendChild( secondBaseElement );
+
+        new PipeBase( baseForPipeElement );
+        Pipe pipe = new Pipe( pipeOnBaseElement );
+
+        pipe.verify();
+    }
+
     /*
             Make a couple of suspend objects that are children of this truss
             and confirm that they are properly associated
      */
     @Test
     public void verifyCheeseboroughReferences() throws Exception {
-        Base base = new Base( baseElement );
+        Base base = new Base( trussBaseElement );
         base.verify();
         Truss truss = new Truss( trussElement );
         truss.verify();
@@ -534,6 +591,105 @@ public class PipeTest {
     }
 
     @Test
+    public void locationDistance() throws Exception {
+        Pipe pipe = new Pipe(element);
+
+        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be a number.")
+    public void locationDistanceNotNumber() throws Exception {
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance("15a");
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
+    public void locationDistanceOffPipePlus() throws Exception {
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "121" );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
+    public void locationDistanceOffPipeMinus() throws Exception {
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "-1" );
+    }
+
+    @Test
+    public void locationDistanceProscenium() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        Pipe pipe = new Pipe(element);
+
+        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of -60.0 to 60.0.")
+    public void locationDistanceOffProsceniumPipePlus() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "61" );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of -60.0 to 60.0.")
+    public void locationDistanceOffProsceniumPipeMinus() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "-61" );
+    }
+
+    @Test
+    public void locationDistanceProsceniumOrientation90() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        element.setAttribute( "orientation", "90" );
+        Pipe pipe = new Pipe(element);
+
+        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
+    public void locationDistanceOffProsceniumOrientation90PipePlus() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        element.setAttribute( "orientation", "90" );
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "121" );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
+    public void locationDistanceOffProsceniumOrientation90PipeMinus() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        element.setAttribute( "orientation", "90" );
+        Pipe pipe = new Pipe(element);
+
+        pipe.locationDistance( "-61" );
+    }
+
+    @Test
     public void domPlan() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
@@ -554,7 +710,7 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        assertEquals(element.getAttribute("width"), length);
+        assertEquals(element.getAttribute("width"), length.toString());
         assertEquals(element.getAttribute("height"), Pipe.DIAMETER.toString());
         assertEquals(element.getAttribute("fill"), "none");
     }
@@ -686,7 +842,7 @@ public class PipeTest {
         Node node = list.item(0);
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
-        assertEquals(element.getAttribute("width"), length);
+        assertEquals(element.getAttribute("width"), length.toString());
         assertEquals(element.getAttribute("height"), Pipe.DIAMETER.toString());
         assertEquals(element.getAttribute("fill"), "none");
     }
@@ -779,6 +935,7 @@ public class PipeTest {
         TestResets.ProsceniumReset();
         TestResets.MountableReset();
         TestResets.LayerReset();
+        TestResets.ElementalListerReset();
 
         Element venueElement = new IIOMetadataNode("venue");
         venueElement.setAttribute("room", "Test Name");
@@ -812,18 +969,23 @@ public class PipeTest {
 //        anchoredElement.setAttribute("id", pipeId);
 //        anchoredElement.setAttribute("length", length.toString());
 //        anchoredElement.setAttribute("");
-        
-        
-        baseElement = new IIOMetadataNode( "base" );
-        baseElement.setAttribute( "size", baseSize.toString() );
-        baseElement.setAttribute( "x", baseX.toString() );
-        baseElement.setAttribute( "y", baseY.toString() );
+
+
+//        baseElement = new IIOMetadataNode( "pipebase" );
+////        baseElement.setAttribute( "size", baseSize.toString() );
+//        baseElement.setAttribute( "x", baseX.toString() );
+//        baseElement.setAttribute( "y", baseY.toString() );
+
+        trussBaseElement = new IIOMetadataNode( "base" );
+        trussBaseElement.setAttribute( "size", baseSize.toString() );
+        trussBaseElement.setAttribute( "x", baseX.toString() );
+        trussBaseElement.setAttribute( "y", baseY.toString() );
         
         trussElement = new IIOMetadataNode( "truss" );
         trussElement.setAttribute( "id", trussID );
         trussElement.setAttribute( "size", trussSize.toString() );
         trussElement.setAttribute( "length", trussLength.toString() );
-        trussElement.appendChild( baseElement );
+        trussElement.appendChild( trussBaseElement );
 
         cheeseborough1Element = new IIOMetadataNode( "cheeseborough" );
         cheeseborough1Element.setAttribute( "id", cheeseborough1Id );
@@ -840,6 +1002,16 @@ public class PipeTest {
         pipeOnCheeseboroughsElement.setAttribute( "length", pipeOnCheeseboroughsLength.toString() );
         pipeOnCheeseboroughsElement.appendChild( cheeseborough1Element );
         pipeOnCheeseboroughsElement.appendChild( cheeseborough2Element );
+
+        baseForPipeElement = new IIOMetadataNode( "pipebase" );
+//        baseForPipeElement.setAttribute( "size", baseSize.toString() );
+        baseForPipeElement.setAttribute( "x", baseX.toString() );
+        baseForPipeElement.setAttribute( "y", baseY.toString() );
+
+        pipeOnBaseElement = new IIOMetadataNode( "pipe" );
+        pipeOnBaseElement.setAttribute( "id", pipeId );
+        pipeOnBaseElement.setAttribute( "length", length.toString() );
+        pipeOnBaseElement.appendChild( baseForPipeElement );
     }
 
     @AfterMethod

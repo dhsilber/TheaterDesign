@@ -5,8 +5,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.geom.Rectangle2D;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /**
  * Generic pipe.
@@ -78,8 +76,11 @@ public class Pipe extends Mountable implements Schematicable {
     private Cheeseborough support2 = null;
     private Point point1 = null;
     private Point point2 = null;
-    private Double rotation = null;
+//    private Double rotation = null;
     private Double overHang = null;
+
+    private PipeBase base = null;
+//    private Point verticalCenter = null;
 
 
     /**
@@ -139,11 +140,8 @@ public class Pipe extends Mountable implements Schematicable {
      * @throws LocationException if the pipe would at any point be outside of the venue
      */
     @Override
-    public void verify() throws LocationException, ReferenceException {
+    public void verify() throws InvalidXMLException, LocationException, ReferenceException {
 //        System.err.println( "Pipe starting.");
-        if( null == start ) {
-            System.err.println( "start is null at top of Pipe.verify()" );
-        }
         assert( null != id ) : "Id is null at top of verify()";
 
         String identity = "Pipe (" + id + ")";
@@ -153,6 +151,49 @@ public class Pipe extends Mountable implements Schematicable {
         NodeList cheeseboroughList = element.getElementsByTagName( CHEESEBOROUGH );
         if( 2 == cheeseboroughList.getLength() ) {
             calculateLocationFromSupports( cheeseboroughList );
+        }
+
+        NodeList baseList = element.getElementsByTagName( "pipebase" );
+        if ( 1 == baseList.getLength() ) {
+            base = findBase( baseList );
+
+            start = new Point( base.x(), base.y(), base.z() );
+
+            if (Proscenium.Active()) {
+                boxOrigin = Proscenium.Locate(new Point(start.x() - 1, start.y() + 1, start.z() ));
+
+                Space space = new Space( boxOrigin, DIAMETER, DIAMETER, length );
+
+                if (!Venue.Contains( space )) {
+                    Point end = Proscenium.Locate( new Point( start.x() - 1 + DIAMETER, start.y() - 1 + DIAMETER, start.z() + length ) );
+                    Mountable.Remove(this);
+                    throw new LocationException(
+                            identity + " should not extend beyond the boundaries of the venue.\n" +
+                                    "Start: " + boxOrigin.toString() + "\n" +
+                                    "End  : " + end.toString() + "\n" +
+                                    "Venue: " + Venue.ToString()
+                    );
+                }
+            } else {
+                boxOrigin = new Point(start.x() - 1, start.y() - 1, start.z() );
+
+                Space space = new Space( boxOrigin, DIAMETER, DIAMETER, length );
+
+                if (!Venue.Contains( space )) {
+                    Mountable.Remove(this);
+                    throw new LocationException(
+                            identity + " should not extend beyond the boundaries of the venue.");
+                }
+            }
+
+            return;
+        }
+        if ( 1 < baseList.getLength() ) {
+            throw new InvalidXMLException( "Pipe (" + id + ") should not have more than one base." );
+        }
+
+        if( null == start ) {
+            throw new InvalidXMLException( "Pipe (" + id + ") start is null at top of Pipe.verify()" );
         }
 
         if (Proscenium.Active()) {
@@ -201,6 +242,7 @@ public class Pipe extends Mountable implements Schematicable {
             } else {
 //                System.err.println( "90.0 != orientation" );
 //Fails right here:
+//                Double x = start.x();
                 boxOrigin = new Point(start.x(), start.y() - 1, start.z() - 1);
 
                 Space space = new Space(boxOrigin, length, DIAMETER, DIAMETER);
@@ -215,13 +257,53 @@ public class Pipe extends Mountable implements Schematicable {
 //        System.err.println( "Pipe verified.");
     }
 
+    // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
+    private PipeBase findBase( NodeList baseList ) {
+        Node node = baseList.item( 0 );
+        // Much of this code is copied from HangPoint.ParseXML - refactor
+        if (null != node) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                String mark = element.getAttribute("processedMark");
+
+                return PipeBase.Find(mark);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Integer locationDistance(String location) throws InvalidXMLException, MountingException {
+        Integer distance;
+        try {
+            distance = new Integer( location );
+        } catch (NumberFormatException exception) {
+            throw new InvalidXMLException("Pipe (" + id + ") location must be a number.");
+        }
+
+        Double begin = 0.0;
+        Double end = length;
+//        if (Proscenium.Active()  ) {
+        if (Proscenium.Active() && (90 != orientation) ) {
+            begin -= length / 2;
+            end -= length / 2;
+        }
+
+        if ( begin > distance || distance > end ) {
+            throw new MountingException(
+                    "Pipe (" + id + ") location must be in the range of " + begin.toString() +
+                            " to " + end.toString() + ".");
+        }
+        return distance;
+    }
+
     public void calculateLocationFromSupports( NodeList cheeseboroughList ) {
         support1 = findCheeseborough(0, cheeseboroughList);
         support2 = findCheeseborough(1, cheeseboroughList);
 
         point1 = support1.locate();
         point2 = support2.locate();
-        Double slope = slope(point1, point2);
+        Double slope = point1.slope( point2 );
 //        rotation = Math.toDegrees(Math.atan(slope));
 
         Double supportSpan = point1.distance(point2);
@@ -241,7 +323,7 @@ public class Pipe extends Mountable implements Schematicable {
         if (null != node) {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                String reference = element.getAttribute("ref");
+                String reference = element.getAttribute("id");
                 Cheeseborough found = Cheeseborough.Find(reference);
 
                 return found;
@@ -425,7 +507,9 @@ public class Pipe extends Mountable implements Schematicable {
 
         switch (mode) {
             case PLAN:
-                if (90.0 == orientation) {
+                if ( null != base ) {
+                    group.rectangle( draw, drawBox.x(), drawBox.y(), DIAMETER, DIAMETER, COLOR );
+                } else if (90.0 == orientation) {
                     group.rectangle( draw, drawBox.x(), drawBox.y(), DIAMETER, length, COLOR );
                 } else {
                     group.rectangle( draw, drawBox.x(), drawBox.y(), length, DIAMETER, COLOR );

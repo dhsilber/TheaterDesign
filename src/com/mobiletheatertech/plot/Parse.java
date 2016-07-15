@@ -95,7 +95,9 @@ public class Parse {
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
         parseXML( Base.class, "base" );
+        parseXML( PipeBase.class, "pipebase" );
         parseXML( Cheeseborough.class, "cheeseborough" );
+        parseXML( Drape.class, "drape" );
 
         // Mountable
         parseXML( Truss.class, "truss" );

@@ -129,16 +129,29 @@ public class Draw extends SvgElement {
         element = root;
     }
 
+    void setScript( String script ) {
+        Element scriptElement = document.createElement( "script" );
+        scriptElement.appendChild( document.createTextNode( script ) );
+        Node first = root.getFirstChild();
+        root.insertBefore( scriptElement, first );
+    }
+
     /**
      * Set the document title to the specified string.
      *
      * @param title New document title
      */
     void setDocumentTitle( String title ) {
-        Node first = root.getFirstChild();
         Element titleElement = document.createElement( "title" );
         titleElement.appendChild( document.createTextNode( title ) );
-        root.insertBefore( titleElement, first );
+        Node node = root.getFirstChild();
+        if ( node.getNodeType() == Node.ELEMENT_NODE ) {
+            Element firstElement = (Element) node;
+            if ( firstElement.getTagName() == "script" ) {
+                node = firstElement.getNextSibling();
+            }
+        }
+        root.insertBefore( titleElement, node );
     }
 
     /**

@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 /**
  * Encapsulations of various useful test code.
@@ -34,10 +35,19 @@ public class TestHelpers {
         return field;
     }
 
+//    public static Object accessScalaObject( String classname, String name ) throws Exception {
+//        Class<?> clazz = Class.forName( classname );
+//        Object object = clazz.getField( "MODULE$" ).get(null);
+//        Field field = clazz.getDeclaredField( name );
+//        field.setAccessible( true );
+//        return field.get( object );
+//    }
+
     public static Object accessStaticObject( String classname, String name ) throws Exception {
-        Field field = Class.forName( classname ).getDeclaredField( name );
+        Class<?> clazz = Class.forName( classname );
+        Field field = clazz.getDeclaredField( name );
         field.setAccessible( true );
-        return field.get( Class.forName( classname ) );
+        return field.get( clazz );
     }
 
     public static Object accessStaticObjectNotNull( String classname, String name ) throws Exception {
@@ -108,5 +118,12 @@ public class TestHelpers {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;
         return element.getTextContent();
+    }
+
+    public static void checkAttribute( Element element, String attribute, String expected ) {
+        assertNotNull( element );
+        Node attributeNode = element.getAttributeNode( attribute );
+        assertNotNull( attributeNode );
+        assertEquals( attributeNode.getTextContent(), expected );
     }
 }

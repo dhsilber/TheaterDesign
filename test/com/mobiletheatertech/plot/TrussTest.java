@@ -23,18 +23,25 @@ public class TrussTest {
     Element element = null;
     HangPoint hanger1 = null;
     HangPoint hanger2 = null;
-    Element trussOnBase = null;
+    HangPoint hanger3 = null;
+    Element trussOnBaseElement = null;
     Element baseElement = null;
     Element suspendElement1 = null;
     Element suspendElement2 = null;
+    Element suspendElement3 = null;
+    Element elementTrussDiagonal = null;
 //    Element baseElement = null;
-    final String id = "trussID";
+    final String trussId = "trussID";
+    final String trussDiagonalId = "trusDiagonalId";
+    final String trussOnBaseId = "trussOnBaseId";
     Double size = 12.0;
     String sizeIntegerString = "12";
     Double length = 160.0;
     Double x1 = 100.0;
-    Double yBoth = 200.0;
+    Double y1and2 = 200.0;
     Double x2 = 180.0;
+    Double suspend3X = 150.0;
+    Double suspend3Y = 150.0;
     Double x = 73.7;
     Double y = 12.5;
     Double z = 22.4;
@@ -93,7 +100,7 @@ public class TrussTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
+                    "Truss \\(" + trussId + "\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoX() throws Exception {
         element.setAttribute( "y", y.toString() );
         element.setAttribute( "z", z.toString() );
@@ -102,7 +109,7 @@ public class TrussTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
+                    "Truss \\(" + trussId + "\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoY() throws Exception {
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "z", z.toString() );
@@ -111,7 +118,7 @@ public class TrussTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
+                    "Truss \\(" + trussId + "\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoZ() throws Exception {
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -120,7 +127,7 @@ public class TrussTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Truss \\("+id+"\\) explicitly positioned must have x, y, and z coordinates")
+                    "Truss \\(" + trussId + "\\) explicitly positioned must have x, y, and z coordinates")
     public void positionedNoXY() throws Exception {
         element.setAttribute( "z", z.toString() );
         new Truss( element );
@@ -231,7 +238,7 @@ public class TrussTest {
 
     @Test
     public void verifyBaseReference() throws Exception {
-        Truss truss = new Truss( trussOnBase );
+        Truss truss = new Truss(trussOnBaseElement);
         new Base( baseElement );
 
         truss.verify();
@@ -251,7 +258,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
     public void verifyNoSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         element.removeChild( suspendElement2 );
@@ -261,7 +268,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
     public void verifyTooFewSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         Truss truss = new Truss( element );
@@ -270,7 +277,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) must have position, base, or exactly two suspend children")
+          expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
     public void verifyTooManySuspends() throws Exception {
         Element suspendElement3 = new IIOMetadataNode( "suspend" );
         suspendElement3.setAttribute( "ref", "joan" );
@@ -343,14 +350,14 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) is missing required 'size' attribute.")
+          expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) is missing required 'size' attribute.")
     public void noSize() throws Exception {
         element.removeAttribute( "size" );
         new Truss( element );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) is missing required 'length' attribute.")
+          expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) is missing required 'length' attribute.")
     public void noLength() throws Exception {
         element.removeAttribute( "length" );
         new Truss( element );
@@ -409,7 +416,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location must include vertex and distance.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) location must include vertex and distance.")
     public void locationFormatNoDistance() throws Exception{
         Truss truss = new Truss( element );
 
@@ -417,7 +424,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location does not include a valid vertex.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) location does not include a valid vertex.")
     public void locationFormatNoVertex() throws Exception{
         Truss truss = new Truss( element );
 
@@ -425,7 +432,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=MountingException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) does not include location 161.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) does not include location 161.")
     public void locationOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
@@ -433,7 +440,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=MountingException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) does not include location -1.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) does not include location -1.")
     public void locationNegativeOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
@@ -441,7 +448,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) location does not include a valid vertex.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) location does not include a valid vertex.")
     public void locationVertexOffTruss() throws Exception{
         Truss truss = new Truss( element );
 
@@ -497,7 +504,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location must include vertex and distance.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) location must include vertex and distance.")
     public void locationPositionedFormatNoDistance() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -508,7 +515,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\("+id+"\\) location does not include a valid vertex.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) location does not include a valid vertex.")
     public void locationPositionedFormatNoVertex() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -519,7 +526,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=MountingException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) does not include location 161.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) does not include location 161.")
     public void locationPositionedOffTruss() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -530,7 +537,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=MountingException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) does not include location -1.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) does not include location -1.")
     public void locationPositionedNegativeOffTruss() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -541,7 +548,7 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Truss \\(" + id + "\\) location does not include a valid vertex.")
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussId +  "\\) location does not include a valid vertex.")
     public void locationPositionedVertexOffTruss() throws Exception{
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
@@ -599,6 +606,22 @@ public class TrussTest {
     }
 
     @Test
+    public void rotatedLocationDiagonal() throws Exception {
+        Truss truss = new Truss( elementTrussDiagonal );
+        new Suspend( suspendElement1 );
+        new Suspend( suspendElement3 );
+
+        Place place = truss.rotatedLocation( "b 23");
+
+        assertEquals( place.origin(), TestHelpers.accessPoint( truss, "point1"));
+        assertNotNull( TestHelpers.accessDouble(truss, "rotation"));
+        assertEquals( place.rotation(), -45.0);
+        assertEquals( place.location(), new Point(83, 206, 239));
+
+        fail( "Does rotatedLocation give correct results for truss at a diagonal to the room coordinates?");
+    }
+
+    @Test
     public void domPlan() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
@@ -627,15 +650,15 @@ public class TrussTest {
         assertEquals(element.getAttribute("stroke"), "dark blue");
         Double x = x1 - (length - (x2 - x1)) / 2;
         assertEquals(element.getAttribute("x"), x.toString());
-        Double y = yBoth - size / 2;
+        Double y = y1and2 - size / 2;
         assertEquals(element.getAttribute("y"), y.toString());
-        assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + yBoth.toString() + ")");
+        assertEquals(element.getAttribute("transform"), "rotate(-0.0," + x1.toString() + "," + y1and2.toString() + ")");
     }
 
     @Test
     public void legendRegistered() throws Exception {
         TestResets.LegendReset();
-        Truss truss = new Truss( trussOnBase );
+        Truss truss = new Truss(trussOnBaseElement);
         new Base( baseElement );
         Truss.LEGENDREGISTERED = false;
 
@@ -654,12 +677,12 @@ public class TrussTest {
     public void domLegendItem() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
-        Truss truss = new Truss( trussOnBase );
+        Truss truss = new Truss(trussOnBaseElement);
         new Base( baseElement );
         truss.verify();
 //        truss.dom(draw, View.PLAN);
         Truss.BaseCount = 1;
-        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
+        PagePoint startPoint = new PagePoint( 20.0, 1/0.0 );
 
         NodeList preGroup = draw.root().getElementsByTagName( "g" );
         assertEquals( preGroup.getLength(), 1 );
@@ -915,14 +938,20 @@ public class TrussTest {
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
         hangPoint1.setAttribute( "id", "jim" );
         hangPoint1.setAttribute("x", x1.toString());
-        hangPoint1.setAttribute("y", yBoth.toString());
+        hangPoint1.setAttribute("y", y1and2.toString());
         hanger1 = new HangPoint( hangPoint1 );
 
         Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
         hangPoint2.setAttribute( "id", "joan" );
         hangPoint2.setAttribute("x", x2.toString());
-        hangPoint2.setAttribute("y", yBoth.toString());
+        hangPoint2.setAttribute("y", y1and2.toString());
         hanger2 = new HangPoint( hangPoint2 );
+
+        Element hangPoint3 = new IIOMetadataNode( "hangpoint" );
+        hangPoint3.setAttribute( "id", "fred" );
+        hangPoint3.setAttribute("x", suspend3X.toString());
+        hangPoint3.setAttribute("y", suspend3Y.toString());
+        hanger3 = new HangPoint( hangPoint3 );
 
         suspendElement1 = new IIOMetadataNode( "suspend" );
         suspendElement1.setAttribute( "ref", "jim" );
@@ -932,27 +961,38 @@ public class TrussTest {
         suspendElement2.setAttribute( "ref", "joan" );
         suspendElement2.setAttribute( "distance", "1" );
 
+        suspendElement3 = new IIOMetadataNode( "suspend" );
+        suspendElement3.setAttribute( "ref", "fred" );
+        suspendElement3.setAttribute( "distance", "1" );
+
 //        baseElement = new IIOMetadataNode( "base" );
 //        baseElement.setAttribute( "x", "1" );
 //        baseElement.setAttribute( "y", "2" );
 
         element = new IIOMetadataNode("truss");
-        element.setAttribute("id", id);
+        element.setAttribute("id", trussId );
         element.setAttribute("size", size.toString());
         element.setAttribute("length", length.toString());
         element.appendChild( suspendElement1 );
         element.appendChild( suspendElement2 );
+
+        elementTrussDiagonal = new IIOMetadataNode("truss");
+        elementTrussDiagonal.setAttribute("id", trussDiagonalId );
+        elementTrussDiagonal.setAttribute("size", size.toString());
+        elementTrussDiagonal.setAttribute("length", length.toString());
+        elementTrussDiagonal.appendChild( suspendElement1 );
+        elementTrussDiagonal.appendChild( suspendElement3 );
 
         baseElement = new IIOMetadataNode( "base" );
         baseElement.setAttribute( "size", baseSize.toString() );
         baseElement.setAttribute("x", baseX.toString());
         baseElement.setAttribute("y", baseY.toString());
 
-        trussOnBase = new IIOMetadataNode("truss");
-        trussOnBase.setAttribute("id", id);
-        trussOnBase.setAttribute("size", size.toString());
-        trussOnBase.setAttribute("length", length.toString());
-        trussOnBase.appendChild( baseElement );
+        trussOnBaseElement = new IIOMetadataNode("truss");
+        trussOnBaseElement.setAttribute("id", trussOnBaseId );
+        trussOnBaseElement.setAttribute("size", size.toString());
+        trussOnBaseElement.setAttribute("length", length.toString());
+        trussOnBaseElement.appendChild(baseElement);
     }
 
     @AfterMethod

@@ -15,58 +15,37 @@ import static org.testng.Assert.fail;
  */
 public class ReadTest {
 
-    public ReadTest() {
-    }
+    static String boguspath = "/boguspath/";
+    String pathname = "~/Dropbox/Plot/testfiles/";
+    static String basename = "tutorial";
 
-    @Test(expectedExceptions = FileNotFoundException.class)
-    public void noArgument() throws Exception {
-        new Read( "bogus file name" );
-    }
-
-    // TODO: commented out 2014-04-22 as it was hanging the whole test run.
-//    @Test
-//    public void reads() throws Exception {
-//        TestResets.MinderDomReset();
-//
-//        new Read( "tutorial" );
-//        assertEquals( Drawable.List().size(), 18 );
+//    Does not apply, as Configuration cannot be initialized with no arguments.
+//    @Test(expectedExceptions = FileNotFoundException.class,
+//            expectedExceptionsMessageRegExp = "No input file specified.")
+//    public void noArgument() throws Exception {
+//        String[] arguments = new String[] {  };
+//        Configuration.Initialize( arguments );wri
+//        new Read();
 //    }
 
-    @Test
-    public void test() {
-        fail( "Test that read opens, parses, and closes specified file." );
+    @Test(expectedExceptions = FileNotFoundException.class,
+            expectedExceptionsMessageRegExp = "/boguspath/tutorial.xml \\(No such file or directory\\)")
+    public void unfoundArgumentArgument() throws Exception {
+        String[] arguments = new String[] { boguspath + basename };
+        Configuration.Initialize( arguments );
+        new Read();
     }
 
-//        @Mocked System stringValue;
-//        @Mocked FileInputStream bar;
-//        @Mocked Parse baz;
-//    @Test
-////    public void opensDirectory( @Mocked System stringValue ) {
-//    public void opensDirectory() throws FileNotFoundException {
-//        
-////        @Mocked(stubOutClassInitialization = true) final System; unused = null);
-//        /*
-//         * 
-//         */
-////        new Expectations() {
-//        {
-//            stringValue.getProperty( "user.home");
-//            InputStream stream = new FileInputStream( "fajdflkj");
-//            new Parse(stream);
-//        }
-////        fail("Test that Read gets the user's home directory from System.getProperty(\"user.home\"), then attempts to open the named file from <user.home>/Plot/plotfiles/");
-//    }
-
     @Test
-    public void opensDirectory() {
-        /*
-         * 
-         */
-//        new Expectations() {
-//            System.getProperty( "stringValue");
-//        }
-        fail( "Test that Read gets the user's home directory from System.getProperty(\"user.home\"), then attempts to open the named file from <user.home>/Plot/plotfiles/" );
+    public void reads() throws Exception {
+        TestResets.MinderDomReset();
+
+        String[] arguments = new String[] { pathname + basename };
+        Configuration.Initialize( arguments );
+        new Read();
+        assertEquals( ElementalLister.List().size(), 88 );
     }
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {

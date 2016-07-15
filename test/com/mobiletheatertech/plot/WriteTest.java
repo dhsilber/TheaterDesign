@@ -1,7 +1,10 @@
 package com.mobiletheatertech.plot;
 
+//import org.apache.xalan.xsltc.runtime.Node;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.io.File;
@@ -34,17 +37,15 @@ public class WriteTest {
 
     Element venueElement;
 
-    public WriteTest() {
-    }
 
-    @Test
-    // TODO Is it even possible for this to happen?
-//        ( expectedExceptions=SystemDataMissingException.class,
-//        expectedExceptionsMessageRegExp = "User has no home directory")
-    public void noHome() throws Exception
-    {
-        fail( "Must throw exception if user's home is not available." );
-    }
+//    @Test
+//    // TODO Is it even possible for this to happen?
+////        ( expectedExceptions=SystemDataMissingException.class,
+////        expectedExceptionsMessageRegExp = "User has no home directory")
+//    public void noHome() throws Exception
+//    {
+//        fail( "Must throw exception if user's home is not available." );
+//    }
 
     @Test
     public void directory() throws Exception {
@@ -55,7 +56,12 @@ public class WriteTest {
         File tmp = new File( pathName );
         assertFalse( tmp.exists() );
 
-        new Write().init( directoryName );
+//        String[] arguments = new String[]{ "foo", "~/Dropbox/Plot/out/" + directoryName + "/" };
+        String[] arguments = new String[]{ directoryName };
+        Configuration.Initialize( arguments );
+
+//        new Write().init( directoryName );
+        new Write().init();
         tmp = new File( pathName );
         assertTrue( tmp.exists() );
         assertTrue( tmp.isDirectory() );
@@ -86,6 +92,103 @@ public class WriteTest {
         File[] contents = tmp.listFiles();
         assertEquals( contents.length, 8 );
     }
+
+    @Test
+    public void startFileMakesSvgRoot() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+
+        assertEquals( rootElement.getTagName(), "svg" );
+    }
+
+    // This is mostly to confirm that I can actually extract the attribute
+    // I need in startFileMakesPlotNamespace()
+    @Test
+    public void startFileSetsSvgFill() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+
+        assertEquals( rootElement.getAttribute( "fill" ), "black" );
+        assertEquals( rootElement.getAttributeNS( null, "fill" ), "black" );
+    }
+
+    @Test
+    public void startFileMakesPlotNamespace() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+
+        assertEquals( rootElement.getAttribute( "xmlns:plot" ),
+                "http://www.davidsilber.name/namespaces/plot" );
+    }
+
+    @Test
+    public void startFileMakesCss() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+        NodeList nodes = rootElement.getChildNodes();
+
+        assertEquals( nodes.getLength(), 6 );
+
+        int styleType = nodes.item( 3 ).getNodeType();
+        assertEquals( styleType, Element.ELEMENT_NODE );
+        Element style = (Element) nodes.item( 3 );
+        assertEquals( style.getTagName(), "style");
+        assertEquals( style.getAttribute( "type" ), "text/css" );
+        assertEquals( style.getFirstChild().getNodeType(), Node.CDATA_SECTION_NODE );
+        assertEquals( style.getFirstChild().getTextContent(), Write.CSS );
+    }
+
+    @Test
+    public void startFileMakesScript() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+        NodeList nodes = rootElement.getChildNodes();
+
+        assertEquals( nodes.getLength(), 6 );
+
+        int scriptType = nodes.item( 4 ).getNodeType();
+        assertEquals( scriptType, Element.ELEMENT_NODE );
+        Element script = (Element) nodes.item( 4 );
+        assertEquals( script.getTagName(), "script");
+        assertEquals( script.getAttribute( "type" ), "text/ecmascript" );
+        assertNotNull( script.getFirstChild() );
+        assertEquals( script.getFirstChild().getNodeType(), Node.CDATA_SECTION_NODE );
+        assertEquals( script.getFirstChild().getTextContent(), Write.ECMAScript);
+    }
+
+    @Test
+    public void startFileMakesPersistentTextBox() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+        NodeList nodes = rootElement.getChildNodes();
+
+        assertEquals( nodes.getLength(), 6 );
+
+        int nodeType = nodes.item( 5 ).getNodeType();
+        assertEquals( nodeType, Element.ELEMENT_NODE );
+        Element textElement = (Element) nodes.item( 5 );
+        assertEquals( textElement.getTagName(), "text");
+        assertEquals( textElement.getAttribute( "id" ), "persistent" );
+        assertEquals( textElement.getAttribute( "fill" ), "black" );
+        assertEquals( textElement.getAttribute( "stroke" ), "none" );
+        assertEquals( textElement.getAttribute( "font-size" ), "12" );
+        assertEquals( textElement.getAttribute( "visibility" ), "hidden" );
+
+        assertEquals( textElement.getTextContent(), "initial content" );
+    }
+
     @Test
     public void weightCalculations() {
         Random random = new Random();

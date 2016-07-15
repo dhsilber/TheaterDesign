@@ -23,9 +23,12 @@ public class ElementalTest {
         String stringValue;
         Integer integerValue;
         Integer positiveIntegerValue;
-        Integer unset;
-        Integer empty;
-        Integer used;
+        Integer unsetZero;
+        Integer emptyZero;
+        Integer usedZero;
+        Integer unsetNull;
+        Integer emptyNull;
+        Integer usedNull;
         Double twiceUnsetZero;
         Double twiceEmptyZero;
         Double twiceUsedZero;
@@ -44,9 +47,12 @@ public class ElementalTest {
 
             id = getOptionalStringAttribute( element, "id" );
             stringValue = getStringAttribute(element, "stringValue");
-            empty = getOptionalIntegerAttributeOrZero(element, "empty");
-            unset = getOptionalIntegerAttributeOrZero(element, "unset");
-            used = getOptionalIntegerAttributeOrZero(element, "used");
+            emptyZero = getOptionalIntegerAttributeOrZero(element, "empty");
+            unsetZero = getOptionalIntegerAttributeOrZero(element, "unset");
+            usedZero = getOptionalIntegerAttributeOrZero(element, "used");
+            emptyNull = getOptionalIntegerAttributeOrNull(element, "empty");
+            unsetNull = getOptionalIntegerAttributeOrNull(element, "unset");
+            usedNull = getOptionalIntegerAttributeOrNull(element, "used");
             integerValue = getIntegerAttribute(element, "integerValue");
             positiveIntegerValue=getPositiveIntegerAttribute(element, "positiveIntegerValue");
             twiceUnsetZero = getOptionalDoubleAttributeOrZero(element, "twiceUnset");
@@ -111,31 +117,53 @@ public class ElementalTest {
     }
 
     @Test
-    public void getOptionalIntegerAttributeEmpty() throws Exception {
+    public void getOptionalIntegerAttributeOrZeroEmpty() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals(TestHelpers.accessInteger(ellie, "empty"), (Integer) 0);
+        assertEquals(TestHelpers.accessInteger(ellie, "emptyZero"), (Integer) 0);
     }
 
     @Test
-    public void getOptionalIntegerAttributeUnset() throws Exception {
+    public void getOptionalIntegerAttributeOrZeroUnset() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger(ellie, "unset"), (Integer) 0 );
+        assertEquals( TestHelpers.accessInteger(ellie, "unsetZero"), (Integer) 0 );
     }
 
     @Test
-    public void getOptionalIntegerAttributeUsed() throws Exception {
+    public void getOptionalIntegerAttributeOrZeroUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessInteger( ellie, "used" ), (Integer) 17 );
+        assertEquals( TestHelpers.accessInteger( ellie, "usedZero" ), (Integer) 17 );
+    }
+
+
+    @Test
+    public void getOptionalIntegerAttributeOrNullEmpty() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertNull(TestHelpers.accessInteger(ellie, "emptyNull") );
+    }
+
+    @Test
+    public void getOptionalIntegerAttributeOrNullUnset() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertNull( TestHelpers.accessInteger(ellie, "unsetNull") );
+    }
+
+    @Test
+    public void getOptionalIntegerAttributeOrNullUsed() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessInteger( ellie, "usedNull" ), (Integer) 17 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrZeroEmpty() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyZero"), null );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyZero"), 0.0 );
     }
 
     @Test
@@ -149,14 +177,14 @@ public class ElementalTest {
     public void getOptionalDoubleAttributeOrZeroZero() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroZero"), (Double) 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroZero"), 0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrZeroUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedZero"), (Double) 4.32 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedZero"), 4.32 );
     }
 
 
@@ -178,14 +206,14 @@ public class ElementalTest {
     public void getOptionalDoubleAttributeOrNullZero() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroNull"), (Double) 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroNull"), 0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrNullUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedNull"), (Double) 4.32 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedNull"), 4.32 );
     }
 
     @Test

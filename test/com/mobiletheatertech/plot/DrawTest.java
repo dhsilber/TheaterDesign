@@ -108,13 +108,13 @@ public class DrawTest {
     }
 
     @Test
-    public void createsElement() throws Exception {
+    public void createsSvgElement() throws Exception {
         Draw draw = new Draw();
 
         String namespace = TestHelpers.accessString( draw, "namespace" );
         String tag = "defs";
         SvgElement element = draw.element(tag);
-        assert Element.class.isInstance( element );
+        assert SvgElement.class.isInstance( element );
         assertEquals( element.element().getTagName(), tag );
         assertEquals(element.element().getNamespaceURI(), namespace);
         assertEquals(element.element().getOwnerDocument(), draw.document());
@@ -142,6 +142,74 @@ public class DrawTest {
         assertEquals(element.getTextContent(), title);
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void setScriptBeforeGetRoot() {
+        Draw draw = new Draw();
+        String title = "Follow The Rabbit";
+        draw.setScript(title);
+    }
+
+    @Test
+    public void setScriptAfterGetRoot() {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        String script = "Follow The Rabbit";
+        draw.setScript( script );
+
+        NodeList list = draw.root().getElementsByTagName( "script" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals(element.getTextContent(), script);
+    }
+
+    @Test
+    public void scriptBeforeTitle() {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        String script = "script code here";
+        draw.setScript( script );
+        String title = "Follow The Rabbit";
+        draw.setDocumentTitle( title );
+
+        scriptAlwaysBeforeTitle(draw);
+    }
+
+    @Test
+    public void titleBeforeScript() {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        String title = "Follow The Rabbit";
+        draw.setDocumentTitle( title );
+        String script = "script code here";
+        draw.setScript( script );
+
+        scriptAlwaysBeforeTitle(draw);
+    }
+
+    void scriptAlwaysBeforeTitle(Draw draw) {
+        NodeList scriptList = draw.root().getElementsByTagName( "script" );
+        assertEquals( scriptList.getLength(), 1 );
+        Node scriptNode = scriptList.item( 0 );
+//        assertEquals( scriptNode.getNodeType(), Node.ELEMENT_NODE );
+//        Element scriptElement = (Element) scriptNode;
+//        assertEquals(scriptElement.getTextContent(), script);
+
+        NodeList titleList = draw.root().getElementsByTagName( "title" );
+        assertEquals( titleList.getLength(), 1 );
+        Node titleNode = titleList.item( 0 );
+//        assertEquals( titleNode.getNodeType(), Node.ELEMENT_NODE );
+//        Element titleElement = (Element) titleNode;
+//        assertEquals(titleElement.getTextContent(), title);
+
+        Element root = draw.root();
+        Node first = root.getFirstChild();
+        assertSame( first, scriptNode );
+        Node second = first.getNextSibling();
+        assertSame( second, titleNode );
+    }
+
     @Test
     public void svgGroupOverride() throws Exception {
         fail();
@@ -160,7 +228,9 @@ public class DrawTest {
         SvgElement element = draw.element("type");
         draw.insertRootChild( element );
         Element root = draw.root();
-        Node second = root.getFirstChild().getNextSibling();
+        Node first = root.getFirstChild();
+//        assertSame( first, element );
+        Node second = first.getNextSibling();
         assertSame( second, element );
     }
 

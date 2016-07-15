@@ -218,6 +218,123 @@ public class PointTest {
         assertEquals( howFar, 1.732, 0.001 );
     }
 
+    @Test
+    public void onALineZeroDistance() {
+        Point place = Point.OnALine( point1, point2, 0.0 );
+
+        assertEquals( place, point1, "position should match first point" );
+        assertNotSame( place, point1, "points should not be same object" );
+    }
+
+    @Test
+    public void onALinePositiveDistance() {
+        Double distance = point1.distance( point2 );
+        Point place = Point.OnALine( point1, point2, distance );
+
+        assertEquals( place, point2 );
+        assertNotSame( place, point2 );
+    }
+
+    @Test
+    public void onALinePositiveDistance2() {
+        Point knownPlace = new Point( 12, 13, 14 );
+        Double distance = point1.distance( knownPlace );
+        Point place = Point.OnALine( point1, knownPlace, distance );
+
+        assertEquals( place, knownPlace );
+        assertNotSame( place, knownPlace );
+    }
+
+    @Test
+    public void onALineNegativeDistance() {
+        Double distance = point1.distance( point2 );
+        Point negative = new Point(
+                point1.x() - (point1.x() - point2.x()),
+                point1.y() - (point1.y() - point2.y()),
+                point1.z() + (point1.z() - point2.z()) );
+
+        Point place = Point.OnALine( point1, point2, -distance );
+
+        assertEquals( place, negative );
+    }
+
+    @Test
+    public void onALineNegativeDistance2() {
+        Point knownPlace = new Point( 32, 43, 54 );
+        Double distance = point1.distance( knownPlace );
+        Point negative = new Point(
+                point1.x() - 10,
+                point1.y() - 10,
+                point1.z() - 10 );
+
+        Point place = Point.OnALine( point1, knownPlace, -distance );
+
+        assertEquals( place, negative );
+    }
+
+    @Test
+    public void onALineXNegative() {
+        Point knownPlace = new Point( -12, 43, 54 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, distance );
+
+        assertEquals( place, knownPlace );
+    }
+
+    @Test
+    public void onALineYNegative() {
+        Point knownPlace = new Point( 32, -43, 54 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, distance );
+
+        assertEquals( place, knownPlace );
+    }
+
+    @Test
+    public void onALineZNegative() {
+        Point knownPlace = new Point( 32, 43, -54 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, distance );
+
+        assertEquals( place, knownPlace );
+    }
+
+    @Test
+    public void onALineXNegativeNegativeDistance() {
+        Point knownPlace = new Point( -12, 43, 54 );
+        Point destination = new Point( 56, 23, 34 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, -distance );
+
+        assertEquals( place, destination );
+    }
+
+    @Test
+    public void onALineYNegativeNegativeDistance() {
+        Point knownPlace = new Point( 32, -43, 54 );
+        Point destination = new Point( 12, 109, 34 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, -distance );
+
+        assertEquals( place, destination );
+    }
+
+    @Test
+    public void onALineZNegativeNegativeDistance() {
+        Point knownPlace = new Point( 32, 43, -54 );
+        Point destination = new Point( 12, 23, 142 );
+        Double distance = point1.distance( knownPlace );
+
+        Point place = Point.OnALine( point1, knownPlace, -distance );
+
+        assertEquals( place, destination );
+    }
+
     /**
      * @since 0.0.6
      */

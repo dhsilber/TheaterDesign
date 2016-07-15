@@ -104,6 +104,8 @@ public abstract class Mountable extends MinderDom implements Schematicable {
         LUMINAIRELIST.add( luminaire );
     }
 
+    public abstract Integer locationDistance( String location ) throws InvalidXMLException, MountingException;
+
     public ArrayList<Luminaire> loads() {
         return LUMINAIRELIST;
     }
@@ -135,29 +137,16 @@ public abstract class Mountable extends MinderDom implements Schematicable {
             Double weight = lumi.weight();
             totalWeight += weight;
             text.append( weight.toString() );
-            text.append( " pounds" );
-            text.append( calculateIndividualLoad( lumi ) );
+            text.append( " pounds. " );
+//            text.append( calculateIndividualLoad( lumi ) );
             text.append( " \n" );
         }
         text.append( "\nTotal: " );
         text.append( totalWeight.toString() );
         text.append( " pounds " );
-        text.append( totalSuspendLoads() );
+//        text.append( totalSuspendLoads() );
         text.append( "\n" );
 
         return text.toString();
-    }
-
-    // Totally untested. Yar!
-    Double slope(Point point1, Point point2) {
-        Double x1 = point1.x();
-        Double y1 = point1.y();
-        Double x2 = point2.x();
-        Double y2 = point2.y();
-
-        Double changeInX = x1 - x2;
-        Double changeInY = y1 - y2;
-
-        return changeInY / changeInX;
     }
 }
