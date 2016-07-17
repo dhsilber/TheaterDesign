@@ -66,6 +66,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
     Point position = null;
     Boolean positioned = false;
+    Boolean suspended = false;
 
     Point verticalCenter = null;
 
@@ -78,7 +79,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
      */
     public Truss(Element element)
             throws AttributeMissingException, DataException, InvalidXMLException,
-            KindException, MountingException {
+            KindException, MountingException, ReferenceException {
         super(element);
 
         if (Proscenium.Active()) {
@@ -103,6 +104,9 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             positioned = true;
         }
 
+        suspended = suspended();
+
+
 //        processedMark = Mark.Generate();
 //        element.setAttribute("processedMark", processedMark);
 
@@ -110,7 +114,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
     }
 //
 
-    public void verify() throws InvalidXMLException, ReferenceException {
+    public void verify() throws AttributeMissingException, DataException, InvalidXMLException, ReferenceException {
 //        NodeList baseList = element.getElementsByTagName( "base" );
 
         if ( positioned ) {
@@ -118,34 +122,13 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             return;
         }
 
-        NodeList suspendList = element.getElementsByTagName("suspend");
+        if ( suspended ) {
+            return;
+        }
+
         NodeList baseList = element.getElementsByTagName( "base" );
 
-        if (2 == suspendList.getLength()) {
-
-            // ToDo The processedMark thing is really bogus. We should just create the objects found in the suspend list as they are encountered here.
-            suspend1 = findSuspend(0, suspendList);/*ArrayList<Anchor> suspensions*/
-            suspend2 = findSuspend(1, suspendList);
-
-            assert (suspend1.locate().x() < suspend2.locate().x());
-
-            suspensions.add( suspend1 );
-            suspensions.add( suspend2 );
-
-            point1 = suspend1.locate();
-            point2 = suspend2.locate();
-            Double slope = point1.slope( point2 );
-            rotation = Math.toDegrees(Math.atan(slope));
-
-            span = point1.distance(point2);
-//            Long span = Math.round(span);
-            overHang = (length - span) / 2;
-            // Given suspend1 and the slope, find where the start of the truss will end up.
-
-            suspend1.location( overHang );
-            suspend2.location( overHang + span );
-        }
-        else if ( 1 == baseList.getLength() ) {
+        if ( 1 == baseList.getLength() ) {
             // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
             base = findBase( baseList );
 
@@ -163,10 +146,67 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             }
         }
         else {
-            System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
             System.err.println("Found " + baseList.getLength() + " base child nodes");
             throw new InvalidXMLException("Truss (" + id + ") must have position, base, or exactly two suspend children");
         }
+    }
+
+    private boolean suspended()
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            ReferenceException
+    {
+        NodeList suspendList = element.getElementsByTagName("suspend");
+
+//        System.out.println( "Suspend items: " + suspendList.getLength() );
+
+        if (0 == suspendList.getLength()) {
+            return false;
+        }
+        else if (2 == suspendList.getLength()) {
+
+            suspend1 = instatiateSuspend( suspendList, 0 );
+            suspend2 = instatiateSuspend( suspendList, 1 );
+
+            if (suspend1.locate().x() > suspend2.locate().x()) {
+                Suspend temp = suspend1;
+                suspend1 = suspend2;
+                suspend2 = temp;
+            }
+
+//            suspensions.add( suspend1 );
+//            suspensions.add( suspend2 );
+
+            point1 = suspend1.locate();
+            point2 = suspend2.locate();
+            Double slope = point1.slope( point2 );
+            rotation = Math.toDegrees(Math.atan(slope));
+
+            span = point1.distance(point2);
+//            Long span = Math.round(span);
+            overHang = (length - span) / 2;
+            // Given suspend1 and the slope, find where the start of the truss will end up.
+
+            suspend1.location( overHang );
+            suspend2.location( overHang + span );
+
+            return true;
+        }
+        else {
+            System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
+            throw new InvalidXMLException( "Truss (" + id + ") must have position, base, or exactly two suspend children");
+        }
+
+    }
+
+    private Suspend instatiateSuspend( NodeList suspendList, int index )
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            ReferenceException
+    {
+        Node suspendNode = suspendList.item( index );
+        if ( suspendNode.getNodeType() == Node.ELEMENT_NODE ) {
+            return new Suspend( (Element) suspendNode );
+        }
+        return null;
     }
 
     // ToDo The processedMark thing is really bogus. We should just create the objects found in the suspend list as they are encountered here.
@@ -423,11 +463,9 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
     Everything that location() does, bundled with the information a hanged thing needs to position itself.
      */
     @Override
-
-
-
-
-    public Place rotatedLocation(String location) throws InvalidXMLException, MountingException, ReferenceException {
+    public Place rotatedLocation(String location)
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException {
         verify();
 
 //        System.err.println( "RotatedLocation()" );
@@ -494,36 +532,36 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
 
     @Override
     public String calculateIndividualLoad( Luminaire luminaire ) throws InvalidXMLException, MountingException {
-        assert ( 2 == suspensions.size() );
-
-        Suspend one = suspensions.get(0);
-        Suspend two = suspensions.get(1);
+//        assert ( 2 == suspensions.size() );
+//
+//        Suspend one = suspensions.get(0);
+//        Suspend two = suspensions.get(1);
 
         Integer locationDistance = locationDistance( luminaire.locationValue() );
-        Double oneDistance = one.location() - locationDistance;
-        Double twoDistance = two.location() - locationDistance;
+        Double oneDistance = suspend1.location() - locationDistance;
+        Double twoDistance = suspend2.location() - locationDistance;
 
         Double load = luminaire.weight();
         Double first = (load * twoDistance) / span;
-        one.load( first );
+        suspend1.load( first );
         Double second = - (load * oneDistance) / span;
-        two.load( second );
+        suspend2.load( second );
 
         DecimalFormat fourPlaces = new DecimalFormat( "###.####" );
-        return " " + fourPlaces.format( first ) + " on " + one.refId() + ". "
-                + fourPlaces.format( second ) + " on " + two.refId() + ".";
+        return " " + fourPlaces.format( first ) + " on " + suspend1.refId() + ". "
+                + fourPlaces.format( second ) + " on " + suspend2.refId() + ".";
     }
 
     @Override
     public String totalSuspendLoads() {
-        assert ( 2 == suspensions.size() );
-
-        Suspend one = suspensions.get(0);
-        Suspend two = suspensions.get(1);
+//        assert ( 2 == suspensions.size() );
+//
+//        Suspend one = suspensions.get(0);
+//        Suspend two = suspensions.get(1);
 
         DecimalFormat fourPlaces = new DecimalFormat( "###.####" );
-        return " " + fourPlaces.format( one.load() ) + " on " + one.refId() + ". "
-                + fourPlaces.format( two.load() ) + " on " + two.refId() + ".";
+        return " " + fourPlaces.format( suspend1.load() ) + " on " + suspend1.refId() + ". "
+                + fourPlaces.format( suspend2.load() ) + " on " + suspend2.refId() + ".";
     }
 
     @Override

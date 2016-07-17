@@ -223,7 +223,7 @@ public class CheeseboroughTest {
         Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
         cheeseborough.verify();
 
-        Point point = cheeseborough.place.location();
+        Point point = cheeseborough.locate();
         Point origin = cheeseborough.place.origin();
 
         assertEquals( cheeseborough.place.rotation(), -0.0 );

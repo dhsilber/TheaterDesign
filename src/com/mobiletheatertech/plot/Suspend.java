@@ -27,12 +27,13 @@ public class Suspend extends MinderDom {
 
 
     public Suspend( Element element )
-            throws AttributeMissingException, DataException, InvalidXMLException, ReferenceException
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            ReferenceException
     {
         super( element );
 
-        refId = getStringAttribute( element, "ref" );
-        distance = getIntegerAttribute( element, "distance" );
+        refId = getStringAttribute(element, "ref");
+        distance = getIntegerAttribute(element, "distance");
 
         hangPoint = HangPoint.Find( refId );
         if (null == hangPoint) {

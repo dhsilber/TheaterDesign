@@ -104,7 +104,10 @@ public class Parse {
         parseXML( LightingStand.class, LightingStand.TAG );
         parseXML( Pipe.class, "pipe" );
 
-        parseXML( Suspend.class, "suspend" );
+        // Since all 'suspend' elements are direct children of a truss,
+        // Truss will instantiate each Suspend as it is discovered,
+        // rather than make a list of Suspend objects and then have to match them up with elements later.
+//        parseXML( Suspend.class, "suspend" );
         parseXML( Zone.class, "zone" );
         parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );

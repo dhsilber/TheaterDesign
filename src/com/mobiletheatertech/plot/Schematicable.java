@@ -29,6 +29,6 @@ public interface Schematicable {
     public void preview( View view )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException;
 
-    public Place drawingLocation() throws InvalidXMLException, MountingException, ReferenceException
-            ;
+    public Place drawingLocation() throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException;
 }

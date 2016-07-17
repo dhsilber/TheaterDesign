@@ -234,7 +234,8 @@ public class CableRun implements Schematicable {
     }
 
     public static void DomAll( Draw draw, View view )
-            throws InvalidXMLException, MountingException, ReferenceException
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException
     {
         for ( CableRun instance : RunList ) {
             instance.dom( draw, view );
@@ -395,7 +396,8 @@ public class CableRun implements Schematicable {
     Because we had to search out the devices when we verified them, we
     already have reference to them.
      */
-    public void dom( Draw draw, View mode ) throws InvalidXMLException, MountingException, ReferenceException {
+    public void dom( Draw draw, View mode ) throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException {
 
         switch (mode) {
             case PLAN:
@@ -429,7 +431,8 @@ public class CableRun implements Schematicable {
         }
     }
 
-    void domPlan(Draw draw) throws InvalidXMLException, MountingException, ReferenceException {
+    void domPlan(Draw draw) throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException {
         Place sourcePoint = sourceThingy.drawingLocation();
         Place sinkPoint = sinkThingy.drawingLocation();
 

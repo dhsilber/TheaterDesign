@@ -482,23 +482,13 @@ public class VenueTest {
         draw.establishRoot();
         Venue venue = new Venue( element );
 
-        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
-        assertEquals(existingRectangles.getLength(), 0);
+        NodeList existingChildren = draw.root().getChildNodes();//  getElementsByTagName("rect");
+        assertEquals(existingChildren.getLength(), 0);
 
         venue.dom(draw, View.PLAN);
 
-        NodeList rectangles = draw.root().getElementsByTagName("rect");
-        assertEquals(rectangles.getLength(), 1);
-        Node groupNode = rectangles.item(0);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        Element tableElement = (Element) groupNode;
-        assertEquals(tableElement.getAttribute("x"), "0" );
-        assertEquals(tableElement.getAttribute("y"), "0" );
-        assertEquals(tableElement.getAttribute("width"), width.toString() );
-        // Plot attribute is 'depth'. SVG attribute is 'height'.
-        assertEquals(tableElement.getAttribute("height"), depth.toString() );
-        assertEquals(tableElement.getAttribute("fill"), "none");
-        assertEquals(tableElement.getAttribute("stroke"), "black");
+        NodeList children = draw.root().getChildNodes();
+        assertEquals(children.getLength(), 1);
     }
 
     @Test

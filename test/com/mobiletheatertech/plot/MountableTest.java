@@ -51,7 +51,7 @@ public class MountableTest {
             Double rotation = 17.8;
             Place here = new Place( locationPoint, origin, rotation );
 
-            System.err.print( "Here: " + here.toString() );
+//            System.err.print( "Here: " + here.toString() );
             return here;
         }
 
@@ -104,7 +104,7 @@ public class MountableTest {
             Double rotation = 7.8;
             Place here = new Place( location, origin, rotation );
 
-            System.err.print( "Here: " + here.toString() );
+//            System.err.print( "Here: " + here.toString() );
             return here;
         }
 
@@ -115,7 +115,7 @@ public class MountableTest {
          */
         @Override
         public String suspensionPoints( /*ArrayList<Anchor> suspensions*/ ) {
-            return "Just a test class, honest.\n";
+            return "suspension points";
         }
 
         @Override
@@ -132,6 +132,10 @@ public class MountableTest {
         public Integer locationDistance( String location ) {
             return 0;
         }
+
+        public void clearLuminaires() {
+            LUMINAIRELIST.clear();
+        }
     }
 
     //    private static Draw draw = null;
@@ -142,6 +146,7 @@ public class MountableTest {
     Double weight = 9.4;
     String unit = "7";
     String type = "6x9";
+    String location = "13";
 
     public MountableTest() {
     }
@@ -164,6 +169,7 @@ public class MountableTest {
         ArrayList<Mountable> list2 = (ArrayList<Mountable>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST" );
         assert list2.contains(pipe);
+        assertEquals( list2.size(), 1 );
     }
 
 //    @Test
@@ -194,6 +200,7 @@ public class MountableTest {
         ArrayList<Mountable> list2 = (ArrayList<Mountable>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST" );
         assertFalse( list2.contains( pipe ) );
+        assertEquals( list2.size(), 0 );
     }
 
 //    @Test
@@ -295,7 +302,8 @@ public class MountableTest {
     @Test
     public void WeightsText() throws Exception {
         String weightsText = "Weights for " + id + "\n\n"
-                + unit + " " + type + " weighs " + weight + " pounds\n"
+                + "suspension points\n\n"
+                + unit + ": " + type + " at " + location + " weighs " + weight + " pounds.\n"
                 + "\nTotal: " + weight + " pounds\n";
 
         Mounted pipe = new Mounted( element );
@@ -337,7 +345,7 @@ public class MountableTest {
         luminaireElement = new IIOMetadataNode( "luminaire" );
         luminaireElement.setAttribute( "type", type );
         luminaireElement.setAttribute( "on", id );
-        luminaireElement.setAttribute( "location", "12" );
+        luminaireElement.setAttribute( "location", location );
 //        luminaireElement.setAttribute("dimmer", dimmer);
 //        luminaireElement.setAttribute("circuit", circuit);
 //        luminaireElement.setAttribute("channel", channel);

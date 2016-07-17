@@ -152,6 +152,9 @@ public class Pipe extends Mountable implements Schematicable {
         if( 2 == cheeseboroughList.getLength() ) {
             calculateLocationFromSupports( cheeseboroughList );
         }
+        else if ( 0 != cheeseboroughList.getLength() ) {
+            throw new InvalidXMLException( "Pipe", id, "should have zero or two cheeseboroughs" );
+        }
 
         NodeList baseList = element.getElementsByTagName( "pipebase" );
         if ( 1 == baseList.getLength() ) {
@@ -165,7 +168,8 @@ public class Pipe extends Mountable implements Schematicable {
                 Space space = new Space( boxOrigin, DIAMETER, DIAMETER, length );
 
                 if (!Venue.Contains( space )) {
-                    Point end = Proscenium.Locate( new Point( start.x() - 1 + DIAMETER, start.y() - 1 + DIAMETER, start.z() + length ) );
+                    Point end = Proscenium.Locate(
+                            new Point( start.x() - 1 + DIAMETER, start.y() - 1 + DIAMETER, start.z() + length ) );
                     Mountable.Remove(this);
                     throw new LocationException(
                             identity + " should not extend beyond the boundaries of the venue.\n" +
@@ -314,7 +318,10 @@ public class Pipe extends Mountable implements Schematicable {
     }
 
     Point slopeToPoint( Double slope, Double overHang ) {
+
         return null;
+
+//        this is my problem. this method needs to return an actual value.
     }
 
     private Cheeseborough findCheeseborough(int item, NodeList cheeseboroughList) {

@@ -45,7 +45,7 @@ public class PipeTest {
     String cheeseborough2Id = "brie";
     String cheeseborough1Location = "a 112";
     String cheeseborough2Location = "b 112";
-    String pipeOnCheeseboroughsId = "pipeId";
+    final String pipeOnCheeseboroughsId = "pipeId";
     Double pipeOnCheeseboroughsLength = 100.0;
     
     
@@ -102,7 +102,7 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
-        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );;
+        assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertNull( TestHelpers.accessPoint( pipe, "start" ) );
         assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), 0.0 );
@@ -471,6 +471,49 @@ public class PipeTest {
         Field cheeseborough2Field = TestHelpers.accessField( pipe, "cheeseborough2" );
         Cheeseborough cheeseborough2 = (Cheeseborough) cheeseborough2Field.get( pipe );
         assertTrue( Cheeseborough.class.isInstance( cheeseborough2 ) );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
+    public void verifyTooManyCheeseboroughReferences() throws Exception {
+
+        String cheeseborough3Id = "brie";
+        String cheeseborough3Location = "b 112";
+
+        Element cheeseborough3Element = new IIOMetadataNode( "cheeseborough" );
+        cheeseborough3Element.setAttribute( "id", cheeseborough3Id );
+        cheeseborough3Element.setAttribute( "on", trussID );
+        cheeseborough3Element.setAttribute( "location", cheeseborough3Location );
+
+        pipeOnCheeseboroughsElement.appendChild( cheeseborough3Element );
+
+        Base base = new Base( trussBaseElement );
+        base.verify();
+        Truss truss = new Truss( trussElement );
+        truss.verify();
+        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+        c1.verify();
+        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
+        c2.verify();
+        Cheeseborough c3 = new Cheeseborough( cheeseborough3Element );
+        c3.verify();
+        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
+    public void verifyOnlyOneCheeseboroughReference() throws Exception {
+        pipeOnCheeseboroughsElement.removeChild( cheeseborough2Element );
+
+        Base base = new Base( trussBaseElement );
+        base.verify();
+        Truss truss = new Truss( trussElement );
+        truss.verify();
+        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+        c1.verify();
+        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+        pipe.verify();
     }
 
     @Test

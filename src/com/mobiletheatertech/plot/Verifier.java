@@ -17,7 +17,8 @@ public abstract class Verifier extends ElementalLister {
      * @throws LocationException
      */
     public static void VerifyAll()
-            throws DataException, FeatureException, InvalidXMLException, LocationException,
+            throws AttributeMissingException, DataException, FeatureException,
+            InvalidXMLException, LocationException,
             MountingException, ReferenceException
     {
         for ( ElementalLister item : LIST ) {
@@ -26,7 +27,7 @@ public abstract class Verifier extends ElementalLister {
                 thing.verify();
             }
         }
-        CableRun.Verify();
+//        CableRun.Verify();
     }
 
     /**
@@ -39,7 +40,8 @@ public abstract class Verifier extends ElementalLister {
      * @throws LocationException   if certain plot items don't fit in available physical space
      */
     public abstract void verify()
-            throws DataException, FeatureException, InvalidXMLException, LocationException,
+            throws AttributeMissingException, DataException, FeatureException,
+            InvalidXMLException, LocationException,
             MountingException, ReferenceException;
 
 }

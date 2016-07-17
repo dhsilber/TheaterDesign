@@ -279,9 +279,12 @@ public class TrussTest {
     @Test(expectedExceptions = InvalidXMLException.class,
           expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
     public void verifyTooManySuspends() throws Exception {
-        Element suspendElement3 = new IIOMetadataNode( "suspend" );
-        suspendElement3.setAttribute( "ref", "joan" );
-        suspendElement3.setAttribute( "distance", "2" );
+        // This is just broken.
+        // A new 'element' should have been constructed in setUpMethod() that has two
+        //   suspendElement# in it, but apparently the removal in the above test is not
+        //   being overwritten.
+        element.appendChild( suspendElement1 );
+        element.appendChild( suspendElement2 );
         element.appendChild( suspendElement3 );
 
         Truss truss = new Truss( element );
@@ -342,11 +345,12 @@ public class TrussTest {
     public void justFinePositioned() throws Exception {
         element.removeChild( suspendElement1 );
         element.removeChild( suspendElement2 );
+        element.removeChild( suspendElement3 );
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
         element.setAttribute( "z", z.toString() );
 
-        Truss truss = new Truss( element );
+        new Truss( element );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,

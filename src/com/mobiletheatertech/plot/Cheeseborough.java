@@ -90,8 +90,9 @@ public class Cheeseborough extends MinderDom {
 
     @Override
     public void verify()
-            throws FeatureException, InvalidXMLException, LocationException,
-            MountingException, ReferenceException {
+            throws AttributeMissingException, DataException, FeatureException,
+            InvalidXMLException,
+            LocationException, MountingException, ReferenceException {
 
         if( null == reference ) {
             System.err.println( "Cheeseborough verify()");
@@ -126,7 +127,9 @@ public class Cheeseborough extends MinderDom {
     }
 
     // Get the location that this Cheeseborough holds something at.
-    public Point mountableLocation() throws InvalidXMLException, MountingException, ReferenceException {
+    public Point mountableLocation()
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            MountingException, ReferenceException {
         if( null != reference ) {
             if (null == place) {
                 mount = reference.mount();

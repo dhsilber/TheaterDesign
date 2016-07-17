@@ -159,7 +159,8 @@ public class Luminaire extends MinderDom implements Schematicable {
      */
     @Override
     public Place drawingLocation()
-            throws InvalidXMLException, MountingException, ReferenceException {
+            throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException {
         Place result;
         try {
             result = mount.rotatedLocation(location);
@@ -173,7 +174,8 @@ public class Luminaire extends MinderDom implements Schematicable {
     }
 
     @Override
-    public void verify() throws InvalidXMLException, MountingException, ReferenceException {
+    public void verify() throws AttributeMissingException, DataException,
+            InvalidXMLException, MountingException, ReferenceException {
         try {
             mount = Mountable.Select(on);
         }

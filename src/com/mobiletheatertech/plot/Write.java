@@ -497,7 +497,7 @@ System.out.println( "Drawing: " + drawing.filename() );
 
         switch (view) {
             case SCHEMATIC:
-                CableRun.Collate();
+//                CableRun.Collate();
                 break;
             default:
                 break;
@@ -667,7 +667,7 @@ System.out.println( "Item: " + item.id );
         LightingStand.Count = 0;
 //        Legend.
         Schematic.Reset();
-        CableRun.Reset();
+//        CableRun.Reset();
         Pipe.SchematicPositionReset();
         LuminaireTable.clear();
     }

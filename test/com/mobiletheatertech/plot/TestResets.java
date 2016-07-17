@@ -225,9 +225,9 @@ public class TestResets {
      * @throws IllegalAccessException if the {@code MOUNTABLELIST} field cannot be accessed.
      */
     public static void MountableReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Mountable.class.getDeclaredField( "MOUNTABLELIST" );
-        field.setAccessible( true );
-        ArrayList<Mountable> mountableList = (ArrayList<Mountable>) field.get( Mountable.class );
+        Field mountableListField = Mountable.class.getDeclaredField( "MOUNTABLELIST" );
+        mountableListField.setAccessible( true );
+        ArrayList<Mountable> mountableList = (ArrayList<Mountable>) mountableListField.get( Mountable.class );
         mountableList.clear();
     }
 

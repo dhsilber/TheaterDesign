@@ -28,7 +28,7 @@ public class LuminaireInformation extends MinderDom /*implements Schematicable*/
     // LuminaireInformation needs to display as a MinderDom, but doesn't need the element parsing side.
     public LuminaireInformation( Element element, Luminaire luminaire ) throws DataException, InvalidXMLException {
         super( element );
-        System.err.println("C");
+//        System.err.println("C");
 
         this.luminaire = luminaire;
 

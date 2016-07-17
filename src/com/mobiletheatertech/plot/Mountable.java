@@ -21,9 +21,9 @@ public abstract class Mountable extends MinderDom implements Schematicable {
 
     private static ArrayList<Mountable> MOUNTABLELIST = new ArrayList<>();
 
-    private ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
+    protected ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
 
-    protected ArrayList<Suspend> suspensions = new ArrayList<>();
+//    protected ArrayList<Suspend> suspensions = new ArrayList<>();
     protected Double span = 0.0;
 
     /**
@@ -98,7 +98,9 @@ public abstract class Mountable extends MinderDom implements Schematicable {
      */
     public abstract PagePoint schematicLocation( String location ) throws InvalidXMLException, MountingException; //, MountingException, ReferenceException;
 
-    public abstract Place rotatedLocation( String location ) throws InvalidXMLException, MountingException, ReferenceException;
+    public abstract Place rotatedLocation( String location )
+            throws AttributeMissingException, DataException, InvalidXMLException,
+            MountingException, ReferenceException;
 
     public void hang( Luminaire luminaire ) {
         LUMINAIRELIST.add( luminaire );
@@ -137,13 +139,13 @@ public abstract class Mountable extends MinderDom implements Schematicable {
             Double weight = lumi.weight();
             totalWeight += weight;
             text.append( weight.toString() );
-            text.append( " pounds. " );
+            text.append( " pounds." );
 //            text.append( calculateIndividualLoad( lumi ) );
-            text.append( " \n" );
+            text.append( "\n" );
         }
         text.append( "\nTotal: " );
         text.append( totalWeight.toString() );
-        text.append( " pounds " );
+        text.append( " pounds" );
 //        text.append( totalSuspendLoads() );
         text.append( "\n" );
 
