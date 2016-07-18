@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.7
  */
-public class Luminaire extends MinderDom implements Schematicable {
+public class Luminaire extends MinderDom /*implements Schematicable*/ {
 
     private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
@@ -65,7 +65,7 @@ public class Luminaire extends MinderDom implements Schematicable {
 
     static final String COLOR = "black";
 
-    CableCounter cableCounter = new CableCounter();
+//    CableCounter cableCounter = new CableCounter();
 
     /**
      * Construct a {@code Luminaire} from an XML element.
@@ -157,7 +157,7 @@ public class Luminaire extends MinderDom implements Schematicable {
      * @return drawing location
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
-    @Override
+//    @Override
     public Place drawingLocation()
             throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
@@ -201,11 +201,11 @@ public class Luminaire extends MinderDom implements Schematicable {
         }
     }
 
-    @Override
-    public void useCount( Direction direction, CableRun run ) {
-        cableCounter.add( direction, run );
-//        schematicPosition = null;
-    }
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//        cableCounter.add( direction, run );
+////        schematicPosition = null;
+//    }
 
     Point point() {
         return point;
@@ -287,49 +287,49 @@ public class Luminaire extends MinderDom implements Schematicable {
 //        cablesIn[ direction.ordinal() ]++;
 //    }
 
-    @Override
-    public void preview( View view ) throws InvalidXMLException, MountingException {
-        switch ( view ) {
-            case SCHEMATIC:
-                schematicPosition = mount.schematicLocation( location );
-                if( null == schematicPosition ) {
-                    return;
-                }
-
-                Double width = definition.width();
-                Double height = definition.length();
-                schematicBox = new Rectangle2D.Double(
-                        schematicPosition.x() - width / 2,
-                        schematicPosition.y() - height / 2,
-                        width, height );
-                Schematic.Obstruction( this );
-        }
-    }
-
-    @Override
-    public PagePoint schematicPosition() {
-        return schematicPosition;
-    }
-
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run )
-            throws CorruptedInternalInformationException, ReferenceException
-    {
-        Solid shape = new Solid( definition.width(), definition.width(), definition.length() );
-
-        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
-    }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return schematicBox;
-    }
-
-    @Override
-    public void schematicReset() {
-        cableCounter.clear();
-        schematicPosition = null;
-    }
+//    @Override
+//    public void preview( View view ) throws InvalidXMLException, MountingException {
+//        switch ( view ) {
+//            case SCHEMATIC:
+//                schematicPosition = mount.schematicLocation( location );
+//                if( null == schematicPosition ) {
+//                    return;
+//                }
+//
+//                Double width = definition.width();
+//                Double height = definition.length();
+//                schematicBox = new Rectangle2D.Double(
+//                        schematicPosition.x() - width / 2,
+//                        schematicPosition.y() - height / 2,
+//                        width, height );
+//                Schematic.Obstruction( this );
+//        }
+//    }
+//
+//    @Override
+//    public PagePoint schematicPosition() {
+//        return schematicPosition;
+//    }
+//
+//    @Override
+//    public PagePoint schematicCableIntersectPosition( CableRun run )
+//            throws CorruptedInternalInformationException, ReferenceException
+//    {
+//        Solid shape = new Solid( definition.width(), definition.width(), definition.length() );
+//
+//        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
+//    }
+//
+//    @Override
+//    public Rectangle2D.Double schematicBox() {
+//        return schematicBox;
+//    }
+//
+//    @Override
+//    public void schematicReset() {
+//        cableCounter.clear();
+//        schematicPosition = null;
+//    }
 
     /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and
@@ -373,64 +373,64 @@ public class Luminaire extends MinderDom implements Schematicable {
                 use = group.use( draw, type, newPoint.x(), newPoint.y() );
                 use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
                 break;
-            case SCHEMATIC:
-                if( null == schematicPosition ) {
-                    return;
-                }
-                use = group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
-                if( ! LightingStand.class.isInstance( mount ) ) {
-                    use.attribute("transform",
-                            "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")");
-                }
-
-                // Unit number to draw under icon
-                SvgElement unitText = group.textAbsolute(draw, unit,
-                        schematicPosition.x() - 1, schematicPosition.y() + 2 + definition.length(), COLOR);
-                unitText.attribute("fill", "green");
-                unitText.attribute("stroke", "nonef");
-                unitText.attribute("font-family", "sans-serif");
-                unitText.attribute("font-weight", "100");
-                unitText.attribute("font-size", "6");
-                unitText.attribute("text-anchor", "middle");
-
-                // Location to draw over icon
-                Double locationX = schematicPosition.x() + 2;
-                Double locationY = schematicPosition.y() - 4 - definition.length();
-                Distance place = new Distance( mount.locationDistance( location ) );
-                SvgElement locationText = group.textAbsolute(draw, place.toString(), locationX, locationY, COLOR);
-                locationText.attribute("fill", "black");
-                locationText.attribute("stroke", "none");
-                locationText.attribute("font-family", "sans-serif");
-                locationText.attribute("font-weight", "100");
-                locationText.attribute("font-size", "6");
-//                locationText.attribute("text-anchor", "middle");
-                locationText.attribute("transform",
-                        "rotate(" + -90 + "," + locationX + "," + locationY + ")");
-
-                StringBuilder information = new StringBuilder (unit + ": " + type + " :: " );
-                if( (null != target) && (target.length() > 0) ) {
-                    information.append(", target: " + target);
-                }
-                if ( null != circuit && circuit.length() > 0) {
-                    information.append(", circuit: " + circuit);
-                }
-                if ( null != dimmer && dimmer.length() > 0) {
-                    information.append(", dimmer: " + dimmer);
-                }
-                if( null != channel && channel.length() > 0) {
-                    information.append(", channel: " + channel);
-                }
-                if ( null != address && address.length() > 0) {
-                    information.append(", address: " + address);
-                }
-                if( null != color && color.length() > 0) {
-                    information.append(", color: " + color);
-                }
-                if( null != info && info.length() > 0) {
-                    information.append(", info: " + info);
-                }
-                LuminaireTable.add(information.toString());
-                break;
+//            case SCHEMATIC:
+//                if( null == schematicPosition ) {
+//                    return;
+//                }
+//                use = group.useAbsolute(draw, type, schematicPosition.x(), schematicPosition.y() );
+//                if( ! LightingStand.class.isInstance( mount ) ) {
+//                    use.attribute("transform",
+//                            "rotate(" + rotation + "," + schematicPosition.x() + "," + schematicPosition.y() + ")");
+//                }
+//
+//                // Unit number to draw under icon
+//                SvgElement unitText = group.textAbsolute(draw, unit,
+//                        schematicPosition.x() - 1, schematicPosition.y() + 2 + definition.length(), COLOR);
+//                unitText.attribute("fill", "green");
+//                unitText.attribute("stroke", "nonef");
+//                unitText.attribute("font-family", "sans-serif");
+//                unitText.attribute("font-weight", "100");
+//                unitText.attribute("font-size", "6");
+//                unitText.attribute("text-anchor", "middle");
+//
+//                // Location to draw over icon
+//                Double locationX = schematicPosition.x() + 2;
+//                Double locationY = schematicPosition.y() - 4 - definition.length();
+//                Distance place = new Distance( mount.locationDistance( location ) );
+//                SvgElement locationText = group.textAbsolute(draw, place.toString(), locationX, locationY, COLOR);
+//                locationText.attribute("fill", "black");
+//                locationText.attribute("stroke", "none");
+//                locationText.attribute("font-family", "sans-serif");
+//                locationText.attribute("font-weight", "100");
+//                locationText.attribute("font-size", "6");
+////                locationText.attribute("text-anchor", "middle");
+//                locationText.attribute("transform",
+//                        "rotate(" + -90 + "," + locationX + "," + locationY + ")");
+//
+//                StringBuilder information = new StringBuilder (unit + ": " + type + " :: " );
+//                if( (null != target) && (target.length() > 0) ) {
+//                    information.append(", target: " + target);
+//                }
+//                if ( null != circuit && circuit.length() > 0) {
+//                    information.append(", circuit: " + circuit);
+//                }
+//                if ( null != dimmer && dimmer.length() > 0) {
+//                    information.append(", dimmer: " + dimmer);
+//                }
+//                if( null != channel && channel.length() > 0) {
+//                    information.append(", channel: " + channel);
+//                }
+//                if ( null != address && address.length() > 0) {
+//                    information.append(", address: " + address);
+//                }
+//                if( null != color && color.length() > 0) {
+//                    information.append(", color: " + color);
+//                }
+//                if( null != info && info.length() > 0) {
+//                    information.append(", info: " + info);
+//                }
+//                LuminaireTable.add(information.toString());
+//                break;
             default:
                 return;
         }

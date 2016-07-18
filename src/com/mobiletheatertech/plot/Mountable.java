@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.23
  */
-public abstract class Mountable extends MinderDom implements Schematicable {
+public abstract class Mountable extends MinderDom /*implements Schematicable*/ {
 
     private static ArrayList<Mountable> MOUNTABLELIST = new ArrayList<>();
 

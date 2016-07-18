@@ -23,7 +23,7 @@ public class DrawingTest {
 
     final String id = "Name";
     String filename = "filename";
-    String schematic = "schematic";
+    String truss = "truss";
     String legend = "legend text";
 
     @Test
@@ -46,12 +46,12 @@ public class DrawingTest {
 
     @Test
     public void storesOptionalAttributes() throws Exception {
-        drawingElement.setAttribute("view", schematic );
+        drawingElement.setAttribute( "view", "" );
         Drawing instance = new Drawing( drawingElement );
 
         assertEquals( TestHelpers.accessString( instance, "id"), id);
         assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
-        assertSame(TestHelpers.accessView(instance, "view"), View.SCHEMATIC );
+        assertSame(TestHelpers.accessView(instance, "view"), View.TRUSS );
         assertEquals( TestHelpers.accessString( instance, "legend" ), legend );
     }
 
@@ -87,10 +87,10 @@ public class DrawingTest {
 
     @Test
     public void view() throws Exception {
-        drawingElement.setAttribute("view", schematic );
+        drawingElement.setAttribute("view", "" );
         Drawing drawing = new Drawing( drawingElement );
 
-        assertEquals( drawing.view(), View.SCHEMATIC );
+        assertEquals( drawing.view(), View.PLAN );
     }
 
     @Test

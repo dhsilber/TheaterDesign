@@ -23,7 +23,7 @@ import java.awt.geom.Rectangle2D;
  * @author dhs
  * @since 0.0.6
  */
-public class Pipe extends Mountable implements Schematicable {
+public class Pipe extends Mountable /*implements Schematicable*/ {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -365,21 +365,21 @@ public class Pipe extends Mountable implements Schematicable {
         return schematicLocation;
     }
 
-    @Override
-    public PagePoint schematicPosition() {
-        return schematicPosition;
-    }
+//    @Override
+//    public PagePoint schematicPosition() {
+//        return schematicPosition;
+//    }
 
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+//    @Override
+//    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
 
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return null;
-    }
+//    @Override
+//    public Rectangle2D.Double schematicBox() {
+//        return null;
+//    }
 
-    @Override
-    public void schematicReset() {}
+//    @Override
+//    public void schematicReset() {}
 
     /**
      * Provide the drawing location of a point along this {@code Pipe}.
@@ -443,22 +443,22 @@ public class Pipe extends Mountable implements Schematicable {
         return new Place(mountableLocation(location), boxOrigin, 0.0);
     }
 
-    @Override
-    public void useCount( Direction direction, CableRun run ) {
-    }
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//    }
 
-    @Override
-    public void preview( View view ) {
-        switch ( view ) {
-            case SCHEMATIC:
-                schematicPosition = Schematic.Position( length, 2.0 );
-        }
-    }
+//    @Override
+//    public void preview( View view ) {
+//        switch ( view ) {
+//            case SCHEMATIC:
+//                schematicPosition = Schematic.Position( length, 2.0 );
+//        }
+//    }
 
-    @Override
-    public Place drawingLocation() {
-        return null;
-    }
+//    @Override
+//    public Place drawingLocation() {
+//        return null;
+//    }
 
     /**
      * Elucidate the support for this.
@@ -523,19 +523,19 @@ public class Pipe extends Mountable implements Schematicable {
                     group.text( draw, id, 38.0, drawBox.y() + DIAMETER, COLOR);
                 }
                 break;
-            case SCHEMATIC:
-                if (90.0 == orientation) {
-                    group.rectangleAbsolute(draw,
-                            schematicPosition.x() - DIAMETER / 2,
-                            schematicPosition.y() - length / 2,
-                            DIAMETER, length, COLOR);
-                } else {
-                    group.rectangleAbsolute(draw,
-                            schematicPosition.x() - length / 2,
-                            schematicPosition.y() - DIAMETER / 2,
-                            length, DIAMETER, COLOR );
-                }
-                break;
+//            case SCHEMATIC:
+//                if (90.0 == orientation) {
+//                    group.rectangleAbsolute(draw,
+//                            schematicPosition.x() - DIAMETER / 2,
+//                            schematicPosition.y() - length / 2,
+//                            DIAMETER, length, COLOR);
+//                } else {
+//                    group.rectangleAbsolute(draw,
+//                            schematicPosition.x() - length / 2,
+//                            schematicPosition.y() - DIAMETER / 2,
+//                            length, DIAMETER, COLOR );
+//                }
+//                break;
             case SECTION:
                 group.rectangle( draw, drawBox.y(), height, DIAMETER, DIAMETER, COLOR );
                 break;

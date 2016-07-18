@@ -75,7 +75,7 @@ public class Grid extends MinderDom {
 
         draw.scaleLine( draw, start, width, height );
 
-        Double startX = SCALETHICKNESS + startx % 48;
+        Double startX = SCALETHICKNESS + (startx % 48);
         for (Double x = startX; x <= width; x += 48) {
             String opacity = /*((x % 120) == 1)
                     ?*/ "0.2"
@@ -90,16 +90,15 @@ public class Grid extends MinderDom {
                     /*: "0.1"*/;
             horizontalLine( draw, width, y, opacity );
         }
-
     }
 
     private void verticalLine( Draw draw, Double end, Double x, String opacity ) {
-        line( draw, x, SCALETHICKNESS, x, SCALETHICKNESS + end, opacity );
+        line( draw, x, SCALETHICKNESS, x, end, opacity );
     }
 
     /*  */
     private void horizontalLine( Draw draw, Double end, Double y, String opacity ) {
-        line( draw, SCALETHICKNESS, y, SCALETHICKNESS + end, y, opacity );
+        line( draw, SCALETHICKNESS, y, end, y, opacity );
     }
 
     /* Generate the SVG XML for a line. */

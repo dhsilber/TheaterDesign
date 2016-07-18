@@ -483,12 +483,12 @@ public class VenueTest {
         Venue venue = new Venue( element );
 
         NodeList existingChildren = draw.root().getChildNodes();//  getElementsByTagName("rect");
-        assertEquals(existingChildren.getLength(), 0);
+        assertEquals(existingChildren.getLength(), 3);
 
         venue.dom(draw, View.PLAN);
 
         NodeList children = draw.root().getChildNodes();
-        assertEquals(children.getLength(), 1);
+        assertEquals(children.getLength(), 4);
     }
 
     @Test

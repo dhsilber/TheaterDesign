@@ -304,34 +304,34 @@ public class WriteTest {
         assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.PLAN );
     }
 
-    @Test
-    public void writeIndividualDrawingSetsViewSchematic() throws Exception {
-        String layerId = "MindedDom";
-        String layerName = "layer Name";
-        String layerColor = "blue";
-
-        Element drawingElement = new IIOMetadataNode( "drawing" );
-        drawingElement.setAttribute( "id", "drawing" );
-        drawingElement.setAttribute( "filename", "file/file" );
-        drawingElement.setAttribute( "view", "schematic" );
-
-        Element displayElement = new IIOMetadataNode( "display" );
-        displayElement.setAttribute( "layer", layerId );
-        drawingElement.appendChild( displayElement );
-
-        Drawing drawing = new Drawing( drawingElement );
-        new Layer( layerId, layerName, layerColor );
-
-        Element bogusMindedDomElement = new IIOMetadataNode( "bogus" );
-        MindedDom bogusMindedDom = new MindedDom( bogusMindedDomElement );
-
-        assertNull( TestHelpers.accessView(bogusMindedDom, "view" ) );
-
-        Write write = new Write();
-        write.writeIndividualDrawing(drawing);
-
-        assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.SCHEMATIC );
-    }
+//    @Test
+//    public void writeIndividualDrawingSetsViewSchematic() throws Exception {
+//        String layerId = "MindedDom";
+//        String layerName = "layer Name";
+//        String layerColor = "blue";
+//
+//        Element drawingElement = new IIOMetadataNode( "drawing" );
+//        drawingElement.setAttribute( "id", "drawing" );
+//        drawingElement.setAttribute( "filename", "file/file" );
+//        drawingElement.setAttribute( "view", "schematic" );
+//
+//        Element displayElement = new IIOMetadataNode( "display" );
+//        displayElement.setAttribute( "layer", layerId );
+//        drawingElement.appendChild( displayElement );
+//
+//        Drawing drawing = new Drawing( drawingElement );
+//        new Layer( layerId, layerName, layerColor );
+//
+//        Element bogusMindedDomElement = new IIOMetadataNode( "bogus" );
+//        MindedDom bogusMindedDom = new MindedDom( bogusMindedDomElement );
+//
+//        assertNull( TestHelpers.accessView(bogusMindedDom, "view" ) );
+//
+//        Write write = new Write();
+//        write.writeIndividualDrawing(drawing);
+//
+////        assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.SCHEMATIC );
+//    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

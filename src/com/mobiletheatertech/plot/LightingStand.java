@@ -8,7 +8,8 @@ import java.util.ArrayList;
 /**
  * Created by dhs on 12/12/14.
  */
-public class LightingStand extends Mountable implements Legendable, Schematicable {
+public class LightingStand extends Mountable implements Legendable //, Schematicable
+{
 
     static Integer Count = 0;
     private PagePoint schematicPosition = null;
@@ -51,29 +52,29 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
                 schematicPosition.y() + 12 );
     }
 
-    /*
-    Position of this LightingStand
-     */
-    @Override
-    public PagePoint schematicPosition() {
-        return schematicPosition;
-    }
+//    /*
+//    Position of this LightingStand
+//     */
+//    @Override
+//    public PagePoint schematicPosition() {
+//        return schematicPosition;
+//    }
 
     @Override
     public Integer locationDistance(String location) throws InvalidXMLException, MountingException {
         return 0;
     }
 
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return null;
-    }
-
-    @Override
-    public void schematicReset() {}
+//    @Override
+//    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+//
+//    @Override
+//    public Rectangle2D.Double schematicBox() {
+//        return null;
+//    }
+//
+//    @Override
+//    public void schematicReset() {}
 
     @Override
     public Point mountableLocation(String location) throws InvalidXMLException {
@@ -108,22 +109,22 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
                 orientation );
     }
 
-    @Override
-    public void useCount( Direction direction, CableRun run ) {
-    }
-
-    @Override
-    public void preview( View view ) {
-        switch ( view ) {
-            case SCHEMATIC:
-                schematicPosition = Schematic.Position( SchematicWidth, SchematicHeight );
-        }
-    }
-
-    @Override
-    public Place drawingLocation() {
-        return null;
-    }
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//    }
+//
+//    @Override
+//    public void preview( View view ) {
+//        switch ( view ) {
+//            case SCHEMATIC:
+//                schematicPosition = Schematic.Position( SchematicWidth, SchematicHeight );
+//        }
+//    }
+//
+//    @Override
+//    public Place drawingLocation() {
+//        return null;
+//    }
 
     /**
      * Elucidate the support for this.
@@ -172,20 +173,20 @@ public class LightingStand extends Mountable implements Legendable, Schematicabl
                         "rotate(" + orientation + "," + (x + SvgElement.OffsetX()) + "," + (y + SvgElement.OffsetY()) + ")");
 
                 break;
-            case SCHEMATIC:
-                generateSchematicSymbol( draw );
-
-                group = svgClassGroup( draw, TAG );
-                draw.appendRootChild(group);
-
-                Double x = schematicPosition.x();
-                Double y = schematicPosition.y();
-                group.useAbsolute(draw, TAG, x, y );
-                group.textAbsolute(draw, id,
-                        x - SchematicWidth / 2,
-                        y + SchematicHeight + Schematic.TextSpace, "black");
-
-                break;
+//            case SCHEMATIC:
+//                generateSchematicSymbol( draw );
+//
+//                group = svgClassGroup( draw, TAG );
+//                draw.appendRootChild(group);
+//
+//                Double x = schematicPosition.x();
+//                Double y = schematicPosition.y();
+//                group.useAbsolute(draw, TAG, x, y );
+//                group.textAbsolute(draw, id,
+//                        x - SchematicWidth / 2,
+//                        y + SchematicHeight + Schematic.TextSpace, "black");
+//
+//                break;
             default:
                 return;
         }

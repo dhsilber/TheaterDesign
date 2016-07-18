@@ -464,7 +464,7 @@ System.out.println( "Drawing: " + drawing.filename() );
                         "For " + drawing.filename() +", " + mountableName + " is not a valid mountable." );
                 continue;
             }
-            mountable.preview( view);
+//            mountable.preview( view);
         }
 
         for ( String deviceName : drawing.devices ) {
@@ -474,7 +474,7 @@ System.out.println( "Drawing: " + drawing.filename() );
                         "For " + drawing.filename() +", " + deviceName + " is not a valid device." );
                 continue;
             }
-            device.preview( view);
+//            device.preview( view);
         }
 
         for ( String layerName : drawing.layers ) {
@@ -486,22 +486,22 @@ System.out.println( "Drawing: " + drawing.filename() );
                 }
                 continue;
             }
-            for ( Layerer item : layer.contents() ) {
-                if( Schematicable.class.isInstance( item ) ) {
-                    Schematicable thingy = (Schematicable) item;
-                    thingy.preview( view );
-                }
-            }
+//            for ( Layerer item : layer.contents() ) {
+//                if( Schematicable.class.isInstance( item ) ) {
+//                    Schematicable thingy = (Schematicable) item;
+//                    thingy.preview( view );
+//                }
+//            }
         }
-        Multicable.PreviewAll( view );
+//        Multicable.PreviewAll( view );
 
-        switch (view) {
-            case SCHEMATIC:
-//                CableRun.Collate();
-                break;
-            default:
-                break;
-        }
+//        switch (view) {
+//            case SCHEMATIC:
+////                CableRun.Collate();
+//                break;
+//            default:
+//                break;
+//        }
 
         for ( String mountableName : drawing.mountables ) {
             Mountable mountable = Mountable.Select( mountableName );
@@ -528,19 +528,19 @@ System.out.println( "LayerName: " + layerName );
                                 Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
                                 Legend.PlanWidth() );
                         break;
-                    case SCHEMATIC:
-                        Legend.Startup(draw, drawing, View.SCHEMATIC,
-                                Schematic.TotalWidth + 100, Legend.PlanWidth() );
-                        break;
+//                    case SCHEMATIC:
+//                        Legend.Startup(draw, drawing, View.SCHEMATIC,
+//                                Schematic.TotalWidth + 100, Legend.PlanWidth() );
+//                        break;
                 }
                 Legend.Callback();
                 continue;
             }
 
-            if ( layerName.equals( "LuminaireTable" )) {
-                LuminaireTable.dom( draw, View.SCHEMATIC );
-                continue;
-            }
+//            if ( layerName.equals( "LuminaireTable" )) {
+//                LuminaireTable.dom( draw, View.SCHEMATIC );
+//                continue;
+//            }
 
             Layer layer = Layer.List().get( layerName );
             if ( null == layer ) {
@@ -554,10 +554,10 @@ System.out.println( "Item: " + item.id );
                 }
             }
 
-            if ( layerName.equals( "LuminaireTable" )) {
-                LuminaireTable.dom( draw, View.SCHEMATIC );
-                continue;
-            }
+//            if ( layerName.equals( "LuminaireTable" )) {
+//                LuminaireTable.dom( draw, View.SCHEMATIC );
+//                continue;
+//            }
         }
 //        Multicable.DomAll( draw, view );
 //        CableRun.DomAll( draw, view );
@@ -666,7 +666,7 @@ System.out.println( "Item: " + item.id );
         LightingStand.SYMBOLGENERATED = false;
         LightingStand.Count = 0;
 //        Legend.
-        Schematic.Reset();
+//        Schematic.Reset();
 //        CableRun.Reset();
         Pipe.SchematicPositionReset();
         LuminaireTable.clear();

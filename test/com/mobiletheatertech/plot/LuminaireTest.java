@@ -26,7 +26,7 @@ public class LuminaireTest {
     Element definitionElement = null;
 
     final String unit = "unit";
-    final String type = "6x9";
+    final String type = "Altman 6x9";
     final String pipeName = "luminaireTestPipe";
     final String lightingStandName = "luminaireTestLightingStand";
     final String trussId = "luminaireTestTruss";
@@ -65,7 +65,7 @@ public class LuminaireTest {
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
 
-        assert Schematicable.class.isInstance( instance );
+//        assert Schematicable.class.isInstance( instance );
         assert ! Legendable.class.isInstance( instance );
     }
 
@@ -427,124 +427,123 @@ public class LuminaireTest {
 //        assertEquals( text, color );
     }
 
-    // TODO: commented out 2014-04-22 as it was hanging the whole test run.
-    @Test
-    public void domPlanCircuitingOne() throws Exception {
-        venueElement.setAttribute( "circuiting", "one-to-one" );
-        new Venue( venueElement );
-        Draw draw = new Draw();
-        draw.establishRoot();
-        Luminaire luminaire = new Luminaire(elementOnPipe);
-        luminaire.verify();
-
-        luminaire.dom( draw, View.PLAN );
-
-        NodeList list = draw.root().getElementsByTagName( "use" );
-        assertEquals( list.getLength(), 1 );
-        Node node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        Element diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
-
-        list = draw.root().getElementsByTagName( "path" );
-        assertEquals( list.getLength(), 0 );
-
-        list = draw.root().getElementsByTagName( "rect" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
-
-        list = draw.root().getElementsByTagName( "circle" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
-
-        list = draw.root().getElementsByTagName( "text" );
-        assertEquals( list.getLength(), 4 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        String text = diversionElement.getTextContent();
-        assertEquals( text, dimmer );
-        node = list.item( 1 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, channel );
-        node = list.item( 2 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, unit );
-        node = list.item( 3 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, color );
-    }
-
-    @Test
-    public void domPlanCircuitingMany() throws Exception {
-        venueElement.setAttribute( "circuiting", "one-to-many" );
-        new Venue( venueElement );
-        Draw draw = new Draw();
-        draw.establishRoot();
-        Luminaire luminaire = new Luminaire(elementOnPipe);
-        luminaire.verify();
-
-        luminaire.dom( draw, View.PLAN );
-
-        NodeList list = draw.root().getElementsByTagName( "use" );
-        assertEquals( list.getLength(), 1 );
-        Node node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        Element diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
-
-        list = draw.root().getElementsByTagName( "path" );
-        assertEquals( list.getLength(), 0 );
-
-        list = draw.root().getElementsByTagName( "rect" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
-
-        list = draw.root().getElementsByTagName( "circle" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-//        baseElement = (Element) node;
-
-        list = draw.root().getElementsByTagName( "text" );
-        assertEquals( list.getLength(), 4 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        String text = diversionElement.getTextContent();
-        assertEquals( text, circuit );
-        node = list.item( 1 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, channel );
-        node = list.item( 2 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, unit );
-        node = list.item( 3 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        text = diversionElement.getTextContent();
-        assertEquals( text, color );
-    }
+//    @Test
+//    public void domPlanCircuitingOne() throws Exception {
+//        venueElement.setAttribute( "circuiting", "one-to-one" );
+//        new Venue( venueElement );
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        Luminaire luminaire = new Luminaire(elementOnPipe);
+//        luminaire.verify();
+//
+//        luminaire.dom( draw, View.PLAN );
+//
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element diversionElement = (Element) node;
+//        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+//        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+//        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+//
+//        list = draw.root().getElementsByTagName( "path" );
+//        assertEquals( list.getLength(), 0 );
+//
+//        list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
+//
+//        list = draw.root().getElementsByTagName( "circle" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
+//
+//        list = draw.root().getElementsByTagName( "text" );
+//        assertEquals( list.getLength(), 4 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        String text = diversionElement.getTextContent();
+//        assertEquals( text, dimmer );
+//        node = list.item( 1 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, channel );
+//        node = list.item( 2 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, unit );
+//        node = list.item( 3 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, color );
+//    }
+//
+//    @Test
+//    public void domPlanCircuitingMany() throws Exception {
+//        venueElement.setAttribute( "circuiting", "one-to-many" );
+//        new Venue( venueElement );
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        Luminaire luminaire = new Luminaire(elementOnPipe);
+//        luminaire.verify();
+//
+//        luminaire.dom( draw, View.PLAN );
+//
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element diversionElement = (Element) node;
+//        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+//        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+//        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+//
+//        list = draw.root().getElementsByTagName( "path" );
+//        assertEquals( list.getLength(), 0 );
+//
+//        list = draw.root().getElementsByTagName( "rect" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
+//
+//        list = draw.root().getElementsByTagName( "circle" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+////        baseElement = (Element) node;
+//
+//        list = draw.root().getElementsByTagName( "text" );
+//        assertEquals( list.getLength(), 4 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        String text = diversionElement.getTextContent();
+//        assertEquals( text, circuit );
+//        node = list.item( 1 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, channel );
+//        node = list.item( 2 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, unit );
+//        node = list.item( 3 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        text = diversionElement.getTextContent();
+//        assertEquals( text, color );
+//    }
 
 
     // TODO: commented out 2014-07-15 as it was hanging the whole test run.
@@ -645,141 +644,141 @@ public class LuminaireTest {
 //                      "M 25 39 L 28 34 L 38 34 L 41 39 L 38 44 L 28 44 Z" );
     }
 
-    @Test
-    public void domSchematicTwiceSetsPostion() throws Exception {
-        lightingStand.preview( View.SCHEMATIC );
-        Luminaire instance1 = new Luminaire(elementOnLightingStand);
-        elementOnLightingStand.setAttribute( "location", "c" );
-        elementOnLightingStand.setAttribute( "unit", "other unit" );
-        Luminaire instance2 = new Luminaire(elementOnLightingStand);
-        instance1.verify();
-        instance2.verify();
-        instance1.preview(View.SCHEMATIC);
-        instance2.preview(View.SCHEMATIC);
-        Draw draw = new Draw();
-        draw.establishRoot();
-        lightingStand.dom(draw, View.SCHEMATIC);
-
-        instance1.dom(draw, View.SCHEMATIC);
-        instance2.dom(draw, View.SCHEMATIC);
+//    @Test
+//    public void domSchematicTwiceSetsPostion() throws Exception {
+//        lightingStand.preview( View.SCHEMATIC );
+//        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+//        elementOnLightingStand.setAttribute( "location", "c" );
+//        elementOnLightingStand.setAttribute( "unit", "other unit" );
+//        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+//        instance1.verify();
+//        instance2.verify();
+//        instance1.preview(View.SCHEMATIC);
+//        instance2.preview(View.SCHEMATIC);
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        lightingStand.dom(draw, View.SCHEMATIC);
 //
-//        assertEquals( instance1.schematicPosition(),
-//                new PagePoint( Schematic.FirstX - LightingStand.Space * 0.5, Schematic.FirstY ));
-//        assertEquals( instance2.schematicPosition(),
-//                new PagePoint( Schematic.FirstX + LightingStand.Space * 0.5, Schematic.FirstY ));
-        fail();
-    }
-
-    @Test
-    public void domSchematic() throws Exception {
-        Draw draw = new Draw();
-        draw.establishRoot();
-
-        lightingStand.preview(View.SCHEMATIC);
-        Luminaire luminaire = new Luminaire(elementOnLightingStand);
-        luminaire.verify();
-        luminaire.preview(View.SCHEMATIC);
-        lightingStand.dom(draw, View.SCHEMATIC);
-
-        luminaire.dom( draw, View.SCHEMATIC );
-
-//        NodeList list = draw.root().getElementsByTagName( "use" );
-        NodeList group = draw.root().getElementsByTagName( "g" );
-        assertEquals( group.getLength(), 3 ); // One of them is the LightingStand
-        Node groupNode = group.item( 2 );
-        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
-        Element groupElement = (Element) groupNode;
-        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
-//        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
-
-        NodeList list = groupElement.getElementsByTagName( "use" );
-        assertEquals( list.getLength(), 1 );
-        Node node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        Element diversionElement = (Element) node;
-        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-//        Double x = Schematic.FirstX - LightingStand.Space / 2;
-//        Double y = Schematic.FirstY;
-//        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-//        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+//        instance1.dom(draw, View.SCHEMATIC);
+//        instance2.dom(draw, View.SCHEMATIC);
+////
+////        assertEquals( instance1.schematicPosition(),
+////                new PagePoint( Schematic.FirstX - LightingStand.Space * 0.5, Schematic.FirstY ));
+////        assertEquals( instance2.schematicPosition(),
+////                new PagePoint( Schematic.FirstX + LightingStand.Space * 0.5, Schematic.FirstY ));
 //        fail();
+//    }
 
-        assertEquals( diversionElement.getAttribute( "transform" ), "" );
-
-        list = groupElement.getElementsByTagName( "text" );
-        assertEquals( list.getLength(), 1 );
-        node = list.item( 0 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        diversionElement = (Element) node;
-        String text = diversionElement.getTextContent();
-        assertEquals( text, unit );
-//        x -= 1;
-//        y += 2;
-//        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
-//        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
-    }
-
-    @Test
-    public void domSchematicStoresObstruction() throws Exception {
-        lightingStand.preview( View.SCHEMATIC );
-        Luminaire instance1 = new Luminaire(elementOnLightingStand);
-        elementOnLightingStand.setAttribute( "location", "c" );
-        elementOnLightingStand.setAttribute( "unit", "other unit" );
-        Luminaire instance2 = new Luminaire(elementOnLightingStand);
-        instance1.verify();
-        instance2.verify();
-        instance1.preview(View.SCHEMATIC);
-        instance2.preview(View.SCHEMATIC);
-        Draw draw = new Draw();
-        draw.establishRoot();
-        lightingStand.dom(draw, View.SCHEMATIC);
-        Double width = luminaireDefinition.width();
-        Double height = luminaireDefinition.length();
-//        Rectangle2D.Double rectangle1 =
-//                new Rectangle2D.Double(
-//                        Schematic.FirstX - LightingStand.Space * 0.5 - width / 2,
-//                        Schematic.FirstY - height / 2,
-//                        width, height );
-//        Rectangle2D.Double rectangle2 =
-//                new Rectangle2D.Double(
-//                        Schematic.FirstX + LightingStand.Space * 0.5 - width / 2,
-//                        Schematic.FirstY - height / 2,
-//                        width, height );
-//fail();
-
-        instance1.dom(draw, View.SCHEMATIC);
-        instance2.dom(draw, View.SCHEMATIC);
-
-//        assertEquals( instance1.schematicBox(), rectangle1 );
-//        assertEquals( instance2.schematicBox(), rectangle2 );
-    }
-
-    @Test
-    public void domSchematicRegistersObstruction() throws Exception {
-        lightingStand.preview( View.SCHEMATIC );
-        Luminaire instance1 = new Luminaire(elementOnLightingStand);
-        elementOnLightingStand.setAttribute( "location", "c" );
-        elementOnLightingStand.setAttribute( "unit", "other unit" );
-        Luminaire instance2 = new Luminaire(elementOnLightingStand);
-        instance1.verify();
-        instance2.verify();
-        instance1.preview(View.SCHEMATIC);
-        instance2.preview(View.SCHEMATIC);
-        Draw draw = new Draw();
-        draw.establishRoot();
-        lightingStand.dom(draw, View.SCHEMATIC);
-
-        ArrayList<Schematicable> list = (ArrayList)
-                TestHelpers.accessStaticObject(
-                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
-        assertEquals( list.size(), 0 );
-
-        instance1.dom(draw, View.SCHEMATIC);
-        instance2.dom(draw, View.SCHEMATIC);
-
-        assert list.contains( instance1 );
-        assert list.contains( instance2 );
-    }
+//    @Test
+//    public void domSchematic() throws Exception {
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//
+//        lightingStand.preview(View.SCHEMATIC);
+//        Luminaire luminaire = new Luminaire(elementOnLightingStand);
+//        luminaire.verify();
+//        luminaire.preview(View.SCHEMATIC);
+//        lightingStand.dom(draw, View.SCHEMATIC);
+//
+//        luminaire.dom( draw, View.SCHEMATIC );
+//
+////        NodeList list = draw.root().getElementsByTagName( "use" );
+//        NodeList group = draw.root().getElementsByTagName( "g" );
+//        assertEquals( group.getLength(), 3 ); // One of them is the LightingStand
+//        Node groupNode = group.item( 2 );
+//        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+//        Element groupElement = (Element) groupNode;
+//        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
+////        assertEquals( groupElement.getAttribute( "transform" ).substring( 0, 11 ), "rotate(0.0," );
+//
+//        NodeList list = groupElement.getElementsByTagName( "use" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element diversionElement = (Element) node;
+//        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+////        Double x = Schematic.FirstX - LightingStand.Space / 2;
+////        Double y = Schematic.FirstY;
+////        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+////        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+////        fail();
+//
+//        assertEquals( diversionElement.getAttribute( "transform" ), "" );
+//
+//        list = groupElement.getElementsByTagName( "text" );
+//        assertEquals( list.getLength(), 1 );
+//        node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        diversionElement = (Element) node;
+//        String text = diversionElement.getTextContent();
+//        assertEquals( text, unit );
+////        x -= 1;
+////        y += 2;
+////        assertEquals( diversionElement.getAttribute( "x" ), x.toString() );
+////        assertEquals( diversionElement.getAttribute( "y" ), y.toString() );
+//    }
+//
+//    @Test
+//    public void domSchematicStoresObstruction() throws Exception {
+//        lightingStand.preview( View.SCHEMATIC );
+//        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+//        elementOnLightingStand.setAttribute( "location", "c" );
+//        elementOnLightingStand.setAttribute( "unit", "other unit" );
+//        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+//        instance1.verify();
+//        instance2.verify();
+//        instance1.preview(View.SCHEMATIC);
+//        instance2.preview(View.SCHEMATIC);
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        lightingStand.dom(draw, View.SCHEMATIC);
+//        Double width = luminaireDefinition.width();
+//        Double height = luminaireDefinition.length();
+////        Rectangle2D.Double rectangle1 =
+////                new Rectangle2D.Double(
+////                        Schematic.FirstX - LightingStand.Space * 0.5 - width / 2,
+////                        Schematic.FirstY - height / 2,
+////                        width, height );
+////        Rectangle2D.Double rectangle2 =
+////                new Rectangle2D.Double(
+////                        Schematic.FirstX + LightingStand.Space * 0.5 - width / 2,
+////                        Schematic.FirstY - height / 2,
+////                        width, height );
+////fail();
+//
+//        instance1.dom(draw, View.SCHEMATIC);
+//        instance2.dom(draw, View.SCHEMATIC);
+//
+////        assertEquals( instance1.schematicBox(), rectangle1 );
+////        assertEquals( instance2.schematicBox(), rectangle2 );
+//    }
+//
+//    @Test
+//    public void domSchematicRegistersObstruction() throws Exception {
+//        lightingStand.preview( View.SCHEMATIC );
+//        Luminaire instance1 = new Luminaire(elementOnLightingStand);
+//        elementOnLightingStand.setAttribute( "location", "c" );
+//        elementOnLightingStand.setAttribute( "unit", "other unit" );
+//        Luminaire instance2 = new Luminaire(elementOnLightingStand);
+//        instance1.verify();
+//        instance2.verify();
+//        instance1.preview(View.SCHEMATIC);
+//        instance2.preview(View.SCHEMATIC);
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        lightingStand.dom(draw, View.SCHEMATIC);
+//
+//        ArrayList<Schematicable> list = (ArrayList)
+//                TestHelpers.accessStaticObject(
+//                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
+//        assertEquals( list.size(), 0 );
+//
+//        instance1.dom(draw, View.SCHEMATIC);
+//        instance2.dom(draw, View.SCHEMATIC);
+//
+//        assert list.contains( instance1 );
+//        assert list.contains( instance2 );
+//    }
 
     // TODO: commented out 2014-04-22 as it was hanging the whole test run.
     @Test
@@ -853,7 +852,7 @@ public class LuminaireTest {
         TestResets.LuminaireReset();
 //        Schematic.CountX = 0;
 //        Schematic.CountY = 1;
-        TestResets.SchematicReset();
+//        TestResets.SchematicReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -914,7 +913,7 @@ public class LuminaireTest {
         Integer width = 13;
         Integer length = 27;
         definitionElement = new IIOMetadataNode( "luminaire-definition" );
-        definitionElement.setAttribute( "name", "6x9" );
+        definitionElement.setAttribute( "name", type );
         definitionElement.setAttribute( "width", width.toString() );
         definitionElement.setAttribute( "length", length.toString() );
         definitionElement.setAttribute( "weight", weight.toString() );

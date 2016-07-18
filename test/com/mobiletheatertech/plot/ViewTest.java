@@ -22,12 +22,13 @@ public class ViewTest {
         assertNotNull( View.SECTION );
         assertNotNull( View.FRONT );
         assertNotNull( View.TRUSS );
-        assertNotNull( View.SCHEMATIC );
+//        assertNotNull( View.SCHEMATIC );
     }
 
     @Test
     public void testAll() {
-        assertEquals( View.values().length, 5 );
+        assertEquals( View.values().length, 4 );
+//        assertEquals( View.values().length, 5 ); This includes View.SCHEMATIC
     }
 
     @Test
@@ -35,12 +36,12 @@ public class ViewTest {
         assertNotEquals( View.PLAN, View.FRONT );
         assertNotEquals( View.PLAN, View.SECTION );
         assertNotEquals( View.PLAN, View.TRUSS );
-        assertNotEquals( View.PLAN, View.SCHEMATIC );
+//        assertNotEquals( View.PLAN, View.SCHEMATIC );
         assertNotEquals( View.SECTION, View.FRONT );
         assertNotEquals( View.SECTION, View.TRUSS );
-        assertNotEquals( View.SECTION, View.SCHEMATIC );
+//        assertNotEquals( View.SECTION, View.SCHEMATIC );
         assertNotEquals( View.FRONT, View.TRUSS );
-        assertNotEquals( View.FRONT, View.SCHEMATIC );
-        assertNotEquals( View.TRUSS, View.SCHEMATIC );
+//        assertNotEquals( View.FRONT, View.SCHEMATIC );
+//        assertNotEquals( View.TRUSS, View.SCHEMATIC );
     }
 }

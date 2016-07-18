@@ -85,7 +85,7 @@ public class Parse {
         parseXML( CableType.class, "cable-type" );
         parseXML( Venue.class, "venue");
         parseXML( Wall.class, "wall");
-        parseXML( Balcony.class, "balcony");
+//        parseXML( Balcony.class, "balcony");
         parseXML( Proscenium.class, "proscenium");
         parseXML( Airwall.class, "airwall");
         parseXML( Stage.class, "stage" );
@@ -94,7 +94,10 @@ public class Parse {
         parseXML( ChairBlock.class, "chairblock" );
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
-        parseXML( Base.class, "base" );
+        // Since all 'base' elements are direct children of a truss,
+        // Truss will instantiate each Base as it is discovered,
+        // rather than make a list of Base objects and then have to match them up with elements later.
+//        parseXML( Base.class, "base" );
         parseXML( PipeBase.class, "pipebase" );
         parseXML( Cheeseborough.class, "cheeseborough" );
         parseXML( Drape.class, "drape" );
@@ -114,8 +117,8 @@ public class Parse {
         parseXML( DanceTile.class, "dancetile" );
         parseXML( SetPlatform.class, "set-platform" );
 
-        parseXML( UserMulticable.class, "multicable" );
-        parseXML( UserCableRun.class, "cable-run" );
+//        parseXML( UserMulticable.class, "multicable" );
+//        parseXML( UserCableRun.class, "cable-run" );
 
         if ( fatalParseError ) {
             System.err.println( "... unable to continue." );

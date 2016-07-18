@@ -27,7 +27,7 @@ public class GridTest {
 
     Element element = null;
 
-    Double startx = 17.0;
+    Double startx = -71.0;
     Double starty = -65.0;
     Double startz = 7.0;
 
@@ -87,16 +87,18 @@ public class GridTest {
         grid.dom( draw, View.PLAN );
 
         NodeList list = draw.root().getElementsByTagName( "line" );
-//        assertEquals( list.getLength(), 17 );
+        assertEquals( list.getLength(), 25 );
 
         //  scale line
 
         // vertical lines
-        Double x1 = 1 + SvgElement.OffsetX();
+        Double x1 = SvgElement.OffsetX();
         Double y1 = SvgElement.OffsetY();
-        Double x2 = 1 + SvgElement.OffsetX();
+        Double x2 = SvgElement.OffsetX();
         Double y2 = 401 + SvgElement.OffsetY();
-        Node node = list.item( 0 );
+        // first eight are drawn by a call to Draw.scaleLine() which is tested in
+        // SvgElementTest.scaleLine()
+        Node node = list.item( 8 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element element = (Element) node;
         assertEquals( element.getAttribute( "x1" ), x1.toString() );
@@ -106,25 +108,11 @@ public class GridTest {
         assertEquals( element.getAttribute( "stroke" ), "blue" );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
 
-        x1 = 337 + SvgElement.OffsetX();
+        x1 = 336 + SvgElement.OffsetX();
         y1 = SvgElement.OffsetY();
-        x2 = 337 + SvgElement.OffsetX();
+        x2 = 336 + SvgElement.OffsetX();
         y2 = 401 + SvgElement.OffsetY();
-        node = list.item( 7 );
-        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
-        element = (Element) node;
-        assertEquals( element.getAttribute( "x1" ), x1.toString() );
-        assertEquals( element.getAttribute( "y1" ), y1.toString() );
-        assertEquals( element.getAttribute( "x2" ), x2.toString() );
-        assertEquals( element.getAttribute( "y2" ), y2.toString() );
-        assertEquals( element.getAttribute( "stroke" ), "blue" );
-        assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
-
-        x1 = SvgElement.OffsetX();
-        y1 = 1 + SvgElement.OffsetY();
-        x2 = 351 + SvgElement.OffsetX();
-        y2 = 1 + SvgElement.OffsetY();
-        node = list.item( 8 );
+        node = list.item( 15 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         element = (Element) node;
         assertEquals( element.getAttribute( "x1" ), x1.toString() );
@@ -135,9 +123,9 @@ public class GridTest {
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
 
         x1 = SvgElement.OffsetX();
-        y1 = 385 + SvgElement.OffsetY();
+        y1 = SvgElement.OffsetY();
         x2 = 351 + SvgElement.OffsetX();
-        y2 = 385 + SvgElement.OffsetY();
+        y2 = SvgElement.OffsetY();
         node = list.item( 16 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         element = (Element) node;
@@ -146,7 +134,21 @@ public class GridTest {
         assertEquals( element.getAttribute( "x2" ), x2.toString() );
         assertEquals( element.getAttribute( "y2" ), y2.toString() );
         assertEquals( element.getAttribute( "stroke" ), "blue" );
-        assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
+
+        x1 = SvgElement.OffsetX();
+        y1 = 384 + SvgElement.OffsetY();
+        x2 = 351 + SvgElement.OffsetX();
+        y2 = 384 + SvgElement.OffsetY();
+        node = list.item( 24 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), x1.toString() );
+        assertEquals( element.getAttribute( "y1" ), y1.toString() );
+        assertEquals( element.getAttribute( "x2" ), x2.toString() );
+        assertEquals( element.getAttribute( "y2" ), y2.toString() );
+        assertEquals( element.getAttribute( "stroke" ), "blue" );
+        assertEquals( element.getAttribute( "stroke-opacity" ), "0.2" );
     }
 
     @BeforeClass

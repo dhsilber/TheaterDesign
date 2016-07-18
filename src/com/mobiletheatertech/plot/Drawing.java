@@ -32,9 +32,9 @@ public class Drawing extends ElementalLister {
         }
 
         switch ( viewString ) {
-            case "schematic":
-                view = View.SCHEMATIC;
-                break;
+//            case "schematic":
+//                view = View.SCHEMATIC;
+//                break;
             case "":
                 view = View.PLAN;
                 break;

@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.5
  */
-public class Truss extends Mountable implements Legendable, Schematicable {
+public class Truss extends Mountable implements Legendable /*, Schematicable*/ {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -67,6 +67,7 @@ public class Truss extends Mountable implements Legendable, Schematicable {
     Point position = null;
     Boolean positioned = false;
     Boolean suspended = false;
+    Boolean based = false;
 
     Point verticalCenter = null;
 
@@ -106,13 +107,12 @@ public class Truss extends Mountable implements Legendable, Schematicable {
 
         suspended = suspended();
 
+        based = based();
 
-//        processedMark = Mark.Generate();
-//        element.setAttribute("processedMark", processedMark);
-
-//        new Category( CATEGORY, this.getClass() );
+        if ( !positioned && ! suspended && ! based ) {
+            throw new InvalidXMLException( "Truss (" + id + ") must have position, base, or exactly two suspend children");
+        }
     }
-//
 
     public void verify() throws AttributeMissingException, DataException, InvalidXMLException, ReferenceException {
 //        NodeList baseList = element.getElementsByTagName( "base" );
@@ -122,32 +122,8 @@ public class Truss extends Mountable implements Legendable, Schematicable {
             return;
         }
 
-        if ( suspended ) {
+        if ( suspended || based ) {
             return;
-        }
-
-        NodeList baseList = element.getElementsByTagName( "base" );
-
-        if ( 1 == baseList.getLength() ) {
-            // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
-            base = findBase( baseList );
-
-            verticalCenter = new Point( base.x(), base.y(), 0.0 );
-            rotation = base.rotation();
-
-//            positioned = true;
-            x = base.x();
-            y = base.y();
-            z = 0.0;
-
-            if ( ! LEGENDREGISTERED ) {
-                Legend.Register( this, 2.0, 12.0, LegendOrder.Structure );
-                LEGENDREGISTERED = true;
-            }
-        }
-        else {
-            System.err.println("Found " + baseList.getLength() + " base child nodes");
-            throw new InvalidXMLException("Truss (" + id + ") must have position, base, or exactly two suspend children");
         }
     }
 
@@ -193,9 +169,39 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         }
         else {
             System.err.println("Found " + suspendList.getLength() + " suspend child nodes");
-            throw new InvalidXMLException( "Truss (" + id + ") must have position, base, or exactly two suspend children");
+            return false;
         }
+    }
 
+    private boolean based()
+            throws AttributeMissingException, DataException, InvalidXMLException
+    {
+        NodeList baseList = element.getElementsByTagName( "base" );
+
+        if (0 == baseList.getLength()) {
+            return false;
+        }
+        else if ( 1 == baseList.getLength() ) {
+            base = instantiateBase( baseList );
+
+            verticalCenter = new Point( base.x(), base.y(), 0.0 );
+            rotation = base.rotation();
+
+//            positioned = true;
+            x = base.x();
+            y = base.y();
+            z = 0.0;
+
+            if ( ! LEGENDREGISTERED ) {
+                Legend.Register( this, 2.0, 12.0, LegendOrder.Structure );
+                LEGENDREGISTERED = true;
+            }
+            return true;
+        }
+        else {
+            System.err.println("Found " + baseList.getLength() + " base child nodes");
+            return false;
+        }
     }
 
     private Suspend instatiateSuspend( NodeList suspendList, int index )
@@ -205,6 +211,16 @@ public class Truss extends Mountable implements Legendable, Schematicable {
         Node suspendNode = suspendList.item( index );
         if ( suspendNode.getNodeType() == Node.ELEMENT_NODE ) {
             return new Suspend( (Element) suspendNode );
+        }
+        return null;
+    }
+
+    private Base instantiateBase( NodeList suspendList )
+            throws AttributeMissingException, DataException, InvalidXMLException
+    {
+        Node baseNode = suspendList.item( 0 );
+        if ( baseNode.getNodeType() == Node.ELEMENT_NODE ) {
+            return new Base( (Element) baseNode );
         }
         return null;
     }
@@ -279,21 +295,21 @@ public class Truss extends Mountable implements Legendable, Schematicable {
                 schematicPosition.y() + offset + verticalOffset );
     }
 
-    @Override
-    public PagePoint schematicPosition() {
-        return schematicPosition;
-    }
-
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return null;
-    }
-
-    @Override
-    public void schematicReset() {}
+//    @Override
+//    public PagePoint schematicPosition() {
+//        return schematicPosition;
+//    }
+//
+//    @Override
+//    public PagePoint schematicCableIntersectPosition( CableRun run ) { return null; }
+//
+//    @Override
+//    public Rectangle2D.Double schematicBox() {
+//        return null;
+//    }
+//
+//    @Override
+//    public void schematicReset() {}
 
     /*
     * Provide the location to draw a hanged thing at relative to the unrotated truss.
@@ -492,22 +508,22 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
         }
     }
 
-    @Override
-    public void useCount( Direction direction, CableRun run ) {
-    }
-
-    @Override
-    public void preview( View view ) {
-        switch ( view ) {
-            case SCHEMATIC:
-                schematicPosition = Schematic.Position( length, schematicHeight );
-        }
-    }
-
-    @Override
-    public Place drawingLocation() {
-        return null;
-    }
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//    }
+//
+//    @Override
+//    public void preview( View view ) {
+//        switch ( view ) {
+//            case SCHEMATIC:
+//                schematicPosition = Schematic.Position( length, schematicHeight );
+//        }
+//    }
+//
+//    @Override
+//    public Place drawingLocation() {
+//        return null;
+//    }
 
     /**
      * Elucidate the support for this.
@@ -572,8 +588,8 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
         // Common setup:
         switch (mode) {
             case PLAN:
-//            case TRUSS:
-            case SCHEMATIC:
+            case TRUSS:
+//            case SCHEMATIC:
                 group = svgClassGroup( draw, LAYERTAG );
                 draw.appendRootChild(group);
                 break;
@@ -613,52 +629,52 @@ Used only by Luminaire.dom() in code that only has effect in View.TRUSS mode.
                             "rotate(" + rotation + "," + transformX + "," + transformY + ")");
                 }
                 break;
-            case SCHEMATIC:
-                if ( null != base ) {
-
-                }
-                else {
-                    PagePoint trussTop =
-                            new PagePoint( schematicPosition.x(), schematicPosition.y() - schematicHeight / 4 );
-                    PagePoint trussBottom =
-                            new PagePoint( schematicPosition.x(), schematicPosition.y() + schematicHeight / 4 );
-
-                    group.rectangleAbsolute( draw,
-                            trussTop.x() - length / 2, trussTop.y() - size / 2,
-                            length, size, color );
-
-                    SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
-                    draw.appendRootChild(group2);
-                    group.rectangleAbsolute( draw,
-                            trussBottom.x() - length / 2, trussBottom.y() - size / 2,
-                            length, size, color );
-
-
-//                    // For hangpoints, which is a lower priority today.
-//                    if ( ! positioned ) {
-//                        Double hangOneX = size + overHang;
-//                        Double hangOneY = yTruss1 + size / 2;
-//                        HangPoint.Draw(draw, hangOneX, hangOneY, hangOneX, hangOneY + size + size, suspend1.ref());
+//            case SCHEMATIC:
+//                if ( null != base ) {
 //
-//                        Double hangTwoX = size + length - overHang;
-//                        Double hangTwoY = yTruss1 + size / 2;
-//                        HangPoint.Draw(draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size + size, suspend2.ref());
-//                    }
-
-
-                    Double topTextX = trussTop.x() + length / 2 + Schematic.TextSpace;
-                    Double topTextY = trussTop.y();
-                    SvgElement idText = group.textAbsolute( draw, id + " top layer", topTextX, topTextY, color );
-
-                    Double bottomTextX = trussBottom.x() + length / 2 + Schematic.TextSpace;
-                    Double bottomTextY = trussBottom.y();
-                    SvgElement idText2 = group.textAbsolute(draw, id + " bottom layer", bottomTextX, bottomTextY, color);
-
-
-                    trussCounted = TrussCount;
-                    TrussCount++;
-                }
-                break;
+//                }
+//                else {
+//                    PagePoint trussTop =
+//                            new PagePoint( schematicPosition.x(), schematicPosition.y() - schematicHeight / 4 );
+//                    PagePoint trussBottom =
+//                            new PagePoint( schematicPosition.x(), schematicPosition.y() + schematicHeight / 4 );
+//
+//                    group.rectangleAbsolute( draw,
+//                            trussTop.x() - length / 2, trussTop.y() - size / 2,
+//                            length, size, color );
+//
+//                    SvgElement group2 =  svgClassGroup( draw, LAYERTAG );
+//                    draw.appendRootChild(group2);
+//                    group.rectangleAbsolute( draw,
+//                            trussBottom.x() - length / 2, trussBottom.y() - size / 2,
+//                            length, size, color );
+//
+//
+////                    // For hangpoints, which is a lower priority today.
+////                    if ( ! positioned ) {
+////                        Double hangOneX = size + overHang;
+////                        Double hangOneY = yTruss1 + size / 2;
+////                        HangPoint.Draw(draw, hangOneX, hangOneY, hangOneX, hangOneY + size + size, suspend1.ref());
+////
+////                        Double hangTwoX = size + length - overHang;
+////                        Double hangTwoY = yTruss1 + size / 2;
+////                        HangPoint.Draw(draw, hangTwoX, hangTwoY, hangTwoX, hangTwoY + size + size, suspend2.ref());
+////                    }
+//
+//
+//                    Double topTextX = trussTop.x() + length / 2 + Schematic.TextSpace;
+//                    Double topTextY = trussTop.y();
+//                    SvgElement idText = group.textAbsolute( draw, id + " top layer", topTextX, topTextY, color );
+//
+//                    Double bottomTextX = trussBottom.x() + length / 2 + Schematic.TextSpace;
+//                    Double bottomTextY = trussBottom.y();
+//                    SvgElement idText2 = group.textAbsolute(draw, id + " bottom layer", bottomTextX, bottomTextY, color);
+//
+//
+//                    trussCounted = TrussCount;
+//                    TrussCount++;
+//                }
+//                break;
             default:
 //                System.err.println( "default." );
                 return;

@@ -28,7 +28,7 @@ import java.util.LinkedList;
 /*
 If I need it, implement 'inclination' for vertical rotation.
  */
-public class Device extends Stackable implements Schematicable
+public class Device extends Stackable // implements Schematicable
 {
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class Device extends Stackable implements Schematicable
 
     boolean verified = false;
 
-    CableCounter cableCounter = new CableCounter();
+//    CableCounter cableCounter = new CableCounter();
 
 
     /**
@@ -173,26 +173,26 @@ public class Device extends Stackable implements Schematicable
         }
     }
 
-    @Override
-    public void useCount( Direction direction, CableRun run ) {
-        cableCounter.add( direction, run );
-    }
-
-    @Override
-    public void preview( View view ) {
-        switch ( view ) {
-            case SCHEMATIC:
-                Double width = shape.width();
-                Double height = shape.height();
-                schematicPosition = Schematic.Position( width, height );
-
-                schematicBox = new Rectangle2D.Double(
-                        schematicPosition.x() - width / 2,
-                        schematicPosition.y() - height / 2,
-                        width, height );
-                Schematic.Obstruction( this );
-        }
-    }
+//    @Override
+//    public void useCount( Direction direction, CableRun run ) {
+//        cableCounter.add( direction, run );
+//    }
+//
+//    @Override
+//    public void preview( View view ) {
+//        switch ( view ) {
+//            case SCHEMATIC:
+//                Double width = shape.width();
+//                Double height = shape.height();
+//                schematicPosition = Schematic.Position( width, height );
+//
+//                schematicBox = new Rectangle2D.Double(
+//                        schematicPosition.x() - width / 2,
+//                        schematicPosition.y() - height / 2,
+//                        width, height );
+//                Schematic.Obstruction( this );
+//        }
+//    }
 
     /*
      */
@@ -200,34 +200,34 @@ public class Device extends Stackable implements Schematicable
         return schematicPosition;
     }
 
-    /*
-    Position of this Device
-     */
-    @Override
-    public PagePoint schematicPosition() {
-        if (null == schematicPosition) {
-//            System.err.println( this.toString() + " has no schematic position.");
-        }
-        return schematicPosition;
-    }
-
-    @Override
-    public PagePoint schematicCableIntersectPosition( CableRun run )
-            throws CorruptedInternalInformationException
-    {
-        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
-    }
-
-    @Override
-    public Rectangle2D.Double schematicBox() {
-        return schematicBox;
-    }
-
-    @Override
-    public void schematicReset() {
-        cableCounter.clear();
-        schematicPosition = null;
-    }
+//    /*
+//    Position of this Device
+//     */
+//    @Override
+//    public PagePoint schematicPosition() {
+//        if (null == schematicPosition) {
+////            System.err.println( this.toString() + " has no schematic position.");
+//        }
+//        return schematicPosition;
+//    }
+//
+//    @Override
+//    public PagePoint schematicCableIntersectPosition( CableRun run )
+//            throws CorruptedInternalInformationException
+//    {
+//        return cableCounter.cableIntersectPosition( shape, schematicPosition, run );
+//    }
+//
+//    @Override
+//    public Rectangle2D.Double schematicBox() {
+//        return schematicBox;
+//    }
+//
+//    @Override
+//    public void schematicReset() {
+//        cableCounter.clear();
+//        schematicPosition = null;
+//    }
 
     @Override
     public void dom(Draw draw, View view)
@@ -271,24 +271,24 @@ public class Device extends Stackable implements Schematicable
                 break;
             case TRUSS:
                 break;
-            case SCHEMATIC:
-                group = svgClassGroup( draw, layerName);
-                draw.appendRootChild(group);
-
-                Double leftEdge = schematicPosition.x() - width / 2;
-                Double topEdge = schematicPosition.y() - height / 2;
-                element = group.rectangleAbsolute( draw,
-                        leftEdge, topEdge, width, height, color);
-                element.attribute("fill", color);
-                element.attribute("fill-opacity", "0.1");
-
-                /*SvgElement idText =*/ group.textAbsolute(draw, id,
-                    leftEdge, topEdge + height + Schematic.TextSpace, color);
-//                idText.attribute( "text-anchor", "left" );
-
-                template.count();
-
-                break;
+//            case SCHEMATIC:
+//                group = svgClassGroup( draw, layerName);
+//                draw.appendRootChild(group);
+//
+//                Double leftEdge = schematicPosition.x() - width / 2;
+//                Double topEdge = schematicPosition.y() - height / 2;
+//                element = group.rectangleAbsolute( draw,
+//                        leftEdge, topEdge, width, height, color);
+//                element.attribute("fill", color);
+//                element.attribute("fill-opacity", "0.1");
+//
+//                /*SvgElement idText =*/ group.textAbsolute(draw, id,
+//                    leftEdge, topEdge + height + Schematic.TextSpace, color);
+////                idText.attribute( "text-anchor", "left" );
+//
+//                template.count();
+//
+//                break;
         }
     }
 

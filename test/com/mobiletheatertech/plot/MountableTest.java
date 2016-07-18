@@ -66,47 +66,47 @@ public class MountableTest {
                     "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @Override
-        public PagePoint schematicPosition() { return null; }
-
-        /**
-         * This is schematicPosition() adjusted to take into account the number of
-         * cables attempting to intersect a thing from that direction.
-         *
-         * @return a position along the edge of a thing
-         */
-        @Override
-        public PagePoint schematicCableIntersectPosition( CableRun run )
-                throws CorruptedInternalInformationException, ReferenceException
-        { return null; }
-
-        @Override
-        public Rectangle2D.Double schematicBox()
-        { return null; }
-
-        @Override
-        public void schematicReset()  {}
-
-        @Override
-        public void useCount( Direction direction, CableRun run ) {}
-
-        @Override
-        public void preview( View view )
-                throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
-        {}
-
-        @Override
-        public Place drawingLocation()
-                throws InvalidXMLException, MountingException, ReferenceException
-        {
-            Point location = new Point( 1, 2, 3 );
-            Point origin = new Point( 4, 5, 6 );
-            Double rotation = 7.8;
-            Place here = new Place( location, origin, rotation );
-
-//            System.err.print( "Here: " + here.toString() );
-            return here;
-        }
+//        @Override
+//        public PagePoint schematicPosition() { return null; }
+//
+//        /**
+//         * This is schematicPosition() adjusted to take into account the number of
+//         * cables attempting to intersect a thing from that direction.
+//         *
+//         * @return a position along the edge of a thing
+//         */
+//        @Override
+//        public PagePoint schematicCableIntersectPosition( CableRun run )
+//                throws CorruptedInternalInformationException, ReferenceException
+//        { return null; }
+//
+//        @Override
+//        public Rectangle2D.Double schematicBox()
+//        { return null; }
+//
+//        @Override
+//        public void schematicReset()  {}
+//
+//        @Override
+//        public void useCount( Direction direction, CableRun run ) {}
+//
+//        @Override
+//        public void preview( View view )
+//                throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
+//        {}
+//
+//        @Override
+//        public Place drawingLocation()
+//                throws InvalidXMLException, MountingException, ReferenceException
+//        {
+//            Point location = new Point( 1, 2, 3 );
+//            Point origin = new Point( 4, 5, 6 );
+//            Double rotation = 7.8;
+//            Place here = new Place( location, origin, rotation );
+//
+////            System.err.print( "Here: " + here.toString() );
+//            return here;
+//        }
 
         /**
          * Elucidate the support for this.

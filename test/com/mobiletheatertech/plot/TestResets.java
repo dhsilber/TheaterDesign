@@ -21,14 +21,14 @@ public class TestResets {
         cableDiversionArrayList.clear();
     }
 
-    public static void CableRunReset()
-            throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = CableRun.class.getDeclaredField( "RunList" );
-        field.setAccessible( true );
-        ArrayList<CableRun> runList = (ArrayList<CableRun>) field.get( CableRun.class );
-        runList.clear();
-    }
+//    public static void CableRunReset()
+//            throws NoSuchFieldException, IllegalAccessException
+//    {
+//        Field field = CableRun.class.getDeclaredField( "RunList" );
+//        field.setAccessible( true );
+//        ArrayList<CableRun> runList = (ArrayList<CableRun>) field.get( CableRun.class );
+//        runList.clear();
+//    }
 
     public static void CableTypeReset()
             throws NoSuchFieldException, IllegalAccessException
@@ -231,23 +231,23 @@ public class TestResets {
         mountableList.clear();
     }
 
-    /**
-     * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.
-     *
-     * @throws NoSuchFieldException   if the {@code STACKABLELIST} field isn't there.
-     * @throws IllegalAccessException if the {@code STACKABLELIST} field cannot be accessed.
-     */
-    public static void SchematicReset() throws Exception {
-        ArrayList<Schematicable> list = (ArrayList)
-                TestHelpers.accessStaticObject(
-                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
-        list.clear();
-
-        Schematic.LastX = 0.0;
-        Schematic.LastY = Schematic.Increment;
-        Schematic.LastWidth = Schematic.Spacer;
-        Schematic.TotalWidth = 0.0;
-    }
+//    /**
+//     * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.
+//     *
+//     * @throws NoSuchFieldException   if the {@code STACKABLELIST} field isn't there.
+//     * @throws IllegalAccessException if the {@code STACKABLELIST} field cannot be accessed.
+//     */
+//    public static void SchematicReset() throws Exception {
+//        ArrayList<Schematicable> list = (ArrayList)
+//                TestHelpers.accessStaticObject(
+//                        "com.mobiletheatertech.plot.Schematic", "ObstructionList" );
+//        list.clear();
+//
+//        Schematic.LastX = 0.0;
+//        Schematic.LastY = Schematic.Increment;
+//        Schematic.LastWidth = Schematic.Spacer;
+//        Schematic.TotalWidth = 0.0;
+//    }
 
     /**
      * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.

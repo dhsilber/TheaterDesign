@@ -63,7 +63,7 @@ public class TrussTest {
         assert Mountable.class.isInstance( instance );
 
         assert Legendable.class.isInstance( instance );
-        assert Schematicable.class.isInstance( instance );
+//        assert Schematicable.class.isInstance( instance );
     }
 
     @Test
@@ -210,34 +210,8 @@ public class TrussTest {
 //        assertNotNull( Category.Select( Truss.CATEGORY ) );
 //    }
 
-    /*
-            Make a couple of suspend objects that are children of this truss
-            and confirm that they are properly associated
-     */
     @Test
-    public void verifySuspendReferences() throws Exception {
-        Truss truss = new Truss( element );
-        new Suspend( suspendElement1 );
-        new Suspend( suspendElement2 );
-
-        truss.verify();
-
-        Field suspendField1 = TestHelpers.accessField( truss, "suspend1" );
-        Suspend suspend1 = (Suspend) suspendField1.get( truss );
-
-        Field suspendField2 = TestHelpers.accessField( truss, "suspend2" );
-        Suspend suspend2 = (Suspend) suspendField2.get( truss );
-
-        assertTrue( Suspend.class.isInstance( suspend1 ) );
-        assertTrue( Suspend.class.isInstance( suspend2 ) );
-
-        Field baseField = TestHelpers.accessField( truss, "base" );
-        Object baseReference = baseField.get(truss);
-        assertNull(baseReference);
-    }
-
-    @Test
-    public void verifyBaseReference() throws Exception {
+    public void baseChild() throws Exception {
         Truss truss = new Truss(trussOnBaseElement);
         new Base( baseElement );
 
@@ -258,27 +232,77 @@ public class TrussTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussOnBaseId + "\\) must have position, base, or exactly two suspend children")
+    public void noBase() throws Exception {
+        trussOnBaseElement.removeChild( baseElement );
+        new Truss( trussOnBaseElement );
+
+//        truss.verify();
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Truss \\(" + trussOnBaseId + "\\) must have position, base, or exactly two suspend children")
+    public void tooManyBases() throws Exception {
+        Element baseElementExtra = new IIOMetadataNode( "base" );
+        baseElementExtra.setAttribute( "size", baseSize.toString() );
+        baseElementExtra.setAttribute("x", "12" );
+        baseElementExtra.setAttribute("y", "2009" );
+
+        trussOnBaseElement.appendChild( baseElement );
+        trussOnBaseElement.appendChild( baseElementExtra );
+        new Truss( trussOnBaseElement );
+
+//        truss.verify();
+    }
+
+    /*
+            Make a couple of suspend objects that are children of this truss
+            and confirm that they are properly associated
+     */
+    @Test
+    public void suspendChildren() throws Exception {
+        Truss truss = new Truss( element );
+        new Suspend( suspendElement1 );
+        new Suspend( suspendElement2 );
+
+//        truss.verify();
+
+        Field suspendField1 = TestHelpers.accessField( truss, "suspend1" );
+        Suspend suspend1 = (Suspend) suspendField1.get( truss );
+
+        Field suspendField2 = TestHelpers.accessField( truss, "suspend2" );
+        Suspend suspend2 = (Suspend) suspendField2.get( truss );
+
+        assertTrue( Suspend.class.isInstance( suspend1 ) );
+        assertTrue( Suspend.class.isInstance( suspend2 ) );
+
+        Field baseField = TestHelpers.accessField( truss, "base" );
+        Object baseReference = baseField.get(truss);
+        assertNull(baseReference);
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
           expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
-    public void verifyNoSuspends() throws Exception {
+    public void noSuspends() throws Exception {
         element.removeChild( suspendElement1 );
         element.removeChild( suspendElement2 );
-        Truss truss = new Truss( element );
+        new Truss( element );
 
-        truss.verify();
+//        truss.verify();
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
           expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
-    public void verifyTooFewSuspends() throws Exception {
+    public void tooFewSuspends() throws Exception {
         element.removeChild( suspendElement1 );
-        Truss truss = new Truss( element );
+        new Truss( element );
 
-        truss.verify();
+//        truss.verify();
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
           expectedExceptionsMessageRegExp = "Truss \\(" + trussId + "\\) must have position, base, or exactly two suspend children")
-    public void verifyTooManySuspends() throws Exception {
+    public void tooManySuspends() throws Exception {
         // This is just broken.
         // A new 'element' should have been constructed in setUpMethod() that has two
         //   suspendElement# in it, but apparently the removal in the above test is not
@@ -287,9 +311,9 @@ public class TrussTest {
         element.appendChild( suspendElement2 );
         element.appendChild( suspendElement3 );
 
-        Truss truss = new Truss( element );
+        new Truss( element );
 
-        truss.verify();
+//        truss.verify();
     }
 
 //    @Test

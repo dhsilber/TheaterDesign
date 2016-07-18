@@ -10,6 +10,6 @@ public enum View {
     PLAN,
     SECTION,
     FRONT,
-    TRUSS,
-    SCHEMATIC
+    TRUSS //,
+//    SCHEMATIC
 }

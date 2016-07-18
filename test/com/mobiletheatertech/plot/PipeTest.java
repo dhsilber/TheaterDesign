@@ -71,7 +71,7 @@ public class PipeTest {
         assert MinderDom.class.isInstance( instance );
         assert Mountable.class.isInstance( instance );
 
-        assert Schematicable.class.isInstance( instance );
+//        assert Schematicable.class.isInstance( instance );
     }
 
     @Test

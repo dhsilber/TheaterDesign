@@ -72,36 +72,12 @@ public class DrapeBaseTest {
     }
 
     @Test
-    public void marksProcessed() throws Exception {
-        String emptyMark = baseElement.getAttribute( "processedMark" );
-        assertEquals( emptyMark, "", "Should be unset" );
-
-        DrapeBase base = new DrapeBase( baseElement );
-
-        String baseMark = TestHelpers.accessString( base, "processedMark" );
-        String elementMark = baseElement.getAttribute( "processedMark" );
-        assertNotNull( baseMark );
-        assertNotEquals( baseMark, "", "Should be set in Base object" );
-        assertNotEquals( elementMark, "", "Should be set in Element" );
-        assertEquals( baseMark, elementMark, "should match" );
-    }
-
-    @Test
     public void findNull() throws Exception {
         new DrapeBase( baseElement );
 
         DrapeBase found = DrapeBase.Find( null );
 
         assertNull(found);
-    }
-
-    @Test
-    public void findsMarked() throws Exception {
-        DrapeBase instance = new DrapeBase(baseElement);
-
-        DrapeBase found = DrapeBase.Find( baseElement.getAttribute( "processedMark" ) );
-
-        assertSame( found, instance );
     }
 
     /*
@@ -172,9 +148,10 @@ public class DrapeBaseTest {
     @Test
     public void parse() throws Exception {
         String xml = "<plot>" +
-//                "<drape length=\"10\" >" +
+                "<drape length=\"10\" >" +
                 "<drapebase  x=\"4\" y=\"1\" />" +
-  //              "</drape>" +
+                "<drapebase  x=\"4\" y=\"12\" />" +
+                "</drape>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
