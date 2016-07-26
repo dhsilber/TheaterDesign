@@ -218,7 +218,7 @@ public class LuminaireTest {
 
     @Test(expectedExceptions = MountingException.class,
           expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
-                  "' has location -1 which is beyond the end of \\(non-proscenium\\) Pipe '" + pipeName + "'.")
+                  "' has location -1 which is beyond the end of pipe '" + pipeName + "'.")
     public void locateOffPipe() throws Exception {
         elementOnPipe.setAttribute("location", "-1");
         Luminaire luminaire = new Luminaire(elementOnPipe);
@@ -234,7 +234,7 @@ public class LuminaireTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\("+pipeName+"\\) location is not a number.")
+            expectedExceptionsMessageRegExp = "Pipe \\("+pipeName+"\\) location must be a number.")
     public void verifyBadPipeLocation() throws Exception {
         elementOnPipe.setAttribute("location", "a");
         Luminaire luminaire = new Luminaire(elementOnPipe);
@@ -425,6 +425,61 @@ public class LuminaireTest {
 //        diversionElement = (Element) node;
 //        text = diversionElement.getTextContent();
 //        assertEquals( text, color );
+    }
+
+    @Test
+    public void domPlanRotatedPipe() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+
+        Element rotatedPipeElement = new IIOMetadataNode( "pipe" );
+        rotatedPipeElement.setAttribute( "id", "rotatedPipe" );
+        rotatedPipeElement.setAttribute( "length", "120" );
+        rotatedPipeElement.setAttribute( "x", "12" );
+        rotatedPipeElement.setAttribute( "y", "34" );
+        rotatedPipeElement.setAttribute( "z", "56" );
+        rotatedPipeElement.setAttribute( "orientation", "90" );
+        Pipe pipe = new Pipe( rotatedPipeElement );
+
+        elementOnPipe.setAttribute( "on", "rotatedPipe" );
+        Luminaire luminaire = new Luminaire(elementOnPipe);
+        luminaire.verify();
+
+        luminaire.dom( draw, View.PLAN );
+
+//        NodeList list = draw.root().getElementsByTagName( "use" );
+        NodeList group = draw.root().getElementsByTagName( "g" );
+        assertEquals( group.getLength(), 2 );
+        Node groupNode = group.item( 1 );
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Luminaire.LAYERTAG );
+//        assertEquals( groupElement.getAttribute( "transform" ), "rotate(270.0,12.0,34.0)" );
+
+        NodeList list = groupElement.getElementsByTagName( "use" );
+        assertEquals( list.getLength(), 1 );
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element diversionElement = (Element) node;
+        assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
+        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+        assertEquals( diversionElement.getAttribute( "id" ), id );
+        assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
+        assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
+
+        list = groupElement.getElementsByTagName( "text" );
+        assertEquals( list.getLength(), 1 );
+/*
+       Issue is that circuit text is not displayed.
+       Root cause is that the code to modify the output based on Venue Circuiting is too complex and a bit broken.
+*/
+        node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element textElement = (Element) node;
+        assertEquals( textElement.getTextContent(), unit );
+
+        domGeneratesData( groupElement, luminaire );
     }
 
 //    @Test

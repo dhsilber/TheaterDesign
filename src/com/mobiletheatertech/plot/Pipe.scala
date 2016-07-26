@@ -30,7 +30,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
   var base: PipeBase = null
   var support1: Cheeseborough = null
   var support2: Cheeseborough = null
-  process()
+  val ( based: Boolean, positioned: Boolean ) = process()
 
 
   if ( 0 >= length ) {
@@ -38,20 +38,24 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     throw new SizeException( this.toString(), "length" )
   }
 
+  if( (0.0 != orientation) && (90.0 != orientation) )
+    throw new InvalidXMLException(
+      "Pipe (" + identifier + ") orientation may only be set to 90." )
+
   val begin: Double = if ( positionConditions() ) 0.0    else - length / 2
   val end: Double   = if ( positionConditions() ) length else length / 2
 
   new Layer( Pipe.LayerTag, Pipe.LayerName, Pipe.Color )
 
 
-  def process(): Unit = {
+  def process(): ( Boolean, Boolean )= {
     base = baseProcessing()
-    if ( null != base ) return
+    if ( null != base ) return ( true, false )
 
     cheeseboroughProcessing()
-    if( null != start ) return
+    if( null != start ) return ( false, false )
 
-    val positioned: Boolean = positionProcessing()
+    ( false, positionProcessing() )
   }
 
   def cheeseboroughProcessing(): Unit = {
@@ -138,7 +142,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
         boxOrigin = Proscenium.Locate(new Point(start.x() - 1, start.y(), start.z() - 1))
       }
       else {
-        boxOrigin = Proscenium.Locate(new Point(start.x, start.y - 1, start.z - 1))
+        boxOrigin = Proscenium.Locate(new Point(start.x, start.y + 1, start.z - 1))
       }
     else {
       boxOrigin = new Point( start.x, start.y - 1, start.z - 1 )
@@ -269,10 +273,11 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     //        group.appendChild(pipeRectangle);
 
     def domPlan(): Unit = {
-      if (null != base) {
+      if (based) {
         group.rectangle(draw, drawBox.x(), drawBox.y(), Pipe.Diameter, Pipe.Diameter, Pipe.Color);
       } else if (90.0 == orientation) {
         group.rectangle(draw, drawBox.x(), drawBox.y(), Pipe.Diameter, length, Pipe.Color);
+        group.text(draw, identifier, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
       } else {
         group.rectangle(draw, drawBox.x(), drawBox.y(), length, Pipe.Diameter, Pipe.Color);
         group.text(draw, identifier, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
@@ -294,33 +299,42 @@ class Pipe ( element: Element ) extends Mountable( element ) {
   }
 
   def mountableLocation( location: String ): Point = {
-    val offset: Double = numberFromLocation( location )
+    val offset: Double = numberFromLocation(location)
 
-    if ( (offset < begin) || (end < offset) )
-      throw new MountingException( "beyond the end of pipe" )
+    if ((offset < begin) || (end < offset))
+      throw new MountingException("beyond the end of pipe")
 
     def crossesProsceniumCenterline(): Point = {
-      Proscenium.Locate( new Point( offset, start.y - 1, start.z - 1 ) )
+      Proscenium.Locate(new Point(offset, start.y - 1, start.z - 1))
     }
     def doesNotCrossProsceniumCenterline(): Point = {
-      Proscenium.Locate( new Point( start.x + offset, start.y - 1, start.z - 1 ) )
+      Proscenium.Locate(new Point(start.x + offset, start.y - 1, start.z - 1))
     }
     def rightAngleToProscenium(): Point = {
-      Proscenium.Locate( new Point( start.x + offset, start.y - 1, start.z - 1 ) )
+      Proscenium.Locate(new Point(start.x - 1, start.y + offset, start.z - 1))
     }
     def noProscenium(): Point = {
-      new Point( start.x + offset, start.y, start.z )
+      new Point(start.x + offset, start.y, start.z)
     }
 
-    if (Proscenium.Active())
-      if (90 == orientation)
+    if (Proscenium.Active()) {
+      if (based)
+        Proscenium.Locate( new Point( base.x, base.y, base.z + offset + Pipe.baseOffsetZ ) )
+      else if (90 == orientation)
         rightAngleToProscenium()
-      else if ( (start.x < 0) && (start.x + length > 0) )
+      else if ((start.x < 0) && (start.x + length > 0))
         crossesProsceniumCenterline()
       else
         doesNotCrossProsceniumCenterline()
-    else
-      noProscenium()
+    }
+    else {
+      if (based)
+        new Point(base.x, base.y, base.z + offset + Pipe.baseOffsetZ)
+      else if (90 == orientation)
+        new Point(start.x - 1, start.y + offset, start.z - 1)
+      else
+        noProscenium()
+    }
   }
 
   def numberFromLocation( location: String ): Int = {
@@ -333,8 +347,29 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     }
   }
 
-  def rotatedLocation(x$1: String): com.mobiletheatertech.plot.Place = {
-    new Place( new Point( 1.0, 2.0, 3.0 ), new Point( 4.0, 5.0, 6.0 ), 0.0 ) }
+  def rotatedLocation( location: String ): Place = {
+    if (positioned) {
+      if ( 90.0 == orientation ) {
+        new Place(mountableLocation(location), start, 90.0 )
+      }
+      else {
+        new Place(mountableLocation(location), start, 0.0)
+      }
+    }
+    else if ( based ) {
+      val transformX: Double = base.x + SvgElement.OffsetX
+      val transformY: Double = base.y + SvgElement.OffsetY
+      val origin: Point = new Point(transformX, transformY, Pipe.baseOffsetZ )
+      new Place( mountableLocation( location ), origin, 0.0 )
+    }
+    else {
+      val transformX: Double = support1.locate().x() + SvgElement.OffsetX
+      val transformY: Double = support1.locate().y() + SvgElement.OffsetY
+      val origin: Point = new Point(transformX, transformY, support1.locate().z() )
+      new Place( mountableLocation( location ), origin, 0.0 )
+    }
+  }
+
   def schematicLocation(x$1: String): com.mobiletheatertech.plot.PagePoint = {
     new PagePoint( 0.0, 0.0 ) }
   def suspensionPoints(): String = { "" }
@@ -359,6 +394,7 @@ object Pipe {
   final val LayerTag: String = "pipe"
   final val Cheeseborough: String = "cheeseborough"
   final val Color: String = "black"
+  final val baseOffsetZ: Double = 2.0
 
   def SchematicPositionReset() {}
 }

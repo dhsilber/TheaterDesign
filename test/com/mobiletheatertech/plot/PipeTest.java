@@ -25,10 +25,10 @@ public class PipeTest {
 
     Element element = null;
     private Element prosceniumElement = null;
-    Element pipeCrossesProsceniumCenterElement = null;
+    private Element pipeCrossesProsceniumCenterElement = null;
 
 //    Element baseElement = null;
-    Element trussBaseElement = null;
+    private Element trussBaseElement = null;
     private Element trussElement = null;
     private Element cheeseborough1Element = null;
     private Element cheeseborough2Element = null;
@@ -125,7 +125,7 @@ public class PipeTest {
 
     @Test
     public void storesOptionalAttributes() throws Exception {
-        element.setAttribute("orientation", "-90");
+        element.setAttribute("orientation", "90");
         element.setAttribute("offsetx", "-50");
 
         Pipe pipe = new Pipe(element);
@@ -133,8 +133,16 @@ public class PipeTest {
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( x, y, z ) );
-        assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), -90.0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 90.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50.0 );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) orientation may only be set to 90.")
+    public void attributeOrientationNot90() throws Exception {
+        element.setAttribute("orientation", "45");
+
+        new Pipe(element);
     }
 
     // Tested in MountableTest
@@ -755,6 +763,141 @@ public class PipeTest {
     }
 
     @Test
+    public void rotatedLocationPositioned() throws Exception {
+        Pipe pipe = new Pipe(element);
+
+        Place place = pipe.rotatedLocation( "23" );
+
+        assertNotNull( place );
+        assertNotNull( pipe.start() );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.x(), start.x() + 23 );
+        assertEquals( location.y(), start.y() );
+        assertEquals( location.z(), start.z() );
+
+        assertEquals( place.rotation(), 0.0 );
+    }
+
+    @Test
+    public void rotatedLocationPositioned90() throws Exception {
+        element.setAttribute( "orientation", "90" );
+        Pipe pipe = new Pipe( element );
+
+        Place place = pipe.rotatedLocation( "23" );
+
+        assertNotNull( place );
+        assertNotNull( pipe.start() );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.y(), start.y() - 23 );
+        assertEquals( location.z(), start.z() - 1 );
+        assertEquals( location.x(), start.x() - 1 );
+
+        assertEquals( place.rotation(), 90.0 );
+    }
+
+    @Test
+    public void rotatedLocationProsceniumd90() throws Exception {
+        pipeCrossesProsceniumCenterElement.setAttribute( "orientation", "90" );
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
+
+        Place place = pipe.rotatedLocation( "23" );
+
+        assertNotNull( place );
+        assertNotNull( pipe.start() );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.x(), prosceniumX + start.x() - 1 );
+        assertEquals( location.y(), prosceniumY + start.y() + 23 );
+        assertEquals( location.z(), prosceniumZ + start.z() - 1 );
+
+        assertEquals( place.rotation(), 90.0 );
+    }
+
+    @Test
+    public void rotatedLocationBase() throws Exception {
+        Pipe pipe = new Pipe( pipeOnBaseElement );
+        PipeBase base = pipe.base();
+        assertNotNull( base );
+
+        Place place = pipe.rotatedLocation( "56");
+
+        assertNotNull( pipe.start() );
+        assertNotNull( place );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.x(), base.x() );
+        assertEquals( location.y(), base.y() );
+        assertEquals( location.z(), base.z() + Pipe.baseOffsetZ() + 56 );
+
+        assertEquals( place.rotation(), 0.0 );
+    }
+
+    @Test
+    public void rotatedLocationProsceniumBase() throws Exception {
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( pipeOnBaseElement );
+        PipeBase base = pipe.base();
+        assertNotNull( base );
+
+        Place place = pipe.rotatedLocation( "56");
+
+        assertNotNull( pipe.start() );
+        assertNotNull( place );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.x(), prosceniumX + base.x() );
+        assertEquals( location.y(), prosceniumY - base.y() );
+        assertEquals( location.z(), prosceniumZ + base.z() + Pipe.baseOffsetZ() + 56 );
+
+        assertEquals( place.rotation(), 0.0 );
+    }
+
+    @Test
+    public void rotatedLocationSRofProsceniumCenterline() throws Exception {
+        new Proscenium( prosceniumElement );
+        Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
+
+        Place place = pipe.rotatedLocation( "-9");
+
+        assertNotNull( place );
+        assertNotNull( pipe.start() );
+        assertNotNull( place.location() );
+
+        Point start = pipe.start();
+        assertEquals( place.origin(), start );
+
+        Point location = place.location();
+        assertEquals( location.x(), prosceniumX - 9.0 );
+        assertEquals( location.y(), prosceniumY - start.y() + 1 );
+        assertEquals( location.z(), prosceniumZ + start.z() - 1 );
+
+        assertEquals( place.rotation(), 0.0 );
+    }
+
+    @Test
     public void domPlan() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
@@ -787,7 +930,7 @@ public class PipeTest {
         draw.establishRoot();
         new Proscenium(prosceniumElement);
         Pipe pipe = new Pipe(element);
-        pipe.verify();
+//        pipe.verify();
 
         pipe.dom(draw, View.PLAN);
 
@@ -797,9 +940,9 @@ public class PipeTest {
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
         Double ex = prosceniumX + x;
-        Double wy = prosceniumY - (y - 1);
-        assertEquals(element.getAttribute("x"), ex.toString());
-        assertEquals(element.getAttribute("y"), wy.toString());
+        Double wy = prosceniumY - (y + 1);
+        assertEquals( element.getAttribute("x"), ex.toString() );
+        assertEquals( element.getAttribute("y"), wy.toString() );
     }
 
 //    @Test
