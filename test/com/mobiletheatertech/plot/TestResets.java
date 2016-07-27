@@ -202,10 +202,11 @@ public class TestResets {
      * @throws IllegalAccessException if the {@code LIST} field cannot be accessed.
      */
     public static void ElementalListerReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = ElementalLister.class.getDeclaredField( "LIST" );
-        field.setAccessible( true );
-        ArrayList<ElementalLister> list = (ArrayList<ElementalLister>) field.get( ElementalLister.class );
-        list.clear();
+//        Field field = ElementalLister.class.getDeclaredField( "LIST" );
+//        field.setAccessible( true );
+//        ArrayList<ElementalLister> list = (ArrayList<ElementalLister>) field.get( ElementalLister.class );
+//        list.clear();
+        ElementalLister.List().clear();
     }
 
     /**
@@ -216,6 +217,7 @@ public class TestResets {
      */
     public static void MinderDomReset() throws NoSuchFieldException, IllegalAccessException {
         ElementalListerReset();
+        Layer.List().clear();
     }
 
     /**

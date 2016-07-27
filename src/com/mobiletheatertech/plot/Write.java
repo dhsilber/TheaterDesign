@@ -660,8 +660,7 @@ System.out.println( "Item: " + item.id );
         LuminaireDefinition.CountReset();
         DeviceTemplate.CountReset();
         DanceTile.Count = 0;
-        Truss.LEGENDREGISTERED = false;
-        Truss.BaseCount = 0;
+        Truss$.MODULE$.Reset();
         LightingStand.SYMBOLGENERATED = false;
         LightingStand.Count = 0;
 //        Legend.

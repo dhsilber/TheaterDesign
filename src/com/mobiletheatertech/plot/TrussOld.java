@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.5
  */
-public class Truss extends Mountable implements Legendable /*, Schematicable*/ {
+public class TrussOld extends Mountable implements Legendable /*, Schematicable*/ {
 
     /**
      * Name of {@code Layer} of {@code Pipe}s.
@@ -78,7 +78,7 @@ public class Truss extends Mountable implements Legendable /*, Schematicable*/ {
      * @throws AttributeMissingException
      * @throws KindException
      */
-    public Truss(Element element)
+    public TrussOld(Element element)
             throws AttributeMissingException, DataException, InvalidXMLException,
             KindException, MountingException, ReferenceException {
         super(element);

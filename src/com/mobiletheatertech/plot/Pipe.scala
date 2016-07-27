@@ -11,7 +11,7 @@ import org.w3c.dom.{Element, Node, NodeList}
   */
 class Pipe ( element: Element ) extends Mountable( element ) {
 
-  var identifier: String = getStringAttribute( element, "id" )
+  val identifier: String = getStringAttribute( element, "id" )
 
   val length = getDoubleAttribute( element, "length" )
 

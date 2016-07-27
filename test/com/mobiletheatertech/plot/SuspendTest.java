@@ -20,6 +20,7 @@ public class SuspendTest {
 
     Element element = null;
     HangPoint hanger1 = null;
+    HangPoint hanger2 = null;
     Truss truss = null;
 
     public SuspendTest() {
@@ -43,7 +44,7 @@ public class SuspendTest {
         Suspend suspend = new Suspend( element );
 
         assertEquals( TestHelpers.accessString( suspend, "refId" ), "jim" );
-        assertEquals( TestHelpers.accessInteger( suspend, "distance" ), (Integer) 32 );
+        assertEquals( TestHelpers.accessDouble( suspend, "distance" ), 32.0 );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -255,6 +256,12 @@ public class SuspendTest {
         hangPoint1.setAttribute( "y", "200" );
         hanger1 = new HangPoint( hangPoint1 );
 
+        Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
+        hangPoint2.setAttribute( "id", "jane" );
+        hangPoint2.setAttribute( "x", "200" );
+        hangPoint2.setAttribute( "y", "200" );
+        hanger2 = new HangPoint( hangPoint2 );
+
         Element otherSuspend = new IIOMetadataNode( "suspend" );
         otherSuspend.setAttribute( "ref", "jane" );
         otherSuspend.setAttribute( "distance", "200" );
@@ -262,6 +269,7 @@ public class SuspendTest {
         element = new IIOMetadataNode( "suspend" );
         element.setAttribute( "ref", "jim" );
         element.setAttribute( "distance", "32" );
+//        element.removeAttribute( "processedMark" );
 
         Element truss1 = new IIOMetadataNode( "truss" );
         truss1.setAttribute( "id", "Mr. Truss");

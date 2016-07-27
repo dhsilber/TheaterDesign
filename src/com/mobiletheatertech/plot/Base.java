@@ -89,7 +89,7 @@ public class Base extends MinderDom {
     public void dom( Draw draw, View mode ) {
         switch (mode) {
             case PLAN:
-SvgElement group = svgClassGroup( draw, Truss.LAYERTAG );
+                SvgElement group = svgClassGroup( draw, Truss$.MODULE$.LayerTag() );
                 draw.appendRootChild( group );
                 SvgElement base = group.rectangle( draw, x - size / 2, y - size / 2, size, size, color );
 

@@ -18,7 +18,7 @@ import org.w3c.dom.NodeList;
 public class Suspend extends MinderDom {
 
     private String refId = null;
-    private Integer distance = null;
+    private Double distance = null;
     private HangPoint hangPoint = null;
     //    private Truss truss = null;        // Should reference Truss which is suspended by this.
     private String processedMark = null;
@@ -33,7 +33,7 @@ public class Suspend extends MinderDom {
         super( element );
 
         refId = getStringAttribute(element, "ref");
-        distance = getIntegerAttribute(element, "distance");
+        distance = getDoubleAttribute(element, "distance");
 
         hangPoint = HangPoint.Find( refId );
         if (null == hangPoint) {

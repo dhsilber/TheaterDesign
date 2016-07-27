@@ -154,7 +154,7 @@ public class Cheeseborough extends MinderDom {
     public void dom(Draw draw, View mode) throws MountingException, ReferenceException {
         switch (mode) {
             case PLAN:
-                SvgElement group = svgClassGroup( draw, Truss.LAYERTAG );
+                SvgElement group = svgClassGroup( draw, Truss$.MODULE$.LayerTag() );
                 draw.appendRootChild( group );
                 System.err.println( "Cheeseborough (not drawn) place: " + place.toString() );
 //                SvgElement base = group.circle(draw, place.location().x(), place.location().y(), 50.0, color);
