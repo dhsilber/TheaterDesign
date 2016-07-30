@@ -239,7 +239,8 @@ public class SuspendTest {
         System.err.println( "Starting SuspendTest method." );
 
         TestResets.MinderDomReset();
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
+        UniqueId.Reset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "room", "Suspend Venue Name" );

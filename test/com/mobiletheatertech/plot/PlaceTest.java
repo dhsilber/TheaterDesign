@@ -54,8 +54,8 @@ public class PlaceTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        location = new Point( 22, 33, 44 );
-        origin = new Point( 22, 33, 1 );
+        location = new Point( 22.0, 33.0, 44.0 );
+        origin = new Point( 22.0, 33.0, 1.0 );
         rotation = 4.5;
     }
 

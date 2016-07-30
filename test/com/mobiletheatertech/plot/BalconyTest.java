@@ -239,7 +239,7 @@
 //    @BeforeMethod
 //    public void setUpMethod() throws Exception {
 //        TestResets.ProsceniumReset();
-//        TestResets.MountableReset();
+//        TestResets.YokeableReset();
 //        TestResets.LayerReset();
 //        TestResets.ElementalListerReset();
 //

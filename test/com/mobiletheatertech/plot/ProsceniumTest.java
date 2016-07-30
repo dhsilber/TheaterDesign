@@ -33,10 +33,14 @@ public class ProsceniumTest {
     }
 
     @Test
-    public void isMinder() throws Exception {
-        Proscenium proscenium = new Proscenium( element );
+    public void isA() throws Exception {
+        Proscenium instance = new Proscenium(element);
 
-        assert MinderDom.class.isInstance( proscenium );
+        assert Elemental.class.isInstance(instance);
+        assert ElementalLister.class.isInstance(instance);
+        assert Verifier.class.isInstance(instance);
+        assert Layerer.class.isInstance(instance);
+        assert MinderDom.class.isInstance(instance);
     }
 
     @Test
@@ -70,18 +74,25 @@ public class ProsceniumTest {
 
     @Test
     public void active() throws Exception {
-        assertFalse( Proscenium.Active() );
         new Proscenium( element );
         assertTrue( Proscenium.Active() );
     }
 
     @Test
+    public void activeNoProscenium() throws Exception {
+        assertFalse( Proscenium.Active() );
+    }
+
+    @Test
     public void origin() throws Exception {
-        TestResets.ProsceniumReset();
-        assertNull( Proscenium.Origin() );
         new Proscenium( element );
-        Point origin = Proscenium.Origin();
-        assert new Point( 250, 144, 12 ).equals( origin );
+
+        assertEquals( Proscenium.Origin(), new Point( 250.0, 144.0, 12.0 ) );
+    }
+
+    @Test
+    public void originNoProscenium() throws Exception {
+        assertEquals( Proscenium.Origin(), new Point( 0.0, 0.0, 0.0 ) );
     }
 
     /*
@@ -233,14 +244,14 @@ public class ProsceniumTest {
     @Test
     public void locateOrigin() throws Exception {
         new Proscenium( element );
-        Point fixed = Proscenium.Locate( new Point( 0, 0, 0 ) );
-        assert new Point( 250, 144, 12 ).equals( fixed );
+        Point fixed = Proscenium.Locate( new Point( 0.0, 0.0, 0.0 ) );
+        assert new Point( 250.0, 144.0, 12.0 ).equals( fixed );
     }
 
     @Test
     public void locateUSRHigh() throws Exception {
         new Proscenium( element );
-        Point fixed = Proscenium.Locate( new Point( 100, 120, 60 ) );
+        Point fixed = Proscenium.Locate( new Point( 100.0, 120.0, 60.0 ) );
 //        assert new Point( 150, 24, 72 ).equals( fixed );
         assertEquals( fixed.x(), 350.0, "X" );
         assertEquals( fixed.y(), 24.0, "Y" );

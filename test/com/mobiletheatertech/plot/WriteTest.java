@@ -24,7 +24,8 @@ public class WriteTest {
 
         public View view;
 
-        public MindedDom( Element element ) throws DataException, InvalidXMLException {
+        public MindedDom( Element element )
+                throws AttributeMissingException, DataException, InvalidXMLException {
             super( element );
         }
         public void verify() {}

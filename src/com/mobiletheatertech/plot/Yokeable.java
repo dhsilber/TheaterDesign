@@ -17,23 +17,22 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.23
  */
-public abstract class Mountable extends MinderDom /*implements Schematicable*/ {
+public abstract class Yokeable extends UniqueId /*implements Schematicable*/ {
 
-    private static ArrayList<Mountable> MOUNTABLELIST = new ArrayList<>();
+    private static ArrayList<Yokeable> YOKEABLELIST = new ArrayList<>();
 
     protected ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
 
 //    protected ArrayList<Suspend> suspensions = new ArrayList<>();
-    protected Double span = 0.0;
 
     /**
-     * Find a specific {@code Mountable} from all that have been constructed.
+     * Find a specific {@code Yokeable} from all that have been constructed.
      *
-     * @param id of {@code Mountable} to find
-     * @return {@code Mountable} instance, or {@code null} if not found
+     * @param id of {@code Yokeable} to find
+     * @return {@code Yokeable} instance, or {@code null} if not found
      */
-    public static Mountable Select(String id) throws MountingException {
-        for (Mountable selection : MOUNTABLELIST) {
+    public static Yokeable Select(String id) throws MountingException {
+        for (Yokeable selection : YOKEABLELIST) {
             if (selection.id.equals( id )) {
                 return selection;
             }
@@ -41,48 +40,39 @@ public abstract class Mountable extends MinderDom /*implements Schematicable*/ {
         throw new MountingException( "'" + id + "' is not a mountable object." );
     }
 
-    static ArrayList<Mountable> MountableList() { return MOUNTABLELIST; }
+    static ArrayList<Yokeable> MountableList() { return YOKEABLELIST; }
 
 //    public static void Remove( String id ) {
-//        Mountable candidate = null;
-//        for (Mountable selection : MOUNTABLELIST) {
+//        Yokeable candidate = null;
+//        for (Yokeable selection : YOKEABLELIST) {
 //            if (selection.id.equals( id )) {
 //                candidate = selection;
 //            }
 //        }
-//        MOUNTABLELIST.remove( candidate );
+//        YOKEABLELIST.remove( candidate );
 //    }
 
-    public static void Remove( Mountable reference ) {
-        MOUNTABLELIST.remove( reference );
+    public static void Remove( Yokeable reference ) {
+        YOKEABLELIST.remove( reference );
     }
 
     /**
-     * Construct the {@code Mountable} parts of a from an XML Element.
+     * Construct the {@code Yokeable} parts of a from an XML Element.
      * <p/>
-     * Keep a list of defined {@code Mountable} objects.
+     * Keep a list of defined {@code Yokeable} objects.
      *
-     * @param element DOM Element defining a {@code Mountable} object
+     * @param element DOM Element defining a {@code Yokeable} object
      *                // * @throws AttributeMissingException if any attribute is missing
      * @throws InvalidXMLException if null element is somehow presented to constructor
      *                             // * @throws Sizthrows InvalidXMLException, MountingExceptioneException             if the length is too short
      */
-    public Mountable(Element element)
+    public Yokeable(Element element)
             throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException {
         super(element);
 
-        id = getStringAttribute(element, "id");
 
-        try {
-            Select( id );
-            throw new InvalidXMLException(
-                    this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
-        }
-        catch (MountingException e) {
-        }
-
-        MOUNTABLELIST.add(this);
+        YOKEABLELIST.add(this);
     }
 
     public abstract Point mountableLocation(String location)

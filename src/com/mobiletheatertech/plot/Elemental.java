@@ -164,7 +164,8 @@ public class Elemental {
         return value;
     }
 
-    protected void checkAttribute(String name, String value) throws AttributeMissingException {
+    protected void checkAttribute(String name, String value)
+            throws AttributeMissingException {
         if (value.isEmpty()) {
             throw new AttributeMissingException(
                     this.getClass().getSimpleName(), id, name );

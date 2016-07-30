@@ -21,6 +21,7 @@ import static org.testng.Assert.*;
 public class TrussTest {
 
     Element element = null;
+    Element positionedTrussElement = null;
     HangPoint hanger1 = null;
     HangPoint hanger2 = null;
     HangPoint hanger3 = null;
@@ -56,6 +57,22 @@ public class TrussTest {
     Double venueHeight = 240.0;
     Double suspendDistance = 1.0;
 
+    Double negativeX = -21.9;
+    final String unit = "unit";
+
+
+    private Element prosceniumElement = null;
+    private Integer prosceniumX = 200;
+    private Integer prosceniumY = 144;
+    private Integer prosceniumZ = 12;
+
+
+    Element luminaireElement = null;
+    final String luminaireUnit = "unit";
+    final String luminaireType = "Altman 6x9";
+    String luminaireLocation = "12";
+
+
 
     @Test
     public void isA() throws Exception {
@@ -66,8 +83,11 @@ public class TrussTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-        assert Mountable.class.isInstance( instance );
+        assert UniqueId.class.isInstance( instance );
+        assertFalse( Yokeable.class.isInstance( instance ) );
 
+        assert SupportsClamp.class.isInstance( instance );
+        assert Populate.class.isInstance( instance );
         assert Legendable.class.isInstance( instance );
 //        assert Schematicable.class.isInstance( instance );
     }
@@ -460,7 +480,7 @@ public class TrussTest {
                 new Point( x2, y1and2, venueHeight - suspendDistance ) );
 
         Point point = truss.mountableLocation("a 17");
-        assertEquals( point, new Point(77, 194, 239));
+        assertEquals( point, new Point(77.0, 194.0, 239.0));
     }
 
     @Test
@@ -473,7 +493,7 @@ public class TrussTest {
         assertNotNull( TestHelpers.accessObject(truss, "suspend2"));
 
         Point point = truss.mountableLocation("c 17");
-        assertEquals( point, new Point(77, 194, 227));
+        assertEquals( point, new Point(77.0, 194.0, 227.0));
     }
 
     @Test(expectedExceptions=InvalidXMLException.class,
@@ -618,7 +638,7 @@ public class TrussTest {
         assertEquals(place.origin(), TestHelpers.accessPoint(truss, "point1"));
         assertNotNull(TestHelpers.accessDouble(truss, "rotation"));
         assertEquals( place.rotation(), -0.0);
-        assertEquals( place.location(), new Point(83, 206, 239));
+        assertEquals( place.location(), new Point(83.0, 206.0, 239.0));
     }
  
     @Test
@@ -632,7 +652,7 @@ public class TrussTest {
         assertEquals( place.origin(), TestHelpers.accessPoint( truss, "point1"));
         assertNotNull( TestHelpers.accessDouble(truss, "rotation"));
         assertEquals( place.rotation(), -0.0);
-        assertEquals( place.location(), new Point(83, 206, 239));
+        assertEquals( place.location(), new Point(83.0, 206.0, 239.0));
     }
 
     @Test
@@ -646,9 +666,73 @@ public class TrussTest {
         assertEquals( place.origin(), TestHelpers.accessPoint( truss, "point1"));
         assertNotNull( TestHelpers.accessDouble(truss, "rotation"));
         assertEquals( place.rotation(), -45.0);
-        assertEquals( place.location(), new Point(83, 206, 239));
+        assertEquals( place.location(), new Point(83.0, 206.0, 239.0));
 
         fail( "Does rotatedLocation give correct results for truss at a diagonal to the room coordinates?");
+    }
+
+    @Test
+    public void minLocation() {
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertEquals( truss.minLocation(), 0.0 );
+    }
+
+    @Test
+    public void maxLocation() {
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertEquals( truss.maxLocation(), length );
+    }
+
+//    @Test
+//    public void minLocationProscenium() throws Exception {
+//        new Proscenium(prosceniumElement);
+//
+//        Truss truss = new Truss( positionedTrussElement );
+//
+//        assertEquals( truss.minLocation(), negativeX );
+//    }
+//
+//    @Test
+//    public void maxLocationProscenium() throws Exception {
+//        new Proscenium(prosceniumElement);
+//
+//        Truss truss = new Truss( positionedTrussElement );
+//
+//        assertEquals( truss.maxLocation(), negativeX + length );
+//    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + trussId + "\\) unit '" + unit +"' has location outside of permissible range.")
+    public void hangLocationOutOfRange() throws Exception {
+        final String type = "Altman 6x9";
+
+        Element elementOnPipe = new IIOMetadataNode( "luminaire" );
+        elementOnPipe.setAttribute("unit", unit);
+        elementOnPipe.setAttribute( "type", type );
+        elementOnPipe.setAttribute("location", "162" );
+
+        positionedTrussElement.appendChild( elementOnPipe );
+        new Truss( positionedTrussElement );
+    }
+
+    @Test
+    public void tagCallbackRegistered() {
+        positionedTrussElement.appendChild( luminaireElement );
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertEquals( truss.tags().size(), 1 );
+    }
+
+    @Test
+    public void populateChildren() {
+        positionedTrussElement.appendChild( luminaireElement );
+        Truss truss = new Truss( positionedTrussElement );
+
+        scala.collection.mutable.ArrayBuffer<IsClamp> list = truss.IsClampList();
+        assertEquals( list.size(), 1 );
     }
 
     @Test
@@ -965,9 +1049,12 @@ public class TrussTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.ProsceniumReset();
+        TestResets.ElementalListerReset();
         TestResets.MountableReset();
         TestResets.MinderDomReset();
+        TestResets.LuminaireReset();
         Truss.Reset();
+        UniqueId.Reset();
 
         assertTrue( ElementalLister.List().isEmpty() );
         assertTrue( Layer.List().isEmpty() );
@@ -978,6 +1065,14 @@ public class TrussTest {
         venueElement.setAttribute( "depth", "400" );
         venueElement.setAttribute( "height", venueHeight.toString() );
         new Venue( venueElement );
+
+        prosceniumElement = new IIOMetadataNode("proscenium");
+        prosceniumElement.setAttribute("width", "260");
+        prosceniumElement.setAttribute("height", "200");
+        prosceniumElement.setAttribute("depth", "22");
+        prosceniumElement.setAttribute("x", prosceniumX.toString());
+        prosceniumElement.setAttribute("y", prosceniumY.toString());
+        prosceniumElement.setAttribute("z", prosceniumZ.toString());
 
         Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
         hangPoint1.setAttribute( "id", "jim" );
@@ -1023,6 +1118,14 @@ public class TrussTest {
         element.setAttribute("length", length.toString());
         element.appendChild(suspendElement1a);
         element.appendChild( suspendElement2 );
+        
+        positionedTrussElement = new IIOMetadataNode("truss");
+        positionedTrussElement.setAttribute("id", trussId );
+        positionedTrussElement.setAttribute("size", size.toString());
+        positionedTrussElement.setAttribute("length", length.toString());
+        positionedTrussElement.setAttribute("x", x.toString());
+        positionedTrussElement.setAttribute("y", y.toString());
+        positionedTrussElement.setAttribute("z", z.toString());
 
         elementTrussDiagonal = new IIOMetadataNode("truss");
         elementTrussDiagonal.setAttribute("id", trussDiagonalId );
@@ -1049,6 +1152,13 @@ public class TrussTest {
         trussPositionedElement.setAttribute( "x", x.toString() );
         trussPositionedElement.setAttribute( "y", y.toString() );
         trussPositionedElement.setAttribute( "z", z.toString() );
+
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute("unit", luminaireUnit);
+        luminaireElement.setAttribute( "type", luminaireType );
+        luminaireElement.setAttribute("location", luminaireLocation );
+
     }
 
     @AfterMethod

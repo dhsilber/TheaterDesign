@@ -2,23 +2,20 @@ package com.mobiletheatertech.plot
 
 import org.w3c.dom.{Element, Node, NodeList}
 
-//import com.mobiletheatertech.plot.Cheeseborough
-
-//import com.mobiletheatertech.P
-
 /**
   * Created by DHS on 7/18/16.
   */
-class Pipe ( element: Element ) extends Mountable( element ) {
+class Pipe ( element: Element ) extends UniqueId( element ) 
+  with SupportsClamp
+  with Populate
+{
 
-  val identifier: String = getStringAttribute( element, "id" )
-
-  val length = getDoubleAttribute( element, "length" )
+  val length: Double = getDoubleAttribute( element, "length" )
 
   val x = getOptionalDoubleAttributeOrNull( element, "x" )
   val y = getOptionalDoubleAttributeOrNull( element, "y" )
   val z = getOptionalDoubleAttributeOrNull( element, "z" )
-  val orientation = getOptionalDoubleAttributeOrZero( element, "orientation" )
+  val orientationValue = getOptionalDoubleAttributeOrZero( element, "orientation" )
   val offsetX = getOptionalDoubleAttributeOrZero( element, "offsetx" )
 
   // These are set within the *Processing() logic.
@@ -34,19 +31,39 @@ class Pipe ( element: Element ) extends Mountable( element ) {
 
 
   if ( 0 >= length ) {
-    Mountable.Remove( this )
+//    Yokeable.Remove( this )
     throw new SizeException( this.toString(), "length" )
   }
 
-  if( (0.0 != orientation) && (90.0 != orientation) )
+  if( (0.0 != orientationValue) && (90.0 != orientationValue) )
     throw new InvalidXMLException(
-      "Pipe (" + identifier + ") orientation may only be set to 90." )
+      "Pipe (" + id + ") orientation may only be set to 90." )
 
-  val begin: Double = if ( positionConditions() ) 0.0    else - length / 2
-  val end: Double   = if ( positionConditions() ) length else length / 2
+  val begin: Double = if ( crossesProsceniumCenterline() ) start.x          else 0.0
+  val end: Double   = if ( crossesProsceniumCenterline() ) start.x + length else length
+
+  override def minLocation = begin
+  override def maxLocation = end
 
   new Layer( Pipe.LayerTag, Pipe.LayerName, Pipe.Color )
 
+  tagCallback( Luminaire.LAYERTAG, processLuminaire )
+  populate( element )
+
+  def processLuminaire(element: Element ): Unit = {
+    element.setAttribute( "on", id )
+    val light: Luminaire = new Luminaire(element)
+    try {
+      hang(light, light.locationValue().toDouble)
+    }
+    catch {
+      case exception: MountingException =>
+        throw new MountingException (
+          "Pipe (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+//      case exception: Exception =>
+//        throw new Exception( exception.getMessage, exception.getCause )
+    }
+  }
 
   def process(): ( Boolean, Boolean )= {
     base = baseProcessing()
@@ -64,9 +81,9 @@ class Pipe ( element: Element ) extends Mountable( element ) {
       case 0 => return
       case 2 => {}
       case _ => {
-        Mountable.Remove(this)
+//        Yokeable.Remove(this)
         throw new InvalidXMLException(
-          "Pipe (" + identifier + ") should have zero or two cheeseboroughs.")
+          "Pipe (" + id + ") should have zero or two cheeseboroughs.")
       }
     }
     support1 = findCheeseborough( cheeseboroughList, 0 )
@@ -100,6 +117,18 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     return null
   }
 
+  def crossesProsceniumCenterline(): Boolean = {
+    if (Proscenium.Active())
+      if (90 == orientationValue)
+        false
+      else if ( (start.x < 0) && (start.x + length > 0) )
+        true
+      else
+        false
+    else
+      false
+  }
+
   def slopeToPoint( slope: Double, overHang: Double ): Point = {
     new Point( 1.0, 2.0, 3.0 )
   }
@@ -111,24 +140,16 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     catch {
       case npe: NullPointerException =>
         throw new InvalidXMLException(
-          "Pipe (" + identifier + ") must be on base or explicitly positioned." )
+          "Pipe (" + id + ") must be on base or explicitly positioned." )
     }
 
-    if ( Proscenium.Active() ) {
-      tooSmall( Proscenium.Origin().x + x )
-      tooSmall( Proscenium.Origin().y + y )
-      tooSmall( Proscenium.Origin().z + z )
-    }
-    else {
-      tooSmall( x )
-      tooSmall( y )
-      tooSmall( z )
-    }
-
+    tooSmall( Proscenium.Origin().x + x )
+    tooSmall( Proscenium.Origin().y + y )
+    tooSmall( Proscenium.Origin().z + z )
 
     if (! Venue.Contains( positionSpaceOccupied() ) ) {
-      Mountable.Remove( this )
-      throw new LocationException( "Pipe (" + identifier
+//      Yokeable.Remove( this )
+      throw new LocationException( "Pipe (" + id
         + ") should not extend beyond the boundaries of the venue." )
     }
 
@@ -138,7 +159,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
   def positionSpaceOccupied(): Space = {
 
     if ( Proscenium.Active() )
-      if ( 90 == orientation ) {
+      if ( 90 == orientationValue ) {
         boxOrigin = Proscenium.Locate(new Point(start.x() - 1, start.y(), start.z() - 1))
       }
       else {
@@ -148,7 +169,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
       boxOrigin = new Point( start.x, start.y - 1, start.z - 1 )
     }
 
-    if ( Proscenium.Active() && (90 == orientation) ) {
+    if ( Proscenium.Active() && (90 == orientationValue) ) {
       new Space( boxOrigin, Pipe.Diameter, length, Pipe.Diameter )
     }
     else {
@@ -156,22 +177,10 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     }
   }
 
-  def positionConditions(): Boolean = {
-    if (Proscenium.Active())
-      if (90 == orientation)
-        true
-      else if ( (start.x < 0) && (start.x + length > 0) )
-        false
-      else
-        true
-    else
-      true
-  }
-
   def tooSmall( dimension: Double ): Unit = {
     if (0 >= dimension)
       throw new LocationException(
-        "Pipe (" + identifier + ") should not extend beyond the boundaries of the venue.")
+        "Pipe (" + id + ") should not extend beyond the boundaries of the venue.")
   }
 
   //  def tooLarge( dimension: Double ): Unit = {
@@ -200,9 +209,9 @@ class Pipe ( element: Element ) extends Mountable( element ) {
 
       val space: Space = new Space( boxOrigin, Pipe.Diameter, Pipe.Diameter, length )
       if ( ! Venue.Contains( space ) ) {
-        Mountable.Remove(this)
+//        Yokeable.Remove(this)
         throw new LocationException(
-          "Pipe (" + identifier + ") should not extend beyond the boundaries of the venue.")
+          "Pipe (" + id + ") should not extend beyond the boundaries of the venue.")
       }
     }
 
@@ -231,7 +240,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
       return null
     }
     else if ( 1 < baseList.getLength() ) {
-      throw new InvalidXMLException( "Pipe (" + identifier + ") should not have more than one base." )
+      throw new InvalidXMLException( "Pipe (" + id + ") should not have more than one base." )
     }
 
     null
@@ -275,24 +284,24 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     def domPlan(): Unit = {
       if (based) {
         group.rectangle(draw, drawBox.x(), drawBox.y(), Pipe.Diameter, Pipe.Diameter, Pipe.Color);
-      } else if (90.0 == orientation) {
+      } else if (90.0 == orientationValue) {
         group.rectangle(draw, drawBox.x(), drawBox.y(), Pipe.Diameter, length, Pipe.Color);
-        group.text(draw, identifier, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
+        group.text(draw, id, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
       } else {
         group.rectangle(draw, drawBox.x(), drawBox.y(), length, Pipe.Diameter, Pipe.Color);
-        group.text(draw, identifier, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
+        group.text(draw, id, 38.0, drawBox.y() + Pipe.Diameter, Pipe.Color);
       }
     }
   }
 
-  // Members declared in com.mobiletheatertech.plot.Mountable
+  // Members declared in com.mobiletheatertech.plot.Yokeable
   def calculateIndividualLoad(x$1: Luminaire): String = { "" }
   def locationDistance( location: String ): Integer = {
     val distance = numberFromLocation( location )
 
     if ( (begin > distance) || (distance > end) )
       throw new MountingException(
-        "Pipe (" + identifier + ") location must be in the range of " + begin.toString() +
+        "Pipe (" + id + ") location must be in the range of " + begin.toString() +
         " to " + end.toString() + ".")
 
     distance
@@ -320,7 +329,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     if (Proscenium.Active()) {
       if (based)
         Proscenium.Locate( new Point( base.x, base.y, base.z + offset + Pipe.baseOffsetZ ) )
-      else if (90 == orientation)
+      else if (90 == orientationValue)
         rightAngleToProscenium()
       else if ((start.x < 0) && (start.x + length > 0))
         crossesProsceniumCenterline()
@@ -330,7 +339,7 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     else {
       if (based)
         new Point(base.x, base.y, base.z + offset + Pipe.baseOffsetZ)
-      else if (90 == orientation)
+      else if (90 == orientationValue)
         new Point(start.x - 1, start.y + offset, start.z - 1)
       else
         noProscenium()
@@ -343,13 +352,13 @@ class Pipe ( element: Element ) extends Mountable( element ) {
     }
     catch {
       case nfe: NumberFormatException =>
-        throw new InvalidXMLException("Pipe (" + identifier + ") location must be a number.")
+        throw new InvalidXMLException("Pipe (" + id + ") location must be a number.")
     }
   }
 
-  def rotatedLocation( location: String ): Place = {
+  override def rotatedLocation( location: String ): Place = {
     if (positioned) {
-      if ( 90.0 == orientation ) {
+      if ( 90.0 == orientationValue ) {
         new Place(mountableLocation(location), start, 90.0 )
       }
       else {

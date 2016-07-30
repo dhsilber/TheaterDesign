@@ -63,7 +63,7 @@ public class LuminaireInformationTest {
 
 //        TestResets.VenueReset();
 //        TestResets.MinderDomReset();
-//        TestResets.MountableReset();
+//        TestResets.YokeableReset();
 //        TestResets.LuminaireReset();
 //
 //        venueElement = new IIOMetadataNode( "venue" );

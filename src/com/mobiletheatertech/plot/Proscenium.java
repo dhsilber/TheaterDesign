@@ -29,7 +29,7 @@ import java.awt.geom.Line2D;
 public class Proscenium extends MinderDom {
 
     private static boolean ACTIVE = false;
-    private static Point ORIGIN = null;
+    private static Point ORIGIN = new Point( 0.0, 0.0, 0.0 );
 
     private Double width = null;
     private Double depth = null;

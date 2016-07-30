@@ -5,7 +5,6 @@ import org.w3c.dom.Element;
 
 import javax.imageio.metadata.IIOMetadataNode;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.testng.Assert.*;
 
@@ -37,6 +36,11 @@ public class CheeseboroughTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+        assertFalse( UniqueId.class.isInstance( instance ) );
+
+        assert IsClamp.class.isInstance( instance);
+//        assert Schematicable.class.isInstance( instance );
+        assertFalse( Legendable.class.isInstance( instance ) );
     }
 
     @Test
@@ -311,8 +315,9 @@ public class CheeseboroughTest {
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         TestResets.CheeseboroughReset();
+        UniqueId.Reset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );

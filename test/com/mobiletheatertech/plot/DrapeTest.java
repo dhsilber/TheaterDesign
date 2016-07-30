@@ -4,7 +4,7 @@ import org.testng.annotations.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import scala.Int;
+
 import scala.collection.immutable.List;
 
 import javax.imageio.metadata.IIOMetadataNode;
@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 import static org.testng.Assert.assertNull;
 
 /**
@@ -44,7 +44,7 @@ public class DrapeTest {
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
 
-        assert Legendable.class.isInstance( instance );
+        assertFalse( Legendable.class.isInstance( instance ) );
     }
 
     @Test

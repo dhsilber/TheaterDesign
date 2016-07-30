@@ -24,10 +24,11 @@ import static org.testng.Assert.assertEquals;
 public class PipeTest {
 
     Element element = null;
+    final String unit = "unit";
     private Element prosceniumElement = null;
     private Element pipeCrossesProsceniumCenterElement = null;
 
-//    Element baseElement = null;
+    //    Element baseElement = null;
     private Element trussBaseElement = null;
     private Element trussElement = null;
     private Element cheeseborough1Element = null;
@@ -61,6 +62,12 @@ public class PipeTest {
     private Integer prosceniumZ = 12;
     private final String pipeId = "balconyId";
 
+    Element luminaireElement = null;
+    final String luminaireUnit = "unit";
+    final String luminaireType = "Altman 6x9";
+    String luminaireLocation = "12";
+
+
 
     @Test
     public void isA() throws Exception {
@@ -71,8 +78,11 @@ public class PipeTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-        assert Mountable.class.isInstance( instance );
+        assert UniqueId.class.isInstance( instance );
+        assertFalse( Yokeable.class.isInstance( instance ) );
 
+        assert SupportsClamp.class.isInstance( instance );
+        assert Populate.class.isInstance( instance );
 //        assert Schematicable.class.isInstance( instance );
     }
 
@@ -145,24 +155,24 @@ public class PipeTest {
         new Pipe(element);
     }
 
-    // Tested in MountableTest
+    // Tested in YokeableTest
 //    @Test
 //    public void stores() throws Exception {
-//        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
-//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+//        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
+//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
 //        assertEquals(list1.size(), 0);
 //
 //        Pipe pipe = new Pipe(element);
 //
-//        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
-//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+//        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
+//                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
 //        assert list2.contains(pipe);
 //    }
 
     @Test
     public void storesOnlyWhenGood() throws Exception {
-        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list1.size(), 0);
 
         element.setAttribute("length", "0");
@@ -171,15 +181,15 @@ public class PipeTest {
         } catch (Exception e) {
         }
 
-        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list2.size(), 0);
     }
 
     @Test
     public void unstoresWhenBad() throws Exception {
-        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list1.size(), 0);
 
         element.setAttribute("length", "339");
@@ -189,15 +199,15 @@ public class PipeTest {
         } catch (Exception e) {
         }
 
-        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list1.size(), 0);
     }
 
     @Test
     public void unstoresWhenBadWithProscenium() throws Exception {
-        ArrayList<Mountable> list1 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list1.size(), 0);
 
         new Proscenium(prosceniumElement);
@@ -208,8 +218,8 @@ public class PipeTest {
         } catch (Exception e) {
         }
 
-        ArrayList<Mountable> list2 = (ArrayList<Mountable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Mountable", "MOUNTABLELIST");
+        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
+                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
         assertEquals(list1.size(), 0);
     }
 
@@ -227,7 +237,7 @@ public class PipeTest {
     public void select() throws Exception {
         element.setAttribute("id", "friendly");
         Pipe pipe = new Pipe(element);
-        assertSame(Mountable.Select("friendly"), pipe);
+        assertSame(Yokeable.Select("friendly"), pipe);
     }
 
     @Test
@@ -262,8 +272,8 @@ public class PipeTest {
 
         element.setAttribute("id", "friendly");
         Pipe pipe = new Pipe(element);
-        assertSame(Mountable.Select("friendly"), pipe);
-        assertSame(Mountable.Select("fred"), truss);
+        assertSame(Yokeable.Select("friendly"), pipe);
+        assertSame(Yokeable.Select("fred"), truss);
     }
 
     @Test
@@ -412,6 +422,66 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeZ() throws Exception {
+        element.setAttribute("z", "241");
+        Pipe pipe = new Pipe(element);
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooSmallXProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        element.setAttribute("x", "-" + (prosceniumX + 1) );
+        Pipe pipe = new Pipe(element);
+//        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooLargeXProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        element.setAttribute("x", "351");
+        Pipe pipe = new Pipe(element);
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooSmallYProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        element.setAttribute("y", "-" + (prosceniumY + 1) );
+        Pipe pipe = new Pipe(element);
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooLargeYProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        element.setAttribute("y", "401");
+        Pipe pipe = new Pipe(element);
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooSmallZProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
+        element.setAttribute("z", "-" + (prosceniumZ + 1) );
+        Pipe pipe = new Pipe(element);
+        pipe.verify();
+    }
+
+    @Test(expectedExceptions = LocationException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
+    public void tooLargeZProscenium() throws Exception {
+        new Proscenium( prosceniumElement );
         element.setAttribute("z", "241");
         Pipe pipe = new Pipe(element);
         pipe.verify();
@@ -708,24 +778,24 @@ public class PipeTest {
 
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\(" + pipeId + "\\) location must be in the range of -60.0 to 60.0.")
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of -12.0 to 108.0.")
     public void locationDistanceOffProsceniumPipePlus() throws Exception {
         new Proscenium(prosceniumElement);
 
         Pipe pipe = new Pipe(pipeCrossesProsceniumCenterElement);
 
-        pipe.locationDistance( "61" );
+        pipe.locationDistance( "109" );
     }
 
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\(" + pipeId + "\\) location must be in the range of -60.0 to 60.0.")
+                    "Pipe \\(" + pipeId + "\\) location must be in the range of -12.0 to 108.0.")
     public void locationDistanceOffProsceniumPipeMinus() throws Exception {
         new Proscenium(prosceniumElement);
 
         Pipe pipe = new Pipe(pipeCrossesProsceniumCenterElement);
 
-        pipe.locationDistance( "-61" );
+        pipe.locationDistance( "-13" );
     }
 
     @Test
@@ -895,6 +965,73 @@ public class PipeTest {
         assertEquals( location.z(), prosceniumZ + start.z() - 1 );
 
         assertEquals( place.rotation(), 0.0 );
+    }
+
+    @Test
+    public void minLocation() {
+        Pipe pipe = new Pipe( element );
+
+        assertEquals( pipe.minLocation(), 0.0 );
+    }
+
+    @Test
+    public void maxLocation() {
+        Pipe pipe = new Pipe( element );
+
+        assertEquals( pipe.maxLocation(), length );
+    }
+
+    @Test
+    public void minLocationProscenium() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
+
+        assertEquals( pipe.minLocation(), negativeX );
+    }
+
+    @Test
+    public void maxLocationProscenium() throws Exception {
+        new Proscenium(prosceniumElement);
+
+        Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
+
+        assertEquals( pipe.maxLocation(), negativeX + length );
+    }
+
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\(" + pipeId + "\\) unit '" + unit +"' has location outside of permissible range.")
+    public void hangLocationOutOfRange() throws Exception {
+        final String type = "Altman 6x9";
+
+        Element elementOnPipe = new IIOMetadataNode( "luminaire" );
+        elementOnPipe.setAttribute("unit", unit);
+        elementOnPipe.setAttribute( "type", type );
+        elementOnPipe.setAttribute("location", "122" );
+
+        element.appendChild( elementOnPipe );
+        new Pipe( element );
+    }
+
+    void callBack( Element element ) {
+    }
+
+    @Test
+    public void tagCallbackRegistered() {
+        element.appendChild( luminaireElement );
+        Pipe pipe = new Pipe( element );
+
+        assertEquals( pipe.tags().size(), 1 );
+    }
+
+    @Test
+    public void populateChildren() {
+        element.appendChild( luminaireElement );
+        Pipe pipe = new Pipe( element );
+
+        scala.collection.mutable.ArrayBuffer<IsClamp> list = pipe.IsClampList();
+        assertEquals( list.size(), 1 );
     }
 
     @Test
@@ -1145,7 +1282,10 @@ public class PipeTest {
         TestResets.MountableReset();
         TestResets.LayerReset();
         TestResets.ElementalListerReset();
+        TestResets.LuminaireReset();
         element = null;
+        UniqueId.Reset();
+
 
         Element venueElement = new IIOMetadataNode("venue");
         venueElement.setAttribute("room", "Test Name");
@@ -1229,6 +1369,12 @@ public class PipeTest {
         pipeOnBaseElement.setAttribute( "id", pipeId );
         pipeOnBaseElement.setAttribute( "length", length.toString() );
         pipeOnBaseElement.appendChild( baseForPipeElement );
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute("unit", luminaireUnit);
+        luminaireElement.setAttribute( "type", luminaireType );
+        luminaireElement.setAttribute("location", luminaireLocation );
+
     }
 
     @AfterMethod

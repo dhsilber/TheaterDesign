@@ -7,8 +7,6 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -272,7 +270,7 @@ public class SetPlatfomTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         SvgElement.Offset(0.0, 0.0);
 //        TestResets.SetPlatformReset();
 //        Schematic.CountX = 0;

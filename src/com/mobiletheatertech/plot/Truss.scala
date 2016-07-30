@@ -4,14 +4,14 @@ import java.text.DecimalFormat
 
 import org.w3c.dom.{Element, Node, NodeList}
 
-import scala.math.Ordering.BooleanOrdering
-
 /**
   * Created by DHS on 7/26/16.
   */
-class Truss ( element: Element ) extends Mountable( element ) with Legendable {
-
-  val identifier: String = getStringAttribute( element, "id" )
+class Truss ( element: Element ) extends UniqueId( element )
+  with SupportsClamp
+  with Populate
+  with Legendable
+{
 
   if (Proscenium.Active) {
     throw new InvalidXMLException("Truss not yet supported with Proscenium.")
@@ -39,11 +39,48 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
   var start: Point = null
   var boxOrigin : Point = null
 
+  var span: Double = 0.0
   var base: Base = null
 
   val (based: Boolean, suspended: Boolean, positioned: Boolean ) = process()
 
-  val foo = null
+
+//  val foo = null
+  val begin: Double = /*if ( crossesProsceniumCenterline() ) start.x          else*/ 0.0
+  val end: Double   = /*if ( crossesProsceniumCenterline() ) start.x + length else*/ length
+
+  override def minLocation = begin
+  override def maxLocation = end
+
+
+  tagCallback( Luminaire.LAYERTAG, processLuminaire )
+  populate( element )
+
+  def processLuminaire(element: Element ): Unit = {
+    element.setAttribute( "on", id )
+    val light: Luminaire = new Luminaire(element)
+    try {
+      hang(light, light.locationValue().toDouble)
+    }
+    catch {
+      case exception: MountingException =>
+        throw new MountingException (
+          "Pipe (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+      //      case exception: Exception =>
+      //        throw new Exception( exception.getMessage, exception.getCause )
+    }
+  }
+
+
+//  def crossesProsceniumCenterline(): Boolean = {
+//    if (Proscenium.Active())
+//      if ( (start.x < 0) && (start.x + length > 0) )
+//        true
+//      else
+//        false
+//    else
+//      false
+//  }
 
   def process(): ( Boolean, Boolean, Boolean ) = {
 
@@ -68,7 +105,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
       }
       else if ( 1 < baseList.getLength() ) {
         throw new InvalidXMLException(
-          "Truss (" + identifier + ") must have position, one base, or two suspend children." )
+          "Truss (" + id + ") must have position, one base, or two suspend children." )
       }
 
       null
@@ -79,19 +116,19 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
       if ( null != base ) {
         start = new Point( base.x, base.y, 0.0 )
 
-        if ( Proscenium.Active() ) {
-          boxOrigin = new Point( start.x - 1, start.y + 1, start.z )
-          boxOrigin = Proscenium.Locate( boxOrigin )
-        }
-        else {
+//        if ( Proscenium.Active() ) {
+//          boxOrigin = new Point( start.x - 1, start.y + 1, start.z )
+//          boxOrigin = Proscenium.Locate( boxOrigin )
+//        }
+//        else {
           boxOrigin = new Point( start.x - 1, start.y - 1, start.z )
-        }
+//        }
 
         val space: Space = new Space( boxOrigin, Pipe.Diameter, Pipe.Diameter, length )
         if ( ! Venue.Contains( space ) ) {
-          Mountable.Remove(this)
+//          Yokeable.Remove(this)
           throw new LocationException(
-            "Truss (" + identifier + ") should not extend beyond the boundaries of the venue.")
+            "Truss (" + id + ") should not extend beyond the boundaries of the venue.")
         }
       }
 
@@ -129,7 +166,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
       else {
         System.err.println("Found " + suspendList.getLength + " suspend child nodes")
         throw new InvalidXMLException(
-          "Truss (" + identifier + ") must have position, one base, or two suspend children." )
+          "Truss (" + id + ") must have position, one base, or two suspend children." )
         false
       }
     }
@@ -154,7 +191,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
       catch {
         case npe: NullPointerException =>
           throw new InvalidXMLException(
-            "Truss (" + identifier + ") must have position, one base, or two suspend children." )
+            "Truss (" + id + ") must have position, one base, or two suspend children." )
       }
       true
     }
@@ -167,7 +204,8 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
     ( false, false, positionProcessing() )
   }
 
-  override def mountableLocation(location: String): Point = {
+//  override
+  def mountableLocation(location: String): Point = {
     val vertex: Char = location.charAt(0)
     val distance: Integer = locationDistance(location)
 
@@ -185,7 +223,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
           westOffset *= -1
         case _ =>
           throw new InvalidXMLException(
-            "Truss (" + identifier + ") location does not include a valid vertex.")
+            "Truss (" + id + ") location does not include a valid vertex.")
       }
       return new Point(x + westOffset, y + northOffset, z + distance)
     }
@@ -197,7 +235,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
         case 'b' | 'd' =>
         case _ =>
           throw new InvalidXMLException(
-            "Truss (" + identifier + ") location does not include a valid vertex.")
+            "Truss (" + id + ") location does not include a valid vertex.")
       }
       if (positioned) {
         var verticalOffset: Double = halfSize
@@ -206,7 +244,7 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
           case 'c' | 'd' =>
             verticalOffset *= -1
           case _ =>
-            throw new InvalidXMLException("Truss (" + identifier + ") location does not include a valid vertex.")
+            throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
         return new Point(x - length / 2 + distance, y + offset, z + verticalOffset)
       }
@@ -221,14 +259,15 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
           case 'c' | 'd' =>
             verticalOffset += size
           case _ =>
-            throw new InvalidXMLException("Truss (" + identifier + ") location does not include a valid vertex.")
+            throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
         return new Point(point.x - overHang + distance, point.y + offset, point.z - verticalOffset)
       }
     }
   }
 
-  override def suspensionPoints(): String = {
+//  override
+  def suspensionPoints(): String = {
     if (positioned) {
       return "Truss is positioned."
     }
@@ -243,7 +282,8 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
     }
   }
 
-  override def totalSuspendLoads(): String = {
+//  override
+  def totalSuspendLoads(): String = {
     val fourPlaces: DecimalFormat = new DecimalFormat("###.####")
     return " " + fourPlaces.format(suspend1.load) + " on " + suspend1.refId + ". " +
       fourPlaces.format(suspend2.load) + " on " + suspend2.refId + "."
@@ -267,7 +307,8 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
     }
   }
 
-  override def schematicLocation(location: String): PagePoint = ???
+//  override
+  def schematicLocation(location: String): PagePoint = ???
 
   def locationDistance( location: String ): Integer = {
     val distanceString: String = location.substring(1)
@@ -278,18 +319,19 @@ class Truss ( element: Element ) extends Mountable( element ) with Legendable {
     catch {
       case exception: NumberFormatException => {
         throw new InvalidXMLException(
-          "Truss (" + identifier + ") location must include vertex and distance.")
+          "Truss (" + id + ") location must include vertex and distance.")
       }
     }
 
     if (0 > distance || distance > length) {
       throw new MountingException(
-        "Truss (" + identifier + ") does not include location " + distance.toString + ".")
+        "Truss (" + id + ") does not include location " + distance.toString + ".")
     }
     distance
   }
 
-  override def calculateIndividualLoad(luminaire: Luminaire): String = ???
+//  override
+  def calculateIndividualLoad(luminaire: Luminaire): String = ???
 
   override def dom(draw: Draw, mode: View) {
     var trussRectangle: SvgElement = null

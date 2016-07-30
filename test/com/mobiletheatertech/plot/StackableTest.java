@@ -15,7 +15,7 @@ import static org.testng.Assert.assertEquals;
 public class StackableTest {
 
     /**
-     * Extend {@code Mountable} so that there is a concrete class to test with.
+     * Extend {@code Yokeable} so that there is a concrete class to test with.
      */
     private class Stacked extends Stackable {
 

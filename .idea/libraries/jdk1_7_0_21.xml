@@ -4,6 +4,7 @@
       <root url="file:///Library/Java/JavaVirtualMachines/jdk1.7.0_21.jdk" />
       <root url="file://$PROJECT_DIR$/../Cables/lib" />
       <root url="file:///usr/lib/jvm/default-java" />
+      <root url="jar://$PROJECT_DIR$/../Scala/lib/scalatest_2.11-2.2.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

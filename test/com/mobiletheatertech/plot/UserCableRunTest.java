@@ -216,7 +216,7 @@
 //        TestResets.ElementalListerReset();
 //        TestResets.StackableReset();
 ////        TestResets.DeviceReset();
-//        TestResets.MountableReset();
+//        TestResets.YokeableReset();
 //        TestResets.LuminaireReset();
 //
 //        venueElement = new IIOMetadataNode( "venue" );

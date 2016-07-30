@@ -23,8 +23,10 @@ public abstract class MinderDom extends Layerer {
     /**
      *
      */
-    public MinderDom( Element element ) throws DataException, InvalidXMLException {
+    public MinderDom( Element element )
+            throws AttributeMissingException, DataException, InvalidXMLException {
         super (element);
+
 //        System.err.println( "D" );
 
 //

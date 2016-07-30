@@ -6,7 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
       <library>
@@ -20,6 +19,7 @@
         <jarDirectory url="file://$MODULE_DIR$/../../Batik Libraries" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="jmockit" level="project" />
     <orderEntry type="library" name="Libraries" level="project" />
     <orderEntry type="library" exported="" name="jOpenDocument-1.3" level="project" />
@@ -55,5 +55,6 @@
         <jarDirectory url="file://$MODULE_DIR$/../../Batik Libraries/batik-1.8/lib" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="scala-sdk-2.11.8" level="project" />
   </component>
 </module>

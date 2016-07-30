@@ -2,7 +2,6 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +10,7 @@ import java.util.ArrayList;
  * Note that as of 2015-06-22, the way that attribute checking is handled here seems like the way to go
  * to deal with sets of attributes which are required in some cases and optional in others.
  */
-public class Cheeseborough extends MinderDom {
+public class Cheeseborough extends MinderDom implements IsClamp {
 
     private static ArrayList<Cheeseborough> CHEESEBOROUGHLIST = new ArrayList<>();
 
@@ -19,7 +18,7 @@ public class Cheeseborough extends MinderDom {
     String location = null;
     String type = null;
     Place place = null;
-    Mountable mount = null;
+    Yokeable mount = null;
     Cheeseborough reference = null;
 
     String color = "orange";
@@ -84,7 +83,7 @@ public class Cheeseborough extends MinderDom {
         return location;
     }
 
-    public Mountable mount() {
+    public Yokeable mount() {
         return mount;
     }
 
@@ -97,7 +96,7 @@ public class Cheeseborough extends MinderDom {
         if( null == reference ) {
             System.err.println( "Cheeseborough verify()");
             try {
-                mount = Mountable.Select(on);
+                mount = Yokeable.Select(on);
                 System.err.println( "location: " + location.toString() );
                 System.err.println( "mount: " + mount.toString() );
             }
@@ -139,6 +138,21 @@ public class Cheeseborough extends MinderDom {
         }
         return place.location();
     }
+
+    @Override
+    public double weight() {
+        return 0.0;
+    }
+
+    @Override
+    public Place position() {
+        return null;
+    }
+
+    @Override
+    public void position( Point point ) {
+    }
+
 
 //    @Override
 //    public PagePoint schematicLocation(String location) throws InvalidXMLException, MountingException {

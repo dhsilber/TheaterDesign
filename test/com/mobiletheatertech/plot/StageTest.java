@@ -113,27 +113,27 @@ public class StageTest {
         assert thing.contains(stage);
     }
 
-    @Test
-    public void findChildRiser() throws Exception {
-        Element displayElement = new IIOMetadataNode( "riser" );
-        displayElement.setAttribute( "type", foldingRiser );
-        displayElement.setAttribute( "x", riserX.toString() );
-        displayElement.setAttribute( "y", riserY.toString() );
-        displayElement.setAttribute( "orientation", riserOrientation.toString() );
-        element.appendChild( displayElement );
-
-        Draw draw = new Draw();
-        draw.establishRoot();
-        Stage stage = new Stage(element);
-
-        ArrayList<Device> risers = stage.risers();
-
-        assertEquals( risers.size(), 1 );
-        Device stageRiser = risers.get( 0 );
-//        assertEquals(layer.name(), name);
-        assertEquals( stageRiser.is(), foldingRiser );
-//        fail();
-    }
+//    @Test
+//    public void findChildRiser() throws Exception {
+//        Element displayElement = new IIOMetadataNode( "riser" );
+//        displayElement.setAttribute( "type", foldingRiser );
+//        displayElement.setAttribute( "x", riserX.toString() );
+//        displayElement.setAttribute( "y", riserY.toString() );
+//        displayElement.setAttribute( "orientation", riserOrientation.toString() );
+//        element.appendChild( displayElement );
+//
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        Stage stage = new Stage(element);
+//
+//        ArrayList<Device> risers = stage.risers();
+//
+//        assertEquals( risers.size(), 1 );
+//        Device stageRiser = risers.get( 0 );
+////        assertEquals(layer.name(), name);
+//        assertEquals( stageRiser.is(), foldingRiser );
+////        fail();
+//    }
 
     /*
          * This is to ensure that no exception is thrown if data is OK.
@@ -343,59 +343,59 @@ public class StageTest {
         assertEquals(tableElement.getAttribute("stroke"), "orange");
     }
 
-    @Test
-    public void domFront() throws Exception {
-        Draw draw = new Draw();
-
-        draw.establishRoot();
-        Stage stage = new Stage(element);
-
-        NodeList existingLines = draw.root().getElementsByTagName("line");
-        assertEquals(existingLines.getLength(), 0);
-
-        stage.dom(draw, View.FRONT);
-
-        NodeList lines = draw.root().getElementsByTagName("line");
-        assertEquals(lines.getLength(), 3);
-        Node groupNode = lines.item(0);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        Element tableElement = (Element) groupNode;
-//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
-
-        assertEquals(tableElement.getAttribute("x1"), x.toString() );
-        assertEquals(tableElement.getAttribute("y1"), y.toString() );
-        assertEquals(tableElement.getAttribute("x2"), width.toString() );
-        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
-        assertEquals(tableElement.getAttribute("stroke-width"), "2");
-        assertEquals(tableElement.getAttribute("stroke"), "orange");
-    }
-
-    @Test
-    public void domSection() throws Exception {
-        Draw draw = new Draw();
-
-        draw.establishRoot();
-        Stage stage = new Stage(element);
-
-        NodeList existingLines = draw.root().getElementsByTagName("line");
-        assertEquals(existingLines.getLength(), 0);
-
-        stage.dom(draw, View.SECTION);
-
-        NodeList lines = draw.root().getElementsByTagName("line");
-        assertEquals(lines.getLength(), 3);
-        Node groupNode = lines.item(0);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        Element tableElement = (Element) groupNode;
-//        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
-
-        assertEquals(tableElement.getAttribute("x1"), x.toString() );
-        assertEquals(tableElement.getAttribute("y1"), y.toString() );
-        assertEquals(tableElement.getAttribute("x2"), width.toString() );
-        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
-        assertEquals(tableElement.getAttribute("stroke-width"), "2");
-        assertEquals(tableElement.getAttribute("stroke"), "orange");
-    }
+//    @Test
+//    public void domFront() throws Exception {
+//        Draw draw = new Draw();
+//
+//        draw.establishRoot();
+//        Stage stage = new Stage(element);
+//
+//        NodeList existingLines = draw.root().getElementsByTagName("line");
+//        assertEquals(existingLines.getLength(), 0);
+//
+//        stage.dom(draw, View.FRONT);
+//
+//        NodeList lines = draw.root().getElementsByTagName("line");
+//        assertEquals(lines.getLength(), 3);
+//        Node groupNode = lines.item(0);
+//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+//        Element tableElement = (Element) groupNode;
+////        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+//
+//        assertEquals(tableElement.getAttribute("x1"), x.toString() );
+//        assertEquals(tableElement.getAttribute("y1"), y.toString() );
+//        assertEquals(tableElement.getAttribute("x2"), width.toString() );
+//        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
+//        assertEquals(tableElement.getAttribute("stroke-width"), "2");
+//        assertEquals(tableElement.getAttribute("stroke"), "orange");
+//    }
+//
+//    @Test
+//    public void domSection() throws Exception {
+//        Draw draw = new Draw();
+//
+//        draw.establishRoot();
+//        Stage stage = new Stage(element);
+//
+//        NodeList existingLines = draw.root().getElementsByTagName("line");
+//        assertEquals(existingLines.getLength(), 0);
+//
+//        stage.dom(draw, View.SECTION);
+//
+//        NodeList lines = draw.root().getElementsByTagName("line");
+//        assertEquals(lines.getLength(), 3);
+//        Node groupNode = lines.item(0);
+//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+//        Element tableElement = (Element) groupNode;
+////        assertEquals(tableElement.attribute("class"), Table.LAYERTAG);
+//
+//        assertEquals(tableElement.getAttribute("x1"), x.toString() );
+//        assertEquals(tableElement.getAttribute("y1"), y.toString() );
+//        assertEquals(tableElement.getAttribute("x2"), width.toString() );
+//        assertEquals(tableElement.getAttribute("y2"), depth.toString() );
+//        assertEquals(tableElement.getAttribute("stroke-width"), "2");
+//        assertEquals(tableElement.getAttribute("stroke"), "orange");
+//    }
 
 //    @Test
 //    public void stagesCreatesMultiple() {

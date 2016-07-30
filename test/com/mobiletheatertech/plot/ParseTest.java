@@ -504,7 +504,7 @@ public class ParseTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
 //        TestResets.MinderDomReset();
-//        TestResets.MountableReset();
+//        TestResets.YokeableReset();
 //        TestResets.ProsceniumReset();
     }
 

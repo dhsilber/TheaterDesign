@@ -174,7 +174,7 @@ public class WallTest {
         Wall wall2 = new Wall( wallElementInner );
         wall2.verify();
 
-        assertSame(Wall.WallNearestPoint(new Point(90, 200, 0)), wall2);
+        assertSame(Wall.WallNearestPoint(new Point(90.0, 200.0, 0.0)), wall2);
     }
 
     @Test
@@ -190,7 +190,8 @@ public class WallTest {
         Wall wall2 = new Wall( wallElement );
         wall2.verify();
 
-        assertEquals(wall2.nearestPointNearWall(new Point(90, 200, 0)), new Point(12, 200, 0));
+        Point nearest = wall2.nearestPointNearWall( new Point(90.0, 200.0, 0.0) );
+        assertEquals( nearest, new Point(12.0, 200.0, 0.0) );
     }
 
     @Test
@@ -233,8 +234,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
         Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
 
         Point result = wall1.nextCorner( start, destination, wall2 );
@@ -252,7 +253,7 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point destination = new Point( 46, 70, 0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
         Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
 
         Point result = wall2.nextCorner( corner, destination, wall2 );
@@ -274,8 +275,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
 
         wall1.nextCorner( start, destination, wall2 );
     }
@@ -294,8 +295,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
 
         wall1.nextCorner( start, destination, wall2 );
     }
@@ -310,8 +311,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
         Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = wall2.nextCorner( start, destination, wall2 );
@@ -329,7 +330,7 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point destination = new Point( 18, 40, 0 );
+        Point destination = new Point( 18.0, 40.0, 0.0 );
         Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = wall2.nextCorner( corner, destination, wall2 );
@@ -353,8 +354,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
 
         wall2.nextCorner( start, destination, wall2 );
     }
@@ -373,8 +374,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
 
         wall2.nextCorner( start, destination, wall2 );
     }
@@ -389,8 +390,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
         Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
 
         Point result = null;
@@ -409,7 +410,7 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point destination = new Point( 46, 70, 0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
         Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
 
         Point result = null;
@@ -432,8 +433,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
 
         wall1.nextNear( start, destination, wall2 );
     }
@@ -452,8 +453,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 18, 40, 0 );
-        Point destination = new Point( 46, 70, 0 );
+        Point start = new Point( 18.0, 40.0, 0.0 );
+        Point destination = new Point( 46.0, 70.0, 0.0 );
 
         wall1.nextNear( start, destination, wall2 );
     }
@@ -468,8 +469,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
         Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = null;
@@ -488,7 +489,7 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point destination = new Point( 18, 40, 0 );
+        Point destination = new Point( 18.0, 40.0, 0.0 );
         Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
 
         Point result = null;
@@ -511,8 +512,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
 
         wall2.nextNear( start, destination, wall2 );
     }
@@ -531,8 +532,8 @@ public class WallTest {
         wall2.verify();
         wall3.verify();
 
-        Point start = new Point( 46, 70, 0 );
-        Point destination = new Point( 28, 40, 0 );
+        Point start = new Point( 46.0, 70.0, 0.0 );
+        Point destination = new Point( 28.0, 40.0, 0.0 );
 
         wall2.nextNear( start, destination, wall2 );
     }

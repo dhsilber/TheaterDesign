@@ -41,7 +41,7 @@ public class DrapeBaseTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-//        assert Mountable.class.isInstance( instance );
+//        assert Yokeable.class.isInstance( instance );
     }
 
     @Test
@@ -332,7 +332,7 @@ public class DrapeBaseTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting BaseTest method." );
 
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
 

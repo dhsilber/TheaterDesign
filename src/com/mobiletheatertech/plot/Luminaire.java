@@ -1,8 +1,8 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGElement;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 //import java.awt.geom.Line2D;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.7
  */
-public class Luminaire extends MinderDom /*implements Schematicable*/ {
+public class Luminaire extends MinderDom implements IsClamp /*implements Schematicable*/ {
 
     private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
@@ -61,7 +61,7 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
     private Point origin;
     private Double pipeRotation;
     private String transform;
-    private Mountable mount = null;
+    private SupportsClamp mount = null;
 
     static final String COLOR = "black";
 
@@ -101,7 +101,8 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
 //        System.err.println("Got to middle of constructor");
 
         if( null != Select( id )){
-            throw new InvalidXMLException(
+//            throw new InvalidXMLException(
+            System.out.println(
                     this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
         }
 
@@ -162,28 +163,36 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
             throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
         Place result;
-        try {
+//        try {
             result = mount.rotatedLocation(location);
-        } catch (MountingException e) {
-            System.err.println( e.toString() );
-            throw new MountingException(
-                    "Luminaire of type '" + type + "' has location " + location + " which is " +
-                            e.getMessage() + " '" + on + "'.");
-        }
+//        } catch (MountingException e) {
+//            System.err.println( e.toString() );
+//            throw new MountingException(
+//                    "Luminaire of type '" + type + "' has location " + location + " which is " +
+//                            e.getMessage() + " '" + on + "'.");
+//        }
         return result;
     }
 
     @Override
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
-        try {
-            mount = Mountable.Select(on);
-        }
-        catch ( MountingException e ) {
+
+        mount = SupportsClamp$.MODULE$.Select(on);
+        if( null == mount ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
         }
-        mount.hang( this );
+        try {
+            mount.hang( this, Double.parseDouble( location ) );
+        }
+        catch (MountingException exception) {
+                throw new MountingException(
+                    "Pipe (" + on + ") unit '" + unit + "' has " + exception.getMessage() );
+//      case exception: Exception =>
+//        throw new Exception( exception.getMessage, exception.getCause )
+        }
+
 
         place = drawingLocation();
         point=place.location();
@@ -211,7 +220,7 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
         return point;
     }
 
-    Mountable mount() {
+    SupportsClamp mount() {
         return mount;
     }
 
@@ -253,7 +262,7 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
         return address;
     }
 
-    Double weight() {
+    public double weight() {
         Double result = 0.0;
 
         if( null != definition ) {
@@ -330,6 +339,15 @@ public class Luminaire extends MinderDom /*implements Schematicable*/ {
 //        cableCounter.clear();
 //        schematicPosition = null;
 //    }
+
+    @Override
+    public Place position() {
+        return null;
+    }
+
+    @Override
+    public void position( Point point ) {
+    }
 
     /**
      * Generate SVG DOM for a {@code Luminaire}, along with its circuit, dimmer, channel, color, and

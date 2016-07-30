@@ -64,9 +64,11 @@ public class LuminaireTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+        assertFalse( UniqueId.class.isInstance( instance ) );
 
+        assert IsClamp.class.isInstance( instance);
 //        assert Schematicable.class.isInstance( instance );
-        assert ! Legendable.class.isInstance( instance );
+        assertFalse( Legendable.class.isInstance( instance ) );
     }
 
     @Test
@@ -154,7 +156,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
 
-        assertTrue( pipe.loads().contains(luminaire) );
+        assertTrue( pipe.contains( luminaire ) );
     }
 
     /*
@@ -903,11 +905,12 @@ public class LuminaireTest {
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
         TestResets.MinderDomReset();
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         TestResets.LuminaireReset();
 //        Schematic.CountX = 0;
 //        Schematic.CountY = 1;
 //        TestResets.SchematicReset();
+        UniqueId.Reset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );

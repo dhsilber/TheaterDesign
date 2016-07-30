@@ -221,17 +221,26 @@ public class TestResets {
     }
 
     /**
-     * Reset the MOUNTABLELIST maintained by {@link Mountable} to its initial empty state.
+     * Reset the MOUNTABLELIST maintained by {@link Yokeable} to its initial empty state.
      *
      * @throws NoSuchFieldException   if the {@code MOUNTABLELIST} field isn't there.
      * @throws IllegalAccessException if the {@code MOUNTABLELIST} field cannot be accessed.
      */
-    public static void MountableReset() throws NoSuchFieldException, IllegalAccessException {
-        Field mountableListField = Mountable.class.getDeclaredField( "MOUNTABLELIST" );
+    public static void YokeableReset() throws NoSuchFieldException, IllegalAccessException {
+        Field mountableListField = Yokeable.class.getDeclaredField( "YOKEABLELIST" );
         mountableListField.setAccessible( true );
-        ArrayList<Mountable> mountableList = (ArrayList<Mountable>) mountableListField.get( Mountable.class );
-        mountableList.clear();
+        ArrayList<Yokeable> yokeableList = (ArrayList<Yokeable>) mountableListField.get( Yokeable.class );
+        yokeableList.clear();
     }
+
+    public static void MountableReset() {
+//        Mountable$.MODULE$.MountableListReset();
+    }
+
+
+
+
+
 
 //    /**
 //     * Reset the STACKABLELIST maintained by {@link Stackable} to its initial empty state.
@@ -303,7 +312,7 @@ public class TestResets {
         Field originField = Proscenium.class.getDeclaredField( "ORIGIN" );
         originField.setAccessible( true );
         Point origin = (Point) originField.get( Proscenium.class );
-        originField.set( origin, null );
+        originField.set( origin, new Point( 0.0, 0.0, 0.0 ) );
     }
 
 /*

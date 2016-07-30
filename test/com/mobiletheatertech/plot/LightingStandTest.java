@@ -34,7 +34,8 @@ public class LightingStandTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-        assert Mountable.class.isInstance( instance );
+        assert UniqueId.class.isInstance( instance );
+        assert Yokeable.class.isInstance( instance );
 
 //        assert Schematicable.class.isInstance( instance );
         assert Legendable.class.isInstance( instance );
@@ -450,11 +451,12 @@ public class LightingStandTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         SvgElement.Offset(0.0, 0.0);
         TestResets.LightingStandReset();
 //        Schematic.CountX = 0;
 //        Schematic.CountY = 1;
+        UniqueId.Reset();
 
         element = new IIOMetadataNode("lighting-stand");
         element.setAttribute("id", id);

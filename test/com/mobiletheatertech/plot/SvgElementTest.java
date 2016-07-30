@@ -21,7 +21,8 @@ public class SvgElementTest {
      */
     private class MindedDom extends MinderDom {
 
-        public MindedDom( Element element ) throws DataException, InvalidXMLException {
+        public MindedDom( Element element )
+                throws AttributeMissingException, DataException, InvalidXMLException {
             super( element );
         }
 

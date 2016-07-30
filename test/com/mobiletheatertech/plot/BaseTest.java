@@ -250,8 +250,9 @@ public class BaseTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting BaseTest method." );
 
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         TestResets.ElementalListerReset();
+        UniqueId.Reset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "Base Venue Name" );
@@ -275,7 +276,7 @@ public class BaseTest {
         Element truss1 = new IIOMetadataNode( "truss" );
         truss1.setAttribute("id", id);
         truss1.setAttribute( "size", "12" );
-        truss1.setAttribute( "length", "320" );
+        truss1.setAttribute( "length", "120" );
         truss1.appendChild(baseElement);
         truss = new Truss( truss1 );
     }

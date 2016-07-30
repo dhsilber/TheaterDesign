@@ -2,13 +2,10 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-
 /**
  * Created by dhs on 12/12/14.
  */
-public class LightingStand extends Mountable implements Legendable //, Schematicable
+public class LightingStand extends Yokeable implements Legendable //, Schematicable
 {
 
     static Integer Count = 0;

@@ -457,13 +457,13 @@ System.out.println( "Drawing: " + drawing.filename() );
         View view = drawing.view();
 
         for ( String mountableName : drawing.mountables ) {
-            Mountable mountable = Mountable.Select( mountableName );
-            if ( null == mountable ) {
+            Yokeable yokeable = Yokeable.Select( mountableName );
+            if ( null == yokeable) {
                 System.err.println(
-                        "For " + drawing.filename() +", " + mountableName + " is not a valid mountable." );
+                        "For " + drawing.filename() +", " + mountableName + " is not a valid yokeable." );
                 continue;
             }
-//            mountable.preview( view);
+//            yokeable.preview( view);
         }
 
         for ( String deviceName : drawing.devices ) {
@@ -503,11 +503,11 @@ System.out.println( "Drawing: " + drawing.filename() );
 //        }
 
         for ( String mountableName : drawing.mountables ) {
-            Mountable mountable = Mountable.Select( mountableName );
-            if ( null == mountable ) {
+            Yokeable yokeable = Yokeable.Select( mountableName );
+            if ( null == yokeable) {
                 continue;
             }
-            mountable.dom( draw, view );
+            yokeable.dom( draw, view );
         }
 
         for ( String deviceName : drawing.devices ) {
@@ -569,7 +569,7 @@ System.out.println( "Item: " + item.id );
 
         writeDirectory( weightsPath );
 
-        for( Mountable mount : Mountable.MountableList() ) {
+        for( Yokeable mount : Yokeable.MountableList() ) {
             String text = "";
             try {
                 text = mount.weights();

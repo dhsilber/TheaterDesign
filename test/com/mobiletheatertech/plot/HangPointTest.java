@@ -311,13 +311,13 @@ public class HangPointTest {
 //        Node groupNod = group.item(0);
 //        Element groupElem = (Element) groupNod;
 
-        NodeList groupList = draw.root().getElementsByTagName( "g" );
-        assertEquals( groupList.getLength(), 2 );
-        Node groupNode = groupList.item(1);
-        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-        Element groupElement = (Element) groupNode;
+//        NodeList groupList = draw.root().getElementsByTagName( "g" );
+//        assertEquals( groupList.getLength(), 2 );
+//        Node groupNode = groupList.item(1);
+//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+//        Element groupElement = (Element) groupNode;
 
-        NodeList useList = groupElement.getElementsByTagName( "use" );
+        NodeList useList = draw.root().getElementsByTagName( "use" );
         assertEquals( useList.getLength(), 1 );
         Node useNode = useList.item(0);
         assertEquals(useNode.getNodeType(), Node.ELEMENT_NODE);
@@ -329,7 +329,7 @@ public class HangPointTest {
         assertEquals(useElement.getAttribute("y"), startY.toString());
         assertEquals(useElement.getAttribute("xlink:href"), "#"+HangPoint.SYMBOL );
 
-        NodeList textList = groupElement.getElementsByTagName( "text" );
+        NodeList textList = draw.root().getElementsByTagName( "text" );
         assertEquals( textList.getLength(), 1 );
         Node textNode = textList.item(0);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);

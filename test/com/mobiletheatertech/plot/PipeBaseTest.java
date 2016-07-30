@@ -1,6 +1,5 @@
 package com.mobiletheatertech.plot;
 
-import com.mobiletheatertech.plot.*;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,7 +48,7 @@ public class PipeBaseTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-//        assert Mountable.class.isInstance( instance );
+//        assert Yokeable.class.isInstance( instance );
     }
 
     @Test
@@ -362,7 +361,7 @@ public class PipeBaseTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting BaseTest method." );
 
-        TestResets.MountableReset();
+        TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
 

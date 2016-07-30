@@ -26,8 +26,8 @@ public abstract class Stackable extends MinderDom {
     /**
      * Find a specific {@code Stackable} from all that have been constructed.
      *
-     * @param id of {@code Mountable} to find
-     * @return {@code Mountable} instance, or {@code null} if not found
+     * @param id of {@code Yokeable} to find
+     * @return {@code Yokeable} instance, or {@code null} if not found
      */
     public static Stackable Select(String id) {
         for (Stackable selection : STACKABLELIST) {
