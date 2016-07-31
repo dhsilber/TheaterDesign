@@ -79,9 +79,9 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             throw new AttributeMissingException( "Luminaire definition", null, "name" );
         }
         complete = (element.getAttribute( "complete" ).equals( "1" ));
-        width = getOptionalDoubleAttributeOrZero(element, "width");
-        length = getOptionalDoubleAttributeOrZero(element, "length");
-        weight = getDoubleAttribute( element, "weight" );
+        width  = getOptionalDoubleAttributeOrZero( "width" );
+        length = getOptionalDoubleAttributeOrZero( "length" );
+        weight = getDoubleAttribute( "weight" );
 
         NodeList svgList = element.getElementsByTagName( "svg" );
         if (null != svgList && svgList.getLength() > 0) {

@@ -57,10 +57,10 @@ public class Wall extends MinderDom {
     public Wall( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
-        x1 = getDoubleAttribute( element, "x1" );
-        y1 = getDoubleAttribute( element, "y1" );
-        x2 = getDoubleAttribute( element, "x2" );
-        y2 = getDoubleAttribute( element, "y2" );
+        x1 = getDoubleAttribute( "x1" );
+        y1 = getDoubleAttribute( "y1" );
+        x2 = getDoubleAttribute( "x2" );
+        y2 = getDoubleAttribute( "y2" );
 
         WallList.add( this );
 

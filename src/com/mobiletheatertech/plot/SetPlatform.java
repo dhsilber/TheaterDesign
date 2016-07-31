@@ -22,9 +22,9 @@ public class SetPlatform extends MinderDom implements Legendable {
     {
         super( element );
 
-        x = getDoubleAttribute( element, "x" );
-        y = getDoubleAttribute( element, "y" );
-        orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        orientation = getOptionalDoubleAttributeOrZero( "orientation" );
 
         ArrayList<Element> polygonList = subElements( element, "shape" );
         for( Element polygonElement : polygonList ) {

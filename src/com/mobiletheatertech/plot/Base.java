@@ -31,10 +31,10 @@ public class Base extends MinderDom {
     public Base( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
-        size = getDoubleAttribute( element, "size" );
-        x = getDoubleAttribute( element, "x" );
-        y = getDoubleAttribute( element, "y" );
-        rotation = getOptionalDoubleAttributeOrZero( element, "rotation" );
+        size = getDoubleAttribute( "size" );
+        y = getDoubleAttribute( "y" );
+        x = getDoubleAttribute( "x" );
+        rotation = getOptionalDoubleAttributeOrZero( "rotation" );
 
         // Give the base's element a unique id so that its Plot object can be recognized
         // and used.

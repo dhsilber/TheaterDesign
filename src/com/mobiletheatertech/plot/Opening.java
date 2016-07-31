@@ -30,9 +30,9 @@ public class Opening extends Elemental {
 //            throw new InvalidXMLException( "Element unexpectedly null!" );
 //        }
 
-        height = getDoubleAttribute( element, "height" );
-        width = getDoubleAttribute( element, "width" );
-        start = getDoubleAttribute( element, "start" );
+        height = getDoubleAttribute( "height" );
+        width = getDoubleAttribute( "width" );
+        start = getDoubleAttribute( "start" );
     }
 
     /**

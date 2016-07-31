@@ -23,10 +23,10 @@ public class Drawing extends ElementalLister {
     public Drawing( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        id = getStringAttribute( element, "id" );
-        filename = getStringAttribute( element, "filename" );
-        viewString = getOptionalStringAttribute( element, "view" );
-        legend = getOptionalStringAttribute( element, "legend" );
+        id = getStringAttribute( "id" );
+        filename = getStringAttribute( "filename" );
+        viewString = getOptionalStringAttribute( "view" );
+        legend     = getOptionalStringAttribute( "legend" );
         if ( "".equals( legend ) ) {
             legend = id;
         }

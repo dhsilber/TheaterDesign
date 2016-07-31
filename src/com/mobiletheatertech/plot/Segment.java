@@ -18,10 +18,10 @@ public class Segment extends Elemental {
     public Segment( Element element ) throws AttributeMissingException, InvalidXMLException {
         super (element);
 
-        x1 = getPositiveIntegerAttribute(element, "x1");
-        y1 = getPositiveIntegerAttribute(element, "y1");
-        x2 = getPositiveIntegerAttribute(element, "x2");
-        y2 = getPositiveIntegerAttribute(element, "y2");
+        x1 = getPositiveIntegerAttribute( "x1");
+        y1 = getPositiveIntegerAttribute( "y1");
+        x2 = getPositiveIntegerAttribute( "x2");
+        y2 = getPositiveIntegerAttribute( "y2");
 
     }
 }

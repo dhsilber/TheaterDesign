@@ -33,7 +33,7 @@ public class Airwall extends MinderDom {
     {
         super( element );
 
-        depth = getDoubleAttribute( element, "depth" );
+        depth = getDoubleAttribute( "depth" );
 
         if (depth <= 0) {
             throw new LocationException( "Airwall instance is at too small a depth" );

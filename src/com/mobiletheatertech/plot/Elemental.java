@@ -3,8 +3,6 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.imageio.metadata.IIOMetadataNode;
-
 /*
 
 TODO: Upgrade notes...
@@ -32,8 +30,9 @@ public class Elemental {
      * the earliest opportunity.
      */
     public String id = null;
+    Element internalElement = null;
 
-    public Elemental( Element element) throws InvalidXMLException{
+    public Elemental( Element element ) throws InvalidXMLException {
 //        System.err.println( "H" );
 
         if (null == element) {
@@ -41,21 +40,21 @@ public class Elemental {
         }
 //        System.err.println( "I" );
 
+        internalElement = element;
     }
 
     /**
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and convert it to an
      * {@code Integer}.
      *
-     * @param element DOM Element defining a venue.
      * @param name    name of attribute.
      * @return Integer value of attribute
      * @throws AttributeMissingException
      */
-    protected Integer getIntegerAttribute( Element element, String name )
+    protected Integer getIntegerAttribute( String name )
             throws AttributeMissingException
     {
-        String value = element.getAttribute( name );
+        String value = internalElement.getAttribute( name );
         checkAttribute(name, value);
 
         return new Integer( value );
@@ -63,16 +62,15 @@ public class Elemental {
 
     /**
      *
-     * @param element
      * @param name
      * @return
      * @throws AttributeMissingException
      * @throws InvalidXMLException
      * @since 0.0.24
      */
-    protected Integer getPositiveIntegerAttribute(Element element, String name)
+    protected Integer getPositiveIntegerAttribute( String name)
             throws AttributeMissingException, InvalidXMLException {
-        Integer value = getIntegerAttribute(element, name);
+        Integer value = getIntegerAttribute( name);
         if (0 > value) {
             throw new InvalidXMLException(this.getClass().getSimpleName(), id,
                     "value for '" + name + "' attribute should not be negative");
@@ -86,11 +84,11 @@ public class Elemental {
         return value;
     }
 
-    protected Double getPositiveDoubleAttribute(Element element, String name)
+    protected Double getPositiveDoubleAttribute( String name)
             throws AttributeMissingException, InvalidXMLException {
-        Double value = getDoubleAttribute(element, name);
+        Double value = getDoubleAttribute( name );
         if (0 > value) {
-            throw new InvalidXMLException(this.getClass().getSimpleName(), id,
+            throw new InvalidXMLException( this.getClass().getSimpleName(), id,
                     "value for '" + name + "' attribute should not be negative");
 //            this.getClass().getSimpleName() + " \\(" + id + "\\) value for '" + name +
 //                    "' attribute should not be negative.");
@@ -100,10 +98,11 @@ public class Elemental {
                     "value for '" + name + "' attribute should not be zero");
         }
         return value;
+//        return null;
     }
 
-    protected Integer getOptionalIntegerAttributeOrZero(Element element, String name) {
-        String value = element.getAttribute( name );
+    protected Integer getOptionalIntegerAttributeOrZero( String name ) {
+        String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
             value = "0";
         }
@@ -111,8 +110,8 @@ public class Elemental {
         return new Integer( value );
     }
 
-    protected Integer getOptionalIntegerAttributeOrNull(Element element, String name) {
-        String value = element.getAttribute( name );
+    protected Integer getOptionalIntegerAttributeOrNull( String name ) {
+        String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
             return null;
         }
@@ -120,18 +119,24 @@ public class Elemental {
         return new Integer( value );
     }
 
-    protected Double getDoubleAttribute( Element element, String name )
+//    protected Double getDoubleAttribute( String name )
+//            throws AttributeMissingException
+//    {
+//        return getDoubleAttribute( internalElement, name );
+//    }
+
+    protected Double getDoubleAttribute( String name )
             throws AttributeMissingException
     {
-        String value = element.getAttribute( name );
+        String value = internalElement.getAttribute( name );
         checkAttribute(name, value);
 
         return new Double( value );
     }
 
 
-    protected Double getOptionalDoubleAttributeOrNull( Element element, String name ) {
-        String value = element.getAttribute( name );
+    protected Double getOptionalDoubleAttributeOrNull( String name ) {
+        String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
             return null;
         }
@@ -140,8 +145,8 @@ public class Elemental {
     }
 
 
-    protected Double getOptionalDoubleAttributeOrZero( Element element, String name ) {
-        String value = element.getAttribute( name );
+    protected Double getOptionalDoubleAttributeOrZero( String name ) {
+        String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
             return 0.0;
         }
@@ -153,15 +158,14 @@ public class Elemental {
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} and return that
      * {@code String}.
      *
-     * @param element DOM Element defining a venue.
      * @param name    name of attribute.
      * @return String value of attribute
      * @throws AttributeMissingException
      */
-    protected String getStringAttribute( Element element, String name )
+    protected String getStringAttribute( String name )
             throws AttributeMissingException
     {
-        String value = element.getAttribute( name );
+        String value = internalElement.getAttribute( name );
         checkAttribute(name, value);
 
         return value;
@@ -185,12 +189,11 @@ public class Elemental {
     /**
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present.
      *
-     * @param element DOM Element defining a venue.
      * @param name    name of attribute.
      * @return String value of attribute - empty {@code String} if attribute not set
      */
-    protected String getOptionalStringAttribute( Element element, String name ) {
-        String value = element.getAttribute( name );
+    protected String getOptionalStringAttribute( String name ) {
+        String value = internalElement.getAttribute( name );
 
         return value;
     }
@@ -199,12 +202,11 @@ public class Elemental {
      * Acquire the named attribute from the {@link org.w3c.dom.Element Element} if it is present.
      * If it is not present, return a null.
      *
-     * @param element DOM Element defining a venue.
      * @param name    name of attribute.
      * @return String value of attribute - null {@code String} if attribute not set
      */
-    protected String getOptionalStringAttributeOrNull( Element element, String name ) {
-        String value = element.getAttribute( name );
+    protected String getOptionalStringAttributeOrNull( String name ) {
+        String value = internalElement.getAttribute( name );
 
         if ( "".equals( value ) ) { value = null; }
 

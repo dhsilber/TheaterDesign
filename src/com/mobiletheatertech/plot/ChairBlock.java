@@ -78,11 +78,11 @@ public class ChairBlock extends MinderDom {
         String exceptionMessage =
                 "Chairblock can be defined with either a perimeter or a complete set of x/y/width/depth parameters, but not both.";
 
-        x = getOptionalIntegerAttributeOrZero(element, "x");
-        y = getOptionalIntegerAttributeOrZero(element, "y");
-        width = getOptionalIntegerAttributeOrZero(element, "width");
-        depth = getOptionalIntegerAttributeOrZero(element, "depth");
-        perimeter = getOptionalStringAttribute(element, "perimeter");
+        x     = getOptionalIntegerAttributeOrZero( "x" );
+        y     = getOptionalIntegerAttributeOrZero( "y" );
+        width = getOptionalIntegerAttributeOrZero( "width" );
+        depth = getOptionalIntegerAttributeOrZero( "depth" );
+        perimeter = getOptionalStringAttribute( "perimeter" );
 
         if (!perimeter.isEmpty() && (0 != x && 0 != y && 0 != width && 0 != depth)) {
             throw new InvalidXMLException(exceptionMessage);

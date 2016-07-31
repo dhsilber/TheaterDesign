@@ -10,13 +10,13 @@ class Pipe ( element: Element ) extends UniqueId( element )
   with Populate
 {
 
-  val length: Double = getDoubleAttribute( element, "length" )
+  val length: Double = getDoubleAttribute( "length" )
 
-  val x = getOptionalDoubleAttributeOrNull( element, "x" )
-  val y = getOptionalDoubleAttributeOrNull( element, "y" )
-  val z = getOptionalDoubleAttributeOrNull( element, "z" )
-  val orientationValue = getOptionalDoubleAttributeOrZero( element, "orientation" )
-  val offsetX = getOptionalDoubleAttributeOrZero( element, "offsetx" )
+  val x = getOptionalDoubleAttributeOrNull( "x" )
+  val y = getOptionalDoubleAttributeOrNull( "y" )
+  val z = getOptionalDoubleAttributeOrNull( "z" )
+  val orientationValue = getOptionalDoubleAttributeOrZero( "orientation" )
+  val offsetX = getOptionalDoubleAttributeOrZero( "offsetx" )
 
   // These are set within the *Processing() logic.
   var start: Point = null

@@ -12,9 +12,9 @@ public class CableDiversionPoint extends Elemental {
     public CableDiversionPoint( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        Double x = getDoubleAttribute( element, "x" );
-        Double y = getDoubleAttribute( element, "y" );
-        Double z = getDoubleAttribute( element, "z" );
+        Double x = getDoubleAttribute( "x" );
+        Double y = getDoubleAttribute( "y" );
+        Double z = getDoubleAttribute( "z" );
 
         point = new Point( x, y, z );
     }

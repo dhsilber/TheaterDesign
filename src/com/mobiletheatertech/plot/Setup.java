@@ -65,8 +65,8 @@ public class Setup extends Elemental {
             throws AttributeMissingException, InvalidXMLException {
         super(element);
 
-        name = getStringAttribute( element, "name" );
-        tag = getStringAttribute( element, "tag" );
+        name = getStringAttribute( "name" );
+        tag  = getStringAttribute( "tag" );
 
         if (Accumulator.length() < 1) {
             Accumulator.append(

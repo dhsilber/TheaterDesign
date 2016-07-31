@@ -8,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
   * Created by DHS on 7/27/16.
   */
 abstract class UniqueId( element: Element ) extends MinderDom( element: Element ) {
-  id = getStringAttribute( element, "id" )
+  id = getStringAttribute( "id" )
 
   if( UniqueId.Check(id) )
     throw new InvalidXMLException(

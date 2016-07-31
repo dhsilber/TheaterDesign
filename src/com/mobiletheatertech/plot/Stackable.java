@@ -42,7 +42,7 @@ public abstract class Stackable extends MinderDom {
             throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
-        id = getOptionalStringAttribute( element, "id");
+        id = getOptionalStringAttribute( "id");
 
         if( ! "".equals( id )) {
 

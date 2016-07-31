@@ -70,14 +70,14 @@ public class Device extends Stackable // implements Schematicable
      */
     public Device( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
-        id = getStringAttribute(element, "id");
-        is = getStringAttribute(element, "is");
-        on = getOptionalStringAttribute(element, "on");
-        x = getOptionalDoubleAttributeOrZero(element, "x");
-        y = getOptionalDoubleAttributeOrZero(element, "y");
-        z = getOptionalDoubleAttributeOrZero(element, "z");
-        orientation = getOptionalDoubleAttributeOrZero(element, "orientation");
-        layerSpecified = getOptionalStringAttribute( element, "layer" );
+        id = getStringAttribute( "id" );
+        is = getStringAttribute( "is" );
+        on = getOptionalStringAttribute( "on" );
+        x = getOptionalDoubleAttributeOrZero( "x" );
+        y = getOptionalDoubleAttributeOrZero( "y" );
+        z = getOptionalDoubleAttributeOrZero( "z" );
+        orientation = getOptionalDoubleAttributeOrZero( "orientation" );
+        layerSpecified = getOptionalStringAttribute( "layer" );
 
         if( "".equals( on ) && ( x.equals( 0.0 ) || y.equals( 0.0 ) ) ) {
             throw new AttributeMissingException( "Device (" + id +

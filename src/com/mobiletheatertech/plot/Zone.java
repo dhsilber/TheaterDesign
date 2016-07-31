@@ -78,12 +78,12 @@ public class Zone extends MinderDom {
     {
         super(element);
 
-        id = getStringAttribute(element, "id");
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
+        id = getStringAttribute( "id" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
 //        z=getIntegerAttribute( element, "z" );
-        r = getDoubleAttribute(element, "r");
-        color = getOptionalStringAttribute(element, "color");
+        r = getDoubleAttribute( "r" );
+        color = getOptionalStringAttribute( "color" );
         if (color.equals("")) {
             color = COLORDEFAULT;
         }

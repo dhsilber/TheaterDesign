@@ -41,11 +41,11 @@ public class Stage extends Stackable implements Legendable {
     {
         super( element );
 
-        width = getDoubleAttribute(element, "width");
-        depth = getDoubleAttribute(element, "depth");
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
-        z = getDoubleAttribute(element, "z");
+        width = getDoubleAttribute( "width" );
+        depth = getDoubleAttribute( "depth" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        z = getDoubleAttribute( "z" );
 
         if (0 >= width) throw new SizeException( "Stage", "width" );
         if (0 >= depth) throw new SizeException( "Stage", "depth" );

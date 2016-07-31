@@ -17,16 +17,16 @@ class Truss ( element: Element ) extends UniqueId( element )
     throw new InvalidXMLException("Truss not yet supported with Proscenium.")
   }
 
-  val size: Double = getDoubleAttribute( element, "size" )
+  val size: Double = getDoubleAttribute( "size" )
   if (12.0 != size && 20.5 != size) {
     throw new KindException("Truss", size)
   }
   val halfSize: Double = size / 2.0
 
-  val length: Double = getDoubleAttribute( element, "length" )
-  val x = getOptionalDoubleAttributeOrNull(element, "x")
-  val y = getOptionalDoubleAttributeOrNull(element, "y")
-  val z = getOptionalDoubleAttributeOrNull(element, "z")
+  val length: Double = getDoubleAttribute( "length" )
+  val x = getOptionalDoubleAttributeOrNull( "x" )
+  val y = getOptionalDoubleAttributeOrNull( "y" )
+  val z = getOptionalDoubleAttributeOrNull( "z" )
 
   var suspend1: Suspend = null
   var suspend2: Suspend = null

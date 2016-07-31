@@ -32,8 +32,8 @@ public class Suspend extends MinderDom {
     {
         super( element );
 
-        refId = getStringAttribute(element, "ref");
-        distance = getDoubleAttribute(element, "distance");
+        refId = getStringAttribute( "ref" );
+        distance = getDoubleAttribute( "distance");
 
         hangPoint = HangPoint.Find( refId );
         if (null == hangPoint) {

@@ -21,9 +21,9 @@ public class UserLayer extends ElementalLister {
     {
         super( element );
 
-        id = getStringAttribute( element, "id" );
-        name = getStringAttribute( element, "name" );
-        color = getStringAttribute( element, "color" );
+        id    = getStringAttribute( "id" );
+        name  = getStringAttribute( "name" );
+        color = getStringAttribute( "color" );
 
         new Layer( id, name, color );
     }

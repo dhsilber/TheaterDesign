@@ -72,7 +72,7 @@ class SupportsClampTest {
     mounted.hang( null, 0.1 )
   }
 
-  @Test(expectedExceptions = Array(classOf[InvalidXMLException]),
+  @Test(expectedExceptions = Array(classOf[MountingException]),
     expectedExceptionsMessageRegExp = "location outside of permissible range." )
   @throws[Exception]
   def locationTooSmall {
@@ -81,7 +81,7 @@ class SupportsClampTest {
     pipe.hang( light, -12.1 )
   }
 
-  @Test(expectedExceptions = Array(classOf[InvalidXMLException]),
+  @Test(expectedExceptions = Array(classOf[MountingException]),
     expectedExceptionsMessageRegExp = "location outside of permissible range." )
   @throws[Exception]
   def locationTooLarge {

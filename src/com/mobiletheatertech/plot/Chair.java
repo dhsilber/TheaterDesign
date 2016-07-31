@@ -55,15 +55,15 @@ public class Chair extends MinderDom implements Legendable {
     public Chair(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
         super(element);
 
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
-        radius = getOptionalDoubleAttributeOrNull( element, "r" );
-        space = getOptionalDoubleAttributeOrZero( element, "space" );
-        orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
-        line = getOptionalIntegerAttributeOrZero( element, "line" );
-        layerName = getOptionalStringAttribute( element, "layer" );
-        count = getOptionalIntegerAttributeOrNull(element, "count");
-        opening = getOptionalDoubleAttributeOrNull(element, "opening");
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        radius = getOptionalDoubleAttributeOrNull( "r" );
+        space = getOptionalDoubleAttributeOrZero( "space" );
+        orientation = getOptionalDoubleAttributeOrZero( "orientation" );
+        line = getOptionalIntegerAttributeOrZero( "line" );
+        layerName = getOptionalStringAttribute( "layer" );
+        count = getOptionalIntegerAttributeOrNull( "count" );
+        opening = getOptionalDoubleAttributeOrNull( "opening");
 
         layerName = ("".equals( layerName )) ? LAYERTAG : layerName;
         if ( ! "".equals( layerName )) {

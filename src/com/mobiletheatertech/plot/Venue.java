@@ -68,12 +68,12 @@ public class Venue extends MinderDom implements Legendable {
 
 //System.out.println(  "Just inside VENUE constructor.");
 
-        room = getStringAttribute( element, "room" );
-        width = getDoubleAttribute( element, "width" );
-        depth = getDoubleAttribute( element, "depth" );
-        height = getDoubleAttribute( element, "height" );
-        building = getOptionalStringAttribute( element, "building" );
-        circuiting = getOptionalStringAttribute( element, "circuiting" );
+        room = getStringAttribute( "room" );
+        width  = getDoubleAttribute( "width" );
+        depth  = getDoubleAttribute( "depth" );
+        height = getDoubleAttribute( "height" );
+        building   = getOptionalStringAttribute( "building" );
+        circuiting = getOptionalStringAttribute( "circuiting" );
         switch (circuiting) {
             case "":
             case "one-to-one":

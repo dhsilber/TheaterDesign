@@ -16,29 +16,6 @@ import static org.testng.Assert.*;
  */
 public class SvgElementTest {
 
-    /**
-     * Extended {@code MinderDom} so that there is a concrete class to test with.
-     */
-    private class MindedDom extends MinderDom {
-
-        public MindedDom( Element element )
-                throws AttributeMissingException, DataException, InvalidXMLException {
-            super( element );
-        }
-
-        @Override
-        public void verify() throws InvalidXMLException {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void dom( Draw draw, View mode ) {
-
-//            throw new UnsupportedOperationException(
-//                    "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
-
     private Element element = null;
 
     Double x = 12.0;

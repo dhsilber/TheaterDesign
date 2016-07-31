@@ -53,14 +53,14 @@ public class Table extends Stackable implements Legendable {
             throws AttributeMissingException, DataException, InvalidXMLException, LocationException, ReferenceException, SizeException {
         super(element);
 
-        id = getOptionalStringAttribute(element, "id");
+        id = getOptionalStringAttribute( "id" );
 
-        width = getDoubleAttribute(element, "width");
-        depth = getDoubleAttribute(element, "depth");
-        height = getDoubleAttribute(element, "height");
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
-        z = getDoubleAttribute(element, "z");
+        width = getDoubleAttribute( "width" );
+        depth = getDoubleAttribute( "depth" );
+        height = getDoubleAttribute( "height" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        z = getDoubleAttribute( "z" );
 
         if (0 >= width) throw new SizeException("Table", "width");
         if (0 >= depth) throw new SizeException("Table", "depth");

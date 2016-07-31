@@ -7,9 +7,9 @@ import org.w3c.dom.Element
  */
 class PipeBase ( element: Element ) extends MinderDom( element ) {
 
-  val x = getDoubleAttribute( element, "x" )
-  val y = getDoubleAttribute( element, "y" )
-  val z = getOptionalDoubleAttributeOrZero( element, "z" )
+  val x = getDoubleAttribute( "x" )
+  val y = getDoubleAttribute( "y" )
+  val z = getOptionalDoubleAttributeOrZero( "z" )
 
   val processedMark = Mark.Generate()
   element.setAttribute( "processedMark", processedMark )

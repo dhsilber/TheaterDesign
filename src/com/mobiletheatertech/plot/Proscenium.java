@@ -96,12 +96,12 @@ public class Proscenium extends MinderDom {
             throw new InvalidXMLException("Multiple Prosceniums are not currently supported.");
         }
 
-        width = getDoubleAttribute(element, "width");
-        depth = getDoubleAttribute(element, "depth");
-        height = getDoubleAttribute(element, "height");
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
-        z = getDoubleAttribute(element, "z");
+        width  = getDoubleAttribute( "width" );
+        depth  = getDoubleAttribute( "depth" );
+        height = getDoubleAttribute( "height" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        z = getDoubleAttribute( "z" );
 
         if (0 >= width) throw new SizeException("Proscenium", "width");
         if (0 >= depth) throw new SizeException("Proscenium", "depth");

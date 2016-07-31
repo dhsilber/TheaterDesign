@@ -26,9 +26,9 @@ public class LightingStand extends Yokeable implements Legendable //, Schematica
             InvalidXMLException, MountingException {
         super( element );
 
-        x = getDoubleAttribute(element, "x");
-        y = getDoubleAttribute(element, "y");
-        orientation = getOptionalDoubleAttributeOrZero( element, "orientation" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
+        orientation = getOptionalDoubleAttributeOrZero( "orientation" );
     }
 
     @Override

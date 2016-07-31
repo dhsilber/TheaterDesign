@@ -16,8 +16,8 @@ public class CableType extends Elemental implements Legendable {
     public CableType( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
 
-        id = getStringAttribute( element, "id" );
-        schematicColor = getStringAttribute( element, "schematic-color" );
+        id = getStringAttribute( "id" );
+        schematicColor = getStringAttribute( "schematic-color" );
 
         CABLETYPELIST.add( this );
 

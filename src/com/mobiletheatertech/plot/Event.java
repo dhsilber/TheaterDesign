@@ -48,7 +48,7 @@ public class Event extends MinderDom {
     public Event( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
-        id = getStringAttribute( element, "name" );
+        id = getStringAttribute( "name" );
 
         Only = this;
     }

@@ -30,6 +30,7 @@ public class ElementalTest {
         Integer unsetNull;
         Integer emptyNull;
         Integer usedNull;
+
         Double twiceUnsetZero;
         Double twiceEmptyZero;
         Double twiceUsedZero;
@@ -38,6 +39,10 @@ public class ElementalTest {
         Double twiceEmptyNull;
         Double twiceUsedNull;
         Double twiceZeroNull;
+
+        Double doubleValue;
+        Double positiveDoubleValue;
+
         String stringNull;
         String stringNotNull;
         String stringEmpty;
@@ -46,33 +51,69 @@ public class ElementalTest {
         public Ellie( Element element ) throws AttributeMissingException,InvalidXMLException {
             super ( element );
 
-            id = getOptionalStringAttribute( element, "id" );
-            stringValue = getStringAttribute(element, "stringValue");
-            emptyZero = getOptionalIntegerAttributeOrZero(element, "empty");
-            unsetZero = getOptionalIntegerAttributeOrZero(element, "unset");
-            usedZero = getOptionalIntegerAttributeOrZero(element, "used");
-            emptyNull = getOptionalIntegerAttributeOrNull(element, "empty");
-            unsetNull = getOptionalIntegerAttributeOrNull(element, "unset");
-            usedNull = getOptionalIntegerAttributeOrNull(element, "used");
-            integerValue = getIntegerAttribute(element, "integerValue");
-            positiveIntegerValue=getPositiveIntegerAttribute(element, "positiveIntegerValue");
-            twiceUnsetZero = getOptionalDoubleAttributeOrZero(element, "twiceUnset");
-            twiceEmptyZero = getOptionalDoubleAttributeOrZero(element, "twiceEmpty");
-            twiceUsedZero = getOptionalDoubleAttributeOrZero(element, "twiceUsed");
-            twiceZeroZero = getOptionalDoubleAttributeOrZero( element, "twiceZero" );
-            twiceUnsetNull = getOptionalDoubleAttributeOrNull(element, "twiceUnset");
-            twiceEmptyNull = getOptionalDoubleAttributeOrNull(element, "twiceEmpty");
-            twiceUsedNull = getOptionalDoubleAttributeOrNull(element, "twiceUsed");
-            twiceZeroNull = getOptionalDoubleAttributeOrNull( element, "twiceZero" );
-            stringNotEmpty = getOptionalStringAttribute(element, "stringNotEmpty");
-            stringEmpty = getOptionalStringAttribute(element, "stringEmpty");
-            stringNotNull = getOptionalStringAttributeOrNull(element, "stringNotNull");
-            stringNull = getOptionalStringAttributeOrNull( element, "stringNull" );
+            id = getOptionalStringAttribute( "id" );
+            stringValue = getStringAttribute( "stringValue" );
+
+            emptyZero = getOptionalIntegerAttributeOrZero( "empty" );
+            unsetZero = getOptionalIntegerAttributeOrZero( "unset" );
+            usedZero  = getOptionalIntegerAttributeOrZero( "used" );
+            emptyNull = getOptionalIntegerAttributeOrNull( "empty" );
+            unsetNull = getOptionalIntegerAttributeOrNull( "unset" );
+            usedNull  = getOptionalIntegerAttributeOrNull( "used" );
+            integerValue = getIntegerAttribute( "integerValue" );
+            positiveIntegerValue=getPositiveIntegerAttribute( "positiveIntegerValue");
+
+            twiceUnsetZero = getOptionalDoubleAttributeOrZero( "twiceUnset" );
+            twiceEmptyZero = getOptionalDoubleAttributeOrZero( "twiceEmpty" );
+            twiceUsedZero  = getOptionalDoubleAttributeOrZero( "twiceUsed" );
+            twiceZeroZero  = getOptionalDoubleAttributeOrZero( "twiceZero" );
+            twiceUnsetNull = getOptionalDoubleAttributeOrNull( "twiceUnset" );
+            twiceEmptyNull = getOptionalDoubleAttributeOrNull( "twiceEmpty" );
+            twiceUsedNull  = getOptionalDoubleAttributeOrNull( "twiceUsed" );
+            twiceZeroNull  = getOptionalDoubleAttributeOrNull( "twiceZero" );
+
+            doubleValue = getDoubleAttribute( "doubleValue");
+            positiveDoubleValue = getPositiveDoubleAttribute( "positiveDoubleValue");
+
+            stringNotEmpty = getOptionalStringAttribute( "stringNotEmpty");
+            stringEmpty = getOptionalStringAttribute( "stringEmpty");
+            stringNull    = getOptionalStringAttributeOrNull( "stringNull" );
+            stringNotNull = getOptionalStringAttributeOrNull( "stringNotNull" );
+        }
+    }
+
+    private class ElliePositiveDoubleNegative extends Elemental {
+
+        Double negativeDoubleValue;
+
+        public ElliePositiveDoubleNegative(Element element)
+                throws AttributeMissingException, InvalidXMLException
+        {
+            super(element);
+
+            id = getOptionalStringAttribute( "id" );
+            negativeDoubleValue = getPositiveDoubleAttribute( "negativeDoubleValue");
+        }
+    }
+
+    private class ElliePositiveDoubleZero extends Elemental {
+
+        Double zeroDoubleValue;
+
+        public ElliePositiveDoubleZero(Element element)
+                throws AttributeMissingException, InvalidXMLException
+        {
+            super(element);
+
+            id = getOptionalStringAttribute( "id" );
+            zeroDoubleValue = getPositiveDoubleAttribute( "zeroDoubleValue");
         }
     }
 
     Element element = null;
     Element elementary = null;
+    Element elementPositiveDoubleNegative = null;
+    Element elementPositiveDoubleZero = null;
 
     String parentTag = "parentTag";
 
@@ -221,6 +262,20 @@ public class ElementalTest {
     }
 
     @Test
+    public void getDoubleAttribute() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "doubleValue"), 12.3 );
+    }
+
+    @Test
+    public void getPositiveDoubleAttributePositive() throws Exception {
+        Ellie ellie = new Ellie( element );
+
+        assertEquals( TestHelpers.accessDouble(ellie, "positiveDoubleValue"), 45.6 );
+    }
+
+    @Test
     public void getOptionalStringAttributeUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
@@ -279,6 +334,13 @@ public class ElementalTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Ellie instance is missing required 'positiveIntegerValue' attribute.")
+    public void noPositiveIntegerAttribute() throws Exception {
+        element.removeAttribute( "positiveIntegerValue" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
             expectedExceptionsMessageRegExp = "Ellie \\(sally\\) is missing required 'positiveIntegerValue' attribute.")
     public void noPositiveIntegerAttributeWithID() throws Exception {
         element.setAttribute( "id", "sally" );
@@ -286,12 +348,91 @@ public class ElementalTest {
         new Ellie( element );
     }
 
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Ellie instance is missing required 'doubleValue' attribute.")
+    public void noDoubleAttribute() throws Exception {
+        element.removeAttribute( "doubleValue" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Ellie \\(sally\\) is missing required 'doubleValue' attribute.")
+    public void noDoubleAttributeWithID() throws Exception {
+        element.setAttribute( "id", "sally" );
+        element.removeAttribute( "doubleValue" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Ellie instance is missing required 'positiveDoubleValue' attribute.")
+    public void noPositiveDoubleAttribute() throws Exception {
+        element.removeAttribute( "positiveDoubleValue" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Ellie \\(sally\\) is missing required 'positiveDoubleValue' attribute.")
+    public void noPositiveDoubleAttributeWithID() throws Exception {
+        element.setAttribute( "id", "sally" );
+        element.removeAttribute( "positiveDoubleValue" );
+        new Ellie( element );
+    }
+
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp ="Ellie \\(sally\\) value for 'positiveIntegerValue' attribute should not be negative.")
+            expectedExceptionsMessageRegExp =
+                    "ElliePositiveDoubleNegative instance value for 'negativeDoubleValue' attribute should not be negative.")
+    public void getPositiveDoubleAttributeNegative() throws Exception {
+        new ElliePositiveDoubleNegative( elementPositiveDoubleNegative );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "ElliePositiveDoubleNegative \\(sally\\) value for 'negativeDoubleValue' attribute should not be negative.")
+    public void getPositiveDoubleAttributeNegativeWithID() throws Exception {
+        elementPositiveDoubleNegative.setAttribute( "id", "sally" );
+        new ElliePositiveDoubleNegative( elementPositiveDoubleNegative );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "ElliePositiveDoubleZero instance value for 'zeroDoubleValue' attribute should not be zero.")
+    public void getPositiveDoubleAttributeZero() throws Exception {
+        new ElliePositiveDoubleZero( elementPositiveDoubleZero );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "ElliePositiveDoubleZero \\(sally\\) value for 'zeroDoubleValue' attribute should not be zero.")
+    public void getPositiveDoubleAttributeZeroWithID() throws Exception {
+        elementPositiveDoubleZero.setAttribute( "id", "sally" );
+        new ElliePositiveDoubleZero( elementPositiveDoubleZero );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Ellie instance value for 'positiveIntegerValue' attribute should not be negative.")
+//                    "Gearlie \\(sally\\) value for 'positiveIntegerValue' attribute should not be negative.")
+    public void negativePositiveIntegerAttribute() throws Exception {
+        element.setAttribute( "positiveIntegerValue","-1" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Ellie \\(sally\\) value for 'positiveIntegerValue' attribute should not be negative.")
 //                    "Gearlie \\(sally\\) value for 'positiveIntegerValue' attribute should not be negative.")
     public void negativePositiveIntegerAttributeWithID() throws Exception {
         element.setAttribute( "id", "sally" );
         element.setAttribute( "positiveIntegerValue","-1" );
+        new Ellie( element );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Ellie instance value for 'positiveIntegerValue' attribute should not be zero.")
+    public void zeroPositiveIntegerAttribute() throws Exception {
+        element.setAttribute( "positiveIntegerValue","0" );
         new Ellie( element );
     }
 
@@ -338,6 +479,7 @@ public class ElementalTest {
         element.setAttribute( "stringValue", "6x9" );
         element.setAttribute( "integerValue", "609" );
         element.setAttribute( "positiveIntegerValue", "1");
+        element.setAttribute( "positiveDoubleValue", "17.3");
         element.setAttribute( "used", "17" );
         element.setAttribute( "empty", "" );
         element.setAttribute( "twiceUsed", "4.32" );
@@ -345,6 +487,14 @@ public class ElementalTest {
         element.setAttribute( "twiceZero", "0.0" );
         element.setAttribute( "stringNotEmpty", "Not Empty" );
         element.setAttribute( "stringNotNull", "Not Null" );
+        element.setAttribute( "doubleValue", "12.3" );
+        element.setAttribute( "positiveDoubleValue", "45.6" );
+
+        elementPositiveDoubleNegative = new IIOMetadataNode( "elemental" );
+        elementPositiveDoubleNegative.setAttribute( "negativeDoubleValue", "-78.9" );
+
+        elementPositiveDoubleZero = new IIOMetadataNode( "elemental" );
+        elementPositiveDoubleZero.setAttribute( "zeroDoubleValue", "0.0" );
     }
 
     @AfterMethod

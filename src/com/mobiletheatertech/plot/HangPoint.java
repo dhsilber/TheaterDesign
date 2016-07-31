@@ -63,9 +63,9 @@ public class HangPoint extends MinderDom implements Legendable {
     {
         super( element );
 
-        id = getOptionalStringAttribute( element, "id" );
-        x = getDoubleAttribute( element, "x" );
-        y = getDoubleAttribute( element, "y" );
+        id = getOptionalStringAttribute( "id" );
+        x = getDoubleAttribute( "x" );
+        y = getDoubleAttribute( "y" );
 
         int outcode = Venue.Contains2D( x.intValue(), y.intValue() );
         switch (outcode) {

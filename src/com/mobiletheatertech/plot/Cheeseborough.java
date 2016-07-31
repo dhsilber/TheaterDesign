@@ -27,10 +27,10 @@ public class Cheeseborough extends MinderDom implements IsClamp {
             throws AttributeMissingException, DataException, InvalidXMLException, MountingException {
         super (element);
 
-        id = getOptionalStringAttribute(element, "id");
-        on = getOptionalStringAttribute(element, "on");
-        location = getOptionalStringAttribute( element, "location" );
-        String ref = getOptionalStringAttributeOrNull( element, "ref" );
+        id       = getOptionalStringAttribute( "id" );
+        on       = getOptionalStringAttribute( "on" );
+        location = getOptionalStringAttribute( "location" );
+        String ref = getOptionalStringAttributeOrNull( "ref" );
 
         if( null == ref ) {
             checkAttribute( "id", id );

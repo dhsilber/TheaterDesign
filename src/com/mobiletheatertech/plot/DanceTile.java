@@ -25,10 +25,10 @@ public class DanceTile extends MinderDom implements Legendable {
             throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
-        startX = getDoubleAttribute( element, "startX" );
-        endX = getDoubleAttribute( element, "endX" );
-        startY = getDoubleAttribute( element, "startY" );
-        endY = getDoubleAttribute( element, "endY" );
+        startX = getDoubleAttribute( "startX" );
+        endX   = getDoubleAttribute( "endX" );
+        startY = getDoubleAttribute( "startY" );
+        endY   = getDoubleAttribute( "endY" );
 
         if ( ! LEGENDREGISTERED ) {
             Legend.Register(this, 2.0, 7.0, LegendOrder.Furniture);

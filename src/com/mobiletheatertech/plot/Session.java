@@ -20,8 +20,8 @@ public class Session extends Elemental {
     public Session(Element element) throws AttributeMissingException, InvalidXMLException {
         super (element);
 
-        id = getStringAttribute( element, "name" );
-        setup = getOptionalStringAttribute( element, "setup" );
+        id = getStringAttribute( "name" );
+        setup = getOptionalStringAttribute( "setup" );
     }
 
     /**

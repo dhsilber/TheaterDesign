@@ -16,9 +16,9 @@ public class Display extends Elemental {
 
         int attributeCount = 0;
 
-        layerName = getOptionalStringAttribute( element, "layer" );
-        deviceName = getOptionalStringAttribute( element, "device" );
-        mountableName = getOptionalStringAttribute( element, "mountable" );
+        layerName     = getOptionalStringAttribute( "layer" );
+        deviceName    = getOptionalStringAttribute( "device" );
+        mountableName = getOptionalStringAttribute( "mountable" );
 
         if( ! layerName.equals( "" ) ) {
             attributeCount++;

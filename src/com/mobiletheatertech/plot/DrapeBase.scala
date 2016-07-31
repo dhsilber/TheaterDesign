@@ -10,9 +10,9 @@ class DrapeBase ( element: Element ) extends MinderDom( element ) {
   val WidthHalf = 9.0
   val DepthHalf = 9.0
 
-  val x = getDoubleAttribute( element, "x" )
-  val y = getDoubleAttribute( element, "y" )
-  val z = getOptionalDoubleAttributeOrZero( element, "z" )
+  val x = getDoubleAttribute( "x" )
+  val y = getDoubleAttribute( "y" )
+  val z = getOptionalDoubleAttributeOrZero( "z" )
 
   var drawPlace : Point = null
 

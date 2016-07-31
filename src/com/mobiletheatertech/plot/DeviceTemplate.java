@@ -96,11 +96,11 @@ public class DeviceTemplate extends Layerer implements Legendable
             throws AttributeMissingException, DataException, InvalidXMLException
     {
         super( element );
-        id = getStringAttribute( element, "type");
-        width = getPositiveDoubleAttribute(element, "width");
-        depth = getPositiveDoubleAttribute(element, "depth");
-        height = getPositiveDoubleAttribute( element, "height");
-        layer = getOptionalStringAttributeOrNull( element, "layer" );
+        id = getStringAttribute( "type" );
+        width = getPositiveDoubleAttribute( "width");
+        depth = getPositiveDoubleAttribute( "depth");
+        height = getPositiveDoubleAttribute( "height");
+        layer = getOptionalStringAttributeOrNull( "layer" );
 //        ports = new ArrayList<Port>();
 
         this.solid = new Solid( width, depth, height );

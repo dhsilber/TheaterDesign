@@ -80,18 +80,18 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     {
         super(element);
 
-        type = getStringAttribute(element, "type");
-        on = getStringAttribute(element, "on");
-        location = getStringAttribute(element, "location");
-        unit = getStringAttribute(element, "unit");
-        circuit = getOptionalStringAttribute(element, "circuit");
-        dimmer = getOptionalStringAttribute(element, "dimmer");
-        channel = getOptionalStringAttribute(element, "channel");
-        color = getOptionalStringAttribute(element, "color");
-        target = getOptionalStringAttribute(element, "target");
-        address = getOptionalStringAttribute( element, "address" );
-        info = getOptionalStringAttribute( element, "info" );
-        String rotate = getOptionalStringAttribute(element, "rotation");
+        on       = getStringAttribute(  "on") ;
+        type     = getStringAttribute(  "type" );
+        location = getStringAttribute(  "location" );
+        unit     = getStringAttribute(  "unit" );
+        circuit = getOptionalStringAttribute( "circuit" );
+        dimmer  = getOptionalStringAttribute( "dimmer" );
+        channel = getOptionalStringAttribute( "channel" );
+        color   = getOptionalStringAttribute( "color" );
+        target  = getOptionalStringAttribute( "target" );
+        address = getOptionalStringAttribute( "address" );
+        info    = getOptionalStringAttribute( "info" );
+        String rotate = getOptionalStringAttribute( "rotation" );
         if (null != rotate && ! rotate.isEmpty() ) {
             rotation = new Double(rotate);
         }
@@ -100,7 +100,9 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
 //        System.err.println("Got to middle of constructor");
 
-        if( null != Select( id )){
+        Luminaire prior = Select( id );
+        if( null != prior ) {
+//            if ( element.getParentElement() )
 //            throw new InvalidXMLException(
             System.out.println(
                     this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
