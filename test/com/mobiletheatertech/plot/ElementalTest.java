@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import javax.imageio.metadata.IIOMetadataNode;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 /**
@@ -71,6 +72,9 @@ public class ElementalTest {
     }
 
     Element element = null;
+    Element elementary = null;
+
+    String parentTag = "parentTag";
 
     public ElementalTest() {
     }
@@ -300,6 +304,24 @@ public class ElementalTest {
         new Ellie( element );
     }
 
+    @Test
+    public void getParentElement() throws Exception {
+        elementary.appendChild( element );
+        Elemental ellie = new Ellie( element );
+        Element parent = ellie.getParentElement( element );
+        assertNotNull( parent );
+        assertEquals( parent.getTagName(), parentTag );
+    }
+
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp =
+                    "Ellie \\(sally\\) does not have a parent.")
+    public void getParentElementBogus() throws Exception {
+        element.setAttribute( "id", "sally" );
+        Elemental ellie = new Ellie( element );
+        ellie.getParentElement( element );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -310,6 +332,8 @@ public class ElementalTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        elementary = new IIOMetadataNode( parentTag );
+
         element = new IIOMetadataNode( "elemental" );
         element.setAttribute( "stringValue", "6x9" );
         element.setAttribute( "integerValue", "609" );

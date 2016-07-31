@@ -1,6 +1,9 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import javax.imageio.metadata.IIOMetadataNode;
 
 /*
 
@@ -206,6 +209,17 @@ public class Elemental {
         if ( "".equals( value ) ) { value = null; }
 
         return value;
+    }
+
+    Element getParentElement( Element element ) throws InvalidXMLException {
+        Node node = element.getParentNode();
+        if ( (null == node) || ( Node.ELEMENT_NODE != node.getNodeType() ) ) {
+            throw new InvalidXMLException(
+                    this.getClass().getSimpleName(), id, "does not have a parent" );
+        }
+
+        Element result = (Element) node;
+        return result;
     }
 
 }
