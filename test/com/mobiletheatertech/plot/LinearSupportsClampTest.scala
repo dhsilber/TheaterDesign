@@ -67,7 +67,7 @@ class LinearSupportsClampTest {
   private val baseX: Double = 40.0
   private val baseY: Double = 50.0
   private val pipeId: String = "Pipe ID"
-  private val baseId: String = "Base ID"
+  private val baseId: String = "TrussBase ID"
   private val length: Double = 37.5
 
   @Test
@@ -122,7 +122,7 @@ class LinearSupportsClampTest {
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
-    expectedExceptionsMessageRegExp = "location outside of permissible range." )
+    expectedExceptionsMessageRegExp = "does not include location -12.1." )
   @throws[Exception]
   def locationTooSmall {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
@@ -131,7 +131,7 @@ class LinearSupportsClampTest {
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
-    expectedExceptionsMessageRegExp = "location outside of permissible range." )
+    expectedExceptionsMessageRegExp = "does not include location 12.1." )
   @throws[Exception]
   def locationTooLarge {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
@@ -206,9 +206,9 @@ class LinearSupportsClampTest {
   @throws[Exception]
   def setUpMethod {
 //    TestResets.YokeableReset
-    TestResets.LuminaireReset
+    TestResets.LuminaireReset()
     TestResets.ElementalListerReset()
-    UniqueId.Reset
+    UniqueId.Reset()
 
 //    element = new IIOMetadataNode("mounted")
 //    element.setAttribute("id", id)

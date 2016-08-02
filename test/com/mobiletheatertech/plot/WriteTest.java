@@ -348,6 +348,7 @@ public class WriteTest {
         TestResets.MinderDomReset();
 //        TestResets.DeviceReset();
         TestResets.ElementalListerReset();
+        UniqueId.Reset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Room" );
@@ -357,7 +358,7 @@ public class WriteTest {
         new Venue( venueElement );
 
         Element eventElement = new IIOMetadataNode( "event" );
-        eventElement.setAttribute( "name", "WriteTest event" );
+        eventElement.setAttribute( "id", "WriteTest event" );
         new Event( eventElement );
     }
 

@@ -59,7 +59,7 @@ class Pipe ( element: Element ) extends UniqueId( element )
     catch {
       case exception: MountingException =>
         throw new MountingException (
-          "Pipe (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+          "Pipe (" + id + ") unit '" + light.unit() + "' " + exception.getMessage )
 //      case exception: Exception =>
 //        throw new Exception( exception.getMessage, exception.getCause )
     }

@@ -26,7 +26,7 @@ trait LinearSupportsClamp {
       println( "minLocation: " + minLocation.toString )
       println( "location: " + location.toString )
       println( "maxLocation: " + maxLocation.toString )
-      throw new MountingException( "location outside of permissible range." )
+      throw new MountingException( "does not include location " + location.toString + "." )
     }
 
     IsClampList += luminaire

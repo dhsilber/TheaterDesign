@@ -1,11 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import sun.net.www.content.audio.x_aiff;
-
-import java.awt.*;
 
 /**
 * Created with IntelliJ IDEA. User: dhs Date: 6/29/13 Time: 5:05 PM To change this template use
@@ -16,7 +11,7 @@ import java.awt.*;
 * @author dhs
 * @since 0.0.5
 */
-public class Base extends MinderDom {
+public class TrussBase extends MinderDom {
 
     private Double x;
     private Double y;
@@ -28,7 +23,7 @@ public class Base extends MinderDom {
     private String processedMark = null;
 
 
-    public Base( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
+    public TrussBase(Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
         size = getDoubleAttribute( "size" );
@@ -43,17 +38,17 @@ public class Base extends MinderDom {
     }
 
     /**
-     * Find a {@code Base}
+     * Find a {@code TrussBase}
      *
-     * @param mark string to match while searching for a {@code Base}
-     * @return {@code Base} whose mark matches specified string
+     * @param mark string to match while searching for a {@code TrussBase}
+     * @return {@code TrussBase} whose mark matches specified string
      */
     // Copied from Truss - refactor to Minder?
-    public static Base Find( String mark ) {
+    public static TrussBase Find(String mark ) {
         for (ElementalLister thingy : ElementalLister.List()) {
-            if (Base.class.isInstance( thingy )) {
-                if (((Base) thingy).processedMark.equals( mark )) {
-                    return (Base) thingy;
+            if (TrussBase.class.isInstance( thingy )) {
+                if (((TrussBase) thingy).processedMark.equals( mark )) {
+                    return (TrussBase) thingy;
                 }
             }
         }

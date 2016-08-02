@@ -48,7 +48,7 @@ public class PipeBaseTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-//        assert Yokeable.class.isInstance( instance );
+        assertFalse( Yokeable.class.isInstance( instance ) );
     }
 
     @Test
@@ -88,7 +88,7 @@ public class PipeBaseTest {
         String baseMark = TestHelpers.accessString( base, "processedMark" );
         String elementMark = baseElement.getAttribute( "processedMark" );
         assertNotNull( baseMark );
-        assertNotEquals( baseMark, "", "Should be set in Base object" );
+        assertNotEquals( baseMark, "", "Should be set in TrussBase object" );
         assertNotEquals( elementMark, "", "Should be set in Element" );
         assertEquals( baseMark, elementMark, "should match" );
     }
@@ -227,7 +227,7 @@ public class PipeBaseTest {
 
 //    @Test
 //    public void locate() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        Point location = base.locate();
 //
@@ -238,14 +238,14 @@ public class PipeBaseTest {
 
 //    @Test
 //    public void drawUnused() throws Exception {
-//        new Base(baseElement);
+//        new TrussBase(baseElement);
 //
 ////        base.drawPlan( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        base.dom( null, View.PLAN );
 //    }
@@ -359,14 +359,14 @@ public class PipeBaseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.err.println( "Starting BaseTest method." );
+        System.err.println( "Starting TrussBaseTest method." );
 
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "Base Venue Name" );
+        venueElement.setAttribute( "name", "TrussBase Venue Name" );
         venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "750" );
         venueElement.setAttribute( "depth", "900" );

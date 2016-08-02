@@ -49,7 +49,7 @@
 //    //    private String processedMark = null;
 //    private Element element = null;
 //
-//    private Base base = null;
+//    private TrussBase base = null;
 //    static Integer BaseCount = 0;
 //
 //    Point point1 = null;
@@ -213,12 +213,12 @@
 //        return null;
 //    }
 //
-//    private Base instantiateBase( NodeList suspendList )
+//    private TrussBase instantiateBase( NodeList suspendList )
 //            throws AttributeMissingException, DataException, InvalidXMLException
 //    {
 //        Node baseNode = suspendList.item( 0 );
 //        if ( baseNode.getNodeType() == Node.ELEMENT_NODE ) {
-//            return new Base( (Element) baseNode );
+//            return new TrussBase( (Element) baseNode );
 //        }
 //        return null;
 //    }
@@ -240,14 +240,14 @@
 //    }
 //
 //    // ToDo The processedMark thing is really bogus. We should just create the objects found in the base list as they are encountered here.
-//    private Base findBase( NodeList baseList ) {
+//    private TrussBase findBase( NodeList baseList ) {
 //        Node node = baseList.item( 0 );
 //        // Much of this code is copied from HangPoint.ParseXML - refactor
 //        if (null != node) {
 //            if (node.getNodeType() == Node.ELEMENT_NODE) {
 //                Element element = (Element) node;
 //                String mark = element.getAttribute("processedMark");
-//                Base found = Base.Find(mark);
+//                TrussBase found = TrussBase.Find(mark);
 //
 //                return found;
 //            }

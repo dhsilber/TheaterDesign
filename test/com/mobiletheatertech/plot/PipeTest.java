@@ -118,7 +118,7 @@ public class PipeTest {
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( x, y, z ) );
-        assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "orientationValue" ), 0.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), 0.0 );
     }
 
@@ -129,7 +129,7 @@ public class PipeTest {
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( baseX, baseY, 2.0 ) );
-        assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 0.0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "orientationValue" ), 0.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), 0.0 );
     }
 
@@ -143,7 +143,7 @@ public class PipeTest {
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( x, y, z ) );
-        assertEquals( TestHelpers.accessDouble( pipe, "orientation" ), 90.0 );
+        assertEquals( TestHelpers.accessDouble( pipe, "orientationValue" ), 90.0 );
         assertEquals( TestHelpers.accessDouble( pipe, "offsetX" ), -50.0 );
     }
 
@@ -170,27 +170,42 @@ public class PipeTest {
 //    }
 
     @Test
-    public void storesOnlyWhenGood() throws Exception {
-        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
+    public void stores() throws Exception {
+        LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( nothing );
 
         element.setAttribute("length", "0");
+
+        Pipe pipe = null;
+        try {
+            pipe = new Pipe(element);
+        } catch (Exception e) {
+        }
+
+        LinearSupportsClamp thingy = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertSame( thingy, pipe );
+    }
+
+    @Test
+    public void storesOnlyWhenGood() throws Exception {
+        LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( nothing );
+
+        element.setAttribute("length", "0");
+
         try {
             new Pipe(element);
         } catch (Exception e) {
         }
 
-        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list2.size(), 0);
+        LinearSupportsClamp notFound = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( notFound );
     }
 
     @Test
     public void unstoresWhenBad() throws Exception {
-        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
+        LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( nothing );
 
         element.setAttribute("length", "339");
 
@@ -199,16 +214,14 @@ public class PipeTest {
         } catch (Exception e) {
         }
 
-        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
+        LinearSupportsClamp notFound = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( notFound );
     }
 
     @Test
     public void unstoresWhenBadWithProscenium() throws Exception {
-        ArrayList<Yokeable> list1 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
+        LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( nothing );
 
         new Proscenium(prosceniumElement);
         element.setAttribute("length", "339");
@@ -218,9 +231,8 @@ public class PipeTest {
         } catch (Exception e) {
         }
 
-        ArrayList<Yokeable> list2 = (ArrayList<Yokeable>)
-                TestHelpers.accessStaticObject("com.mobiletheatertech.plot.Yokeable", "MOUNTABLELIST");
-        assertEquals(list1.size(), 0);
+        LinearSupportsClamp notFound = LinearSupportsClamp$.MODULE$.Select( pipeId );
+        assertNull( notFound );
     }
 
     @Test
@@ -232,49 +244,49 @@ public class PipeTest {
         assertTrue(layers.containsKey(Pipe$.MODULE$.LayerTag()));
         assertEquals(layers.get(Pipe$.MODULE$.LayerTag()).name(), Pipe$.MODULE$.LayerName());
     }
-
-    @Test
-    public void select() throws Exception {
-        element.setAttribute("id", "friendly");
-        Pipe pipe = new Pipe(element);
-        assertSame(Yokeable.Select("friendly"), pipe);
-    }
-
-    @Test
-    public void selectCoexistsWithTruss() throws Exception {
-        Element hangPoint1 = new IIOMetadataNode("hangpoint");
-        hangPoint1.setAttribute("id", "jim");
-        hangPoint1.setAttribute("x", "100");
-        hangPoint1.setAttribute("y", "102");
-        new HangPoint(hangPoint1);
-
-        Element hangPoint2 = new IIOMetadataNode("hangpoint");
-        hangPoint2.setAttribute("id", "joan");
-        hangPoint2.setAttribute("x", "200");
-        hangPoint2.setAttribute("y", "202");
-        new HangPoint(hangPoint2);
-
-        Element suspendElement1 = new IIOMetadataNode("suspend");
-        suspendElement1.setAttribute("ref", "jim");
-        suspendElement1.setAttribute("distance", "1");
-
-        Element suspendElement2 = new IIOMetadataNode("suspend");
-        suspendElement2.setAttribute("ref", "joan");
-        suspendElement2.setAttribute("distance", "2");
-
-        Element trussElement = new IIOMetadataNode("truss");
-        trussElement.setAttribute("id", "fred");
-        trussElement.setAttribute("size", "12");
-        trussElement.setAttribute("length", "120");
-        trussElement.appendChild(suspendElement1);
-        trussElement.appendChild(suspendElement2);
-        Truss truss = new Truss(trussElement);
-
-        element.setAttribute("id", "friendly");
-        Pipe pipe = new Pipe(element);
-        assertSame(Yokeable.Select("friendly"), pipe);
-        assertSame(Yokeable.Select("fred"), truss);
-    }
+//
+//    @Test
+//    public void select() throws Exception {
+//        element.setAttribute("id", "friendly");
+//        Pipe pipe = new Pipe(element);
+//        assertTrue( ElementalLister.List().contains( pipe ) );
+//    }
+//
+//    @Test
+//    public void selectCoexistsWithTruss() throws Exception {
+//        Element hangPoint1 = new IIOMetadataNode("hangpoint");
+//        hangPoint1.setAttribute("id", "jim");
+//        hangPoint1.setAttribute("x", "100");
+//        hangPoint1.setAttribute("y", "102");
+//        new HangPoint(hangPoint1);
+//
+//        Element hangPoint2 = new IIOMetadataNode("hangpoint");
+//        hangPoint2.setAttribute("id", "joan");
+//        hangPoint2.setAttribute("x", "200");
+//        hangPoint2.setAttribute("y", "202");
+//        new HangPoint(hangPoint2);
+//
+//        Element suspendElement1 = new IIOMetadataNode("suspend");
+//        suspendElement1.setAttribute("ref", "jim");
+//        suspendElement1.setAttribute("distance", "1");
+//
+//        Element suspendElement2 = new IIOMetadataNode("suspend");
+//        suspendElement2.setAttribute("ref", "joan");
+//        suspendElement2.setAttribute("distance", "2");
+//
+//        Element trussElement = new IIOMetadataNode("truss");
+//        trussElement.setAttribute("id", "fred");
+//        trussElement.setAttribute("size", "12");
+//        trussElement.setAttribute("length", "120");
+//        trussElement.appendChild(suspendElement1);
+//        trussElement.appendChild(suspendElement2);
+//        Truss truss = new Truss(trussElement);
+//
+//        element.setAttribute("id", "friendly");
+//        Pipe pipe = new Pipe(element);
+//        assertSame(Yokeable.Select("friendly"), pipe);
+//        assertSame(Yokeable.Select("fred"), truss);
+//    }
 
     @Test
     public void storesSelf() throws Exception {
@@ -553,8 +565,8 @@ public class PipeTest {
      */
     @Test
     public void verifyCheeseboroughReferences() throws Exception {
-        Base base = new Base( trussBaseElement );
-        base.verify();
+        TrussBase trussBase = new TrussBase( trussBaseElement );
+        trussBase.verify();
         Truss truss = new Truss( trussElement );
         truss.verify();
         Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
@@ -587,8 +599,8 @@ public class PipeTest {
 
         pipeOnCheeseboroughsElement.appendChild( cheeseborough3Element );
 
-        Base base = new Base( trussBaseElement );
-        base.verify();
+        TrussBase trussBase = new TrussBase( trussBaseElement );
+        trussBase.verify();
         Truss truss = new Truss( trussElement );
         truss.verify();
         Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
@@ -606,8 +618,8 @@ public class PipeTest {
     public void verifyOnlyOneCheeseboroughReference() throws Exception {
         pipeOnCheeseboroughsElement.removeChild( cheeseborough2Element );
 
-        Base base = new Base( trussBaseElement );
-        base.verify();
+        TrussBase trussBase = new TrussBase( trussBaseElement );
+        trussBase.verify();
         Truss truss = new Truss( trussElement );
         truss.verify();
         Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
@@ -1001,7 +1013,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\(" + pipeId + "\\) unit '" + unit +"' has location outside of permissible range.")
+                    "Pipe \\(" + pipeId + "\\) unit '" + unit +"' does not include location 122.0.")
     public void hangLocationOutOfRange() throws Exception {
         final String type = "Altman 6x9";
 

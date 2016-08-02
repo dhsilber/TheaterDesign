@@ -3,7 +3,7 @@ drawing.
 
 The lighting plot is described in an XML file.
 
-The base element is called "plot" and currently has no attributes.
+The trussBase element is called "plot" and currently has no attributes.
 
 In creating a specific plot, it makes sense to start with the venue in general,
 and in particular to build our plot around the stage. (This approach needs to
@@ -30,20 +30,20 @@ A boom with a single vertical pipe can be specified like so:
 <plot>
   <stage depth="132" width="264" />
   <boom>
-    <base id="a76" x="-240" y="-240" z="-24" />
+    <trussBase id="a76" x="-240" y="-240" z="-24" />
       <pipe id="v1" length="144" >
     </pipe>
   </boom>
 </plot>
 
-The base is placed at specified coordinates. I'm presuming a standard 50-pound
-cast iron base, or at least something of that approximate dimension, threaded
-in the center for a pipe. The pipe contained within a base description is
-attached to that base.
+The trussBase is placed at specified coordinates. I'm presuming a standard 50-pound
+cast iron trussBase, or at least something of that approximate dimension, threaded
+in the center for a pipe. The pipe contained within a trussBase description is
+attached to that trussBase.
 
 
 TODO:
-  - I shouldn't need to put an ID into a base, but it will require generating
+  - I shouldn't need to put an ID into a trussBase, but it will require generating
     IDs internally for bases that do not have an ID.
   - I shouldn't need to put an ID into a pipe, but it will require generating
     IDs internally for pipes that do not have an ID. (And then such pipes will
@@ -67,8 +67,8 @@ next.
 
 
   <boom id="bl">
-    <base id="b2" x="240" y="-240" z="-24" />
-    <pipe id="v2" base="b2" length="144" >
+    <trussBase id="b2" x="240" y="-240" z="-24" />
+    <pipe id="v2" trussBase="b2" length="144" >
       <luminaire model="Source Four" lens="50" location="72" spin="135" />
     </pipe>
   </boom>

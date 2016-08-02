@@ -197,7 +197,7 @@ public class DrapeBaseTest {
 
 //    @Test
 //    public void locate() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        Point location = base.locate();
 //
@@ -208,14 +208,14 @@ public class DrapeBaseTest {
 
 //    @Test
 //    public void drawUnused() throws Exception {
-//        new Base(baseElement);
+//        new TrussBase(baseElement);
 //
 ////        base.drawPlan( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        base.dom( null, View.PLAN );
 //    }
@@ -330,14 +330,14 @@ public class DrapeBaseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.err.println( "Starting BaseTest method." );
+        System.err.println( "Starting TrussBaseTest method." );
 
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
 
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "Base Venue Name" );
+        venueElement.setAttribute( "name", "TrussBase Venue Name" );
         venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "750" );
         venueElement.setAttribute( "depth", "900" );

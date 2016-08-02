@@ -17,7 +17,7 @@ import static org.testng.Assert.assertNotEquals;
 *
 * @since 0.0.5
 */
-public class BaseTest {
+public class TrussBaseTest {
 
     Element baseElement = null;
     Truss truss = null;
@@ -29,52 +29,52 @@ public class BaseTest {
     Double y = 32.2;
     Double rotation = 45.0;
 
-    public BaseTest() {
+    public TrussBaseTest() {
     }
 
     @Test
     public void isA() throws Exception {
-        Base base = new Base(baseElement);
+        TrussBase trussBase = new TrussBase(baseElement);
 
-        assert MinderDom.class.isInstance( base );
+        assert MinderDom.class.isInstance(trussBase);
     }
 
     @Test
     public void storesAttributes() throws Exception {
-        Base base = new Base(baseElement);
+        TrussBase trussBase = new TrussBase(baseElement);
 
-        assertEquals( TestHelpers.accessDouble(base, "x"), x );
-        assertEquals( TestHelpers.accessDouble(base, "y"), y );
-//        assertEquals( TestHelpers.accessString(base, "type"), type );
-        assertEquals( TestHelpers.accessDouble(base, "size"), size );
-        assertEquals( TestHelpers.accessDouble(base, "rotation"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(trussBase, "x"), x );
+        assertEquals( TestHelpers.accessDouble(trussBase, "y"), y );
+//        assertEquals( TestHelpers.accessString(trussBase, "type"), type );
+        assertEquals( TestHelpers.accessDouble(trussBase, "size"), size );
+        assertEquals( TestHelpers.accessDouble(trussBase, "rotation"), 0.0 );
     }
 
     @Test
     public void storesOptionalAttributes() throws Exception {
         baseElement.setAttribute( "rotation", rotation.toString() );
-        Base base = new Base(baseElement);
+        TrussBase trussBase = new TrussBase(baseElement);
 
-        assertEquals( TestHelpers.accessDouble(base, "x"), x );
-        assertEquals( TestHelpers.accessDouble(base, "y"), y );
-//        assertEquals( TestHelpers.accessString(base, "type"), type );
-        assertEquals( TestHelpers.accessDouble(base, "size"), size );
-        assertEquals( TestHelpers.accessDouble(base, "rotation"), rotation );
+        assertEquals( TestHelpers.accessDouble(trussBase, "x"), x );
+        assertEquals( TestHelpers.accessDouble(trussBase, "y"), y );
+//        assertEquals( TestHelpers.accessString(trussBase, "type"), type );
+        assertEquals( TestHelpers.accessDouble(trussBase, "size"), size );
+        assertEquals( TestHelpers.accessDouble(trussBase, "rotation"), rotation );
     }
 
     // Until such time as I properly implement this class' use of id.
     @Test
     public void idUnused() throws Exception {
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        assertNull( TestHelpers.accessString( base, "id" ) );
+        assertNull( TestHelpers.accessString(trussBase, "id" ) );
     }
 
 /*
     @Test
     public void storesSelf() throws Exception
     {
-        Base base = new Base( baseElement );
+        TrussBase base = new TrussBase( baseElement );
 
         ArrayList<Minder> thing = Drawable.List();
         assertNotNull( thing, "List should exist" );
@@ -89,32 +89,32 @@ public class BaseTest {
         String emptyMark = baseElement.getAttribute( "processedMark" );
         assertEquals( emptyMark, "", "Should be unset" );
 
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        String baseMark = TestHelpers.accessString( base, "processedMark" );
+        String baseMark = TestHelpers.accessString(trussBase, "processedMark" );
         String elementMark = baseElement.getAttribute( "processedMark" );
         assertNotNull( baseMark );
-        assertNotEquals( baseMark, "", "Should be set in Base object" );
+        assertNotEquals( baseMark, "", "Should be set in TrussBase object" );
         assertNotEquals( elementMark, "", "Should be set in Element" );
         assertEquals( baseMark, elementMark, "should match" );
     }
 
     @Test
     public void findNull() throws Exception {
-        new Base( baseElement );
+        new TrussBase( baseElement );
 
-        Base found = Base.Find( null );
+        TrussBase found = TrussBase.Find( null );
 
         assertNull(found);
     }
 
     @Test
     public void findsMarked() throws Exception {
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        Base found = Base.Find( baseElement.getAttribute( "processedMark" ) );
+        TrussBase found = TrussBase.Find( baseElement.getAttribute( "processedMark" ) );
 
-        assertSame( found, base );
+        assertSame( found, trussBase);
     }
 
     /*
@@ -122,49 +122,49 @@ public class BaseTest {
      */
     @Test
     public void justFine() throws Exception {
-        new Base( baseElement );
+        new TrussBase( baseElement );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Base instance is missing required 'x' attribute.")
+          expectedExceptionsMessageRegExp = "TrussBase instance is missing required 'x' attribute.")
     public void noX() throws Exception {
         baseElement.removeAttribute("x");
-        new Base( baseElement );
+        new TrussBase( baseElement );
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Base instance is missing required 'y' attribute.")
+            expectedExceptionsMessageRegExp = "TrussBase instance is missing required 'y' attribute.")
     public void noY() throws Exception {
         baseElement.removeAttribute("y");
-        new Base(baseElement);
+        new TrussBase(baseElement);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-            expectedExceptionsMessageRegExp = "Base instance is missing required 'size' attribute.")
+            expectedExceptionsMessageRegExp = "TrussBase instance is missing required 'size' attribute.")
     public void noSize() throws Exception {
         baseElement.removeAttribute("size");
-        new Base(baseElement);
+        new TrussBase(baseElement);
     }
 
     @Test
     public void x() throws Exception {
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        assertEquals( base.x(), x );
+        assertEquals( trussBase.x(), x );
     }
 
     @Test
     public void y() throws Exception {
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        assertEquals( base.y(), y );
+        assertEquals( trussBase.y(), y );
     }
 
     @Test
     public void size() throws Exception {
-        Base base = new Base( baseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
 
-        assertEquals( base.size(), size );
+        assertEquals( trussBase.size(), size );
     }
 
     @Test
@@ -191,7 +191,7 @@ public class BaseTest {
     public void parse() throws Exception {
         String xml = "<plot>" +
                 "<truss id=\"trussID\" size=\"12\" length=\"10\" >" +
-                "<base size=\"24\" x=\"4\" y=\"1\" />" +
+                "<trussbase size=\"24\" x=\"4\" y=\"1\" />" +
                 "</truss>" +
                 "</plot>";
         InputStream stream = new ByteArrayInputStream( xml.getBytes() );
@@ -211,7 +211,7 @@ public class BaseTest {
 
 //    @Test
 //    public void locate() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        Point location = base.locate();
 //
@@ -222,14 +222,14 @@ public class BaseTest {
 
 //    @Test
 //    public void drawUnused() throws Exception {
-//        new Base(baseElement);
+//        new TrussBase(baseElement);
 //
 ////        base.drawPlan( null );
 //    }
 //
 //    @Test
 //    public void domUnused() throws Exception {
-//        Base base = new Base(baseElement);
+//        TrussBase base = new TrussBase(baseElement);
 //
 //        base.dom( null, View.PLAN );
 //    }
@@ -248,14 +248,14 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.err.println( "Starting BaseTest method." );
+        System.err.println( "Starting TrussBaseTest method." );
 
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         UniqueId.Reset();
 
         Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "Base Venue Name" );
+        venueElement.setAttribute( "name", "TrussBase Venue Name" );
         venueElement.setAttribute( "room", "Test Name" );
         venueElement.setAttribute( "width", "350" );
         venueElement.setAttribute( "depth", "400" );
@@ -264,11 +264,11 @@ public class BaseTest {
         venue.getClass();
         Venue.Height();
 
-        Element otherBase = new IIOMetadataNode( "base" );
+        Element otherBase = new IIOMetadataNode( "trussbase" );
         otherBase.setAttribute( "ref", "jane" );
         otherBase.setAttribute( "distance", "200" );
 
-        baseElement = new IIOMetadataNode( "base" );
+        baseElement = new IIOMetadataNode( "trussbase" );
         baseElement.setAttribute( "size", size.toString() );
         baseElement.setAttribute("x", x.toString());
         baseElement.setAttribute("y", y.toString());

@@ -105,12 +105,12 @@ public class TestResets {
         deviceTemplateList.clear();
     }
 
-    public static void EventReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Event.class.getDeclaredField( "Only" );
-        field.setAccessible( true );
-        Event singleton = (Event) field.get( Event.class );
-        field.set(singleton, null);
-    }
+//    public static void EventReset() throws NoSuchFieldException, IllegalAccessException {
+////        Field field = Event.class.getDeclaredField( "Only" );
+////        field.setAccessible( true );
+////        Event singleton = (Event) field.get( Event.class );
+////        field.set(singleton, null);
+//    }
 
     /**
      * Reset the LEGENDLIST maintained by {@link Legend} to its initial empty state.

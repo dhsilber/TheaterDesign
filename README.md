@@ -2,7 +2,7 @@
 Draw lighitng plots from XML descriptions.
 
 I have a list of things that I need to do to this code. In no particular order:
-- Regularize the XML that I parse. For example, a base should be the parent of a Truss or Pipe rather than a child of one.
+- Regularize the XML that I parse. For example, a trussBase should be the parent of a Truss or Pipe rather than a child of one.
 - Make a "Mountable" trait for Truss, Pipe, and LightingStand, which will take care of finding all the things that hang from
 those items. 
 - Convert Truss and Lighting stand to Scala, so that the Mountable trait can be applied to them and Pipe.

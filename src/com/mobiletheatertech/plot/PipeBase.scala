@@ -51,7 +51,7 @@ object PipeBase {
 
     val list = ElementalLister.List()
 
-    for( item <- 0 to list.size() - 1 ) {
+    for( item <- 0 until list.size() ) {
       val thingy = list.get( item )
       if ( thingy.isInstanceOf[ PipeBase ]) {
         if ( thingy.asInstanceOf[ PipeBase ].processedMark == mark ) {

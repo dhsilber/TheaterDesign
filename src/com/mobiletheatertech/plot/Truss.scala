@@ -40,7 +40,7 @@ class Truss ( element: Element ) extends UniqueId( element )
   var boxOrigin : Point = null
 
   var span: Double = 0.0
-  var base: Base = null
+  var trussBase: TrussBase = null
 
   override val (based: Boolean, suspended: Boolean, positioned: Boolean ) = process()
 
@@ -86,8 +86,8 @@ class Truss ( element: Element ) extends UniqueId( element )
 
   def process(): ( Boolean, Boolean, Boolean ) = {
 
-    def findBase(): Base = {
-      val baseList: NodeList = element.getElementsByTagName( "base" )
+    def findBase(): TrussBase = {
+      val baseList: NodeList = element.getElementsByTagName( "trussbase" )
       if ( 1 == baseList.getLength() ) {
         val node: Node = baseList.item( 0 )
         // Much of this code is copied from HangPoint.ParseXML - refactor
@@ -100,20 +100,20 @@ class Truss ( element: Element ) extends UniqueId( element )
             Truss.LegendRegistered = true;
           }
 
-          return new Base( element )
+          return new TrussBase( element )
 
         }
         return null
       }
       else if ( 1 < baseList.getLength() ) {
         throw new InvalidXMLException(
-          "Truss (" + id + ") must have position, one base, or two suspend children." )
+          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
       }
 
       null
     }
 
-    def baseProcessing(): Base = {
+    def baseProcessing(): TrussBase = {
       val base = findBase()
       if ( null != base ) {
         start = new Point( base.x, base.y, 0.0 )
@@ -168,7 +168,7 @@ class Truss ( element: Element ) extends UniqueId( element )
       else {
         System.err.println("Found " + suspendList.getLength + " suspend child nodes")
         throw new InvalidXMLException(
-          "Truss (" + id + ") must have position, one base, or two suspend children." )
+          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
         false
       }
     }
@@ -193,13 +193,13 @@ class Truss ( element: Element ) extends UniqueId( element )
       catch {
         case npe: NullPointerException =>
           throw new InvalidXMLException(
-            "Truss (" + id + ") must have position, one base, or two suspend children." )
+            "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
       }
       true
     }
 
-    base = baseProcessing()
-    if ( null != base ) return ( true, false, false )
+    trussBase = baseProcessing()
+    if ( null != trussBase ) return ( true, false, false )
 
     if( suspended() ) return ( false, true, false )
 
@@ -274,7 +274,7 @@ class Truss ( element: Element ) extends UniqueId( element )
       return "Truss is positioned."
     }
     else if (based) {
-      return "Truss is set on end, on a base."
+      return "Truss is set on end, on a trussbase."
     }
     else if (suspended) {
       return "Truss is suspended at " + overHang + " and at " + (length - overHang)
@@ -296,10 +296,10 @@ class Truss ( element: Element ) extends UniqueId( element )
       return new Place(mountableLocation(location), start, 0.0)
     }
     else if (based) {
-      val transformX: Double = base.x + SvgElement.OffsetX
-      val transformY: Double = base.y + SvgElement.OffsetY
+      val transformX: Double = trussBase.x + SvgElement.OffsetX
+      val transformY: Double = trussBase.y + SvgElement.OffsetY
       val origin: Point = new Point(transformX, transformY, 0.0)
-      return new Place(mountableLocation(location), origin, base.rotation)
+      return new Place(mountableLocation(location), origin, trussBase.rotation)
     }
     else {
       val transformX: Double = point1.x + SvgElement.OffsetX
@@ -350,11 +350,12 @@ class Truss ( element: Element ) extends UniqueId( element )
         if (positioned) {
           group.rectangle(draw, x - length / 2, y - size / 2, length, size, Truss.Color )
         }
-        else if (null != base) {
-          val verticalTruss: SvgElement = group.rectangle(draw, x - size / 2, y - size / 2, size, size, Truss.Color)
-          val transformX: Double = x + SvgElement.OffsetX
-          val transformY: Double = y + SvgElement.OffsetY
-          val transform: String = "rotate(" + base.rotation + "," + transformX + "," + transformY + ")"
+        else if (null != trussBase) {
+          val verticalTruss: SvgElement =
+            group.rectangle(draw, start.x - size / 2, start.y - size / 2, size, size, Truss.Color)
+          val transformX: Double = start.x + SvgElement.OffsetX
+          val transformY: Double = start.y + SvgElement.OffsetY
+          val transform: String = "rotate(" + trussBase.rotation + "," + transformX + "," + transformY + ")"
           verticalTruss.attribute("transform", transform)
           Truss.BaseCountIncrement()
         }
@@ -428,7 +429,7 @@ class Truss ( element: Element ) extends UniqueId( element )
     group.rectangleAbsolute(draw, 3.0, 3.0, 6.0, 6.0, Truss.Color )
     var x: Double = Legend.TEXTOFFSET
     val y: Double = 8.0
-    group.textAbsolute(draw, "Truss on base", x, y, Legend.TEXTCOLOR)
+    group.textAbsolute(draw, "Truss on trussbase", x, y, Legend.TEXTCOLOR)
     x = Legend.QUANTITYOFFSET
     group.textAbsolute(draw, Truss.BaseCount.toString, x, y, Legend.TEXTCOLOR)
     val finish: PagePoint = new PagePoint(start.x, start.y + 9)

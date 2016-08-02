@@ -17,7 +17,7 @@ public class ReadTest {
 
     static String boguspath = "/boguspath/";
     String pathname = "~/Dropbox/Plot/testfiles/";
-    static String basename = "tutorial";
+    static String basename = "minimal";
 
 //    Does not apply, as Configuration cannot be initialized with no arguments.
 //    @Test(expectedExceptions = FileNotFoundException.class,
@@ -29,7 +29,7 @@ public class ReadTest {
 //    }
 
     @Test(expectedExceptions = FileNotFoundException.class,
-            expectedExceptionsMessageRegExp = "/boguspath/tutorial.xml \\(No such file or directory\\)")
+            expectedExceptionsMessageRegExp = "/boguspath/minimal.xml \\(No such file or directory\\)")
     public void unfoundArgumentArgument() throws Exception {
         String[] arguments = new String[] { boguspath + basename };
         Configuration.Initialize( arguments );
@@ -43,7 +43,7 @@ public class ReadTest {
         String[] arguments = new String[] { pathname + basename };
         Configuration.Initialize( arguments );
         new Read();
-        assertEquals( ElementalLister.List().size(), 88 );
+        assertEquals( ElementalLister.List().size(), 19 );
     }
 
 
@@ -57,6 +57,7 @@ public class ReadTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.ElementalListerReset();
     }
 
     @AfterMethod

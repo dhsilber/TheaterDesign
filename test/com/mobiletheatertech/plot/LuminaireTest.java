@@ -219,8 +219,10 @@ public class LuminaireTest {
     }
 
     @Test(expectedExceptions = MountingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire of type '" + type +
-                  "' has location -1 which is beyond the end of pipe '" + pipeName + "'.")
+          expectedExceptionsMessageRegExp =
+                  "Pipe \\(" + pipeName + "\\) unit 'unit' has does not include location -1.0." )
+//                  "Luminaire of type '" + type +
+//                  "' has location -1 which is beyond the end of pipe '" + pipeName + "'.")
     public void locateOffPipe() throws Exception {
         elementOnPipe.setAttribute("location", "-1");
         Luminaire luminaire = new Luminaire(elementOnPipe);
