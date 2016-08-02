@@ -32,11 +32,22 @@ public class VenueTest {
     public VenueTest() {
     }
 
+
     @Test
     public void isA() throws Exception {
-        Venue venue = new Venue( element );
+        Venue instance = new Venue( element );
 
-        assert MinderDom.class.isInstance( venue );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
+        assertFalse( UniqueId.class.isInstance( instance ) );
+        assertFalse( Yokeable.class.isInstance( instance ) );
+
+        assertFalse( LinearSupportsClamp.class.isInstance( instance ) );
+        assertFalse( Populate.class.isInstance( instance ) );
+//        assert Schematicable.class.isInstance( instance );
     }
 
     @Test

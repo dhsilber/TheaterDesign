@@ -32,7 +32,7 @@ class PipeBase ( element: Element ) extends MinderDom( element ) {
         return
 
       case View.PLAN =>
-        val group = MinderDom.svgClassGroup( draw, "" )
+        val group = MinderDom.svgClassGroup( draw, PipeBase.Tag )
         draw.appendRootChild( group )
 
         val circle = group.circle( draw, drawPlace.x(), drawPlace.y(), 18.0, "blue" )
@@ -46,6 +46,8 @@ class PipeBase ( element: Element ) extends MinderDom( element ) {
 }
 
 object PipeBase {
+
+  final val Tag: String = "pipebase"
 
   def Find( mark : String ): PipeBase = {
 

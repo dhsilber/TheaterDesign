@@ -7,6 +7,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import static org.testng.Assert.*;
 
@@ -23,6 +24,11 @@ public class EventTest {
 
     Element element = null;
     String name = "Event Name";
+
+    private Element baseForPipeElement = null;
+    private Double baseX = 42.1;
+    private Double baseY = 57.9;
+
 
     public EventTest() {
     }
@@ -41,17 +47,10 @@ public class EventTest {
         assertFalse( Yokeable.class.isInstance( instance ) );
 
         assertFalse( LinearSupportsClamp.class.isInstance( instance ) );
-        assertFalse( Populate.class.isInstance( instance ) );
+        assertTrue( Populate.class.isInstance( instance ) );
         assertFalse( Legendable.class.isInstance( instance ) );
 //        assert Schematicable.class.isInstance( instance );
     }
-
-//    @Test
-//    public void isMinderDom() throws Exception {
-//        Event event = new Event( element );
-//
-//        assert MinderDom.class.isInstance( event );
-//    }
 
     @Test
     public void storesAttributes() throws Exception {
@@ -92,6 +91,37 @@ public class EventTest {
         new Event( element );
 
         assertEquals( Event.Name(), name );
+    }
+
+//    @Test( expectedExceptions = InvalidXMLException.class,
+//            expectedExceptionsMessageRegExp = "Event requires that the Venue be defined." )
+//    public void noVenue() throws Exception {
+//        new Event( element );
+//    }
+
+    @Test
+    public void tagCallbackRegistered() {
+        Event event = new Event( element );
+
+        assertEquals( event.tags().size(), 1 );
+    }
+
+    @Test
+    public void populateChildren() {
+        element.appendChild( baseForPipeElement );
+        new Event( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister event = list.get( 0 );
+        assert MinderDom.class.isInstance( event );
+        assert Event.class.isInstance( event );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        assertEquals( list.size(), 2 );
     }
 
     @Test
@@ -143,9 +173,15 @@ public class EventTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        TestResets.ElementalListerReset();
 //        TestResets.EventReset();
         UniqueId.Reset();
         Event.Reset();
+
+        baseForPipeElement = new IIOMetadataNode( PipeBase$.MODULE$.Tag() );
+        baseForPipeElement.setAttribute( "x", baseX.toString() );
+        baseForPipeElement.setAttribute( "y", baseY.toString() );
+
 
         element = new IIOMetadataNode( "event" );
         element.setAttribute( "id", name );

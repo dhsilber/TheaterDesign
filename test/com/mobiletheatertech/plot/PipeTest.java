@@ -1026,8 +1026,8 @@ public class PipeTest {
         new Pipe( element );
     }
 
-    void callBack( Element element ) {
-    }
+//    void callBack( Element element ) {
+//    }
 
     @Test
     public void tagCallbackRegistered() {
@@ -1386,7 +1386,6 @@ public class PipeTest {
         luminaireElement.setAttribute("unit", luminaireUnit);
         luminaireElement.setAttribute( "type", luminaireType );
         luminaireElement.setAttribute("location", luminaireLocation );
-
     }
 
     @AfterMethod

@@ -5,26 +5,36 @@ import org.w3c.dom.Element
 /**
   * Created by DHS on 8/2/16.
   */
-class Event ( element: Element ) extends UniqueId ( element ) {
+class Event ( element: Element ) extends UniqueId ( element )
+  with Populate
+{
   Event.Only = this
 
-def dom( draw: Draw, mode: View ): Unit = {
+  tagCallback( PipeBase.Tag, processPipeBase )
+  populate( element )
 
-  val title = new StringBuilder( id )
-
-  mode match {
-    case View.PLAN => title.append( " - Plan view" )
-//    case View.TRUSS => return
-//    case View.SECTION => title.append( "Section view" )
-//    case View.FRONT => title.append( "Front view" )
-    case _ => ;
+  def processPipeBase( element: Element ): Unit = {
+    val pipebase: PipeBase = new PipeBase( element )
   }
 
-  draw.setDocumentTitle( title.toString() )
-}
+//  if ( null == Venue.)
+
+  def dom( draw: Draw, mode: View ): Unit = {
+
+    val title = new StringBuilder( id )
+
+    mode match {
+      case View.PLAN => title.append( " - Plan view" )
+      //    case View.TRUSS => return
+      //    case View.SECTION => title.append( "Section view" )
+      //    case View.FRONT => title.append( "Front view" )
+      case _ => ;
+    }
+
+    draw.setDocumentTitle( title.toString() )
+  }
 
   override def verify(): Unit = {
-
   }
 }
 

@@ -52,6 +52,11 @@ public class PipeBaseTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals( PipeBase$.MODULE$.Tag(), "pipebase" );
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         PipeBase base = new PipeBase(baseElement);
 
@@ -191,15 +196,26 @@ public class PipeBaseTest {
 
         // Final size of list
         ArrayList<ElementalLister> list = ElementalLister.List();
-        assertEquals( list.size(), 3 );
 
-        ElementalLister pipe = list.get( 2 );
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipe = list.get( 1 );
         assert MinderDom.class.isInstance( pipe );
         assert Pipe.class.isInstance( pipe );
 
-        ElementalLister pipeBase = list.get( 1 );
+        ElementalLister pipeBase = list.get( 2 );
         assert MinderDom.class.isInstance( pipeBase );
         assert PipeBase.class.isInstance( pipeBase );
+
+        // At some point, I will clean up the code enough that the redundant instance of
+        // this same PipeBase is created by Parse, at which point this test will fail here.
+        ElementalLister pipeBase2 = list.get( 3 );
+        assert MinderDom.class.isInstance( pipeBase2 );
+        assert PipeBase.class.isInstance( pipeBase2 );
+
+        assertEquals( list.size(), 4 );
     }
 
 //    @Test
@@ -272,7 +288,7 @@ public class PipeBaseTest {
         Node groupNode = group.item( 1 );
         assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
         Element groupElement = (Element) groupNode;
-//        assertEquals( groupElement.getAttribute( "class" ), PipeBase.LAYERTAG );
+        assertEquals( groupElement.getAttribute( "class" ), PipeBase$.MODULE$.Tag() );
 
         NodeList circleList = draw.root().getElementsByTagName( "circle" );
         assertEquals( circleList.getLength(), 1 );
@@ -284,7 +300,6 @@ public class PipeBaseTest {
         assertEquals( element.getAttribute( "r" ), "18.0" );
 
         assertEquals( element.getAttribute( "fill" ), "none" );
-//        assertEquals( element.getAttribute( "stroke" ), defaultColor );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.5" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -359,8 +374,6 @@ public class PipeBaseTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.err.println( "Starting TrussBaseTest method." );
-
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
@@ -371,9 +384,10 @@ public class PipeBaseTest {
         venueElement.setAttribute( "width", "750" );
         venueElement.setAttribute( "depth", "900" );
         venueElement.setAttribute( "height", "240" );
-        Venue venue = new Venue( venueElement );
-        venue.getClass();
-        Venue.Height();
+//        Venue venue =
+                new Venue( venueElement );
+//        venue.getClass();
+//        Venue.Height();
 
         prosceniumElement = new IIOMetadataNode( "proscenium" );
         prosceniumElement.setAttribute( "x", prosceniumX.toString() );

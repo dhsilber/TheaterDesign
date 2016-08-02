@@ -98,7 +98,6 @@ public class Parse {
         // Truss will instantiate each TrussBase as it is discovered,
         // rather than make a list of TrussBase objects and then have to match them up with elements later.
 //        parseXML( TrussBase.class, "base" );
-        parseXML( PipeBase.class, "pipebase" );
         parseXML( Cheeseborough.class, "cheeseborough" );
         parseXML( Drape.class, "drape" );
 
@@ -106,6 +105,8 @@ public class Parse {
         parseXML( Truss.class, "truss" );
         parseXML( LightingStand.class, LightingStand.TAG );
         parseXML( Pipe.class, "pipe" );
+
+        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
 
         // Since all 'suspend' elements are direct children of a truss,
         // Truss will instantiate each Suspend as it is discovered,
