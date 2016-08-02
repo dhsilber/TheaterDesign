@@ -58,7 +58,6 @@ public class TrussTest {
     Double suspendDistance = 1.0;
 
     Double negativeX = -21.9;
-    final String unit = "unit";
 
 
     private Element prosceniumElement = null;
@@ -70,7 +69,7 @@ public class TrussTest {
     Element luminaireElement = null;
     final String luminaireUnit = "unit";
     final String luminaireType = "Altman 6x9";
-    String luminaireLocation = "12";
+    String luminaireLocation = "b 12";
 
 
 
@@ -86,7 +85,7 @@ public class TrussTest {
         assert UniqueId.class.isInstance( instance );
         assertFalse( Yokeable.class.isInstance( instance ) );
 
-        assert SupportsClamp.class.isInstance( instance );
+        assert LinearSupportsClamp.class.isInstance( instance );
         assert Populate.class.isInstance( instance );
         assert Legendable.class.isInstance( instance );
 //        assert Schematicable.class.isInstance( instance );
@@ -703,26 +702,39 @@ public class TrussTest {
 //        assertEquals( truss.maxLocation(), negativeX + length );
 //    }
 
+    @Test
+    public void processLuminaire() {
+        positionedTrussElement.appendChild( luminaireElement );
+        Truss truss = new Truss( positionedTrussElement );
+
+        IsClamp last = truss.IsClampList().last();
+        assertEquals( last.getClass(), Luminaire.class );
+        Luminaire luminaire = (Luminaire) last;
+        assertEquals( luminaire.id, trussId + ":" + luminaireUnit );
+    }
+
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\(" + trussId + "\\) unit '" + unit +"' has location outside of permissible range.")
-    public void hangLocationOutOfRange() throws Exception {
-        final String type = "Altman 6x9";
-
-        Element elementOnPipe = new IIOMetadataNode( "luminaire" );
-        elementOnPipe.setAttribute("unit", unit);
-        elementOnPipe.setAttribute( "type", type );
-        elementOnPipe.setAttribute("location", "162" );
-
-        positionedTrussElement.appendChild( elementOnPipe );
+                    "Truss \\(" + trussId + "\\) unit '" + luminaireUnit +"' has location outside of permissible range.")
+    public void processLuminaireLocationOutOfRange() throws Exception {
+        luminaireElement.setAttribute( "location", "c 162" );
+        positionedTrussElement.appendChild( luminaireElement );
         new Truss( positionedTrussElement );
     }
 
     @Test
-    public void tagCallbackRegistered() {
-        positionedTrussElement.appendChild( luminaireElement );
+    public void luminaireCallbackRegistered() {
         Truss truss = new Truss( positionedTrussElement );
 
+        assertTrue( truss.tags().contains( Luminaire.LAYERTAG ) );
+        assertEquals( truss.tags().size(), 1 );
+    }
+
+    @Test
+    public void cheeseboroughCallbackRegistered() {
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertTrue( truss.tags().contains( Cheeseborough.TAG ) );
         assertEquals( truss.tags().size(), 1 );
     }
 
@@ -1158,7 +1170,6 @@ public class TrussTest {
         luminaireElement.setAttribute("unit", luminaireUnit);
         luminaireElement.setAttribute( "type", luminaireType );
         luminaireElement.setAttribute("location", luminaireLocation );
-
     }
 
     @AfterMethod

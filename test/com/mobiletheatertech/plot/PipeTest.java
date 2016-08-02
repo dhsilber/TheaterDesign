@@ -81,7 +81,7 @@ public class PipeTest {
         assert UniqueId.class.isInstance( instance );
         assertFalse( Yokeable.class.isInstance( instance ) );
 
-        assert SupportsClamp.class.isInstance( instance );
+        assert LinearSupportsClamp.class.isInstance( instance );
         assert Populate.class.isInstance( instance );
 //        assert Schematicable.class.isInstance( instance );
     }

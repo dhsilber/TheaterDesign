@@ -8,9 +8,14 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * Created by DHS on 7/27/16.
   */
-trait SupportsClamp {
+trait LinearSupportsClamp {
 
   val IsClampList = new ArrayBuffer[ IsClamp ]
+
+  val based: Boolean = false
+  val positioned: Boolean = false
+  val suspended: Boolean = false
+
 
   @throws[MountingException]
   def hang( luminaire: IsClamp, location: Double ): Unit = {
@@ -45,6 +50,11 @@ trait SupportsClamp {
 
   def maxLocation: Double = ???
 
+  /*
+   The Pipe & Truss versions of this are the same except that
+   - Pipe supports a 90-degree rotation of a positioned pipe
+   - Pipe uses support1 where Truss uses point1
+  */
   def rotatedLocation( location: String ): Place = ???
 
 //  def weights( id: String ): String = {
@@ -76,15 +86,15 @@ trait SupportsClamp {
 //  }
 }
 
-object SupportsClamp {
+object LinearSupportsClamp {
 
   @throws[MountingException]
-  def Select(id: String): SupportsClamp = {
+  def Select(id: String): LinearSupportsClamp = {
     for ( selection <- ElementalLister.List() ) {
       if ( null != selection.id )
         if ( selection.id.equals( id ) )
-          if ( selection.isInstanceOf[SupportsClamp] )
-            return selection.asInstanceOf[SupportsClamp]
+          if ( selection.isInstanceOf[LinearSupportsClamp] )
+            return selection.asInstanceOf[LinearSupportsClamp]
     }
     null
   }

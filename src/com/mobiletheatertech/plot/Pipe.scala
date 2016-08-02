@@ -6,7 +6,7 @@ import org.w3c.dom.{Element, Node, NodeList}
   * Created by DHS on 7/18/16.
   */
 class Pipe ( element: Element ) extends UniqueId( element ) 
-  with SupportsClamp
+  with LinearSupportsClamp
   with Populate
 {
 
@@ -27,7 +27,7 @@ class Pipe ( element: Element ) extends UniqueId( element )
   var base: PipeBase = null
   var support1: Cheeseborough = null
   var support2: Cheeseborough = null
-  val ( based: Boolean, positioned: Boolean ) = process()
+  override val ( based: Boolean, positioned: Boolean ) = process()
 
 
   if ( 0 >= length ) {
@@ -54,7 +54,7 @@ class Pipe ( element: Element ) extends UniqueId( element )
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
     try {
-      hang(light, light.locationValue().toDouble)
+      hang(light, light.locationValue().toDouble )
     }
     catch {
       case exception: MountingException =>

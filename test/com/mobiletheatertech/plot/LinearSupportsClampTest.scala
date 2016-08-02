@@ -6,20 +6,39 @@ package com.mobiletheatertech.plot
 import javax.imageio.metadata.IIOMetadataNode
 
 import org.w3c.dom.Element
-
 import org.testng.annotations._
 import org.testng.Assert.{assertEquals, _}
 
-class SupportsClampTest {
+import scala.Boolean
 
-  private class SupporterForClamp extends SupportsClamp {
+class LinearSupportsClampTest {
+
+  private class SupporterForClampLinear extends LinearSupportsClamp {
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
-  private class UniqueIdSupportsClamp(element: Element )
+  private class LinearSupportsClampBased extends LinearSupportsClamp {
+    override val based = true
+    override def minLocation: Double = -12
+    override def maxLocation: Double = 12
+  }
+
+  private class LinearSupportsClampPositioned extends LinearSupportsClamp {
+    override val positioned = true
+    override def minLocation: Double = -12
+    override def maxLocation: Double = 12
+  }
+
+  private class LinearSupportsClampSuspended extends LinearSupportsClamp {
+    override val suspended = true
+    override def minLocation: Double = -12
+    override def maxLocation: Double = 12
+  }
+
+  private class UniqueIdLinearSupportsClamp(element: Element )
     extends UniqueId( element: Element )
-      with SupportsClamp {
+      with LinearSupportsClamp {
 
     override def dom(draw: Draw, mode: View): Unit = ???
 
@@ -54,21 +73,51 @@ class SupportsClampTest {
   @Test
   @throws[Exception]
   def isA {
-    val instance1 = new SupporterForClamp
-    assert(classOf[SupportsClamp].isInstance(instance1))
+    val instance1 = new SupporterForClampLinear
+    assert(classOf[LinearSupportsClamp].isInstance(instance1))
 
-    val instance2 = new UniqueIdSupportsClamp( pipeOnBaseElement )
-    assert(classOf[SupportsClamp].isInstance(instance2))
+    val instance2 = new UniqueIdLinearSupportsClamp( pipeOnBaseElement )
+    assert(classOf[LinearSupportsClamp].isInstance(instance2))
 
     val instance3 = new UniqueIdDoesNotSupportClamp( baseForPipeElement )
-    assertFalse(classOf[SupportsClamp].isInstance(instance3))
+    assertFalse(classOf[LinearSupportsClamp].isInstance(instance3))
+  }
+
+  @Test
+  def globalVarBasedBoolean: Unit = {
+    val instance = new SupporterForClampLinear
+    instance.based.isInstanceOf[ Boolean ]
+    assertFalse( instance.based )
+
+    val basedSupported = new LinearSupportsClampBased
+    assertTrue( basedSupported.based )
+  }
+
+  @Test
+  def globalVarPositionedBoolean: Unit = {
+    val instance = new SupporterForClampLinear
+    instance.positioned.isInstanceOf[ Boolean ]
+    assertFalse( instance.positioned )
+
+    val positionedSupported = new LinearSupportsClampPositioned
+    assertTrue( positionedSupported.positioned )
+  }
+
+  @Test
+  def globalVarSuspendedBoolean: Unit = {
+    val instance = new SupporterForClampLinear
+    instance.suspended.isInstanceOf[ Boolean ]
+    assertFalse( instance.suspended )
+
+    val suspendedSupported = new LinearSupportsClampSuspended
+    assertTrue( suspendedSupported.suspended )
   }
 
   @Test(expectedExceptions = Array(classOf[DataException]),
     expectedExceptionsMessageRegExp = "mounted element unexpectedly null!" )
   @throws[Exception]
   def hangNull {
-    val mounted = new SupporterForClamp
+    val mounted = new SupporterForClampLinear
     mounted.hang( null, 0.1 )
   }
 
@@ -76,7 +125,7 @@ class SupportsClampTest {
     expectedExceptionsMessageRegExp = "location outside of permissible range." )
   @throws[Exception]
   def locationTooSmall {
-    val pipe: SupporterForClamp = new SupporterForClamp
+    val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
     pipe.hang( light, -12.1 )
   }
@@ -85,7 +134,7 @@ class SupportsClampTest {
     expectedExceptionsMessageRegExp = "location outside of permissible range." )
   @throws[Exception]
   def locationTooLarge {
-    val pipe: SupporterForClamp = new SupporterForClamp
+    val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
     pipe.hang( light, 12.1 )
   }
@@ -93,7 +142,7 @@ class SupportsClampTest {
   @Test
   @throws[Exception]
   def hangIsClamp {
-    val pipe: SupporterForClamp = new SupporterForClamp
+    val pipe: SupporterForClampLinear = new SupporterForClampLinear
     assertEquals( pipe.IsClampList.size, 0 )
     val light = new Luminaire( luminaireElement )
     pipe.hang( light, 0.3 )
@@ -103,14 +152,14 @@ class SupportsClampTest {
   @Test
   @throws[Exception]
   def containsUnfound {
-    val mounted = new SupporterForClamp
+    val mounted = new SupporterForClampLinear
     assertFalse( mounted.contains( new Luminaire( luminaireElement ) ) )
   }
 
   @Test
   @throws[Exception]
   def containsFound {
-    val pipe: SupporterForClamp = new SupporterForClamp
+    val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
     pipe.hang( light, 0.3 )
     assertTrue( pipe.contains( light ) )
@@ -120,36 +169,36 @@ class SupportsClampTest {
   @throws[Exception]
   def selectEmpty {
     assertEquals( ElementalLister.List().size(), 0 )
-    val found: SupportsClamp = SupportsClamp.Select( "bogus" )
+    val found: LinearSupportsClamp = LinearSupportsClamp.Select( "bogus" )
     assertNull( found )
   }
 
   @Test
   @throws[Exception]
   def selectMatch {
-    val target = new UniqueIdSupportsClamp( pipeOnBaseElement )
+    val target = new UniqueIdLinearSupportsClamp( pipeOnBaseElement )
     assertEquals( target.id, pipeId )
     assertEquals( ElementalLister.List().size(), 1 )
-    val found: SupportsClamp = SupportsClamp.Select( pipeId )
+    val found: LinearSupportsClamp = LinearSupportsClamp.Select( pipeId )
     assertSame( found, target )
   }
 
   @Test
   @throws[Exception]
   def selectMatchNotMountable {
-    new UniqueIdSupportsClamp( pipeOnBaseElement )
+    new UniqueIdLinearSupportsClamp( pipeOnBaseElement )
     new UniqueIdDoesNotSupportClamp( baseForPipeElement )
     assertEquals( ElementalLister.List().size(), 2 )
-    val found: SupportsClamp = SupportsClamp.Select( baseId )
+    val found: LinearSupportsClamp = LinearSupportsClamp.Select( baseId )
     assertNull( found )
   }
 
   @Test
   @throws[Exception]
   def selectNoMatch {
-    new UniqueIdSupportsClamp( pipeOnBaseElement )
+    new UniqueIdLinearSupportsClamp( pipeOnBaseElement )
     assertEquals( ElementalLister.List().size(), 1 )
-    val found: SupportsClamp = SupportsClamp.Select( "bogus" )
+    val found: LinearSupportsClamp = LinearSupportsClamp.Select( "bogus" )
     assertNull( found )
   }
 
@@ -200,7 +249,7 @@ class SupportsClampTest {
   }
 }
 
-object SupportsClampTest {
+object LinearSupportsClampTest {
   @BeforeClass
   @throws[Exception]
   def setUpClass {

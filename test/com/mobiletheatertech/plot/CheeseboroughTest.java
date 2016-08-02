@@ -44,6 +44,11 @@ public class CheeseboroughTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals( Cheeseborough.TAG, "cheeseborough" );
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         Cheeseborough cheeseborough = new Cheeseborough(elementOnTruss);
 

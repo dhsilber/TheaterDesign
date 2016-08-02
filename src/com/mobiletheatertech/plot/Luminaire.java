@@ -2,7 +2,6 @@ package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 //import java.awt.geom.Line2D;
@@ -61,7 +60,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     private Point origin;
     private Double pipeRotation;
     private String transform;
-    private SupportsClamp mount = null;
+    private LinearSupportsClamp mount = null;
 
     static final String COLOR = "black";
 
@@ -180,7 +179,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
 
-        mount = SupportsClamp$.MODULE$.Select(on);
+        mount = LinearSupportsClamp$.MODULE$.Select(on);
         if( null == mount ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
@@ -222,7 +221,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         return point;
     }
 
-    SupportsClamp mount() {
+    LinearSupportsClamp mount() {
         return mount;
     }
 

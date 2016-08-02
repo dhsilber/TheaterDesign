@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class Cheeseborough extends MinderDom implements IsClamp {
 
+    public static final String TAG = "cheeseborough";
+
     private static ArrayList<Cheeseborough> CHEESEBOROUGHLIST = new ArrayList<>();
 
     String on = null;

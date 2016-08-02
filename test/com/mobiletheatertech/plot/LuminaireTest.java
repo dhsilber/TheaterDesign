@@ -904,9 +904,11 @@ public class LuminaireTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.VenueReset();
+        TestResets.ProsceniumReset();
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         TestResets.LuminaireReset();
+        TestResets.ElementalListerReset();
 //        Schematic.CountX = 0;
 //        Schematic.CountY = 1;
 //        TestResets.SchematicReset();

@@ -8,7 +8,7 @@ import org.w3c.dom.{Element, Node, NodeList}
   * Created by DHS on 7/26/16.
   */
 class Truss ( element: Element ) extends UniqueId( element )
-  with SupportsClamp
+  with LinearSupportsClamp
   with Populate
   with Legendable
 {
@@ -42,7 +42,7 @@ class Truss ( element: Element ) extends UniqueId( element )
   var span: Double = 0.0
   var base: Base = null
 
-  val (based: Boolean, suspended: Boolean, positioned: Boolean ) = process()
+  override val (based: Boolean, suspended: Boolean, positioned: Boolean ) = process()
 
 
 //  val foo = null
@@ -54,18 +54,20 @@ class Truss ( element: Element ) extends UniqueId( element )
 
 
   tagCallback( Luminaire.LAYERTAG, processLuminaire )
+//  tagCallback( Cheeseborough.TAG, processCheeseborough )
   populate( element )
 
   def processLuminaire(element: Element ): Unit = {
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
+    val distanceFromOrigin = locationDistance( light.locationValue() )
     try {
-      hang(light, light.locationValue().toDouble)
+      hang(light, distanceFromOrigin.toDouble )
     }
     catch {
       case exception: MountingException =>
         throw new MountingException (
-          "Pipe (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+          "Truss (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
       //      case exception: Exception =>
       //        throw new Exception( exception.getMessage, exception.getCause )
     }
