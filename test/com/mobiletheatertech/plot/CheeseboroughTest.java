@@ -318,7 +318,7 @@ public class CheeseboroughTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.VenueReset();
+        Venue.Reset();
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         TestResets.CheeseboroughReset();

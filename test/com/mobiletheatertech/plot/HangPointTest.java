@@ -355,7 +355,7 @@ public class HangPointTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.VenueReset();
+        Venue.Reset();
         TestResets.MinderDomReset();
         TestResets.LayerReset();
         TestResets.ElementalListerReset();

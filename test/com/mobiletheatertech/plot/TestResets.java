@@ -352,12 +352,12 @@ public class TestResets {
      * @throws NoSuchFieldException   if the {@code StaticVenue} field isn't there.
      * @throws IllegalAccessException if the {@code StaticVenue} field cannot be accessed.
      */
-    public static void VenueReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = Venue.class.getDeclaredField( "StaticVenue" );
-        field.setAccessible( true );
-        Venue staticVenue = (Venue) field.get( Venue.class );
-        field.set( staticVenue, null );
-    }
+//    public static void VenueReset() throws NoSuchFieldException, IllegalAccessException {
+//        Field field = Venue.class.getDeclaredField( "StaticVenue" );
+//        field.setAccessible( true );
+//        Venue staticVenue = (Venue) field.get( Venue.class );
+//        field.set( staticVenue, null );
+//    }
 
     /**
      * Reach into the specified class and zero out the specified static int.

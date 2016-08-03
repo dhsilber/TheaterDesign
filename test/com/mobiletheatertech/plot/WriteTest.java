@@ -344,7 +344,7 @@ public class WriteTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.VenueReset();
+        Venue.Reset();
         TestResets.MinderDomReset();
 //        TestResets.DeviceReset();
         TestResets.ElementalListerReset();

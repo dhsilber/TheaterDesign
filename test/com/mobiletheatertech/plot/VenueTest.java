@@ -52,17 +52,17 @@ public class VenueTest {
     }
 
     @Test
-    public void hasOnetoone() throws Exception {
+    public void constantOneToOne() throws Exception {
         new Venue( element );
 
-        assertEquals( Venue.ONETOONE, "one-to-one" );
+        assertEquals( Venue$.MODULE$.ONETOONE(), "one-to-one" );
     }
 
     @Test
-    public void hasOnetomany() throws Exception {
+    public void constantOneToMany() throws Exception {
         new Venue( element );
 
-        assertEquals( Venue.ONETOMANY, "one-to-many" );
+        assertEquals( Venue$.MODULE$.ONETOMANY(), "one-to-many" );
     }
 
     @Test
@@ -566,7 +566,7 @@ public class VenueTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.VenueReset();
+        Venue.Reset();
 
         element = new IIOMetadataNode();
         element.setAttribute( "building", building );

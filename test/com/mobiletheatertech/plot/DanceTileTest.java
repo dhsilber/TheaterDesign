@@ -150,7 +150,7 @@ public class DanceTileTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         DanceTile.CountReset();
-        TestResets.VenueReset();
+        Venue.Reset();
 
         element = new IIOMetadataNode( "dancetile" );
         element.setAttribute( "startX", startX.toString() );
