@@ -204,65 +204,7 @@ public class PipeBaseTest {
                 new Point( prosceniumX + x, prosceniumY - y, prosceniumZ + z ) );
     }
 
-    @Test
-    public void parse() throws Exception {
-        String xml = "<plot>" +
-                "<pipe id=\"pipeID\" length=\"10\" >" +
-                "<pipebase size=\"24\" x=\"4\" y=\"1\" />" +
-                "</pipe>" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
 
-//        TestHelpers.MinderDomReset();
-
-        new Parse( stream );
-
-        // Final size of list
-        ArrayList<ElementalLister> list = ElementalLister.List();
-
-        ElementalLister venue = list.get( 0 );
-        assert MinderDom.class.isInstance( venue );
-        assert Venue.class.isInstance( venue );
-
-        ElementalLister pipe = list.get( 1 );
-        assert MinderDom.class.isInstance( pipe );
-        assert Pipe.class.isInstance( pipe );
-
-        ElementalLister pipeBase = list.get( 2 );
-        assert MinderDom.class.isInstance( pipeBase );
-        assert PipeBase.class.isInstance( pipeBase );
-
-        // At some point, I will clean up the code enough that the redundant instance of
-        // this same PipeBase is created by Parse, at which point this test will fail here.
-        ElementalLister pipeBase2 = list.get( 3 );
-        assert MinderDom.class.isInstance( pipeBase2 );
-        assert PipeBase.class.isInstance( pipeBase2 );
-
-        assertEquals( list.size(), 4 );
-    }
-
-//    @Test
-//    public void parseProscenium() throws Exception {
-//        String xml = "<plot>" +
-//                "<proscenium width=\"300\" height=\"100\" depth=\"12\" x=\"400\" y=\"360\" z=\"40\" />" +
-//                "<pipe id=\"trussID\" length=\"10\" >" +
-//                "<pipebase size=\"24\" x=\"4\" y=\"1\" />" +
-//                "</pipe>" +
-//                "</plot>";
-//        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-//
-////        TestHelpers.MinderDomReset();
-//
-//        new Parse( stream );
-//
-//        // Final size of list
-//        ArrayList<ElementalLister> list = ElementalLister.List();
-//        assertEquals( list.size(), 4 );
-////
-////        ElementalLister truss = list.get( 0 );
-////        assert MinderDom.class.isInstance( truss );
-////        assert Truss.class.isInstance( truss );
-//    }
 
 //    @Test
 //    public void locate() throws Exception {
@@ -275,19 +217,6 @@ public class PipeBaseTest {
 //        assertEquals( location.z(), 0 );
 //    }
 
-//    @Test
-//    public void drawUnused() throws Exception {
-//        new TrussBase(baseElement);
-//
-////        base.drawPlan( null );
-//    }
-//
-//    @Test
-//    public void domUnused() throws Exception {
-//        TrussBase base = new TrussBase(baseElement);
-//
-//        base.dom( null, View.PLAN );
-//    }
 
     @Test
     public void domPlan() throws Exception {
@@ -458,17 +387,17 @@ public class PipeBaseTest {
         Node outerCircleNode = childList.item( 0 );
         assertEquals( outerCircleNode.getNodeType(), Node.ELEMENT_NODE );
         Element outerCircleElement = (Element) outerCircleNode;
-        assertEquals( outerCircleElement.getAttribute( "cx" ), "7.0" );
-        assertEquals( outerCircleElement.getAttribute( "cy" ), "3.0" );
-        assertEquals( outerCircleElement.getAttribute( "r" ), "9.0" );
+        assertEquals( outerCircleElement.getAttribute( "cx" ), "5.0" );
+        assertEquals( outerCircleElement.getAttribute( "cy" ), "2.0" );
+        assertEquals( outerCircleElement.getAttribute( "r" ), "12.0" );
         assertEquals( outerCircleElement.getAttribute( "stroke" ), PipeBase$.MODULE$.Color() );
 
         Node innerCircleNode = childList.item( 1 );
         assertEquals( innerCircleNode.getNodeType(), Node.ELEMENT_NODE );
         Element innerCircleElement = (Element) innerCircleNode;
-        assertEquals( innerCircleElement.getAttribute( "cx" ), "7.0" );
-        assertEquals( innerCircleElement.getAttribute( "cy" ), "3.0" );
-        assertEquals( innerCircleElement.getAttribute( "r" ), "3.0" );
+        assertEquals( innerCircleElement.getAttribute( "cx" ), "5.0" );
+        assertEquals( innerCircleElement.getAttribute( "cy" ), "2.0" );
+        assertEquals( innerCircleElement.getAttribute( "r" ), "2.0" );
         assertEquals( innerCircleElement.getAttribute( "stroke" ), PipeBase$.MODULE$.Color() );
 
         Node descriptionNode = childList.item( 2 );

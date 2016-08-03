@@ -66,7 +66,7 @@ class PipeBase ( element: Element ) extends MinderDom( element )
     group.textAbsolute( draw, PipeBase.LegendCount.toString,
       Legend.QUANTITYOFFSET, 8.0, Legend.TEXTCOLOR )
 
-    return start
+    return new PagePoint( start.x(), start.y() + PipeBase.LegendHeight )
   }
 }
 
