@@ -43,7 +43,7 @@ public class ReadTest {
         String[] arguments = new String[] { pathname + basename };
         Configuration.Initialize( arguments );
         new Read();
-        assertEquals( ElementalLister.List().size(), 19 );
+        assertEquals( ElementalLister.List().size(), 18 );
     }
 
 
@@ -58,6 +58,8 @@ public class ReadTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.ElementalListerReset();
+        Venue.Reset();
+        TestResets.ProsceniumReset();
     }
 
     @AfterMethod

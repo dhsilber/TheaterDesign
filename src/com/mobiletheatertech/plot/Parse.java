@@ -86,7 +86,7 @@ public class Parse {
         parseXML( Venue.class, "venue");
         parseXML( Wall.class, "wall");
 //        parseXML( Balcony.class, "balcony");
-        parseXML( Proscenium.class, "proscenium");
+//        parseXML( Proscenium.class, "proscenium");
         parseXML( Airwall.class, "airwall");
         parseXML( Stage.class, "stage" );
         parseXML( Table.class, "table" );
@@ -104,7 +104,7 @@ public class Parse {
         // Yokeable
         parseXML( Truss.class, "truss" );
         parseXML( LightingStand.class, LightingStand.TAG );
-        parseXML( Pipe.class, "pipe" );
+//        parseXML( Pipe.class, "pipe" );
 
 //        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
 

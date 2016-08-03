@@ -28,6 +28,21 @@ public class VenueTest {
     Double depth = 1320.0;
     Double height = 240.0;
 
+    private Element prosceniumElement = null;
+    private Integer prosceniumX = 600;
+    private Integer prosceniumY = 144;
+    private Integer prosceniumZ = 12;
+
+    private Element pipeCrossesProsceniumCenterElement = null;
+    Double longLength = 360.0;
+    Double negativeX = -180.0;
+
+    Element pipeElement = null;
+    Double x = 92.0;
+    Double y = 83.0;
+    Double z = 74.0;
+    String pipeId = "pipe id";
+
 
     public VenueTest() {
     }
@@ -46,7 +61,7 @@ public class VenueTest {
         assertFalse( Yokeable.class.isInstance( instance ) );
 
         assertFalse( LinearSupportsClamp.class.isInstance( instance ) );
-        assertFalse( Populate.class.isInstance( instance ) );
+        assertTrue( Populate.class.isInstance( instance ) );
         assertTrue( Legendable.class.isInstance( instance ) );
 //        assert Schematicable.class.isInstance( instance );
     }
@@ -556,6 +571,63 @@ public class VenueTest {
 //    }
 
 
+    @Test
+    public void tagCallbackRegisteredPipe() {
+        Venue venue = new Venue( element );
+
+        assertTrue( venue.tags().contains( Pipe.LayerTag() ) );
+        assertEquals( venue.tags().size(), 2 );
+    }
+
+    @Test
+    public void tagCallbackRegisteredProscenium() {
+        Venue venue = new Venue( element );
+
+        assertTrue( venue.tags().contains( Proscenium.Tag ) );
+        assertEquals( venue.tags().size(), 2 );
+    }
+
+    @Test
+    public void populateChildren() {
+        element.appendChild( pipeElement );
+        new Venue( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipe = list.get( 1 );
+        assert MinderDom.class.isInstance( pipe );
+        assert Pipe.class.isInstance( pipe );
+
+        assertEquals( list.size(), 2 );
+    }
+
+    @Test
+    public void populateChildrenWithProscenium() {
+        element.appendChild( prosceniumElement );
+        element.appendChild( pipeCrossesProsceniumCenterElement );
+        new Venue( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister proscenium = list.get( 1 );
+        assert MinderDom.class.isInstance( proscenium );
+        assert Proscenium.class.isInstance( proscenium );
+
+        ElementalLister pipe = list.get( 2 );
+        assert MinderDom.class.isInstance( pipe );
+        assert Pipe.class.isInstance( pipe );
+
+        assertEquals( list.size(), 3 );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -567,6 +639,8 @@ public class VenueTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Venue.Reset();
+        TestResets.ElementalListerReset();
+        UniqueId.Reset();
 
         element = new IIOMetadataNode();
         element.setAttribute( "building", building );
@@ -574,6 +648,30 @@ public class VenueTest {
         element.setAttribute( "width", width.toString() );
         element.setAttribute( "depth", depth.toString() );
         element.setAttribute( "height", height.toString() );
+
+        prosceniumElement = new IIOMetadataNode("proscenium");
+        prosceniumElement.setAttribute("width", "260");
+        prosceniumElement.setAttribute("height", "200");
+        prosceniumElement.setAttribute("depth", "22");
+        prosceniumElement.setAttribute("x", prosceniumX.toString());
+        prosceniumElement.setAttribute("y", prosceniumY.toString());
+        prosceniumElement.setAttribute("z", prosceniumZ.toString());
+
+        pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
+        pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
+        pipeCrossesProsceniumCenterElement.setAttribute("length", longLength.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("x", negativeX.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("y", y.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute( "z", z.toString());
+
+        pipeElement = new IIOMetadataNode( "pipe" );
+        pipeElement.setAttribute( "id", pipeId);
+        pipeElement.setAttribute( "size", "12" );
+        pipeElement.setAttribute( "length", "120" );
+        pipeElement.setAttribute("x", x.toString());
+        pipeElement.setAttribute("y", y.toString());
+        pipeElement.setAttribute("z", z.toString());
+
     }
 
     @AfterMethod

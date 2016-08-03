@@ -38,6 +38,7 @@ public class Proscenium extends MinderDom {
     private Double y = null;
     private Double z = null;
 
+    final static String Tag = "proscenium";
     private static final String COLOR = "black";
     private static final String FADEDCOLOR = "gray";
 

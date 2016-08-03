@@ -10,7 +10,10 @@ import java.awt._
   * Created by DHS on 8/3/16.
   */
 
-class Venue ( element: Element) extends MinderDom(element) with Legendable {
+class Venue ( element: Element) extends MinderDom(element)
+  with Populate
+  with Legendable
+{
   val room = getStringAttribute("room")
   val width = getDoubleAttribute("width")
   val depth = getDoubleAttribute("depth")
@@ -28,6 +31,18 @@ class Venue ( element: Element) extends MinderDom(element) with Legendable {
 
   new Point(width, depth, height)
   Venue.StaticVenue = this
+
+  tagCallback( Proscenium.Tag, processProscenium )
+  tagCallback( Pipe.LayerTag, processPipe )
+  populate( element )
+
+  def processProscenium( element: Element ): Unit = {
+    new Proscenium( element )
+  }
+
+  def processPipe( element: Element ): Unit = {
+    new Pipe( element )
+  }
 
   def verify {
   }
