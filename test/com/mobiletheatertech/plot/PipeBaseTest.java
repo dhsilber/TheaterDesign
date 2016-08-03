@@ -28,8 +28,10 @@ public class PipeBaseTest {
  * @since 0.0.5
  */
     Element baseElement = null;
-    Pipe pipe = null;
+//    Pipe pipe = null;
     Element prosceniumElement = null;
+
+    Element pipeElement = null;
 
     String id = "Truss ID";
     Double x = 12.0;
@@ -51,6 +53,7 @@ public class PipeBaseTest {
         assert MinderDom.class.isInstance( instance );
         assertFalse( Yokeable.class.isInstance( instance ) );
 
+        assertTrue( Populate.class.isInstance( instance ) );
         assertTrue( Legendable.class.isInstance( instance ) );
     }
 
@@ -184,6 +187,14 @@ public class PipeBaseTest {
     }
 
     @Test
+    public void mountPoint() {
+        PipeBase pipeBase = new PipeBase( baseElement );
+
+        assertEquals( pipeBase.mountPoint(),
+                new Point( pipeBase.x(), pipeBase.y(), pipeBase.z() + 2.0 ));
+    }
+
+    @Test
     public void verify() throws Exception {
         baseElement.setAttribute( "z", z.toString() );
         PipeBase instance = new PipeBase( baseElement );
@@ -203,8 +214,6 @@ public class PipeBaseTest {
         assertEquals( TestHelpers.accessObject(instance, "drawPlace"),
                 new Point( prosceniumX + x, prosceniumY - y, prosceniumZ + z ) );
     }
-
-
 
 //    @Test
 //    public void locate() throws Exception {
@@ -317,6 +326,36 @@ public class PipeBaseTest {
     }
 
     @Test
+    public void tagCallbackRegistered() {
+        PipeBase pipebase = new PipeBase( baseElement );
+
+        assertEquals( pipebase.tags().size(), 1 );
+        assertTrue( pipebase.tags().contains( Pipe.LayerTag() ) );
+    }
+
+    @Test
+    public void populateChildren() {
+        baseElement.appendChild( pipeElement );
+        new PipeBase( baseElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipe = list.get( 2 );
+        assert MinderDom.class.isInstance( pipe );
+        assert Pipe.class.isInstance( pipe );
+
+        assertEquals( list.size(), 3 );
+    }
+
+    @Test
     public void legendRegistered() throws Exception {
         assertEquals(PipeBase$.MODULE$.LegendRegistered(), false );
 
@@ -358,18 +397,13 @@ public class PipeBaseTest {
         Draw draw = new Draw();
         draw.establishRoot();
         PipeBase pipebase = new PipeBase( baseElement );
-
         PagePoint startPoint = new PagePoint( 20.0, 10.0 );
-
         NodeList preGroup = draw.root().getElementsByTagName( "g" );
         assertEquals( preGroup.getLength(), 1 );
 
+
         PagePoint endPoint = pipebase.domLegendItem( draw, startPoint );
 
-////        NodeList group = draw.root().getElementsByTagName( "g" );
-////        assertEquals( group.getLength(), 1 );
-////        Node groupNod = group.item(0);
-////        Element groupElem = (Element) groupNod;
 
         NodeList groupList = draw.root().getElementsByTagName( "g" );
         // item 0 exists before domLegendItem() adds any content.
@@ -387,6 +421,7 @@ public class PipeBaseTest {
         Node outerCircleNode = childList.item( 0 );
         assertEquals( outerCircleNode.getNodeType(), Node.ELEMENT_NODE );
         Element outerCircleElement = (Element) outerCircleNode;
+        assertEquals( outerCircleElement.getTagName(), "circle" );
         assertEquals( outerCircleElement.getAttribute( "cx" ), "5.0" );
         assertEquals( outerCircleElement.getAttribute( "cy" ), "2.0" );
         assertEquals( outerCircleElement.getAttribute( "r" ), "12.0" );
@@ -395,6 +430,7 @@ public class PipeBaseTest {
         Node innerCircleNode = childList.item( 1 );
         assertEquals( innerCircleNode.getNodeType(), Node.ELEMENT_NODE );
         Element innerCircleElement = (Element) innerCircleNode;
+        assertEquals( innerCircleElement.getTagName(), "circle" );
         assertEquals( innerCircleElement.getAttribute( "cx" ), "5.0" );
         assertEquals( innerCircleElement.getAttribute( "cy" ), "2.0" );
         assertEquals( innerCircleElement.getAttribute( "r" ), "2.0" );
@@ -403,6 +439,7 @@ public class PipeBaseTest {
         Node descriptionNode = childList.item( 2 );
         assertEquals( descriptionNode.getNodeType(), Node.ELEMENT_NODE );
         Element descriptionElement = (Element) descriptionNode;
+        assertEquals( descriptionElement.getTagName(), "text" );
         Double x = Legend.TEXTOFFSET;
         Double y = 8.0;
         assertEquals( descriptionElement.getAttribute("x"), x.toString() );
@@ -414,6 +451,7 @@ public class PipeBaseTest {
         Node quantityNode = childList.item( 3 );
         assertEquals( quantityNode.getNodeType(), Node.ELEMENT_NODE );
         Element quantityElement = (Element) quantityNode;
+        assertEquals( quantityElement.getTagName(), "text" );
         x = Legend.QUANTITYOFFSET;
         assertEquals(quantityElement.getAttribute("x"), x.toString() );
         assertEquals(quantityElement.getAttribute("y"), y.toString() );
@@ -471,12 +509,10 @@ public class PipeBaseTest {
         baseElement.setAttribute("x", x.toString());
         baseElement.setAttribute("y", y.toString());
 
-//        Element pipeElement = new IIOMetadataNode( "pipe" );
-//        pipeElement.setAttribute("id", id);
-//        pipeElement.setAttribute( "size", "12" );
-//        pipeElement.setAttribute( "length", "320" );
-//        pipeElement.appendChild(baseElement);
-//        pipe = new Pipe( pipeElement );
+        pipeElement = new IIOMetadataNode( "pipe" );
+        pipeElement.setAttribute( "id", id);
+        pipeElement.setAttribute( "size", "12" );
+        pipeElement.setAttribute( "length", "120" );
     }
 
     @AfterMethod

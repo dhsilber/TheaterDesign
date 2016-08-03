@@ -14,7 +14,7 @@ class Event ( element: Element ) extends UniqueId ( element )
   populate( element )
 
   def processPipeBase( element: Element ): Unit = {
-    val pipebase: PipeBase = new PipeBase( element )
+    new PipeBase( element )
   }
 
 //  if ( null == Venue.)

@@ -171,6 +171,12 @@ public class ExceptionTest {
         throw new SizeException("Foo", "length");
     }
 
+    @Test(expectedExceptions = SizeException.class,
+            expectedExceptionsMessageRegExp = "Foo \\(bar\\) should have a positive length.")
+    public void sizeExceptionWithId() throws Exception {
+        throw new SizeException("Foo", "bar", "should have a positive length");
+    }
+
     /**
      * For bad references to plot items
      *

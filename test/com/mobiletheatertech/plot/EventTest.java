@@ -104,6 +104,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertEquals( event.tags().size(), 1 );
+        assertTrue( event.tags().contains( PipeBase.Tag() ) );
     }
 
     @Test

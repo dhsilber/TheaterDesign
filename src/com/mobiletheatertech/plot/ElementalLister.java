@@ -30,4 +30,5 @@ public class ElementalLister extends Elemental {
         return LIST;
     }
 
+    public static void Remove( ElementalLister thingy ) { LIST.remove( thingy ); }
 }

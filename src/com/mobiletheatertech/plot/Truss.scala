@@ -36,7 +36,9 @@ class Truss ( element: Element ) extends UniqueId( element )
   var overHang: Double = 0.0
 
   // These are set within the *Processing() logic.
-  var start: Point = null
+//  override val start: Point = null
+  // Note that start is only mutable because I haven't yet updated Truss to be a child of
+  // its TrussBase. When I do, make it 'val' in LinearSupportsClamp
   var boxOrigin : Point = null
 
   var span: Double = 0.0

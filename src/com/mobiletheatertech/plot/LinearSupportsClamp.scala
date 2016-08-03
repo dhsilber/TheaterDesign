@@ -15,6 +15,7 @@ trait LinearSupportsClamp {
   val based: Boolean = false
   val positioned: Boolean = false
   val suspended: Boolean = false
+  var start: Point = null
 
 
   @throws[MountingException]
@@ -42,7 +43,9 @@ trait LinearSupportsClamp {
     IsClampList contains item
   }
 
-  def origin(): Point = ???
+  def origin(): Point = {
+    new Point( start.x + SvgElement.OffsetX(), start.y + SvgElement.OffsetY(), start.z )
+  }
 
   def orientation(): Double = ???
 

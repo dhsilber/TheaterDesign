@@ -18,4 +18,14 @@ public class SizeException extends Exception {
     public SizeException( String type, String part ) {
         super( type + " should have a positive " + part + "." );
     }
+
+    public SizeException( String tag, String id, String message ) {
+        super(
+                tag + " "
+                        + (null == id || id.isEmpty()
+                        ? "instance"
+                        : "(" + id + ")")
+                        + " " + message + "."
+        );
+    }
 }

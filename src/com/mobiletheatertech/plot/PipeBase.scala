@@ -6,12 +6,17 @@ import org.w3c.dom.Element
  * Created by dhs on 7/15/15.
  */
 class PipeBase ( element: Element ) extends MinderDom( element )
+  with Populate
   with Legendable
 {
 
   val x = getDoubleAttribute( "x" )
   val y = getDoubleAttribute( "y" )
   val z = getOptionalDoubleAttributeOrZero( "z" )
+
+  tagCallback( Pipe.LayerTag, processPipe )
+  populate( element )
+
 
   val processedMark = Mark.Generate()
   element.setAttribute( "processedMark", processedMark )
@@ -32,6 +37,14 @@ class PipeBase ( element: Element ) extends MinderDom( element )
     else {
       drawPlace = new Point( x, y, z )
     }
+  }
+
+  def mountPoint(): Point = {
+    new Point( x, y, z + 2.0 )
+  }
+
+  def processPipe( element: Element ): Unit = {
+    new Pipe( element, this )
   }
 
   def dom( draw: Draw, mode: View ): Unit = {

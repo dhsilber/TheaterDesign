@@ -97,6 +97,11 @@ public class PipeTest {
     }
 
     @Test
+    public void constantRadius() {
+        assertEquals( Pipe$.MODULE$.Radius(), 1.0 );
+    }
+
+    @Test
     public void constantLayerName() {
         assertEquals(Pipe$.MODULE$.LayerName(), "Pipes");
     }
@@ -108,9 +113,14 @@ public class PipeTest {
 
     @Test
     public void constantCheeseborough() {
-        assertEquals(Pipe$.MODULE$.Cheeseborough(), "cheeseborough");
+//        assertEquals(Pipe$.MODULE$.Cheeseborough(), "cheeseborough");
     }
 
+    @Test
+    public void parentIsPipeBase() {
+        
+    }
+    
     @Test
     public void storesAttributesWithPosition() throws Exception {
         Pipe pipe = new Pipe(element);
@@ -124,8 +134,26 @@ public class PipeTest {
 
     @Test
     public void storesAttributesWithBase() throws Exception {
-        Pipe pipe = new Pipe(pipeOnBaseElement);
+        new PipeBase( baseForPipeElement );
 
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipeFromList = list.get( 2 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+
+        assertEquals( list.size(), 3 );
+        
+        Pipe pipe = (Pipe) pipeFromList;
+        
         assertEquals( TestHelpers.accessString( pipe, "id" ), pipeId );
         assertEquals( TestHelpers.accessDouble( pipe, "length" ), length );
         assertEquals( TestHelpers.accessPoint( pipe, "start" ), new Point( baseX, baseY, 2.0 ) );
@@ -174,13 +202,7 @@ public class PipeTest {
         LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select( pipeId );
         assertNull( nothing );
 
-        element.setAttribute("length", "0");
-
-        Pipe pipe = null;
-        try {
-            pipe = new Pipe(element);
-        } catch (Exception e) {
-        }
+        Pipe pipe = new Pipe(element);
 
         LinearSupportsClamp thingy = LinearSupportsClamp$.MODULE$.Select( pipeId );
         assertSame( thingy, pipe );
@@ -320,28 +342,28 @@ public class PipeTest {
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on base or explicitly positioned.")
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoX() throws Exception {
         element.removeAttribute("x");
         new Pipe(element);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on base or explicitly positioned.")
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoY() throws Exception {
         element.removeAttribute("y");
         new Pipe(element);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on base or explicitly positioned.")
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoZ() throws Exception {
         element.removeAttribute("z");
         new Pipe(element);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on base or explicitly positioned.")
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void noLocation() throws Exception {
         element.removeAttribute( "x" );
         element.removeAttribute( "y" );
@@ -351,7 +373,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=0.0 \\} should have a positive length.")
+                    "Pipe \\(" + pipeId + "\\) should have a positive length.")
     public void tooSmallLengthZero() throws Exception {
         element.setAttribute("length", "0");
         new Pipe(element);
@@ -359,7 +381,7 @@ public class PipeTest {
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\{ origin=Point \\{ x=12.0, y=23.0, z=34.0 \\}, length=-1.0 \\} should have a positive length.")
+                    "Pipe \\(" + pipeId + "\\) should have a positive length.")
     public void tooSmallLength() throws Exception {
         element.setAttribute("length", "-1");
         new Pipe(element);
@@ -407,7 +429,7 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallY() throws Exception {
-        element.setAttribute("y", "-1");
+        element.setAttribute("y", "-2");
         Pipe pipe = new Pipe(element);
         pipe.verify();
     }
@@ -464,7 +486,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallYProscenium() throws Exception {
         new Proscenium( prosceniumElement );
-        element.setAttribute("y", "-" + (prosceniumY + 1) );
+        Integer y = prosceniumY + 2;
+        element.setAttribute("y", y.toString() );
         Pipe pipe = new Pipe(element);
         pipe.verify();
     }
@@ -501,10 +524,25 @@ public class PipeTest {
 
     @Test
     public void baseReference() throws Exception {
-        Pipe pipe = new Pipe( pipeOnBaseElement );
-//        new PipeBase( baseForPipeElement );
+        new PipeBase( baseForPipeElement );
 
-//        pipe.verify();
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipeFromList = list.get( 2 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+
+        assertEquals( list.size(), 3 );
+
+        Pipe pipe = (Pipe) pipeFromList;
 
         Field baseField = TestHelpers.accessField( pipe, "base" );
         PipeBase base = (PipeBase) baseField.get( pipe );
@@ -513,120 +551,138 @@ public class PipeTest {
         Field boxOriginField = TestHelpers.accessField( pipe, "boxOrigin" );
         Point boxOrigin = (Point) boxOriginField.get( pipe );
         assertNotNull( boxOrigin );
-        assertEquals( boxOrigin.z(), 2.0 );
-        assertEquals( boxOrigin.y(), 49.0 );
         assertEquals( boxOrigin.x(), 39.0 );
+        assertEquals( boxOrigin.y(), 49.0 );
+        assertEquals( boxOrigin.z(), 2.0 );
     }
 
     @Test
-    public void baseReferenceProscenium() throws Exception {
+    public void baseProscenium() throws Exception {
         new Proscenium( prosceniumElement );
-        Pipe pipe = new Pipe( pipeOnBaseElement );
-        baseForPipeElement.setAttribute( "z", "-12" );
+
+        baseForPipeElement.setAttribute( "x", "-" + baseX.toString() );
         new PipeBase( baseForPipeElement );
 
-        pipe.verify();
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister proscenium = list.get( 1 );
+        assert MinderDom.class.isInstance( proscenium );
+        assert Proscenium.class.isInstance( proscenium );
+
+        ElementalLister pipebase = list.get( 2 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipeFromList = list.get( 3 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+
+        assertEquals( list.size(), 4 );
+
+        Pipe pipe = (Pipe) pipeFromList;
+
+//        pipe.verify();
 
         PipeBase base = pipe.base();
-//        Field baseField = TestHelpers.accessField( pipe, "base" );
-//        PipeBase base = (PipeBase) baseField.get( pipe );
         assertNotNull( base );
         assert PipeBase.class.isInstance( base );
 
         Point boxOrigin = pipe.boxOrigin();
-//        Field boxOriginField = TestHelpers.accessField( pipe, "boxOrigin" );
-//        Point boxOrigin = (Point) boxOriginField.get( pipe );
         assertNotNull( boxOrigin );
         assertEquals( boxOrigin.z(), 14.0 );
         assertEquals( boxOrigin.y(), 93.0 );
-        assertEquals( boxOrigin.x(), 239.0 );
+        assertEquals( boxOrigin.x(), 159.0 );
     }
 
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp =
-                    "Pipe \\(" + pipeId + "\\) should not have more than one base.")
-    public void tooManyBases() throws Exception {
-        Element secondBaseElement = new IIOMetadataNode( "pipebase" );
-//        secondBaseElement.setAttribute( "size", baseSize.toString() );
-        secondBaseElement.setAttribute( "x", baseX.toString() );
-        secondBaseElement.setAttribute( "y", baseY.toString() );
-        new PipeBase( secondBaseElement );
-        pipeOnBaseElement.appendChild( secondBaseElement );
-
-        new PipeBase( baseForPipeElement );
-        Pipe pipe = new Pipe( pipeOnBaseElement );
-
-        pipe.verify();
-    }
+//    @Test(expectedExceptions = InvalidXMLException.class,
+//            expectedExceptionsMessageRegExp =
+//                    "Pipe \\(" + pipeId + "\\) should not have more than one base.")
+//    public void tooManyBases() throws Exception {
+//        Element secondBaseElement = new IIOMetadataNode( "pipebase" );
+////        secondBaseElement.setAttribute( "size", baseSize.toString() );
+//        secondBaseElement.setAttribute( "x", baseX.toString() );
+//        secondBaseElement.setAttribute( "y", baseY.toString() );
+//        new PipeBase( secondBaseElement );
+//        pipeOnBaseElement.appendChild( secondBaseElement );
+//
+//        new PipeBase( baseForPipeElement );
+//        Pipe pipe = new Pipe( pipeOnBaseElement );
+//
+//        pipe.verify();
+//    }
 
     /*
             Make a couple of suspend objects that are children of this truss
             and confirm that they are properly associated
      */
-    @Test
-    public void verifyCheeseboroughReferences() throws Exception {
-        TrussBase trussBase = new TrussBase( trussBaseElement );
-        trussBase.verify();
-        Truss truss = new Truss( trussElement );
-        truss.verify();
-        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
-        c1.verify();
-        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
-        c2.verify();
-        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
-        pipe.verify();
-
-//        Field cheeseborough1Field = TestHelpers.accessField( pipe, "cheeseborough1" );
-//        Cheeseborough cheeseborough1 = (Cheeseborough) cheeseborough1Field.get( pipe );
-        assertTrue(Cheeseborough.class.isInstance( pipe.support1() ));
-
-//        Field cheeseborough2Field = TestHelpers.accessField( pipe, "cheeseborough2" );
-//        Cheeseborough cheeseborough2 = (Cheeseborough) cheeseborough2Field.get( pipe );
-        assertTrue( Cheeseborough.class.isInstance( pipe.support2() ) );
-    }
-
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
-    public void verifyTooManyCheeseboroughReferences() throws Exception {
-
-        String cheeseborough3Id = "brie";
-        String cheeseborough3Location = "b 112";
-
-        Element cheeseborough3Element = new IIOMetadataNode( "cheeseborough" );
-        cheeseborough3Element.setAttribute( "id", cheeseborough3Id );
-        cheeseborough3Element.setAttribute( "on", trussID );
-        cheeseborough3Element.setAttribute( "location", cheeseborough3Location );
-
-        pipeOnCheeseboroughsElement.appendChild( cheeseborough3Element );
-
-        TrussBase trussBase = new TrussBase( trussBaseElement );
-        trussBase.verify();
-        Truss truss = new Truss( trussElement );
-        truss.verify();
-        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
-        c1.verify();
-        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
-        c2.verify();
-        Cheeseborough c3 = new Cheeseborough( cheeseborough3Element );
-        c3.verify();
-        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
-        pipe.verify();
-    }
-
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
-    public void verifyOnlyOneCheeseboroughReference() throws Exception {
-        pipeOnCheeseboroughsElement.removeChild( cheeseborough2Element );
-
-        TrussBase trussBase = new TrussBase( trussBaseElement );
-        trussBase.verify();
-        Truss truss = new Truss( trussElement );
-        truss.verify();
-        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
-        c1.verify();
-        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
-        pipe.verify();
-    }
+//    @Test
+//    public void verifyCheeseboroughReferences() throws Exception {
+//        TrussBase trussBase = new TrussBase( trussBaseElement );
+//        trussBase.verify();
+//        Truss truss = new Truss( trussElement );
+//        truss.verify();
+//        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+//        c1.verify();
+//        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
+//        c2.verify();
+//        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+//        pipe.verify();
+//
+////        Field cheeseborough1Field = TestHelpers.accessField( pipe, "cheeseborough1" );
+////        Cheeseborough cheeseborough1 = (Cheeseborough) cheeseborough1Field.get( pipe );
+//        assertTrue(Cheeseborough.class.isInstance( pipe.support1() ));
+//
+////        Field cheeseborough2Field = TestHelpers.accessField( pipe, "cheeseborough2" );
+////        Cheeseborough cheeseborough2 = (Cheeseborough) cheeseborough2Field.get( pipe );
+//        assertTrue( Cheeseborough.class.isInstance( pipe.support2() ) );
+//    }
+//
+//    @Test(expectedExceptions = InvalidXMLException.class,
+//            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
+//    public void verifyTooManyCheeseboroughReferences() throws Exception {
+//
+//        String cheeseborough3Id = "brie";
+//        String cheeseborough3Location = "b 112";
+//
+//        Element cheeseborough3Element = new IIOMetadataNode( "cheeseborough" );
+//        cheeseborough3Element.setAttribute( "id", cheeseborough3Id );
+//        cheeseborough3Element.setAttribute( "on", trussID );
+//        cheeseborough3Element.setAttribute( "location", cheeseborough3Location );
+//
+//        pipeOnCheeseboroughsElement.appendChild( cheeseborough3Element );
+//
+//        TrussBase trussBase = new TrussBase( trussBaseElement );
+//        trussBase.verify();
+//        Truss truss = new Truss( trussElement );
+//        truss.verify();
+//        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+//        c1.verify();
+//        Cheeseborough c2 = new Cheeseborough( cheeseborough2Element );
+//        c2.verify();
+//        Cheeseborough c3 = new Cheeseborough( cheeseborough3Element );
+//        c3.verify();
+//        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+//        pipe.verify();
+//    }
+//
+//    @Test(expectedExceptions = InvalidXMLException.class,
+//            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeOnCheeseboroughsId + "\\) should have zero or two cheeseboroughs.")
+//    public void verifyOnlyOneCheeseboroughReference() throws Exception {
+//        pipeOnCheeseboroughsElement.removeChild( cheeseborough2Element );
+//
+//        TrussBase trussBase = new TrussBase( trussBaseElement );
+//        trussBase.verify();
+//        Truss truss = new Truss( trussElement );
+//        truss.verify();
+//        Cheeseborough c1 = new Cheeseborough( cheeseborough1Element );
+//        c1.verify();
+//        Pipe pipe = new Pipe( pipeOnCheeseboroughsElement );
+//        pipe.verify();
+//    }
 
     @Test
     public void location() throws Exception {
@@ -665,13 +721,13 @@ public class PipeTest {
     @Test
     public void locationWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.mountableLocation("15");
+
         assertEquals(place.x, 227.0 );
-        assertEquals(place.y, 122.0 );
-        assertEquals(place.z, 45.0 );
+        assertEquals(place.y, 121.0 );
+        assertEquals(place.z, 46.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -705,8 +761,8 @@ public class PipeTest {
 
         Point place = pipe.mountableLocation("15");
         assertEquals(place.x, 215.0 );
-        assertEquals(place.y, 122.0 );
-        assertEquals(place.z, 45.0 );
+        assertEquals(place.y, 121.0 );
+        assertEquals(place.z, 46.0 );
     }
 
     @Test
@@ -718,8 +774,8 @@ public class PipeTest {
 
         Point place = pipe.mountableLocation("-5");
         assertEquals(place.x, 195.0 );
-        assertEquals(place.y, 122.0 );
-        assertEquals(place.z, 45.0 );
+        assertEquals(place.y, 121.0 );
+        assertEquals(place.z, 46.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -880,9 +936,9 @@ public class PipeTest {
         assertEquals( place.origin(), start );
 
         Point location = place.location();
-        assertEquals( location.y(), start.y() - 23 );
-        assertEquals( location.z(), start.z() - 1 );
-        assertEquals( location.x(), start.x() - 1 );
+        assertEquals( location.y(), start.y() + 23 );
+        assertEquals( location.z(), start.z() );
+        assertEquals( location.x(), start.x() );
 
         assertEquals( place.rotation(), 90.0 );
     }
@@ -903,16 +959,35 @@ public class PipeTest {
         assertEquals( place.origin(), start );
 
         Point location = place.location();
-        assertEquals( location.x(), prosceniumX + start.x() - 1 );
-        assertEquals( location.y(), prosceniumY + start.y() + 23 );
-        assertEquals( location.z(), prosceniumZ + start.z() - 1 );
+        assertEquals( location.x(), start.x() );
+        assertEquals( location.y(), start.y() + 23 );
+        assertEquals( location.z(), start.z() );
 
         assertEquals( place.rotation(), 90.0 );
     }
 
     @Test
     public void rotatedLocationBase() throws Exception {
-        Pipe pipe = new Pipe( pipeOnBaseElement );
+        new PipeBase( baseForPipeElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipeFromList = list.get( 2 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+
+        assertEquals( list.size(), 3 );
+
+        Pipe pipe = (Pipe) pipeFromList;
+
         PipeBase base = pipe.base();
         assertNotNull( base );
 
@@ -936,7 +1011,32 @@ public class PipeTest {
     @Test
     public void rotatedLocationProsceniumBase() throws Exception {
         new Proscenium( prosceniumElement );
-        Pipe pipe = new Pipe( pipeOnBaseElement );
+
+        pipeOnBaseElement.setAttribute( "length", "110" );
+        new PipeBase( baseForPipeElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister proscenium = list.get( 1 );
+        assert MinderDom.class.isInstance( proscenium );
+        assert Proscenium.class.isInstance( proscenium );
+
+        ElementalLister pipebase = list.get( 2 );
+        assert MinderDom.class.isInstance( pipebase );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipeFromList = list.get( 3 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+
+        assertEquals( list.size(), 4 );
+
+        Pipe pipe = (Pipe) pipeFromList;
+
         PipeBase base = pipe.base();
         assertNotNull( base );
 
@@ -973,8 +1073,8 @@ public class PipeTest {
 
         Point location = place.location();
         assertEquals( location.x(), prosceniumX - 9.0 );
-        assertEquals( location.y(), prosceniumY - start.y() + 1 );
-        assertEquals( location.z(), prosceniumZ + start.z() - 1 );
+        assertEquals( location.y(), start.y() );
+        assertEquals( location.z(), start.z() );
 
         assertEquals( place.rotation(), 0.0 );
     }
@@ -1035,6 +1135,7 @@ public class PipeTest {
         Pipe pipe = new Pipe( element );
 
         assertEquals( pipe.tags().size(), 1 );
+        assertTrue( pipe.tags().contains( Luminaire.LAYERTAG ) );
     }
 
     @Test
@@ -1074,6 +1175,49 @@ public class PipeTest {
     }
 
     @Test
+    public void domPlanBase() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        PipeBase pipeBase = new PipeBase( baseForPipeElement );
+
+        // Point of this is to get pipe instance:
+        ArrayList<ElementalLister> list = ElementalLister.List();
+        ElementalLister pipeFromList = list.get( 2 );
+        assert MinderDom.class.isInstance( pipeFromList );
+        assert Pipe.class.isInstance( pipeFromList );
+        Pipe pipe = (Pipe) pipeFromList;
+
+
+        pipe.dom(draw, View.PLAN);
+
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        // item 0 exists before dom() adds any content.
+        Node groupNode = groupList.item(1);
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Pipe$.MODULE$.LayerTag() );
+
+        assertEquals( groupList.getLength(), 2 );
+
+        NodeList childList = groupElement.getChildNodes();
+
+        Node outerCircleNode = childList.item( 0 );
+        assertEquals( outerCircleNode.getNodeType(), Node.ELEMENT_NODE );
+        Element outerCircleElement = (Element) outerCircleNode;
+        assertEquals( outerCircleElement.getTagName(), "circle" );
+        Double cx = pipe.boxOrigin().x + Pipe$.MODULE$.Radius();
+        Double cy = pipe.boxOrigin().y + Pipe$.MODULE$.Radius();
+        Double radius = Pipe$.MODULE$.Radius();
+        assertEquals( outerCircleElement.getAttribute( "cx" ), cx.toString() );
+        assertEquals( outerCircleElement.getAttribute( "cy" ), cy.toString() );
+        assertEquals( outerCircleElement.getAttribute( "r" ), radius.toString() );
+        assertEquals( outerCircleElement.getAttribute( "stroke" ), Pipe$.MODULE$.Color() );
+
+        assertEquals( childList.getLength(), 1 );
+    }
+
+    @Test
     public void domPlanProscenium() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
@@ -1089,7 +1233,7 @@ public class PipeTest {
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
         Element element = (Element) node;
         Double ex = prosceniumX + x;
-        Double wy = prosceniumY - (y + 1);
+        Double wy = prosceniumY - (y + 1) + Pipe.Diameter();
         assertEquals( element.getAttribute("x"), ex.toString() );
         assertEquals( element.getAttribute("y"), wy.toString() );
     }
@@ -1349,7 +1493,7 @@ public class PipeTest {
         trussBaseElement.setAttribute( "size", baseSize.toString() );
         trussBaseElement.setAttribute( "x", baseX.toString() );
         trussBaseElement.setAttribute( "y", baseY.toString() );
-        
+
         trussElement = new IIOMetadataNode( "truss" );
         trussElement.setAttribute( "id", trussID );
         trussElement.setAttribute( "size", trussSize.toString() );
@@ -1372,15 +1516,14 @@ public class PipeTest {
         pipeOnCheeseboroughsElement.appendChild( cheeseborough1Element );
         pipeOnCheeseboroughsElement.appendChild( cheeseborough2Element );
 
-        baseForPipeElement = new IIOMetadataNode( "pipebase" );
-//        baseForPipeElement.setAttribute( "size", baseSize.toString() );
-        baseForPipeElement.setAttribute( "x", baseX.toString() );
-        baseForPipeElement.setAttribute( "y", baseY.toString() );
-
         pipeOnBaseElement = new IIOMetadataNode( "pipe" );
         pipeOnBaseElement.setAttribute( "id", pipeId );
         pipeOnBaseElement.setAttribute( "length", length.toString() );
-        pipeOnBaseElement.appendChild( baseForPipeElement );
+
+        baseForPipeElement = new IIOMetadataNode( "pipebase" );
+        baseForPipeElement.setAttribute( "x", baseX.toString() );
+        baseForPipeElement.setAttribute( "y", baseY.toString() );
+        baseForPipeElement.appendChild( pipeOnBaseElement );
 
         luminaireElement = new IIOMetadataNode( "luminaire" );
         luminaireElement.setAttribute("unit", luminaireUnit);

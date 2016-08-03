@@ -63,7 +63,8 @@ public class Venue extends MinderDom implements Legendable {
      * @param element DOM Element defining a venue.
      * @throws AttributeMissingException if any attribute is missing.
      */
-    public Venue( Element element ) throws AttributeMissingException, DataException, InvalidXMLException {
+    public Venue( Element element )
+            throws AttributeMissingException, DataException, InvalidXMLException {
         super( element );
 
 //System.out.println(  "Just inside VENUE constructor.");
@@ -118,7 +119,6 @@ public class Venue extends MinderDom implements Legendable {
      * @param rectangle area to check
      * @return true if specified rectangle fits into this {@code Venue}.
      */
-
     public static boolean Contains2D( Rectangle rectangle ) throws ReferenceException {
         if (null == StaticVenue) {
             throw new ReferenceException( "Venue is not defined." );
