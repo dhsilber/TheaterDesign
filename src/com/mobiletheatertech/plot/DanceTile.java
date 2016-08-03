@@ -63,7 +63,7 @@ public class DanceTile extends MinderDom implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
     }
 
     @Override

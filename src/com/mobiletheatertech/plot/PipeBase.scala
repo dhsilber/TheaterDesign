@@ -5,7 +5,9 @@ import org.w3c.dom.Element
 /**
  * Created by dhs on 7/15/15.
  */
-class PipeBase ( element: Element ) extends MinderDom( element ) {
+class PipeBase ( element: Element ) extends MinderDom( element )
+  with Legendable
+{
 
   val x = getDoubleAttribute( "x" )
   val y = getDoubleAttribute( "y" )
@@ -13,6 +15,12 @@ class PipeBase ( element: Element ) extends MinderDom( element ) {
 
   val processedMark = Mark.Generate()
   element.setAttribute( "processedMark", processedMark )
+
+  if ( ! PipeBase.LegendRegistered ) {
+    Legend.Register(this, 2.0, 2.0, LegendOrder.Structure)
+    PipeBase.LegendRegistered = true
+  }
+  PipeBase.LegendCount += 1
 
   var drawPlace : Point = null
 
@@ -35,7 +43,8 @@ class PipeBase ( element: Element ) extends MinderDom( element ) {
         val group = MinderDom.svgClassGroup( draw, PipeBase.Tag )
         draw.appendRootChild( group )
 
-        val circle = group.circle( draw, drawPlace.x(), drawPlace.y(), 18.0, "blue" )
+        val circle =
+          group.circle( draw, drawPlace.x(), drawPlace.y(), 18.0, PipeBase.Color )
         circle.attribute( "stroke-opacity", "0.5" )
 
       case default =>
@@ -43,11 +52,33 @@ class PipeBase ( element: Element ) extends MinderDom( element ) {
     }
   }
 
+  // From Legendable. Is this really needed:
+  override def legendCountReset(): Unit = ???
+
+  override def domLegendItem( draw: Draw, start: PagePoint ): PagePoint = {
+    val group = MinderDom.svgClassGroup( draw, PipeBase.Tag )
+    group.attribute("transform", "translate(" + start.x + "," + start.y + ")")
+    draw.appendRootChild( group )
+
+    group.circleAbsolute( draw, 5.0, 2.0, 12.0, PipeBase.Color )
+    group.circleAbsolute( draw, 5.0, 2.0, 2.0, PipeBase.Color )
+    group.textAbsolute( draw, PipeBase.Tag, Legend.TEXTOFFSET, 8.0, Legend.TEXTCOLOR )
+    group.textAbsolute( draw, PipeBase.LegendCount.toString,
+      Legend.QUANTITYOFFSET, 8.0, Legend.TEXTCOLOR )
+
+    return start
+  }
 }
 
 object PipeBase {
 
   final val Tag: String = "pipebase"
+  final val Color = "blue"
+  final val LegendHeight = 2.0
+
+  final var LegendRegistered: Boolean = false
+  final var LegendCount: Int = 0
+
 
   def Find( mark : String ): PipeBase = {
 
@@ -69,5 +100,10 @@ object PipeBase {
 
 
     return null
+  }
+
+  def Reset(): Unit = {
+    LegendRegistered = false
+    LegendCount = 0
   }
 }

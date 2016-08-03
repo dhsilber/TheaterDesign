@@ -106,7 +106,7 @@ public class Parse {
         parseXML( LightingStand.class, LightingStand.TAG );
         parseXML( Pipe.class, "pipe" );
 
-        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
+//        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
 
         // Since all 'suspend' elements are direct children of a truss,
         // Truss will instantiate each Suspend as it is discovered,

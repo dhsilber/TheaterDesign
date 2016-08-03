@@ -415,7 +415,7 @@ class Truss ( element: Element ) extends UniqueId( element )
         new Point( 0.0, 0.0, 0.0)
   }
 
-  override def countReset(): Unit = ???
+  override def legendCountReset(): Unit = ???
 
   override def domLegendItem(draw: Draw, start: PagePoint): PagePoint = {
     if (0 >= Truss.BaseCount ) {

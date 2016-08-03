@@ -75,7 +75,7 @@ public class SetPlatform extends MinderDom implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
 
     }
 

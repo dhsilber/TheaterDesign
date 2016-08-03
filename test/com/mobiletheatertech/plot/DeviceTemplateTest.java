@@ -144,7 +144,7 @@ public class DeviceTemplateTest {
     public void countReset() throws Exception {
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );
         deviceTemplate.count();
-        deviceTemplate.countReset();
+        deviceTemplate.legendCountReset();
 
         assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
     }

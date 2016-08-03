@@ -107,7 +107,7 @@ public class TrussTest {
     }
 
     @Test
-    public void constantLegendRegistered() {
+    public void globalVariableLegendRegistered() {
         assertEquals(Truss$.MODULE$.LegendRegistered(), false );
     }
 
@@ -859,8 +859,8 @@ public class TrussTest {
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
         assertEquals( legendList.size(), 1 );
         Integer order = legendList.lastKey();
-        assert( order >= LegendOrder.Structure.ordinal() );
-        assert( order < LegendOrder.Luminaire.ordinal() );
+        assert( order >= LegendOrder.Structure.initial() );
+        assert( order < LegendOrder.Luminaire.initial() );
     }
 
     @Test
@@ -885,7 +885,7 @@ public class TrussTest {
         truss.verify();
 //        truss.dom(draw, View.PLAN);
         Truss$.MODULE$.BaseCountIncrement();
-        PagePoint startPoint = new PagePoint( 20.0, 1/0.0 );
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
 
         NodeList preGroup = draw.root().getElementsByTagName( "g" );
         assertEquals( preGroup.getLength(), 1 );

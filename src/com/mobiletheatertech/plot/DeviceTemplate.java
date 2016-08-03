@@ -1,8 +1,6 @@
 package com.mobiletheatertech.plot;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 
@@ -117,7 +115,7 @@ public class DeviceTemplate extends Layerer implements Legendable
 
     public static void CountReset()  {
         for (DeviceTemplate selection : DEVICELIST) {
-            selection.countReset();
+            selection.legendCountReset();
         }
     }
 
@@ -141,7 +139,7 @@ public class DeviceTemplate extends Layerer implements Legendable
 //    }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
         count = 0;
     }
 

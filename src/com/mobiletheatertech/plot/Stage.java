@@ -128,7 +128,7 @@ public class Stage extends Stackable implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
     }
 
     @Override

@@ -289,7 +289,7 @@ public class Venue extends MinderDom implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
 //        Count = 0;
     }
 

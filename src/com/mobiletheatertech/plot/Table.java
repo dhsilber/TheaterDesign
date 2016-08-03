@@ -163,7 +163,7 @@ public class Table extends Stackable implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
 //        Count = 0;
     }
 

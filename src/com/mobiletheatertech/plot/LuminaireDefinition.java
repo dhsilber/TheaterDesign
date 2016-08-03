@@ -146,12 +146,12 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
 
     public static void CountReset()  {
         for (LuminaireDefinition selection : LUMINAIRELIST) {
-            selection.countReset();
+            selection.legendCountReset();
         }
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
         count = 0;
     }
 

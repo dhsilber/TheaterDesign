@@ -9,6 +9,7 @@ import javax.imageio.metadata.IIOMetadataNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import static org.testng.Assert.*;
 import static org.testng.Assert.assertEquals;
@@ -49,11 +50,33 @@ public class PipeBaseTest {
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
         assertFalse( Yokeable.class.isInstance( instance ) );
+
+        assertTrue( Legendable.class.isInstance( instance ) );
     }
 
     @Test
     public void constantTag() {
         assertEquals( PipeBase$.MODULE$.Tag(), "pipebase" );
+    }
+
+    @Test
+    public void constantColor() {
+        assertEquals( PipeBase$.MODULE$.Color(), "blue" );
+    }
+
+    @Test
+    public void constantLegendHeight() {
+        assertEquals( PipeBase$.MODULE$.LegendHeight(), 2.0 );
+    }
+
+    @Test
+    public void globalVariableLegendCount() {
+        assertEquals( PipeBase$.MODULE$.LegendCount(), 0 );
+    }
+
+    @Test
+    public void globalVariableLegendRegistered() {
+        assertEquals( PipeBase$.MODULE$.LegendRegistered(), false );
     }
 
     @Test
@@ -364,6 +387,118 @@ public class PipeBaseTest {
 
     }
 
+    @Test
+    public void legendRegistered() throws Exception {
+        assertEquals(PipeBase$.MODULE$.LegendRegistered(), false );
+
+        new PipeBase( baseElement );
+
+        TreeMap<Integer, Legendable> legendList =
+                (TreeMap<Integer, Legendable>)
+                        TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+        Integer order = legendList.lastKey();
+        assert( order >= LegendOrder.Structure.initial() );
+        assert( order < LegendOrder.Luminaire.initial() );
+
+        assertEquals(PipeBase$.MODULE$.LegendRegistered(), true );
+    }
+
+    @Test
+    public void legendRegisteredOnce() throws Exception {
+        new PipeBase( baseElement );
+        baseElement.setAttribute( "id", "differentPipeBase");
+        new PipeBase( baseElement );
+
+        TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
+                TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
+        assertEquals( legendList.size(), 1 );
+    }
+
+    @Test
+    public void legendCountIncrements() throws Exception {
+        new PipeBase( baseElement );
+        assertEquals( PipeBase$.MODULE$.LegendCount(), 1 );
+        baseElement.setAttribute( "id", "differentPipeBase");
+        new PipeBase( baseElement );
+        assertEquals( PipeBase$.MODULE$.LegendCount(), 2 );
+    }
+
+    @Test
+    public void domLegendItem() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        PipeBase pipebase = new PipeBase( baseElement );
+
+        PagePoint startPoint = new PagePoint( 20.0, 10.0 );
+
+        NodeList preGroup = draw.root().getElementsByTagName( "g" );
+        assertEquals( preGroup.getLength(), 1 );
+
+        PagePoint endPoint = pipebase.domLegendItem( draw, startPoint );
+
+////        NodeList group = draw.root().getElementsByTagName( "g" );
+////        assertEquals( group.getLength(), 1 );
+////        Node groupNod = group.item(0);
+////        Element groupElem = (Element) groupNod;
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        // item 0 exists before domLegendItem() adds any content.
+        Node groupNode = groupList.item(1);
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), PipeBase$.MODULE$.Tag() );
+        assertEquals( groupElement.getAttribute( "transform" ),
+                "translate(" + startPoint.x() + "," + startPoint.y() + ")" );
+
+        assertEquals( groupList.getLength(), 2 );
+
+        NodeList childList = groupElement.getChildNodes();
+
+        Node outerCircleNode = childList.item( 0 );
+        assertEquals( outerCircleNode.getNodeType(), Node.ELEMENT_NODE );
+        Element outerCircleElement = (Element) outerCircleNode;
+        assertEquals( outerCircleElement.getAttribute( "cx" ), "7.0" );
+        assertEquals( outerCircleElement.getAttribute( "cy" ), "3.0" );
+        assertEquals( outerCircleElement.getAttribute( "r" ), "9.0" );
+        assertEquals( outerCircleElement.getAttribute( "stroke" ), PipeBase$.MODULE$.Color() );
+
+        Node innerCircleNode = childList.item( 1 );
+        assertEquals( innerCircleNode.getNodeType(), Node.ELEMENT_NODE );
+        Element innerCircleElement = (Element) innerCircleNode;
+        assertEquals( innerCircleElement.getAttribute( "cx" ), "7.0" );
+        assertEquals( innerCircleElement.getAttribute( "cy" ), "3.0" );
+        assertEquals( innerCircleElement.getAttribute( "r" ), "3.0" );
+        assertEquals( innerCircleElement.getAttribute( "stroke" ), PipeBase$.MODULE$.Color() );
+
+        Node descriptionNode = childList.item( 2 );
+        assertEquals( descriptionNode.getNodeType(), Node.ELEMENT_NODE );
+        Element descriptionElement = (Element) descriptionNode;
+        Double x = Legend.TEXTOFFSET;
+        Double y = 8.0;
+        assertEquals( descriptionElement.getAttribute("x"), x.toString() );
+        assertEquals( descriptionElement.getAttribute("y"), y.toString() );
+        assertEquals( descriptionElement.getAttribute("fill"), Legend.TEXTCOLOR );
+
+        assertEquals( descriptionElement.getTextContent(), PipeBase$.MODULE$.Tag() );
+
+        Node quantityNode = childList.item( 3 );
+        assertEquals( quantityNode.getNodeType(), Node.ELEMENT_NODE );
+        Element quantityElement = (Element) quantityNode;
+        x = Legend.QUANTITYOFFSET;
+        assertEquals(quantityElement.getAttribute("x"), x.toString() );
+        assertEquals(quantityElement.getAttribute("y"), y.toString() );
+        assertEquals(quantityElement.getAttribute("fill"), Legend.TEXTCOLOR );
+
+        assertEquals( quantityElement.getTextContent(), "1" );
+
+        assertEquals( childList.getLength(), 4 );
+
+        assertEquals( endPoint,
+                new PagePoint( startPoint.x(), startPoint.y() + PipeBase$.MODULE$.LegendHeight() ) );
+    }
+
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -377,6 +512,8 @@ public class PipeBaseTest {
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
         TestResets.ProsceniumReset();
+        TestResets.LegendReset();
+        PipeBase$.MODULE$.Reset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "TrussBase Venue Name" );

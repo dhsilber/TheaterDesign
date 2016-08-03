@@ -218,7 +218,7 @@ public class HangPoint extends MinderDom implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
         COUNT = 0;
     }
 

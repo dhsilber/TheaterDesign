@@ -1,5 +1,7 @@
 package com.mobiletheatertech.plot;
 
+import org.jetbrains.plugins.scala.lang.psi.types.Int;
+
 /**
  * Created with IntelliJ IDEA. User: dhs Date: 11/10/13 Time: 11:09 AM To change this template use
  * File | Settings | File Templates.
@@ -25,12 +27,13 @@ public enum LegendOrder {
                 }
             },
     Structure( 200 )
-            {
-                @Override
-                public Integer next() {
-                    return last++;
-                }
-            },
+//            {
+//                @Override
+//                public Integer next() {
+//                    return last++;
+//                }
+//            },
+    ,
     Luminaire( 300 )
             {
                 @Override
@@ -54,13 +57,19 @@ public enum LegendOrder {
             };
 
     private int value;
+    private int first;
     private static int last = -1;
 
     public Integer next() {
-        return value;
+        return value++;
     }
 
-    private LegendOrder( int value ) {
+    public Integer initial() {
+        return first;
+    }
+
+    LegendOrder( int value ) {
         this.value = value;
+        first = value;
     }
 }

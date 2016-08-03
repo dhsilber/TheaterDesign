@@ -27,7 +27,7 @@ public class LegendTest {
 
     class testLegendable implements Legendable {
         @Override
-        public void countReset() {}
+        public void legendCountReset() {}
 
         @Override
         public PagePoint domLegendItem( Draw draw, PagePoint start ) {
@@ -161,10 +161,13 @@ public class LegendTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.LegendReset();
+        UniqueId.Reset();
+        Event.Reset();
+
         calledBack = 0;
 
         eventElement = new IIOMetadataNode( "event" );
-        eventElement.setAttribute( "name", "name" );
+        eventElement.setAttribute( "id", "name" );
 
         venueElement = new IIOMetadataNode( "venue" );
 //        venueElement.setAttribute( "name", "Test Name" );

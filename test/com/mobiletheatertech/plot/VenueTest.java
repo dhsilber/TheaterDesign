@@ -47,6 +47,7 @@ public class VenueTest {
 
         assertFalse( LinearSupportsClamp.class.isInstance( instance ) );
         assertFalse( Populate.class.isInstance( instance ) );
+        assertTrue( Legendable.class.isInstance( instance ) );
 //        assert Schematicable.class.isInstance( instance );
     }
 

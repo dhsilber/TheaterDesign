@@ -236,7 +236,7 @@ public class LightingStand extends Yokeable implements Legendable //, Schematica
     }
 
 //    @Override
-    public void countReset() {
+    public void legendCountReset() {
 
     }
 

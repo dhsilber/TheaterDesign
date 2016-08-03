@@ -704,7 +704,7 @@
 //    }
 //
 //    @Override
-//    public void countReset() {
+//    public void legendCountReset() {
 ////        Count = 0;
 //    }
 //

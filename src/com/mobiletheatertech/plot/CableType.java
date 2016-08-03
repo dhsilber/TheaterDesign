@@ -38,7 +38,7 @@ public class CableType extends Elemental implements Legendable {
     }
 
     @Override
-    public void countReset() {
+    public void legendCountReset() {
 //        Count = 0;
     }
 
