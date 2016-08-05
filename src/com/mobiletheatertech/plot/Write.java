@@ -35,11 +35,19 @@ public class Write {
             + "    function showData(evt) {\n"
             + "        var box = evt.target.getBoundingClientRect();\n"
             + "        var id = evt.target.getAttributeNS( null, \"id\" );\n"
-            + "        var textElement = document.getElementById( \"persistent\" );\n"
-            + "        textElement.textContent = id;\n"
-            + "        textElement.setAttributeNS( null,  \"visibility\", \"visible\" );\n"
-            + "        textElement.setAttributeNS( null,  \"x\", box.left );\n"
-            + "        textElement.setAttributeNS( null,  \"y\", box.bottom - box.height );\n"
+            + "        var dataElement = document.getElementById( id + \":data\" );\n"
+
+            + "        var onElement = document.getElementById( \"persistent-on\" );\n"
+            + "        onElement.textContent = dataElement.getAttribute( \"on\" );\n"
+            + "        var typeElement = document.getElementById( \"persistent-type\" );\n"
+            + "        typeElement.textContent = dataElement.getAttribute( \"type\" );\n"
+            + "        var unitElement = document.getElementById( \"persistent-unit\" );\n"
+            + "        unitElement.textContent = dataElement.getAttribute( \"unit\" );\n"
+
+            + "        var topElement = document.getElementById( \"persistent\" );\n"
+            + "        topElement.setAttributeNS( null,  \"visibility\", \"visible\" );\n"
+            + "        topElement.setAttributeNS( null,  \"x\", box.left );\n"
+            + "        topElement.setAttributeNS( null,  \"y\", box.bottom - box.height );\n"
             + "    }\n"
             + "\n"
             + "    function showData_didnotwork(evt) {\n"
@@ -54,6 +62,7 @@ public class Write {
             + "        textElement.appendChild( textNode );\n"
             + "        var svgRoot = document.getElementsByTagName(\"svg\")[0];\n"
             + "        svgRoot.appendChild( textElement );\n"
+            + "        textElement.textContent = id;\n"
             + "    }\n"
             + "\n"
             + "    function hideData(evt) {\n"
@@ -335,17 +344,62 @@ public class Write {
         script.appendChild(scriptText);
         rootElement.appendChild(script.element());
 
-        SvgElement textBox = draw.element("text");
-        textBox.attribute("id", "persistent");
-        textBox.attribute("fill", "black");
-        textBox.attribute("stroke", "none");
-        textBox.attribute("font-size", "12");
-        textBox.attribute("visibility", "hidden");
-        Text innerText = draw.document().createTextNode( "initial content" );
-        textBox.appendChild( innerText );
-        rootElement.appendChild(textBox.element());
+        SvgElement foreignObject = draw.element("foreignObject");
+        foreignObject.attribute("id", "persistent");
+        foreignObject.attribute("requiredExtensions", "http://www.w3.org/1999/xhtml");
+        rootElement.appendChild(foreignObject.element());
+
+        foreignObject.appendChild( embededHtml( draw ) );
+
+//        SvgElement textBox = draw.element("text");
+//        textBox.attribute("id", "persistent");
+//        textBox.attribute("fill", "black");
+//        textBox.attribute("stroke", "none");
+//        textBox.attribute("font-size", "12");
+//        textBox.attribute("visibility", "hidden");
+//        Text innerText = draw.document().createTextNode( "initial content" );
+//        textBox.appendChild( innerText );
+//        rootElement.appendChild(textBox.element());
 
         return draw;
+    }
+
+    private SvgElement embededHtml( Draw draw ) {
+        SvgElement body = draw.element( "body" );
+        body.attribute("xmlns", "http://www.w3.org/1999/xhtml");
+
+        SvgElement table = draw.element( "table" );
+        body.appendChild( table );
+
+        table.appendChild( buildTableRow( draw, "on" ) );
+        table.appendChild( buildTableRow( draw, "unit" ) );
+        table.appendChild( buildTableRow( draw, "location" ) );
+        table.appendChild( buildTableRow( draw, "type" ) );
+        table.appendChild( buildTableRow( draw, "color" ) );
+        table.appendChild( buildTableRow( draw, "address" ) );
+        table.appendChild( buildTableRow( draw, "channel" ) );
+        table.appendChild( buildTableRow( draw, "dimmer" ) );
+        table.appendChild( buildTableRow( draw, "circuit" ) );
+        table.appendChild( buildTableRow( draw, "info" ) );
+
+        return body;
+    }
+
+    SvgElement buildTableRow( Draw draw, String content ) {
+        SvgElement row = draw.element( "tr" );
+
+        SvgElement header = draw.element( "th" );
+        Text headerText = draw.document().createTextNode( content );
+        header.appendChild( headerText );
+        row.appendChild( header );
+
+        SvgElement data = draw.element( "td" );
+        data.attribute( "id", "persistent-" + content );
+        Text dataText = draw.document().createTextNode( content + " data" );
+        data.appendChild( dataText );
+        row.appendChild( data );
+
+        return row;
     }
 
     private Draw drawSection() throws InvalidXMLException, MountingException, ReferenceException {

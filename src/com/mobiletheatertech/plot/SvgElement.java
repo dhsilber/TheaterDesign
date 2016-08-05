@@ -64,8 +64,9 @@ class SvgElement {
         return element.getTagName();
     }
 
-    public SvgElement data( Draw draw, String tag ) {
-        SvgElement element = draw.element( "plot:" + tag );
+    public SvgElement data( Draw draw, MinderDom parent ) {
+        SvgElement element = draw.element( "plot:" + parent.getClass().getSimpleName() );
+        element.attribute( "id", parent.id + ":data" );
 
         this.appendChild( element );
 

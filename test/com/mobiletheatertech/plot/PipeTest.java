@@ -1389,40 +1389,6 @@ public class PipeTest {
 //        assertEquals(element.getAttribute("y"), zee.toString());
 //    }
 
-    @Test
-    public void parseWithCoordinates() throws Exception {
-        String xml = "<plot>" +
-                "<pipe id=\"Identifier\" length=\"71\" x=\"4\" y=\"14\" z=\"2\" />" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-
-        TestResets.MinderDomReset();
-
-        new Parse( stream );
-
-        ArrayList<ElementalLister> list = ElementalLister.List();
-        assertEquals( list.size(), 1 );
-    }
-
-    @Test(enabled = false)
-    public void parseWithAnchors() throws Exception {
-        String xml = "<plot>" +
-//                "<hangpoint id=\"bill\" x=\"7\" y=\"8\" />" +
-//                "<hangpoint id=\"betty\" x=\"7\" y=\"8\" />" +
-                "<pipe id=\"fineMe\" length=\"17\" >" +
-                "<anchor ref=\"bill\" />" +
-                "<anchor ref=\"betty\" />" +
-                "</pipe>" +
-                "</plot>";
-        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-
-        TestResets.MinderDomReset();
-
-//        new Parse( stream );
-
-        ArrayList<ElementalLister> list = ElementalLister.List();
-        assertEquals( list.size(), 5 );
-    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {

@@ -528,14 +528,30 @@ public class SvgElementTest {
     }
 
     @Test
-    public void plotData() {
+    public void plotData() throws Exception {
         Draw draw = new Draw();
         SvgElement parent = draw.element("defs");
 
-        SvgElement result = parent.data( draw, "kind" );
+        String lightingStandName = "Jessie";
+        Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
+        lightingStandElement.setAttribute("id", lightingStandName );
+        lightingStandElement.setAttribute("x", "12");
+        lightingStandElement.setAttribute("y", "34");
+        LightingStand lightingStand = new LightingStand( lightingStandElement );
+        lightingStand.verify();
+
+        Element elementOnLightingStand = new IIOMetadataNode( "luminaire" );
+        elementOnLightingStand.setAttribute( "type", type );
+        elementOnLightingStand.setAttribute("on", lightingStandName );
+        elementOnLightingStand.setAttribute("location", "a" );
+        elementOnLightingStand.setAttribute("unit", "1" );
+
+        Luminaire luminaire = new Luminaire( elementOnLightingStand );
+
+        SvgElement result = parent.data( draw, luminaire );
 
         assertNotNull( result.element() );
-        assertEquals( result.element().getTagName(), "plot:kind" );
+        assertEquals( result.element().getTagName(), "plot:Luminaire" );
     }
 
     @Test

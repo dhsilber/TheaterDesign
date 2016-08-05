@@ -220,7 +220,7 @@ public class LuminaireTest {
 
     @Test(expectedExceptions = MountingException.class,
           expectedExceptionsMessageRegExp =
-                  "Pipe \\(" + pipeName + "\\) unit 'unit' has does not include location -1.0." )
+                  "Pipe \\(" + pipeName + "\\) unit 'unit' has invalid location -1.0." )
 //                  "Luminaire of type '" + type +
 //                  "' has location -1 which is beyond the end of pipe '" + pipeName + "'.")
     public void locateOffPipe() throws Exception {
@@ -466,8 +466,8 @@ public class LuminaireTest {
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element diversionElement = (Element) node;
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
-        assertEquals( diversionElement.getAttribute( "x" ), "24.0" );
-        assertEquals( diversionElement.getAttribute( "y" ), "34.0" );
+        assertEquals( diversionElement.getAttribute( "x" ), "12.0" );
+        assertEquals( diversionElement.getAttribute( "y" ), "46.0" );
         assertEquals( diversionElement.getAttribute( "id" ), id );
         assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
         assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
@@ -882,7 +882,7 @@ public class LuminaireTest {
         assertNotNull( protoData );
         assertEquals( protoData.getNodeType(), Node.ELEMENT_NODE );
         Element data = (Element) protoData;
-        assertEquals( data.getTagName(), "plot:luminaire" );
+        assertEquals( data.getTagName(), "plot:Luminaire" );
         TestHelpers.checkAttribute( data, "type", luminaire.type() );
         TestHelpers.checkAttribute( data, "on", luminaire.on() );
         TestHelpers.checkAttribute( data, "location", luminaire.locationValue() );
@@ -910,7 +910,7 @@ public class LuminaireTest {
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         TestResets.LuminaireReset();
-        TestResets.ElementalListerReset();
+        TestResets.MinderDomReset();
 //        Schematic.CountX = 0;
 //        Schematic.CountY = 1;
 //        TestResets.SchematicReset();
@@ -1014,7 +1014,7 @@ public class LuminaireTest {
         elementOnLightingStand.setAttribute("channel", channel);
         elementOnLightingStand.setAttribute("color", color);
         elementOnLightingStand.setAttribute("unit", unit);
-        System.err.println( "setup done.");
+//        System.err.println( "setup done.");
     }
 
     @AfterMethod

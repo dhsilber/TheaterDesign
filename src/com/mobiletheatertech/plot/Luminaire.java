@@ -187,9 +187,9 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         try {
             mount.hang( this, Double.parseDouble( location ) );
         }
-        catch (MountingException exception) {
+        catch (NumberFormatException exception) {
                 throw new MountingException(
-                    "Pipe (" + on + ") unit '" + unit + "' has " + exception.getMessage() );
+                    "Pipe (" + on + ") unit '" + unit + "' has invalid location '" + location + "'." );
 //      case exception: Exception =>
 //        throw new Exception( exception.getMessage, exception.getCause )
         }
@@ -463,7 +463,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         Double y = point.y();
 
         group.attribute("transform", transform);
-        group.mouseover( "showData(evt)", "hideData(evt)" );
+//        group.mouseover( "showData(evt)", "hideData(evt)" );
 
         use = group.use( draw, type, x, y, id );
         use.mouseover( "showData(evt)", "hideData(evt)" );
@@ -488,13 +488,13 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         SvgElement unitText = group.text( draw, unit, x, y + 3, "green" );
         unitText.attribute("font-size", "7");
         unitText.attribute("text-anchor", "middle");
-        unitText.mouseover( "showData(evt)", "hideData(evt)" );
+//        unitText.mouseover( "showData(evt)", "hideData(evt)" );
 
         this.data( draw, group );
     }
 
     SvgElement data( Draw draw, SvgElement parent ) {
-        SvgElement data = parent.data( draw, "luminaire" );
+        SvgElement data = parent.data( draw, this );
 
         data.attribute( "type", this.type() );
         data.attribute( "on", this.on() );

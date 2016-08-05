@@ -136,8 +136,6 @@ public class WriteTest {
         Element rootElement = draw.root();
         NodeList nodes = rootElement.getChildNodes();
 
-        assertEquals( nodes.getLength(), 6 );
-
         int styleType = nodes.item( 3 ).getNodeType();
         assertEquals( styleType, Element.ELEMENT_NODE );
         Element style = (Element) nodes.item( 3 );
@@ -145,6 +143,8 @@ public class WriteTest {
         assertEquals( style.getAttribute( "type" ), "text/css" );
         assertEquals( style.getFirstChild().getNodeType(), Node.CDATA_SECTION_NODE );
         assertEquals( style.getFirstChild().getTextContent(), Write.CSS );
+
+        assertEquals( nodes.getLength(), 6 );
     }
 
     @Test
@@ -155,8 +155,6 @@ public class WriteTest {
         Element rootElement = draw.root();
         NodeList nodes = rootElement.getChildNodes();
 
-        assertEquals( nodes.getLength(), 6 );
-
         int scriptType = nodes.item( 4 ).getNodeType();
         assertEquals( scriptType, Element.ELEMENT_NODE );
         Element script = (Element) nodes.item( 4 );
@@ -165,6 +163,8 @@ public class WriteTest {
         assertNotNull( script.getFirstChild() );
         assertEquals( script.getFirstChild().getNodeType(), Node.CDATA_SECTION_NODE );
         assertEquals( script.getFirstChild().getTextContent(), Write.ECMAScript);
+
+        assertEquals( nodes.getLength(), 6 );
     }
 
     @Test
@@ -175,19 +175,81 @@ public class WriteTest {
         Element rootElement = draw.root();
         NodeList nodes = rootElement.getChildNodes();
 
+        int nodeType = nodes.item( 5 ).getNodeType();
+        assertEquals( nodeType, Element.ELEMENT_NODE );
+        Element foreignElement = (Element) nodes.item( 5 );
+        assertEquals( foreignElement.getTagName(), "foreignObject" );
+        assertEquals( foreignElement.getAttribute( "id" ), "persistent");
+        assertEquals( foreignElement.getAttribute( "requiredExtensions" ),
+                "http://www.w3.org/1999/xhtml");
+
         assertEquals( nodes.getLength(), 6 );
+    }
+
+    @Test
+    public void startFilePersistentTextBoxContains() throws ReferenceException {
+        Write write = new Write();
+        Draw draw = write.startFile();
+
+        Element rootElement = draw.root();
+        NodeList nodes = rootElement.getChildNodes();
 
         int nodeType = nodes.item( 5 ).getNodeType();
         assertEquals( nodeType, Element.ELEMENT_NODE );
-        Element textElement = (Element) nodes.item( 5 );
-        assertEquals( textElement.getTagName(), "text");
-        assertEquals( textElement.getAttribute( "id" ), "persistent" );
-        assertEquals( textElement.getAttribute( "fill" ), "black" );
-        assertEquals( textElement.getAttribute( "stroke" ), "none" );
-        assertEquals( textElement.getAttribute( "font-size" ), "12" );
-        assertEquals( textElement.getAttribute( "visibility" ), "hidden" );
+        Element foreignElement = (Element) nodes.item( 5 );
+        assertEquals( foreignElement.getTagName(), "foreignObject" );
+        assertEquals( foreignElement.getAttribute( "id" ), "persistent");
 
-        assertEquals( textElement.getTextContent(), "initial content" );
+//        Element persistent = draw.document().getElementById( "persistent" );
+
+        nodes = foreignElement.getChildNodes();
+
+        nodeType = nodes.item( 0 ).getNodeType();
+        assertEquals( nodeType, Element.ELEMENT_NODE );
+        Element bodyElement = (Element) nodes.item( 0 );
+        assertEquals( bodyElement.getTagName(), "body" );
+        assertEquals( bodyElement.getAttribute( "xmlns" ), "http://www.w3.org/1999/xhtml");
+
+        nodes = bodyElement.getChildNodes();
+
+        Element tableElement = checkElement( nodes, 0, "table" );
+
+        nodes = tableElement.getChildNodes();
+
+        checkTableRow(nodes, 0, "on" );
+        checkTableRow(nodes, 1, "unit" );
+        checkTableRow(nodes, 2, "location" );
+        checkTableRow(nodes, 3, "type" );
+        checkTableRow(nodes, 4, "color" );
+        checkTableRow(nodes, 5, "address" );
+        checkTableRow(nodes, 6, "channel" );
+        checkTableRow(nodes, 7, "dimmer" );
+        checkTableRow(nodes, 8, "circuit" );
+        checkTableRow(nodes, 9, "info" );
+
+        assertEquals( nodes.getLength(), 10 );
+    }
+
+    private void checkTableRow( NodeList nodes, Integer index, String data ) {
+        Element row1Element = checkElement( nodes, index, "tr" );
+
+        NodeList rowNodes = row1Element.getChildNodes();
+
+        Element headerElement = checkElement( rowNodes, 0, "th" );
+        assertEquals( headerElement.getTextContent(), data );
+
+        Element dataElement = checkElement( rowNodes, 1, "td" );
+        assertEquals( dataElement.getAttribute( "id" ), "persistent-" + data );
+        assertEquals( dataElement.getTextContent(), data + " data" );
+    }
+
+    private Element checkElement(NodeList nodes, Integer index, String tag) {
+        int nodeType = nodes.item( index ).getNodeType();
+        assertEquals( nodeType, Element.ELEMENT_NODE );
+        Element element = (Element) nodes.item( index );
+        assertEquals( element.getTagName(), tag );
+
+        return element;
     }
 
     @Test
