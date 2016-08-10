@@ -67,17 +67,12 @@ public class Proscenium extends MinderDom {
      * @param unfixed point relative to the {@code Proscenium}'s origin
      * @return the drawing point
      */
-    public static Point LocateIfActive( Point unfixed ) {
-        if ( Active() ) {
-            return new Point(
-                    ORIGIN.x() + unfixed.x(),
-                    ORIGIN.y() - unfixed.y(),
-                    ORIGIN.z() + unfixed.z()
-            );
-        }
-        else {
-            return unfixed;
-        }
+    public static Point Locate( Point unfixed ) {
+        return new Point (
+                ORIGIN.x() + unfixed.x(),
+                ORIGIN.y() - unfixed.y(),
+                ORIGIN.z() + unfixed.z()
+        );
     }
 
     /**

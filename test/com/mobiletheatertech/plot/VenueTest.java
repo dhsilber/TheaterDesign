@@ -67,17 +67,16 @@ public class VenueTest {
     }
 
     @Test
-    public void constantTag() throws Exception {
-        assertEquals( Venue$.MODULE$.Tag(), "venue" );
-    }
-
-    @Test
     public void constantOneToOne() throws Exception {
+        new Venue( element );
+
         assertEquals( Venue$.MODULE$.ONETOONE(), "one-to-one" );
     }
 
     @Test
     public void constantOneToMany() throws Exception {
+        new Venue( element );
+
         assertEquals( Venue$.MODULE$.ONETOMANY(), "one-to-many" );
     }
 

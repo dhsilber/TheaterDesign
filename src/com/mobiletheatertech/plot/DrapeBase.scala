@@ -18,7 +18,12 @@ class DrapeBase ( element: Element ) extends MinderDom( element ) {
 
 
   def verify(): Unit = {
-    drawPlace = Proscenium.LocateIfActive( new Point( x, y, z ) )
+    if (Proscenium.Active()) {
+      drawPlace = Proscenium.Locate( new Point( x, y, z ) )
+    }
+    else {
+      drawPlace = new Point( x, y, z )
+    }
   }
 
   def dom( draw: Draw, mode: View ): Unit = {

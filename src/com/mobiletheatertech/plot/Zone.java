@@ -6,6 +6,9 @@ package com.mobiletheatertech.plot;
  */
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  * A lighting zone.
@@ -112,9 +115,14 @@ public class Zone extends MinderDom {
      */
     @Override
     public void verify() {
-        Point point = Proscenium.LocateIfActive( new Point( x, y, 48.0 ) );
-        xDraw = point.x();
-        yDraw = point.y();
+        if (Proscenium.Active()) {
+            Point point = Proscenium.Locate( new Point( x, y, 48.0 ) );
+            xDraw = point.x();
+            yDraw = point.y();
+        } else {
+            xDraw = x;
+            yDraw = y;
+        }
     }
 
 

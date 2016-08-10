@@ -30,8 +30,12 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   val offsetX = getOptionalDoubleAttributeOrZero("offsetx")
 
   val startUnadjusted: Point = startPosition()
-  start = Proscenium.LocateIfActive( startUnadjusted )
-
+  start = {
+    if( Proscenium.Active() )
+      Proscenium.Locate( startUnadjusted )
+    else
+      startUnadjusted
+  }
 
 
   // These are set within the *Processing() logic.

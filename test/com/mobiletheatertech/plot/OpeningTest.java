@@ -31,11 +31,6 @@ public class OpeningTest {
     }
 
     @Test
-    public void constantTag() {
-        assertEquals( Opening.Tag, "opening" );
-    }
-
-    @Test
     public void storesAttributes() throws Exception {
         Opening opening = new Opening( element );
 

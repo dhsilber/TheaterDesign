@@ -19,16 +19,16 @@ import org.w3c.dom.Element;
  */
 public class Opening extends Elemental {
 
-    final static String Tag = "opening";
-
     private Double height = null;
     private Double width = null;
     private Double start = null;
 
-    public Opening( Element element )
-            throws AttributeMissingException, InvalidXMLException
-    {
+    public Opening( Element element ) throws AttributeMissingException, InvalidXMLException {
         super( element );
+
+//        if (null == element) {
+//            throw new InvalidXMLException( "Element unexpectedly null!" );
+//        }
 
         height = getDoubleAttribute( "height" );
         width = getDoubleAttribute( "width" );
@@ -52,4 +52,16 @@ public class Opening extends Elemental {
     public Double width() {
         return width;
     }
+//
+//    public int compare( Opening a, Opening b ) {
+//        if( a.start() < b.start() ) {
+//            return -1;
+//        }
+//        if( a.start() > b.start() ) {
+//            return 1;
+//        }
+//        else {
+//            return 0;
+//        }
+//    }
 }

@@ -78,7 +78,6 @@ class Venue ( element: Element) extends MinderDom(element)
 
 
 object Venue {
-  val Tag = "venue"
   val ONETOMANY: String = "one-to-many"
   val ONETOONE: String = "one-to-one"
   private var StaticVenue: Venue = null
