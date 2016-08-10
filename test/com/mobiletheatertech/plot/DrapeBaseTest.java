@@ -159,17 +159,26 @@ public class DrapeBaseTest {
 
         new Parse( stream );
 
-        // Final size of list
         ArrayList<ElementalLister> list = ElementalLister.List();
-        assertEquals( list.size(), 3 );
 
-        ElementalLister Drape = list.get( 2 );
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister Drape = list.get( 1 );
         assert MinderDom.class.isInstance( Drape );
         assert Drape.class.isInstance( Drape );
 
-        ElementalLister DrapeBase = list.get( 1 );
+        ElementalLister DrapeBase = list.get( 2 );
         assert MinderDom.class.isInstance( DrapeBase );
         assert DrapeBase.class.isInstance( DrapeBase );
+
+        ElementalLister DrapeBase2 = list.get( 3 );
+        assert MinderDom.class.isInstance( DrapeBase2 );
+        assert DrapeBase.class.isInstance( DrapeBase2 );
+
+        // Final size of list
+        assertEquals( list.size(), 4 );
     }
 
 //    @Test
