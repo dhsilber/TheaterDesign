@@ -6,8 +6,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
@@ -249,18 +247,42 @@ public class ProsceniumTest {
     @Test
     public void locateOrigin() throws Exception {
         new Proscenium( element );
-        Point fixed = Proscenium.Locate( new Point( 0.0, 0.0, 0.0 ) );
+        Point origin = new Point( 0.0, 0.0, 0.0 );
+
+        Point fixed = Proscenium.LocateIfActive( origin );
+
+        Point expected = new Point( 250.0, 144.0, 12.0 );
+        assertEquals( fixed, expected );
+
         assert new Point( 250.0, 144.0, 12.0 ).equals( fixed );
+    }
+
+    @Test
+    public void locateNoProsceniumOrigin() throws Exception {
+        Point origin = new Point( 0.0, 0.0, 0.0 );
+
+        Point fixed = Proscenium.LocateIfActive( origin );
+
+        assertEquals( fixed, origin );
     }
 
     @Test
     public void locateUSRHigh() throws Exception {
         new Proscenium( element );
-        Point fixed = Proscenium.Locate( new Point( 100.0, 120.0, 60.0 ) );
+        Point fixed = Proscenium.LocateIfActive( new Point( 100.0, 120.0, 60.0 ) );
 //        assert new Point( 150, 24, 72 ).equals( fixed );
         assertEquals( fixed.x(), 350.0, "X" );
         assertEquals( fixed.y(), 24.0, "Y" );
         assertEquals( fixed.z(), 72.0, "Z" );
+    }
+
+    @Test
+    public void locateNoProsceniumUSRHigh() throws Exception {
+        Point initial = new Point( 100.0, 120.0, 60.0 );
+
+        Point fixed = Proscenium.LocateIfActive( initial );
+
+        assertEquals( fixed, initial );
     }
 //
 //    @Test
