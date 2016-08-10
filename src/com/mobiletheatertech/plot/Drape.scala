@@ -51,7 +51,7 @@ class Drape ( element: Element ) extends MinderDom( element ) {
     val offsetX = SvgElement.OffsetX()
     val offsetY = SvgElement.OffsetY()
 
-    var path = "M " + (x1 + offsetX).toString +
+    val path = "M " + (x1 + offsetX).toString +
       " " + (y1 + offsetY).toString +
 //    "Q " + (x1 - 10 + offsetX).toString +
 //    " " + (y1 + 5 + offsetY).toString +

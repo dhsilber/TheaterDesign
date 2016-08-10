@@ -468,7 +468,7 @@ public class LuminaireTest {
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         assertEquals( diversionElement.getAttribute( "x" ), "12.0" );
         assertEquals( diversionElement.getAttribute( "y" ), "46.0" );
-        assertEquals( diversionElement.getAttribute( "id" ), id );
+        assertEquals( diversionElement.getAttribute( "id" ), "rotatedPipe:unit" );
         assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
         assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
 

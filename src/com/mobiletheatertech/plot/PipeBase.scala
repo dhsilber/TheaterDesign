@@ -31,12 +31,7 @@ class PipeBase ( element: Element ) extends MinderDom( element )
 
 
   def verify() : Unit = {
-    if (Proscenium.Active()) {
-      drawPlace = Proscenium.Locate( new Point( x, y, z ) )
-    }
-    else {
-      drawPlace = new Point( x, y, z )
-    }
+    drawPlace = Proscenium.LocateIfActive( new Point( x, y, z ) )
   }
 
   def mountPoint(): Point = {

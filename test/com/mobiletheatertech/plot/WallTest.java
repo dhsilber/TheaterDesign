@@ -12,11 +12,11 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertSame;
-import static org.testng.Assert.assertTrue;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
 
 /**
  * Test {@code Wall}.
@@ -25,6 +25,8 @@ import static org.testng.Assert.assertTrue;
  * @since 0.0.11
  */
 public class WallTest {
+
+    Double epsilon = 0.000001;
 
     Element wallElement = null;
     Element wallElement2 = null;
@@ -36,84 +38,57 @@ public class WallTest {
     Double x3 = 78.0;
     Double y3 = 89.0;
 
+    Element wallEndWithOpeningElement;
+    Double wwoX1 = 10.0;
+    Double wwoX2 = 155.9;
+    Double wwoY = 57.0;
+
+    Element openingElement;
+    Double openHeight = 7.3;
+    Double openWidth = 17.0;
+    Double openStart = 15.4;
+
+    Element openingElement2;
+    Double open2Height = 7.3;
+    Double open2Width = 17.0;
+    Double open2Start = 55.4;
 
 
     @Test
-    public void isMinderDom() throws Exception {
-        Wall wall = new Wall( wallElement );
+    public void isA() throws Exception {
+        Wall instance = new Wall( wallElement );
 
-        assert MinderDom.class.isInstance( wall );
+        assert Elemental.class.isInstance( instance );
+        assert ElementalLister.class.isInstance( instance );
+        assert Verifier.class.isInstance( instance );
+        assert Layerer.class.isInstance( instance );
+        assert MinderDom.class.isInstance( instance );
+        assert ProtoWall.class.isInstance( instance );
+        assertFalse( UniqueId.class.isInstance( instance ) );
+
+        assertTrue( Populate.class.isInstance( instance ) );
+        assertFalse( IsClamp.class.isInstance( instance) );
+//        assert Schematicable.class.isInstance( instance );
+        assertFalse( Legendable.class.isInstance( instance ) );
     }
 
     @Test
-    public void storesAttributes() throws Exception {
-        Wall wall = new Wall( wallElement );
-
-        assertEquals( TestHelpers.accessDouble( wall, "x1" ), x1 );
-        assertEquals( TestHelpers.accessDouble( wall, "y1" ), y1 );
-        assertEquals( TestHelpers.accessDouble( wall, "x2" ), x2 );
-        assertEquals( TestHelpers.accessDouble( wall, "y2" ), y2 );
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Wall instance is missing required 'x1' attribute.")
-    public void noX1() throws Exception {
-        wallElement.removeAttribute("x1");
-        new Wall( wallElement );
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Wall instance is missing required 'y1' attribute.")
-    public void noY1() throws Exception {
-        wallElement.removeAttribute("y1");
-        new Wall( wallElement );
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Wall instance is missing required 'x2' attribute.")
-    public void noX2() throws Exception {
-        wallElement.removeAttribute("x2");
-        new Wall( wallElement );
-    }
-
-    @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Wall instance is missing required 'y2' attribute.")
-    public void noY2() throws Exception {
-        wallElement.removeAttribute("y2");
-        new Wall( wallElement );
+    public void constantTag() {
+        assertEquals( Wall.Tag(), "wall" );
     }
 
     @Test
-    public void verifyAngledWall() throws Exception {
-        Wall wall = new Wall( wallElement );
-        wall.verify();
-    }
-
-    @Test(expectedExceptions = FeatureException.class,
-          expectedExceptionsMessageRegExp = "Wall at angle does not yet support openings.")
-    public void verifyAngledWallWithOpening() throws Exception {
-        Element openingElement = new IIOMetadataNode( "opening" );
-        openingElement.setAttribute( "width", "6" );
-        openingElement.setAttribute( "height", "8" );
-        openingElement.setAttribute( "start", "5" );
-        wallElement.appendChild(openingElement);
-
-        Wall wall = new Wall( wallElement );
-        wall.verify();
+    public void constantColor() {
+        assertEquals( Wall.Color(), "black" );
     }
 
     @Test
-    public void findChildOpeningSideWall() throws Exception {
+    public void domChildOpeningSideWall() throws Exception {
         wallElement = new IIOMetadataNode( "wall" );
         wallElement.setAttribute( "x1", "20" );
         wallElement.setAttribute("y1", "30");
         wallElement.setAttribute("x2", "20");
-        wallElement.setAttribute("y2", "70");
-
-        Element openingElement = new IIOMetadataNode( "opening" );
-        openingElement.setAttribute("width", "6");
-        openingElement.setAttribute( "height", "8" );
-        openingElement.setAttribute( "start", "17" );
+        wallElement.setAttribute("y2", "110");
         wallElement.appendChild(openingElement);
 
         Draw draw = new Draw();
@@ -127,7 +102,6 @@ public class WallTest {
         wall.dom( draw, View.PLAN );
 
         NodeList list = draw.root().getElementsByTagName( "line" );
-        assertEquals( list.getLength(), 2 );
 
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
@@ -135,15 +109,179 @@ public class WallTest {
         assertEquals( wallElement.getAttribute( "x1" ), "20.0" );
         assertEquals( wallElement.getAttribute( "y1" ), "30.0" );
         assertEquals( wallElement.getAttribute( "x2" ), "20.0" );
-        assertEquals( wallElement.getAttribute( "y2" ), "47.0" );
+        Double y2Value = Double.parseDouble( wallElement.getAttribute( "y2" ) );
+        assertEquals( y2Value, 45.4, epsilon );
 
         node = list.item( 1 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "20.0" );
+        Double y1Value = Double.parseDouble( wallElement.getAttribute( "y1" ) );
+        assertEquals( y1Value, 62.4, epsilon );
         assertEquals( wallElement.getAttribute( "x2" ), "20.0" );
-        assertEquals( wallElement.getAttribute( "y1" ), "53.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "110.0" );
+
+        assertEquals( list.getLength(), 2 );
+    }
+
+    @Test
+    public void domDiagonalWallOpening() throws Exception {
+        wallElement = new IIOMetadataNode( Wall.Tag() );
+        wallElement.setAttribute( "x1", "10" );
+        wallElement.setAttribute( "y1", "20" );
+        wallElement.setAttribute( "x2", "310" );
+        wallElement.setAttribute( "y2", "420" );
+        
+        openingElement = new IIOMetadataNode( Opening.Tag );
+        openingElement.setAttribute( "start", "5.0" );
+        openingElement.setAttribute( "width", "5.0" );
+        openingElement.setAttribute( "height", "72.0" );
+
+        wallElement.appendChild(openingElement);
+
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Wall wall = new Wall( wallElement );
+        wall.verify();
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        wall.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "10.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "20.0" );
+        assertEquals( wallElement.getAttribute( "x2" ), "13.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "24.0" );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "16.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "28.0" );
+        assertEquals( wallElement.getAttribute( "x2" ), "310.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "420.0" );
+
+        assertEquals( list.getLength(), 2 );
+    }
+
+    @Test
+    public void domChildOpeningSideWallTwo() throws Exception {
+        wallElement = new IIOMetadataNode( "wall" );
+        wallElement.setAttribute( "x1", "20" );
+        wallElement.setAttribute("y1", "30");
+        wallElement.setAttribute("x2", "20");
+        wallElement.setAttribute("y2", "110");
+        wallElement.appendChild(openingElement);
+        wallElement.appendChild(openingElement2);
+
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Wall wall = new Wall( wallElement );
+        wall.verify();
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        wall.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "20.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "30.0" );
         assertEquals( wallElement.getAttribute( "x2" ), "20.0" );
-        assertEquals( wallElement.getAttribute( "y2" ), "70.0" );
+        Double y2Value = Double.parseDouble( wallElement.getAttribute( "y2" ) );
+        assertEquals( y2Value, 45.4, epsilon );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "20.0" );
+        Double y1Value = Double.parseDouble( wallElement.getAttribute( "y1" ) );
+        assertEquals( y1Value, 62.4, epsilon );
+        assertEquals( wallElement.getAttribute( "x2" ), "20.0" );
+        Double y2Value2 = Double.parseDouble( wallElement.getAttribute( "y2" ) );
+        assertEquals( y2Value2, 85.4, epsilon );
+
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "20.0" );
+        Double y1Value2 = Double.parseDouble( wallElement.getAttribute( "y1" ) );
+        assertEquals( y1Value2, 102.4, epsilon );
+        assertEquals( wallElement.getAttribute( "x2" ), "20.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "110.0" );
+
+        assertEquals( list.getLength(), 3 );
+    }
+
+    @Test
+    public void domDiagonalTwoWallOpenings() throws Exception {
+        wallElement = new IIOMetadataNode( Wall.Tag() );
+        wallElement.setAttribute( "x1", "10" );
+        wallElement.setAttribute( "y1", "20" );
+        wallElement.setAttribute( "x2", "310" );
+        wallElement.setAttribute( "y2", "420" );
+
+        openingElement = new IIOMetadataNode( Opening.Tag );
+        openingElement.setAttribute( "start", "5.0" );
+        openingElement.setAttribute( "width", "5.0" );
+        openingElement.setAttribute( "height", "72.0" );
+
+        openingElement2 = new IIOMetadataNode( Opening.Tag );
+        openingElement2.setAttribute( "start", "50.0" );
+        openingElement2.setAttribute( "width", "5.0" );
+        openingElement2.setAttribute( "height", "72.0" );
+
+        wallElement.appendChild(openingElement);
+
+        wallElement.appendChild(openingElement2);
+
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Wall wall = new Wall( wallElement );
+        wall.verify();
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        wall.dom( draw, View.PLAN );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "10.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "20.0" );
+        assertEquals( wallElement.getAttribute( "x2" ), "13.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "24.0" );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "16.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "28.0" );
+        assertEquals( wallElement.getAttribute( "x2" ), "40.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "60.0" );
+
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        wallElement = (Element) node;
+        assertEquals( wallElement.getAttribute( "x1" ), "43.0" );
+        assertEquals( wallElement.getAttribute( "y1" ), "64.0" );
+        assertEquals( wallElement.getAttribute( "x2" ), "310.0" );
+        assertEquals( wallElement.getAttribute( "y2" ), "420.0" );
+
+        assertEquals( list.getLength(), 3 );
     }
 
     @Test
@@ -563,6 +701,114 @@ public class WallTest {
         assertEquals( wallElement.getAttribute( "stroke-width" ), "2" );
     }
 
+//    @Test
+//    public void domPlanOpening() throws Exception {
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        Wall wall = new Wall( wallElement );
+//
+//        NodeList prelist = draw.root().getElementsByTagName( "line" );
+//        assertEquals( prelist.getLength(), 0 );
+//
+//        wall.dom( draw, View.PLAN );
+//
+//        NodeList list = draw.root().getElementsByTagName( "line" );
+//        assertEquals( list.getLength(), 1 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element wallElement = (Element) node;
+//        assertEquals( wallElement.getAttribute( "x1" ), x1.toString() );
+//        assertEquals( wallElement.getAttribute( "y1" ), y1.toString() );
+//        assertEquals( wallElement.getAttribute( "x2" ), x2.toString() );
+//        assertEquals( wallElement.getAttribute( "y2" ), y2.toString() );
+//
+//        assertEquals( wallElement.getAttribute( "stroke" ), "black" );
+//        assertEquals( wallElement.getAttribute( "stroke-width" ), "2" );
+//    }
+
+    @Test
+    public void populateChildrenOpeningNone() {
+        Wall wall = new Wall( wallElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venueInstance = list.get( 0 );
+        assert MinderDom.class.isInstance( venueInstance );
+        assert Venue.class.isInstance( venueInstance );
+
+        ElementalLister wallInstance = list.get( 1 );
+        assert MinderDom.class.isInstance( wallInstance );
+        assert Wall.class.isInstance( wallInstance );
+
+        assertEquals( list.size(), 2 );
+        assertSame( wallInstance, wall );
+
+        assertEquals( wall.openingList().size(), 0 );
+    }
+
+    @Test
+    public void populateChildrenOpeningOne() {
+        wallEndWithOpeningElement.appendChild( openingElement );
+        Wall wall = new Wall(wallEndWithOpeningElement);
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venueInstance = list.get( 0 );
+        assert MinderDom.class.isInstance( venueInstance );
+        assert Venue.class.isInstance( venueInstance );
+
+        ElementalLister wallInstance = list.get( 1 );
+        assert MinderDom.class.isInstance( wallInstance );
+        assert Wall.class.isInstance( wallInstance );
+
+        assertEquals( list.size(), 2 );
+        assertSame( wallInstance, wall );
+
+        assertEquals( wall.openingList().size(), 1 );
+    }
+
+    @Test
+    public void populateChildrenOpeningTwo() {
+        wallEndWithOpeningElement.appendChild( openingElement );
+        wallEndWithOpeningElement.appendChild( openingElement2 );
+
+        checkTwoChildOpenings();
+    }
+
+    @Test
+    public void populateChildrenOpeningTwoReversed() {
+        wallEndWithOpeningElement.appendChild( openingElement2 );
+        wallEndWithOpeningElement.appendChild( openingElement );
+
+        checkTwoChildOpenings();
+    }
+
+    void checkTwoChildOpenings() {
+        Wall wall = new Wall(wallEndWithOpeningElement);
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venueInstance = list.get( 0 );
+        assert MinderDom.class.isInstance( venueInstance );
+        assert Venue.class.isInstance( venueInstance );
+
+        ElementalLister wallInstance = list.get( 1 );
+        assert MinderDom.class.isInstance( wallInstance );
+        assert Wall.class.isInstance( wallInstance );
+
+        assertEquals( list.size(), 2 );
+        assertSame( wallInstance, wall );
+
+        assertEquals( wall.openingList().size(), 2 );
+        Iterator<Opening> iterator = wall.openingList().iterator();
+        Opening one = iterator.next();
+        assertNotNull( one );
+        Opening two = iterator.next();
+        assertNotNull( two );
+        assertNotSame( one, two );
+        assert one.start() < two.start();
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -573,7 +819,8 @@ public class WallTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.WallReset();
+        Wall.Reset();
+        TestResets.ElementalListerReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );
@@ -599,6 +846,22 @@ public class WallTest {
         wallElement3.setAttribute( "y1", y3.toString() );
         wallElement3.setAttribute( "x2", x1.toString() );
         wallElement3.setAttribute( "y2", y1.toString() );
+
+        wallEndWithOpeningElement = new IIOMetadataNode( Wall.Tag() );
+        wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString() );
+        wallEndWithOpeningElement.setAttribute( "y1", wwoY.toString() );
+        wallEndWithOpeningElement.setAttribute( "x2", wwoX2.toString() );
+        wallEndWithOpeningElement.setAttribute( "y2", wwoY.toString() );
+
+        openingElement = new IIOMetadataNode( Opening.Tag );
+        openingElement.setAttribute( "width", openWidth.toString() );
+        openingElement.setAttribute( "height", openHeight.toString() );
+        openingElement.setAttribute( "start", openStart.toString() );
+
+        openingElement2 = new IIOMetadataNode( Opening.Tag );
+        openingElement2.setAttribute( "width", open2Width.toString() );
+        openingElement2.setAttribute( "height", open2Height.toString() );
+        openingElement2.setAttribute( "start", open2Start.toString() );
     }
 
     @AfterMethod

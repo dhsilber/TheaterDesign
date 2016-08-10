@@ -168,31 +168,40 @@ public class Point {
      * @since 0.0.5
      */
     public double distance( Point point ) {
-        double legX = x - point.x();
-        double legY = y - point.y();
-        double legZ = z - point.z();
+        double width = x - point.x();
+        double depth = y - point.y();
+        double height = z - point.z();
 
-        return Math.sqrt( legX * legX + legY * legY + legZ * legZ );
+        return Math.sqrt( width * width + depth * depth + height * height );
     }
 
     public static Point OnALine( Point first, Point second, Double distanceFromFirst ) {
+//
+//        // a. calculate the vector from o to g:
+//        Double vectorX = second.x() - first.x();
+//        Double vectorY = second.y() - first.y();
+//        Double vectorZ = second.z() - first.z();
+//
+//        // b. calculate the proportion of hypotenuse
+//        Double factor = distanceFromFirst /
+//                Math.sqrt( vectorX * vectorX + vectorY * vectorY + vectorZ * vectorZ );
+//
+//        // c. factor the lengths
+//        vectorX *= factor;
+//        vectorY *= factor;
+//        vectorZ *= factor;
+//
+//        // d. calculate and Draw the new vector,
+//        return new Point( first.x() + vectorX, first.y() + vectorY, first.z() + vectorZ  );
 
-        // a. calculate the vector from o to g:
-        Double vectorX = second.x() - first.x();
-        Double vectorY = second.y() - first.y();
-        Double vectorZ = second.z() - first.z();
 
-        // b. calculate the proportion of hypotenuse
-        Double factor = distanceFromFirst /
-                Math.sqrt( vectorX * vectorX + vectorY * vectorY + vectorZ * vectorZ );
+        Double u = distanceFromFirst / first.distance( second );
 
-        // c. factor the lengths
-        vectorX *= factor;
-        vectorY *= factor;
-        vectorZ *= factor;
+        Double x = (1-u) * first.x + u * second.x;
+        Double y = (1-u) * first.y + u * second.y;
+        Double z = (1-u) * first.z + u * second.z;
 
-        // d. calculate and Draw the new vector,
-        return new Point( first.x() + vectorX, first.y() + vectorY, first.z() + vectorZ  );
+        return new Point( x, y, z );
     }
 
     /*

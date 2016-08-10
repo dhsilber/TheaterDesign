@@ -122,7 +122,7 @@ class Truss ( element: Element ) extends UniqueId( element )
 
 //        if ( Proscenium.Active() ) {
 //          boxOrigin = new Point( start.x - 1, start.y + 1, start.z )
-//          boxOrigin = Proscenium.Locate( boxOrigin )
+//          boxOrigin = Proscenium.LocateIfActive( boxOrigin )
 //        }
 //        else {
           boxOrigin = new Point( start.x - 1, start.y - 1, start.z )
