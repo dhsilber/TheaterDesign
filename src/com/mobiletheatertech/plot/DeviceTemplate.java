@@ -145,7 +145,7 @@ public class DeviceTemplate extends Layerer implements Legendable
 
     @Override
     public PagePoint domLegendItem(Draw draw, PagePoint start) {
-        System.err.println( "Count from withing DeviceTemplate: " + count );
+//        System.err.println( "Count from withing DeviceTemplate: " + count );
         if (0 >= count) { return start; }
 
         Layer layerInstance = Layer.List().get( layer );

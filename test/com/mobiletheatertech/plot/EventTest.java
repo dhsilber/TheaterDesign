@@ -29,6 +29,11 @@ public class EventTest {
     private Double baseX = 42.1;
     private Double baseY = 57.9;
 
+    Element flatElement = null;
+    Double x1 = 1.1;
+    Double y1 = 2.2;
+    Double x2 = 3.3;
+    Double y2 = 4.4;
 
     public EventTest() {
     }
@@ -100,15 +105,23 @@ public class EventTest {
 //    }
 
     @Test
-    public void tagCallbackRegistered() {
+    public void tagCallbackRegisteredPipeBase() {
         Event event = new Event( element );
 
-        assertEquals( event.tags().size(), 1 );
         assertTrue( event.tags().contains( PipeBase.Tag() ) );
+        assertEquals( event.tags().size(), 2 );
     }
 
     @Test
-    public void populateChildren() {
+    public void tagCallbackRegisteredFlat() {
+        Event event = new Event( element );
+
+        assertTrue( event.tags().contains( Flat.Tag() ) );
+        assertEquals( event.tags().size(), 2 );
+    }
+
+    @Test
+    public void populateChildrenPipeBase() {
         element.appendChild( baseForPipeElement );
         new Event( element );
 
@@ -121,6 +134,24 @@ public class EventTest {
         ElementalLister pipebase = list.get( 1 );
         assert MinderDom.class.isInstance( pipebase );
         assert PipeBase.class.isInstance( pipebase );
+
+        assertEquals( list.size(), 2 );
+    }
+
+    @Test
+    public void populateChildrenFlat() {
+        element.appendChild( flatElement );
+        new Event( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister event = list.get( 0 );
+        assert MinderDom.class.isInstance( event );
+        assert Event.class.isInstance( event );
+
+        ElementalLister flat = list.get( 1 );
+        assert MinderDom.class.isInstance( flat );
+        assert Flat.class.isInstance( flat );
 
         assertEquals( list.size(), 2 );
     }
@@ -179,10 +210,15 @@ public class EventTest {
         UniqueId.Reset();
         Event.Reset();
 
-        baseForPipeElement = new IIOMetadataNode( PipeBase$.MODULE$.Tag() );
+        baseForPipeElement = new IIOMetadataNode( PipeBase.Tag() );
         baseForPipeElement.setAttribute( "x", baseX.toString() );
         baseForPipeElement.setAttribute( "y", baseY.toString() );
 
+        flatElement = new IIOMetadataNode( Flat.Tag() );
+        flatElement.setAttribute( "x1", x1.toString() );
+        flatElement.setAttribute( "y1", y1.toString() );
+        flatElement.setAttribute( "x2", x2.toString() );
+        flatElement.setAttribute( "y2", y2.toString() );
 
         element = new IIOMetadataNode( "event" );
         element.setAttribute( "id", name );

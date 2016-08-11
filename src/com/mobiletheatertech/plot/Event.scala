@@ -11,10 +11,15 @@ class Event ( element: Element ) extends UniqueId ( element )
   Event.Only = this
 
   tagCallback( PipeBase.Tag, processPipeBase )
+  tagCallback( Flat.Tag, processFlat )
   populate( element )
 
   def processPipeBase( element: Element ): Unit = {
     new PipeBase( element )
+  }
+
+  def processFlat( element: Element ): Unit = {
+    new Flat( element )
   }
 
 //  if ( null == Venue.)
