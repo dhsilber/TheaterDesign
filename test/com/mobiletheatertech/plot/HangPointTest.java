@@ -218,7 +218,7 @@ public class HangPointTest {
         TestResets.MinderDomReset();
 
         // TODO Takes too long
-//        new Parse( stream );
+        new Parse( stream );
 
         // Final size of list
         ArrayList<ElementalLister> list = ElementalLister.List();

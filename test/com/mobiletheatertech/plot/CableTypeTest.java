@@ -105,7 +105,7 @@ public class CableTypeTest {
         Node textNode = textList.item(0);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
         Element textElement = (Element) textNode;
-        Double x = startPoint.x() + 20;
+        Double x = startPoint.x() + Legend.TEXTOFFSET;
         Double y = startPoint.y() + 3;
         assertEquals(textElement.getAttribute("x"), x.toString() );
         assertEquals(textElement.getAttribute("y"), y.toString() );

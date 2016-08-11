@@ -50,10 +50,10 @@ public class TestResets {
 //    }
 
     public static void ChairBlockReset() throws NoSuchFieldException, IllegalAccessException {
-        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
-        field.setAccessible( true );
-        boolean generated = field.getBoolean( ChairBlock.class );
-        field.set(generated, false);
+//        Field field = ChairBlock.class.getDeclaredField( "SYMBOLGENERATED" );
+//        field.setAccessible( true );
+//        boolean generated = field.getBoolean( ChairBlock.class );
+//        field.set(generated, false);
     }
 
     public static void ChairReset() throws NoSuchFieldException, IllegalAccessException {

@@ -91,7 +91,7 @@ public class Parse {
         parseXML( Stage.class, "stage" );
         parseXML( Table.class, "table" );
         parseXML( Chair.class, "chair" );
-        parseXML( ChairBlock.class, "chairblock" );
+//        parseXML( ChairBlock.class, "chairblock" );
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
         // Since all 'base' elements are direct children of a truss,

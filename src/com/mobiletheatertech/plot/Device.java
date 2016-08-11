@@ -87,6 +87,11 @@ public class Device extends Stackable // implements Schematicable
         GearList.Add(is);
 
         DEVICELIST.add( this );
+
+        DeviceTemplate template = DeviceTemplate.Select( is );
+        if ( null != template ) {
+            template.count();
+        }
     }
 
     public static Device Select( String identifier ) {

@@ -48,6 +48,7 @@ public class LuminaireTest {
     String lightingStandLocation = "b";
     String callShowData = "showData(evt)";
     String callHideData = "hideData(evt)";
+    final static String letterOnlyLocation = "a";
 
     Pipe pipe = null;
     LightingStand lightingStand = null;
@@ -237,10 +238,12 @@ public class LuminaireTest {
         luminaire.verify();
     }
 
-    @Test(expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Pipe \\("+pipeName+"\\) location must be a number.")
+    @Test(expectedExceptions = MountingException.class,
+            expectedExceptionsMessageRegExp =
+                    "Pipe \\("+pipeName+"\\) unit '" + unit +
+                            "' has invalid location '" + letterOnlyLocation + "'.")
     public void verifyBadPipeLocation() throws Exception {
-        elementOnPipe.setAttribute("location", "a");
+        elementOnPipe.setAttribute( "location", letterOnlyLocation );
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
     }
@@ -468,7 +471,7 @@ public class LuminaireTest {
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         assertEquals( diversionElement.getAttribute( "x" ), "12.0" );
         assertEquals( diversionElement.getAttribute( "y" ), "46.0" );
-        assertEquals( diversionElement.getAttribute( "id" ), id );
+        assertEquals( diversionElement.getAttribute( "id" ), "rotatedPipe:unit" );
         assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
         assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
 

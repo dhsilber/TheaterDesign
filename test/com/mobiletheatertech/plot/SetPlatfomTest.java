@@ -71,7 +71,7 @@ public class SetPlatfomTest {
     public void noLocation() throws Exception {
         SetPlatform instance = new SetPlatform( element );
         instance.verify();
-//
+
 //        instance.location("");
     }
 
@@ -172,7 +172,7 @@ public class SetPlatfomTest {
         NodeList existingGroups = draw.root().getElementsByTagName("g");
         assertEquals(existingGroups.getLength(), 1);
 
-//        instance.dom(draw, View.PLAN);
+        instance.dom(draw, View.PLAN);
 
         NodeList group = draw.root().getElementsByTagName("g");
         assertEquals(group.getLength(), 2);

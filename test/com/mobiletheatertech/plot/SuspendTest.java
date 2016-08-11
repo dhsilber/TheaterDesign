@@ -71,6 +71,7 @@ public class SuspendTest {
 
     @Test
     public void marksProcessed() throws Exception {
+        element.removeAttribute( "processedMark" );
         String emptyMark = element.getAttribute( "processedMark" );
         assertEquals( emptyMark, "", "Should be unset" );
 

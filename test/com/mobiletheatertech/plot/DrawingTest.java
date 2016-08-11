@@ -51,7 +51,7 @@ public class DrawingTest {
 
         assertEquals( TestHelpers.accessString( instance, "id"), id);
         assertEquals( TestHelpers.accessString( instance, "filename" ), filename );
-        assertSame(TestHelpers.accessView(instance, "view"), View.TRUSS );
+        assertSame(TestHelpers.accessView(instance, "view"), View.PLAN );
         assertEquals( TestHelpers.accessString( instance, "legend" ), legend );
     }
 

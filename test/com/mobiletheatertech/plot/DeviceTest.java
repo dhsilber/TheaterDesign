@@ -301,10 +301,10 @@ public class DeviceTest {
         new DeviceTemplate( layeredTemplateElement );
         element.setAttribute( "is", layeredTemplateName );
         element.removeAttribute( "on" );
-        Device device = new Device( element );
 
         assertEquals( deviceLayer.contents().size(), 0 );
 
+        Device device = new Device( element );
         device.verify();
 
         assertEquals(deviceLayer.contents().size(), 1);
@@ -314,14 +314,14 @@ public class DeviceTest {
     public void incrementsCountOnDrawing() throws Exception {
         DeviceTemplate deviceTemplate = new DeviceTemplate( templateElement );
         element.removeAttribute("on");
-        Device device = new Device( element );
-        device.verify();
-
         assertEquals( TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 0 );
 
-        Draw draw = new Draw();
-        draw.establishRoot();
-        device.dom(draw, View.PLAN);
+        Device device = new Device( element );
+
+//        device.verify();
+//        Draw draw = new Draw();
+//        draw.establishRoot();
+//        device.dom(draw, View.PLAN);
 
         assertEquals( TestHelpers.accessInteger(deviceTemplate, "count"), (Integer) 1 );
     }

@@ -87,6 +87,8 @@ public class HangPoint extends MinderDom implements Legendable {
             Legend.Register( this, 130.0, 7.0, LegendOrder.Room );
             Legended = true;
         }
+
+        COUNT++;
     }
 
     /**
@@ -163,8 +165,6 @@ public class HangPoint extends MinderDom implements Legendable {
     @Override
     public void dom( Draw draw, View mode ) {
         if (( View.PLAN == mode || View.TRUSS == mode ) && !SYMBOLGENERATED) {
-            COUNT++;
-
             SvgElement defs = draw.element("defs");
             draw.appendRootChild( defs );
 

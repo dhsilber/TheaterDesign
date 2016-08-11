@@ -262,6 +262,8 @@ public class DeviceTemplateTest {
     @Test
     public void domLegendItemYesCount() throws Exception {
         Draw draw = new Draw();
+        draw.establishRoot();
+
         PagePoint start = new PagePoint( 3.2, 4.5 );
 
         DeviceTemplate deviceTemplate = new DeviceTemplate( element );

@@ -67,7 +67,7 @@ public class SetPlatform extends MinderDom implements Legendable {
         if( ! Proscenium.Active() ) { return; }
 
 
-        SvgElement group = draw.group( draw, "" );
+        SvgElement group = draw.group( draw, "" );x
         for ( Shape thing : Polygons ) {
 
             group.path( draw, thing.toSvgPath( x, y ), "black" );

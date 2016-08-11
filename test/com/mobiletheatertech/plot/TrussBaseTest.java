@@ -252,6 +252,7 @@ public class TrussBaseTest {
 
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
+        TestResets.ProsceniumReset();
         UniqueId.Reset();
 
         Element venueElement = new IIOMetadataNode();
