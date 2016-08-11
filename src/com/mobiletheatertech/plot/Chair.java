@@ -26,7 +26,7 @@ public class Chair extends MinderDom implements Legendable {
     static final String CATEGORY = "chair";
 
     static final Integer CHAIRWIDTH = 18;
-    private static final Integer CHAIRDEPTH = 19;
+    static final Integer CHAIRDEPTH = 19;
     private static final String COLOR = "black";
     static final String CHAIR = "chair";
     public static final String LAYERTAG = "Chair";
@@ -41,15 +41,15 @@ public class Chair extends MinderDom implements Legendable {
     Double radius = null;
     Double orientation = null;
     Integer line = null;
-    String layerName = null;
+    private String layerName = null;
     Double space = null;
     Double opening = null;
     Integer count = null;
+    Double circumference;
 
-    Double circumference = null;
-    Integer chairFit = null;
-    Double chairWidth = CHAIRWIDTH.doubleValue();
-    Double angle = null;
+    private Integer chairFit = null;
+    private Double chairWidth = CHAIRWIDTH.doubleValue();
+    private Double angle = null;
     Double section = 0.0;
 
     public Chair(Element element) throws AttributeMissingException, DataException, InvalidXMLException {
@@ -91,7 +91,7 @@ public class Chair extends MinderDom implements Legendable {
     @Override
     public void verify() throws FeatureException, InvalidXMLException, LocationException,
             MountingException, ReferenceException {
-        circumference = null;
+
 
         if( null != radius ) {
             circumference = 2 * Math.PI * radius;
@@ -124,7 +124,7 @@ public class Chair extends MinderDom implements Legendable {
         if ( ( null != radius ) || ( null != count ) ) {
 
             for ( int chairCount = 0; chairCount < chairFit; chairCount++ ) {
-                Double thisAngle = angle * chairCount - section / 2;
+                Double thisAngle = angle * chairCount;// * (section/100);// / 2;
                 interimX = x - radius * Math.sin(Math.toRadians(thisAngle));
                 interimY = y + radius * Math.cos(Math.toRadians(thisAngle));
                 useChair(draw, group, interimX, interimY, thisAngle );

@@ -53,3 +53,7 @@ class ProtoWall( element: Element ) extends MinderDom( element: Element )
 
   def drawLine( draw: Draw, segmentStart: Point, segmentEnd: Point ): Unit = ???
 }
+
+object ProtoWall{
+
+}

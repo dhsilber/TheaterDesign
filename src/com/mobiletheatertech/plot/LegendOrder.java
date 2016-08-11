@@ -20,12 +20,13 @@ public enum LegendOrder {
                 }
             },
     Furniture( 100 )
-            {
-                @Override
-                public Integer next() {
-                    return last++;
-                }
-            },
+//            {
+//                @Override
+//                public Integer next() {
+//                    return last++;
+//                }
+//            },
+    ,
     Structure( 200 )
 //            {
 //                @Override

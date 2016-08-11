@@ -180,382 +180,382 @@ public class WallTest {
 //        assertNotNull( Category.Select( Wall.CATEGORY ) );
 //    }
 
-    @Test
-    public void findNearestWall() throws Exception {
-        Element wallElementInner = new IIOMetadataNode( "wall" );
-        wallElementInner.setAttribute("x1", "100");
-        wallElementInner.setAttribute("y1", "150");
-        wallElementInner.setAttribute("x2", "100");
-        wallElementInner.setAttribute("y2", "250");
-
-        Wall wall = new Wall( wallElement );
-        wall.verify();
-        Wall wall2 = new Wall( wallElementInner );
-        wall2.verify();
-
-        assertSame(Wall.WallNearestPoint(new Point(90.0, 200.0, 0.0)), wall2);
-    }
-
-    @Test
-    public void findNearestWallPoint() throws Exception {
-        Element wallElement = new IIOMetadataNode( "wall" );
-        wallElement.setAttribute( "x1", "10" );
-        wallElement.setAttribute( "y1", "150" );
-        wallElement.setAttribute( "x2", "10" );
-        wallElement.setAttribute( "y2", "250" );
-
-        Wall wall = new Wall( wallElement );
-        wall.verify();
-        Wall wall2 = new Wall( wallElement );
-        wall2.verify();
-
-        Point nearest = wall2.nearestPointNearWall( new Point(90.0, 200.0, 0.0) );
-        assertEquals( nearest, new Point(12.0, 200.0, 0.0) );
-    }
-
-    @Test
-    public void findNextWallSegment() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        assertSame( wall1.next(), wall2 );
-        assertSame( wall2.next(), wall3 );
-        assertSame( wall3.next(), wall1 );
-    }
-
-    @Test
-    public void findPreviousWallSegment() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        assertSame( wall1.previous(), wall3 );
-        assertSame( wall2.previous(), wall1 );
-        assertSame( wall3.previous(), wall2 );
-    }
-
-    @Test
-    public void findNextCorner() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-        Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
-
-        Point result = wall1.nextCorner( start, destination, wall2 );
-
-        assertEquals( result, corner );
-    }
-
-    @Test
-    public void findNextCorner2() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-        Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
-
-        Point result = wall2.nextCorner( corner, destination, wall2 );
-
-        assertEquals( result, destination );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextCornerDiscontinuousX() throws Exception {
-        Double badX = x2 + 4;
-        wallElement2.setAttribute( "x2", badX.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-
-        wall1.nextCorner( start, destination, wall2 );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextCornerDiscontinuousY() throws Exception {
-        Double badY = y2 + 4;
-        wallElement2.setAttribute( "y2", badY.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-
-        wall1.nextCorner( start, destination, wall2 );
-    }
-
-    @Test
-    public void findNextCornerPrevious() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
-
-        Point result = wall2.nextCorner( start, destination, wall2 );
-
-        assertEquals( result, corner );
-    }
-
-    @Test
-    public void findNextCornerPrevious2() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point destination = new Point( 18.0, 40.0, 0.0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
-
-        Point result = wall2.nextCorner( corner, destination, wall2 );
-
-        assertEquals( result, destination );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextCornerPreviousDiscontinuousX() throws Exception {
-        Double badX = x2 + 4;
-        wallElement2.setAttribute( "x2", badX.toString() );
-        Double badX3 = x3 + 99;
-        wallElement3.setAttribute( "x2", badX3.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-
-        wall2.nextCorner( start, destination, wall2 );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextCornerPreviousDiscontinuousY() throws Exception {
-        Double badY = y2 + 4;
-        wallElement2.setAttribute( "y2", badY.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-
-        wall2.nextCorner( start, destination, wall2 );
-    }
-
-    @Test
-    public void findNextNear() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-        Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
-
-        Point result = null;
-//        result = wall1.nextNear( start, destination, wall2 );
-
-        assertEquals( result, corner );
-    }
-
-    @Test
-    public void findNextNear2() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-        Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
-
-        Point result = null;
-//        result = wall2.nextNear( corner, destination, wall2 );
-
-        assertEquals( result, destination );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextNearDiscontinuousX() throws Exception {
-        Double badX = x2 + 4;
-        wallElement2.setAttribute( "x2", badX.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-
-        wall1.nextNear( start, destination, wall2 );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextNearDiscontinuousY() throws Exception {
-        Double badY = y2 + 4;
-        wallElement2.setAttribute( "y2", badY.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 18.0, 40.0, 0.0 );
-        Point destination = new Point( 46.0, 70.0, 0.0 );
-
-        wall1.nextNear( start, destination, wall2 );
-    }
-
-    @Test
-    public void findNextNearPrevious() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
-
-        Point result = null;
-//        result = wall2.nextNear( start, destination, wall2 );
-
-        assertEquals( result, corner );
-    }
-
-    @Test
-    public void findNextNearPrevious2() throws Exception {
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point destination = new Point( 18.0, 40.0, 0.0 );
-        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
-
-        Point result = null;
-//        result = wall2.nextNear( corner, destination, wall2 );
-
-        assertEquals( result, destination );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextNearPreviousDiscontinuousX() throws Exception {
-        Double badX = x2 + 4;
-        wallElement2.setAttribute( "x2", badX.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-
-        wall2.nextNear( start, destination, wall2 );
-    }
-
-    @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
-    public void findNextNearPreviousDiscontinuousY() throws Exception {
-        Double badY = y2 + 4;
-        wallElement2.setAttribute( "y2", badY.toString() );
-
-        Wall wall1 = new Wall( wallElement );
-        Wall wall2 = new Wall( wallElement2 );
-        Wall wall3 = new Wall( wallElement3 );
-
-        wall1.verify();
-        wall2.verify();
-        wall3.verify();
-
-        Point start = new Point( 46.0, 70.0, 0.0 );
-        Point destination = new Point( 28.0, 40.0, 0.0 );
-
-        wall2.nextNear( start, destination, wall2 );
-    }
+//    @Test
+//    public void findNearestWall() throws Exception {
+//        Element wallElementInner = new IIOMetadataNode( "wall" );
+//        wallElementInner.setAttribute("x1", "100");
+//        wallElementInner.setAttribute("y1", "150");
+//        wallElementInner.setAttribute("x2", "100");
+//        wallElementInner.setAttribute("y2", "250");
+//
+//        Wall wall = new Wall( wallElement );
+//        wall.verify();
+//        Wall wall2 = new Wall( wallElementInner );
+//        wall2.verify();
+//
+//        assertSame(Wall.WallNearestPoint(new Point(90.0, 200.0, 0.0)), wall2);
+//    }
+
+//    @Test
+//    public void findNearestWallPoint() throws Exception {
+//        Element wallElement = new IIOMetadataNode( "wall" );
+//        wallElement.setAttribute( "x1", "10" );
+//        wallElement.setAttribute( "y1", "150" );
+//        wallElement.setAttribute( "x2", "10" );
+//        wallElement.setAttribute( "y2", "250" );
+//
+//        Wall wall = new Wall( wallElement );
+//        wall.verify();
+//        Wall wall2 = new Wall( wallElement );
+//        wall2.verify();
+//
+//        Point nearest = wall2.nearestPointNearWall( new Point(90.0, 200.0, 0.0) );
+//        assertEquals( nearest, new Point(12.0, 200.0, 0.0) );
+//    }
+
+//    @Test
+//    public void findNextWallSegment() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        assertSame( wall1.next(), wall2 );
+//        assertSame( wall2.next(), wall3 );
+//        assertSame( wall3.next(), wall1 );
+//    }
+
+//    @Test
+//    public void findPreviousWallSegment() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        assertSame( wall1.previous(), wall3 );
+//        assertSame( wall2.previous(), wall1 );
+//        assertSame( wall3.previous(), wall2 );
+//    }
+
+//    @Test
+//    public void findNextCorner() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//        Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
+//
+//        Point result = wall1.nextCorner( start, destination, wall2 );
+//
+//        assertEquals( result, corner );
+//    }
+
+//    @Test
+//    public void findNextCorner2() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//        Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
+//
+//        Point result = wall2.nextCorner( corner, destination, wall2 );
+//
+//        assertEquals( result, destination );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextCornerDiscontinuousX() throws Exception {
+//        Double badX = x2 + 4;
+//        wallElement2.setAttribute( "x2", badX.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//
+//        wall1.nextCorner( start, destination, wall2 );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextCornerDiscontinuousY() throws Exception {
+//        Double badY = y2 + 4;
+//        wallElement2.setAttribute( "y2", badY.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//
+//        wall1.nextCorner( start, destination, wall2 );
+//    }
+
+//    @Test
+//    public void findNextCornerPrevious() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
+//
+//        Point result = wall2.nextCorner( start, destination, wall2 );
+//
+//        assertEquals( result, corner );
+//    }
+
+//    @Test
+//    public void findNextCornerPrevious2() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point destination = new Point( 18.0, 40.0, 0.0 );
+//        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
+//
+//        Point result = wall2.nextCorner( corner, destination, wall2 );
+//
+//        assertEquals( result, destination );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextCornerPreviousDiscontinuousX() throws Exception {
+//        Double badX = x2 + 4;
+//        wallElement2.setAttribute( "x2", badX.toString() );
+//        Double badX3 = x3 + 99;
+//        wallElement3.setAttribute( "x2", badX3.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//
+//        wall2.nextCorner( start, destination, wall2 );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextCornerPreviousDiscontinuousY() throws Exception {
+//        Double badY = y2 + 4;
+//        wallElement2.setAttribute( "y2", badY.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//
+//        wall2.nextCorner( start, destination, wall2 );
+//    }
+
+//    @Test
+//    public void findNextNear() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//        Point corner = new Point( x2 + 2.0, y2 + 2.0, 0.0 );
+//
+//        Point result = null;
+////        result = wall1.nextNear( start, destination, wall2 );
+//
+//        assertEquals( result, corner );
+//    }
+
+//    @Test
+//    public void findNextNear2() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//        Point corner = new Point( x2 + 2, y2 + 2, 0.0 );
+//
+//        Point result = null;
+////        result = wall2.nextNear( corner, destination, wall2 );
+//
+//        assertEquals( result, destination );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextNearDiscontinuousX() throws Exception {
+//        Double badX = x2 + 4;
+//        wallElement2.setAttribute( "x2", badX.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//
+//        wall1.nextNear( start, destination, wall2 );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextNearDiscontinuousY() throws Exception {
+//        Double badY = y2 + 4;
+//        wallElement2.setAttribute( "y2", badY.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 18.0, 40.0, 0.0 );
+//        Point destination = new Point( 46.0, 70.0, 0.0 );
+//
+//        wall1.nextNear( start, destination, wall2 );
+//    }
+
+//    @Test
+//    public void findNextNearPrevious() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
+//
+//        Point result = null;
+////        result = wall2.nextNear( start, destination, wall2 );
+//
+//        assertEquals( result, corner );
+//    }
+
+//    @Test
+//    public void findNextNearPrevious2() throws Exception {
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point destination = new Point( 18.0, 40.0, 0.0 );
+//        Point corner = new Point( x2 - 2, y2 - 2, 0.0 );
+//
+//        Point result = null;
+////        result = wall2.nextNear( corner, destination, wall2 );
+//
+//        assertEquals( result, destination );
+//    }
+
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextNearPreviousDiscontinuousX() throws Exception {
+//        Double badX = x2 + 4;
+//        wallElement2.setAttribute( "x2", badX.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//
+//        wall2.nextNear( start, destination, wall2 );
+//    }
+//
+//    @Test(expectedExceptions = DataException.class,
+//            expectedExceptionsMessageRegExp = "Cannot find abutting wall.")
+//    public void findNextNearPreviousDiscontinuousY() throws Exception {
+//        Double badY = y2 + 4;
+//        wallElement2.setAttribute( "y2", badY.toString() );
+//
+//        Wall wall1 = new Wall( wallElement );
+//        Wall wall2 = new Wall( wallElement2 );
+//        Wall wall3 = new Wall( wallElement3 );
+//
+//        wall1.verify();
+//        wall2.verify();
+//        wall3.verify();
+//
+//        Point start = new Point( 46.0, 70.0, 0.0 );
+//        Point destination = new Point( 28.0, 40.0, 0.0 );
+//
+//        wall2.nextNear( start, destination, wall2 );
+//    }
 
     @Test
     public void populateChildrenOpeningNone() {

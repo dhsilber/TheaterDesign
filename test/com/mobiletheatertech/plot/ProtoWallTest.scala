@@ -344,6 +344,7 @@ class ProtoWallTest {
 //    Wall.Reset()
     TestResets.WallReset()
     TestResets.PointReset()
+    SvgElement.Offset( 0.0, 0.0 )
 
     wallEndWithOpeningElement = new IIOMetadataNode( Opening.Tag )
     wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString )
