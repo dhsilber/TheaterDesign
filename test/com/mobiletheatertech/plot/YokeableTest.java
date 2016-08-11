@@ -160,6 +160,7 @@ public class YokeableTest {
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
         assert UniqueId.class.isInstance( instance );
+        assert Yokeable.class.isInstance( instance );
     }
 
     @Test
