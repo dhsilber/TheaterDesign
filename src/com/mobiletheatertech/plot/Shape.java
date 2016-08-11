@@ -11,6 +11,7 @@ package com.mobiletheatertech.plot;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Represents an area in space.
@@ -21,6 +22,8 @@ public class Shape {
     Polygon polygon;
     int[] xPoints;
     int[] yPoints;
+
+    ArrayList<Point> vertices = new ArrayList<>();
 
     public Shape(String prototype) throws DataException {
 
@@ -41,18 +44,21 @@ public class Shape {
         }
 
         for (int index = 0, pointIndex = 0; index < size; ) {
+            if (index + 1 >= size) {
+                throw new DataException("Invalid Shape specification.");
+            }
+
             Integer x = Integer.valueOf(numbers[index]);
 
             xPoints[pointIndex] = x;
 
             index++;
-            if (index >= size) {
-                throw new DataException("Invalid Shape specification.");
-            }
 
             Integer y = Integer.valueOf(numbers[index]);
 
             yPoints[pointIndex] = y;
+
+            vertices.add( new Point( x.doubleValue(), y.doubleValue(), 0.0 ) );
 
             index++;
             pointIndex++;
@@ -110,6 +116,6 @@ public class Shape {
     }
 
     Boolean fits(double x, double y, double width, double depth) {
-        return polygon.contains(x, y);
+        return polygon.contains(x, y, width, depth );
     }
 }

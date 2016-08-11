@@ -125,21 +125,21 @@ public class ShapeTest {
     public void fitsSquareFail() throws DataException {
         Shape shape = new Shape(square);
 
-        assertFalse(shape.fits(2, 2, 5, 5));
+        assertFalse(shape.fits(2, 2, 7, 5));
     }
 
     @Test
     public void fitsPolygonOutsideFail() throws DataException {
         Shape shape = new Shape(polygon);
 
-        assertFalse(shape.fits(2, 37, 5, 5));
+        assertFalse(shape.fits(2, 37, 5, 18 ));
     }
 
     @Test
     public void fitsPolygonIntersectsFail() throws DataException {
         Shape shape = new Shape(polygon);
 
-        assertFalse(shape.fits(2, 32, 5, 5));
+        assertFalse(shape.fits( 32, 2, 5, 5));
     }
 
     @Test
