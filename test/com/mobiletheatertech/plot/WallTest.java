@@ -46,6 +46,16 @@ public class WallTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals( Wall.Tag, "wall" );
+    }
+
+    @Test
+    public void constantColor() {
+        assertEquals( Wall.Color, "black" );
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         Wall wall = new Wall( wallElement );
 

@@ -26,7 +26,8 @@ import java.util.*;
  */
 public class Wall extends MinderDom {
 
-    private static final String COLOR = "black";
+    final static String Tag = "wall";
+    static final String Color = "black";
 
     private Double x1 = null;
     private Double y1 = null;
@@ -361,12 +362,12 @@ public class Wall extends MinderDom {
                     Opening opening = iterator.next();
                     yTwo = y1 + opening.start();
 
-                    SvgElement line = draw.line( draw, x1, yOne, x2, yTwo, COLOR );
+                    SvgElement line = draw.line( draw, x1, yOne, x2, yTwo, Color);
                     line.attribute( "stroke-width", "2" );
 
                     yOne = yTwo + opening.width();
                 }
-                SvgElement line = draw.line( draw, x1, yOne, x2, y2, COLOR );
+                SvgElement line = draw.line( draw, x1, yOne, x2, y2, Color);
                 line.attribute( "stroke-width", "2" );
             }
             else {
@@ -376,12 +377,12 @@ public class Wall extends MinderDom {
                     Opening opening = iterator.next();
                     xTwo = x1 + opening.start();
 
-                    SvgElement line = draw.line( draw, xOne, y1, xTwo, y2, COLOR );
+                    SvgElement line = draw.line( draw, xOne, y1, xTwo, y2, Color);
                     line.attribute( "stroke-width", "2" );
 
                     xOne = xTwo + opening.width();
                 }
-                SvgElement line = draw.line( draw, xOne, y1, x2, y2, COLOR );
+                SvgElement line = draw.line( draw, xOne, y1, x2, y2, Color);
                 line.attribute( "stroke-width", "2" );
             }
         }
@@ -389,7 +390,7 @@ public class Wall extends MinderDom {
         else
 
         {
-            SvgElement line = draw.line( draw, x1, y1, x2, y2, COLOR );
+            SvgElement line = draw.line( draw, x1, y1, x2, y2, Color);
             line.attribute( "stroke-width", "2" );
         }
     }
