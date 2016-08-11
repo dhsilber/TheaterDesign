@@ -386,10 +386,11 @@ public class TestResets {
     public static void WallReset()
             throws NoSuchFieldException, IllegalAccessException
     {
-        Field field = Wall.class.getDeclaredField( "WallList" );
-        field.setAccessible( true );
-        ArrayList<Wall> wallList = (ArrayList<Wall>) field.get( Wall.class );
-        wallList.clear();
+//        Field field = Wall.class.getDeclaredField( "WallList" );
+//        field.setAccessible( true );
+//        ArrayList<Wall> wallList = (ArrayList<Wall>) field.get( Wall.class );
+//        wallList.clear();
+        Wall.Reset();
     }
 
 }
