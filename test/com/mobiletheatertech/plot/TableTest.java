@@ -395,9 +395,9 @@ public class TableTest {
         Solid solid = new Solid( 3,4,5 );
         Point place = surface.location( solid );
 
-        assertEquals( place.x, x );
-        assertEquals( place.y, y );
-        assertEquals( place.z, z+height );
+        assertEquals( place.x(), x );
+        assertEquals( place.y(), y );
+        assertEquals( place.z(), z+height );
     }
 
     // TODO: Allow for two devices on a surface.

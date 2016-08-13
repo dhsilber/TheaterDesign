@@ -10,9 +10,9 @@ package com.mobiletheatertech.plot;
  */
 public class Point {
 
-    Double x;
-    Double y;
-    Double z;
+    private Double x;
+    private Double y;
+    private Double z;
 
     static Double SmallX = Double.MAX_VALUE;
     static Double SmallY = Double.MAX_VALUE;

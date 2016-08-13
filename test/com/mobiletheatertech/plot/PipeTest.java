@@ -725,9 +725,9 @@ public class PipeTest {
 
         Point place = pipe.mountableLocation("15");
 
-        assertEquals(place.x, 227.0 );
-        assertEquals(place.y, 121.0 );
-        assertEquals(place.z, 46.0 );
+        assertEquals( place.x(), 227.0 );
+        assertEquals( place.y(), 121.0 );
+        assertEquals( place.z(), 46.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -760,9 +760,9 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.mountableLocation("15");
-        assertEquals(place.x, 215.0 );
-        assertEquals(place.y, 121.0 );
-        assertEquals(place.z, 46.0 );
+        assertEquals( place.x(), 215.0 );
+        assertEquals( place.y(), 121.0 );
+        assertEquals( place.z(), 46.0 );
     }
 
     @Test
@@ -773,9 +773,9 @@ public class PipeTest {
         Pipe pipe = new Pipe(element);
 
         Point place = pipe.mountableLocation("-5");
-        assertEquals(place.x, 195.0 );
-        assertEquals(place.y, 121.0 );
-        assertEquals(place.z, 46.0 );
+        assertEquals( place.x(), 195.0 );
+        assertEquals( place.y(), 121.0 );
+        assertEquals( place.z(), 46.0 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -1206,8 +1206,8 @@ public class PipeTest {
         assertEquals( outerCircleNode.getNodeType(), Node.ELEMENT_NODE );
         Element outerCircleElement = (Element) outerCircleNode;
         assertEquals( outerCircleElement.getTagName(), "circle" );
-        Double cx = pipe.boxOrigin().x + Pipe$.MODULE$.Radius();
-        Double cy = pipe.boxOrigin().y + Pipe$.MODULE$.Radius();
+        Double cx = pipe.boxOrigin().x() + Pipe$.MODULE$.Radius();
+        Double cy = pipe.boxOrigin().y() + Pipe$.MODULE$.Radius();
         Double radius = Pipe$.MODULE$.Radius();
         assertEquals( outerCircleElement.getAttribute( "cx" ), cx.toString() );
         assertEquals( outerCircleElement.getAttribute( "cy" ), cy.toString() );
