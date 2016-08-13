@@ -9,6 +9,8 @@ package com.mobiletheatertech.plot;
  */
 
 
+import org.w3c.dom.Element;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -18,53 +20,59 @@ import java.util.ArrayList;
  * <p/>
  * Provides a method to determine if a rectangle fits entirely withing the {@code Shape}.
  */
-public class Shape {
-    Polygon polygon;
-    int[] xPoints;
-    int[] yPoints;
+public class Shape extends Elemental {
+    final static String Tag = "shape";
 
-    ArrayList<Point> vertices = new ArrayList<>();
+    private Polygon polygon = null;
+    private int[] xPoints;
+    private int[] yPoints;
+    private Double radius = null;
 
-    public Shape(String prototype) throws DataException {
+    private ArrayList<Point> vertices = new ArrayList<>();
 
-        if (prototype.isEmpty()) {
-            throw new DataException("Empty Shape specification.");
-        }
+    public Shape( Element element )  throws DataException, InvalidXMLException {
+        super( element );
 
-        String[] numbers = prototype.split("\\s+");
-        int size = numbers.length;
-        int pointCount = size / 2;
+        String prototype = getOptionalStringAttributeOrNull( "polygon" );
+        String circle = getOptionalStringAttributeOrNull( "circle" );
 
-        xPoints = new int[pointCount];
-        yPoints = new int[pointCount];
+        if( null != prototype ) {
+            String[] numbers = prototype.split("\\s+");
+            int size = numbers.length;
+            int pointCount = size / 2;
 
-        // Need at least three points to make a shape.
-        if (6 > size) {
-            throw new DataException("Invalid Shape specification.");
-        }
+            xPoints = new int[pointCount];
+            yPoints = new int[pointCount];
 
-        for (int index = 0, pointIndex = 0; index < size; ) {
-            if (index + 1 >= size) {
+            // Need at least three points to make a shape.
+            if (6 > size) {
                 throw new DataException("Invalid Shape specification.");
             }
 
-            Integer x = Integer.valueOf(numbers[index]);
+            for (int index = 0, pointIndex = 0; index < size; ) {
+                if (index + 1 >= size) {
+                    throw new DataException("Invalid Shape specification.");
+                }
 
-            xPoints[pointIndex] = x;
+                Integer x = Integer.valueOf(numbers[index]);
+                xPoints[pointIndex] = x;
+                index++;
 
-            index++;
+                Integer y = Integer.valueOf(numbers[index]);
+                yPoints[pointIndex] = y;
+                index++;
 
-            Integer y = Integer.valueOf(numbers[index]);
-
-            yPoints[pointIndex] = y;
-
-            vertices.add( new Point( x.doubleValue(), y.doubleValue(), 0.0 ) );
-
-            index++;
-            pointIndex++;
+                pointIndex++;
+            }
+            polygon = new Polygon(xPoints, yPoints, pointCount);
+        }
+        else if ( null != circle ) {
+            radius = new Double( circle );
+        }
+        else {
+            throw new InvalidXMLException("Empty Shape specification.");
         }
 
-        polygon = new Polygon(xPoints, yPoints, pointCount);
     }
 
     double x() {
@@ -91,28 +99,29 @@ public class Shape {
         return rectangle.getHeight();
     }
 
-    String toSvgPath( Double startX, Double startY ) {
-
-        if( Proscenium.Active() ) {
-            startX = Proscenium.Origin().x() + startX;
-            startY = Proscenium.Origin().y() - startY;
+    SvgElement toSvg( SvgElement parent, Draw draw, Double centerX, Double centerY ) {
+        
+        if( null != radius )
+        {
+            if( Proscenium.Active() ) {
+                centerX = Proscenium.Origin().x() + centerX;
+                centerY = Proscenium.Origin().y() - centerY;
+            }
+            return parent.circle( draw, centerX, centerY, radius, Tag );
         }
+        else
+        {
+            StringBuilder path = new StringBuilder("M ");
 
-        StringBuilder result = new StringBuilder( "M " );
+            for (int index = 0; index < xPoints.length; index++) {
+                path.append( Proscenium.LocateIfActivePathString(
+                        centerX + xPoints[index], centerY + yPoints[index] ) );
+            }
 
-        for( int index = 0; index < xPoints.length; index++ ) {
-            Double x = new Double( xPoints[index] ) + startX + SvgElement.OffsetX();
-            result.append( x.toString() );
-            result.append( " " );
+            path.append("Z");
 
-            Double y = new Double( yPoints[index] ) + startY + SvgElement.OffsetY();
-            result.append(y.toString());
-            result.append( " " );
+            return parent.path( draw, path.toString(), Tag );
         }
-
-        result.append( "Z" );
-
-        return result.toString();
     }
 
     Boolean fits(double x, double y, double width, double depth) {
