@@ -284,6 +284,38 @@ public class ProsceniumTest {
 
         assertEquals( fixed, initial );
     }
+
+    @Test
+    public void locateOriginPathString() throws Exception {
+        new Proscenium( element );
+
+        String fixed = Proscenium.LocateIfActivePathString( 0.0, 0.0 );
+
+        assertEquals( fixed, "250.0 144.0 " );
+    }
+
+    @Test
+    public void locateNoProsceniumOriginPathString() throws Exception {
+        String fixed = Proscenium.LocateIfActivePathString( 0.0, 0.0 );
+
+        assertEquals( fixed, "0.0 0.0 " );
+    }
+
+    @Test
+    public void locateUSRHighPathString() throws Exception {
+        new Proscenium( element );
+
+        String fixed = Proscenium.LocateIfActivePathString( 100.0, 120.0 );
+
+        assertEquals( fixed, "350.0 24.0 " );
+    }
+
+    @Test
+    public void locateNoProsceniumUSRHighPathString() throws Exception {
+        String fixed = Proscenium.LocateIfActivePathString( 100.0, 120.0 );
+
+        assertEquals( fixed, "100.0 120.0 " );
+    }
 //
 //    @Test
 //    public void parse() throws Exception {

@@ -81,6 +81,18 @@ public class Proscenium extends MinderDom {
 
     }
 
+    public static String LocateIfActivePathString( Double ex, Double wy ) {
+        Double localX = ex;
+        Double localY = wy;
+
+        if ( Active() ) {
+            localX = ORIGIN.x() + ex;
+            localY = ORIGIN.y() - wy;
+        }
+
+        return localX.toString() + " " + localY.toString() + " ";
+    }
+
     /**
      * Construct a {@code Proscenium} from an XML Element.
      * <p/>
