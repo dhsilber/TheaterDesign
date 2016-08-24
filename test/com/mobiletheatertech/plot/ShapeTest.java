@@ -281,12 +281,15 @@ public class ShapeTest {
         Element element = new IIOMetadataNode( Shape.Tag );
         element.setAttribute( "polygon", polygonRelative );
         Shape instance = new Shape( element );
+        SvgElement parent = draw.element( "parent" );
+        parent.element.setAttribute( "stroke", "orange" );
 
-        SvgElement svg = instance.toSvg( draw.element( "parent" ), draw, x, y );
+        SvgElement svg = instance.toSvg( parent, draw, x, y );
 
         assertEquals( svg.tag(), "path" );
         String path = svg.element.getAttribute( "d" );
         assertEquals( path, pathRelativeProscenium );
+        assertEquals( svg.element.getAttribute("stroke"), "orange" );
     }
 
     @Test
@@ -296,14 +299,17 @@ public class ShapeTest {
         Element element = new IIOMetadataNode( Shape.Tag );
         element.setAttribute( "circle", "7" );
         Shape instance = new Shape( element );
+        SvgElement parent = draw.element( "parent" );
+        parent.element.setAttribute( "stroke", "purple" );
 
-        SvgElement svg = instance.toSvg( draw.element( "parent" ), draw,
+        SvgElement svg = instance.toSvg( parent, draw,
                 xRelative, yRelative );
 
         assertEquals( svg.tag(), "circle" );
         assertEquals( svg.element.getAttribute( "cx" ), xRelative.toString() );
         assertEquals( svg.element.getAttribute( "cy" ), yRelative.toString() );
         assertEquals( svg.element.getAttribute( "r" ), "7.0" );
+        assertEquals( svg.element.getAttribute("stroke"), "purple" );
     }
 
     @Test

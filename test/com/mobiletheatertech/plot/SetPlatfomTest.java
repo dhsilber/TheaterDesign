@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 /**
@@ -34,6 +35,11 @@ public class SetPlatfomTest {
 
 
     @Test
+    public void constantTag() {
+        assertEquals( SetPlatform.Tag(), "set-platform" );
+    }
+
+    @Test
     public void isA() throws Exception {
         SetPlatform instance = new SetPlatform( element );
 
@@ -42,6 +48,7 @@ public class SetPlatfomTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
+        assertTrue( Populate.class.isInstance( instance ) );
 
         assert Legendable.class.isInstance( instance );
     }
@@ -63,6 +70,14 @@ public class SetPlatfomTest {
         assertEquals(TestHelpers.accessDouble(instance, "x"), x.doubleValue());
         assertEquals(TestHelpers.accessDouble(instance, "y"), y.doubleValue());
         assertEquals(TestHelpers.accessDouble(instance, "orientation"), orientation.doubleValue() );
+    }
+
+    @Test
+    public void tagCallbackRegisteredShape() {
+        Event event = new Event( element );
+
+//        assertTrue( event.tags().contains( Shape.Tag ) );
+        assertEquals( event.tags().size(), 2 );
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,

@@ -99,15 +99,16 @@ public class Shape extends Elemental {
         return rectangle.getHeight();
     }
 
-    SvgElement toSvg( SvgElement parent, Draw draw, Double centerX, Double centerY ) {
-        
+    SvgElement toSvg( SvgElement parent, Draw draw, Double centerX, Double centerY )
+    {
+        String color = parent.attribute( "stroke" );
         if( null != radius )
         {
             if( Proscenium.Active() ) {
                 centerX = Proscenium.Origin().x() + centerX;
                 centerY = Proscenium.Origin().y() - centerY;
             }
-            return parent.circle( draw, centerX, centerY, radius, Tag );
+            return parent.circle( draw, centerX, centerY, radius, color );
         }
         else
         {
@@ -120,7 +121,7 @@ public class Shape extends Elemental {
 
             path.append("Z");
 
-            return parent.path( draw, path.toString(), Tag );
+            return parent.path( draw, path.toString(), color );
         }
     }
 
