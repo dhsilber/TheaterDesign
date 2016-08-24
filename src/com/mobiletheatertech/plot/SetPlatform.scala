@@ -22,38 +22,48 @@ class SetPlatform (val element: Element) extends MinderDom(element)
   val y = getDoubleAttribute("y")
   val orientation = getOptionalDoubleAttributeOrZero("orientation")
 
-  val polygonList: ArrayList[ Element ] = subElements(element, "shape")
+//  val polygonList: ArrayList[ Element ] = subElements(element, "shape")
 
-  val Polygons: ArrayList[ Shape ] = new ArrayList[ Shape ]
+  val shapes: ArrayList[ Shape ] = new ArrayList[ Shape ]
 
-  for (polygonElement <- polygonList) {
-    val polygonString: String = polygonElement.getAttribute("polygon")
-    if(null != polygonString && "" != polygonString) {
-//      val polygon: Shape = new Shape( element );//polygonString)
-//      Polygons.add(polygon)
-    }
+  tagCallback( Shape.Tag, processShape )
+  populate( element )
+
+  if ( shapes.size() < 1 )
+    throw new InvalidXMLException( "SetPlatform has no Shape." )
+
+  def processShape( element: Element ): Unit ={
+    shapes.add( new Shape( element ) )
   }
 
-  def subElements(element: Element, tag: String): ArrayList[ Element ] =
-  {
-    val resultList: ArrayList[ Element ] = new ArrayList[ Element ]
-    val displays: NodeList = element.getElementsByTagName(tag)
-    val length: Int = displays.getLength
-    var index: Int = 0
-    while (index < length) {
-      {
-        val node: Node = displays.item(index)
-        if(null != node) if(node.getNodeType == Node.ELEMENT_NODE) {
-          val subElement: Element = node.asInstanceOf[ Element ]
-          resultList.add(subElement)
-        }
-      }
-      {
-        index += 1; index - 1
-      }
-    }
-    resultList
-  }
+//  for (polygonElement <- polygonList) {
+//    val polygonString: String = polygonElement.getAttribute("polygon")
+//    if(null != polygonString && "" != polygonString) {
+////      val polygon: Shape = new Shape( element );//polygonString)
+////      Polygons.add(polygon)
+//    }
+//  }
+//
+//  def subElements(element: Element, tag: String): ArrayList[ Element ] =
+//  {
+//    val resultList: ArrayList[ Element ] = new ArrayList[ Element ]
+//    val displays: NodeList = element.getElementsByTagName(tag)
+//    val length: Int = displays.getLength
+//    var index: Int = 0
+//    while (index < length) {
+//      {
+//        val node: Node = displays.item(index)
+//        if(null != node) if(node.getNodeType == Node.ELEMENT_NODE) {
+//          val subElement: Element = node.asInstanceOf[ Element ]
+//          resultList.add(subElement)
+//        }
+//      }
+//      {
+//        index += 1; index - 1
+//      }
+//    }
+//    resultList
+//  }
 
   def verify()
   {
@@ -61,11 +71,13 @@ class SetPlatform (val element: Element) extends MinderDom(element)
 
   def dom(draw: Draw, mode: View)
   {
-    if(!Proscenium.Active) return
-    val group: SvgElement = draw.group(draw, "")
-//    for (var thing: Shape <- Polygons) {
-//      thing.toSvg( group, draw, x, y )
-//    }
+    val group: SvgElement = draw.group(draw, SetPlatform.Tag )
+    group.element.setAttribute( "stroke", SetPlatform.Color )
+
+    for ( thing <- shapes) {
+      val element = thing.toSvg( group, draw, x, y )
+      element.attribute( "transform", "rotate(" + orientation + "," + x + "," + y + ")" )
+    }
   }
 
   def legendCountReset()
@@ -79,4 +91,5 @@ class SetPlatform (val element: Element) extends MinderDom(element)
 
 object SetPlatform {
   val Tag = "set-platform"
+  val Color = "green"
 }
