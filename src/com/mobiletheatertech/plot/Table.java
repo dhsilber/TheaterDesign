@@ -80,7 +80,7 @@ public class Table extends Stackable implements Legendable {
                     "Table should not extend beyond the boundaries of the venue.");
         }
 
-//        new Category( CATEGORY, this.getClass() );
+//        new Category( Tag, this.getClass() );
     }
 
     public static Table Select( String type ) {

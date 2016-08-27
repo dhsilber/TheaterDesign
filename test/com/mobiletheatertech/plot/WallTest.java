@@ -173,11 +173,11 @@ public class WallTest {
 
 //    @Test
 //    public void layer() throws Exception {
-//        assertNull( Category.Select( Wall.CATEGORY ) );
+//        assertNull( Category.Select( Wall.Tag ) );
 //
 //        new Wall( wallElement );
 //
-//        assertNotNull( Category.Select( Wall.CATEGORY ) );
+//        assertNotNull( Category.Select( Wall.Tag ) );
 //    }
 
 //    @Test

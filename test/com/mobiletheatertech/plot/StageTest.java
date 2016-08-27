@@ -97,11 +97,11 @@ public class StageTest {
 
 //    @Test
 //    public void layer() throws Exception {
-//        assertNull( Category.Select( Stage.CATEGORY ) );
+//        assertNull( Category.Select( Stage.Tag ) );
 //
 //        new Stage( element );
 //
-//        assertNotNull( Category.Select( Stage.CATEGORY ) );
+//        assertNotNull( Category.Select( Stage.Tag ) );
 //    }
 
     @Test

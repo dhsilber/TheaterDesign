@@ -249,11 +249,11 @@ public class TrussTest {
 
 //    @Test
 //    public void layer() throws Exception {
-//        assertNull( Category.Select( Truss.CATEGORY ) );
+//        assertNull( Category.Select( Truss.Tag ) );
 //
 //        new Truss( element );
 //
-//        assertNotNull( Category.Select( Truss.CATEGORY ) );
+//        assertNotNull( Category.Select( Truss.Tag ) );
 //    }
 
     @Test

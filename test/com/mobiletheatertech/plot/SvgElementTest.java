@@ -44,6 +44,18 @@ public class SvgElementTest {
     String color = "blue";
     String group = "g";
 
+    Double dashOffset = 7.0;
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        SvgElement.Offset( 0.0, 0.0 );
+        element = new IIOMetadataNode( "bogus" );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
+
     @Test
     public void hasElement() {
         SvgElement element = new SvgElement( new IIOMetadataNode() );
@@ -144,6 +156,28 @@ public class SvgElementTest {
         SvgElement symbol = draw.element("symbol");
 
         baseCircle(draw, symbol);
+    }
+
+    @Test
+    public void svgDashedLine() throws InvalidXMLException {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        SvgElement parent = draw.element("something");
+
+        SvgElement result = parent.dashedLine(draw,
+                x1, y1, x2, y2, color, dashOffset );
+
+        assertEquals(result.attribute("x1"), x1.toString());
+        assertEquals( result.attribute("y1"), y1.toString() );
+        assertEquals(result.attribute("x2"), x2.toString());
+        assertEquals(result.attribute("y2"), y2.toString());
+        assertEquals( result.attribute("stroke"), color );
+        assertEquals( result.attribute("stroke-dasharray"), "48" );
+        assertEquals( result.attribute("stroke-dashoffset"), dashOffset.toString() );
+//        assertEquals( result.attribute("stroke-width"), "2" );
+
+        Node childNode = parent.element().getLastChild();
+        assert( childNode.isSameNode( result.element() ) );
     }
 
     @Test
@@ -338,52 +372,52 @@ public class SvgElementTest {
         baseRectangle(draw, symbol);
     }
 
-
-    @Test
-    public void scaleLine() {
-        Draw draw = new Draw();
-        SvgElement parent = draw.element("defs");
-
-        Point start = new Point( x1, y1, 0.0 );
-        SvgElement result = parent.scaleLine(draw, start, width, height );
-
-        assertEquals(result.tag(), group);
-        assertEquals(result.attribute("class"), "scale");
-
-        NodeList list = result.element().getChildNodes();
-
-        assertEquals( list.getLength(), 8 );
-        for( int index = 0; index < 8; index += 2) {
-            Node node = list.item( index );
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element1 = (Element) node;
-
-                each(element1, index );
-
-                assertEquals(element1.getAttribute("stroke-dasharray"), "", "index: " + index );
-                assertEquals(element1.getAttribute("stroke-dashoffset"), "", "index: " + index );
-            }
-        }
-        for( int index = 1; index < 8; index += 2 ) {
-            Node node = list.item(index);
-            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element1 = (Element) node;
-
-                each(element1, index );
-
-                assertEquals(element1.getAttribute("stroke-dasharray"), "48", "index: " + index );
-//                assertEquals(element1.getAttribute("stroke-dashoffset"), "90", "index: " + index );
-            }
-        }
-
-        Node childNode = parent.element().getLastChild();
-        assert( childNode.isSameNode( result.element() ) );
-    }
-
-    private void each( Element element, int index ) {
-        assertEquals( element.getTagName(), "line", "index: " + index );
-        assertEquals( element.getAttribute("stroke-width"), "3", "index: " + index );
-    }
+//
+//    @Test
+//    public void scaleLine() {
+//        Draw draw = new Draw();
+//        SvgElement parent = draw.element("defs");
+//
+//        Point start = new Point( x1, y1, 0.0 );
+//        SvgElement result = parent.scaleLine(draw, start, width, height );
+//
+//        assertEquals(result.tag(), group);
+//        assertEquals(result.attribute("class"), "scale");
+//
+//        NodeList list = result.element().getChildNodes();
+//
+//        assertEquals( list.getLength(), 8 );
+//        for( int index = 0; index < 8; index += 2) {
+//            Node node = list.item( index );
+//            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
+//                Element element1 = (Element) node;
+//
+//                each(element1, index );
+//
+//                assertEquals(element1.getAttribute("stroke-dasharray"), "", "index: " + index );
+//                assertEquals(element1.getAttribute("stroke-dashoffset"), "", "index: " + index );
+//            }
+//        }
+//        for( int index = 1; index < 8; index += 2 ) {
+//            Node node = list.item(index);
+//            if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
+//                Element element1 = (Element) node;
+//
+//                each(element1, index );
+//
+//                assertEquals(element1.getAttribute("stroke-dasharray"), "48", "index: " + index );
+////                assertEquals(element1.getAttribute("stroke-dashoffset"), "90", "index: " + index );
+//            }
+//        }
+//
+//        Node childNode = parent.element().getLastChild();
+//        assert( childNode.isSameNode( result.element() ) );
+//    }
+//
+//    private void each( Element element, int index ) {
+//        assertEquals( element.getTagName(), "line", "index: " + index );
+//        assertEquals( element.getAttribute("stroke-width"), "3", "index: " + index );
+//    }
 
 
     @Test
@@ -572,15 +606,5 @@ public class SvgElementTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        SvgElement.Offset( 0.0, 0.0 );
-        element = new IIOMetadataNode( "bogus" );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

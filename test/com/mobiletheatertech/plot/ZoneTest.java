@@ -39,6 +39,39 @@ public class ZoneTest {
     String color = "magenta";
     String defaultColor = "teal";
 
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.MinderDomReset();
+        TestResets.ProsceniumReset();
+        TestResets.LayerReset();
+
+        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "350" );
+        venueElement.setAttribute( "depth", "400" );
+        venueElement.setAttribute( "height", "240" );
+        new Venue( venueElement );
+
+        prosceniumElement = new IIOMetadataNode( "proscenium" );
+        prosceniumElement.setAttribute( "x", "175" );
+        prosceniumElement.setAttribute( "y", "150" );
+        prosceniumElement.setAttribute( "z", "12" );
+        prosceniumElement.setAttribute( "width", "200" );
+        prosceniumElement.setAttribute( "depth", "23" );
+        prosceniumElement.setAttribute( "height", "144" );
+
+        element = new IIOMetadataNode( "zone" );
+        element.setAttribute( "id", id );
+        element.setAttribute( "x", x.toString() );
+        element.setAttribute( "y", y.toString() );
+//        baseElement.setAttribute( "z", z.toString() );
+        element.setAttribute( "r", r.toString() );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
+
     @Test
     public void isMinderDom() throws Exception {
         Zone zone = new Zone( element );
@@ -388,39 +421,6 @@ public class ZoneTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.MinderDomReset();
-        TestResets.ProsceniumReset();
-        TestResets.LayerReset();
-
-        Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        new Venue( venueElement );
-
-        prosceniumElement = new IIOMetadataNode( "proscenium" );
-        prosceniumElement.setAttribute( "x", "175" );
-        prosceniumElement.setAttribute( "y", "150" );
-        prosceniumElement.setAttribute( "z", "12" );
-        prosceniumElement.setAttribute( "width", "200" );
-        prosceniumElement.setAttribute( "depth", "23" );
-        prosceniumElement.setAttribute( "height", "144" );
-
-        element = new IIOMetadataNode( "zone" );
-        element.setAttribute( "id", id );
-        element.setAttribute( "x", x.toString() );
-        element.setAttribute( "y", y.toString() );
-//        baseElement.setAttribute( "z", z.toString() );
-        element.setAttribute( "r", r.toString() );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 
 }

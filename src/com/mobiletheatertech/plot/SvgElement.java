@@ -3,10 +3,8 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-import org.w3c.dom.svg.SVGElement;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 
 /**
  * Created by dhs on 9/21/14.
@@ -117,6 +115,22 @@ class SvgElement {
         return element;
     }
 
+    SvgElement dashedLine(Draw draw,
+                          Double startX, Double startY, Double endX, Double endY,
+                          String color, Double dashOffset) {
+        SvgElement topBumps = this.lineAbsolute( draw,
+                startX,
+                startY,
+                endX,
+                endY,
+                color );
+        topBumps.attribute( "stroke-width", "3" );
+        topBumps.attribute( "stroke-dasharray", "48" );
+        topBumps.attribute( "stroke-dashoffset", dashOffset.toString() );
+
+        return topBumps;
+    }
+
     public SvgElement group( Draw draw, String className ) {
         SvgElement element = groupExceptAppend(draw, className);
 
@@ -126,7 +140,7 @@ class SvgElement {
     }
 
     // TODO Clean source for this out of MinderDom
-    SvgElement groupExceptAppend(Draw draw, String className) {
+    public SvgElement groupExceptAppend(Draw draw, String className) {
         SvgElement element = draw.element("g");
         element.attribute("class", className);
 
@@ -135,7 +149,8 @@ class SvgElement {
 
     public SvgElement line( Draw draw,
                                       Double x1, Double y1, Double x2, Double y2,
-                                      String color ) {
+                                      String color )
+    {
         Double x1Set = x1;
         Double y1Set = y1;
         Double x2Set = x2;
@@ -150,7 +165,10 @@ class SvgElement {
         return lineAbsolute(draw, x1Set, y1Set, x2Set, y2Set, color );
     }
 
-    SvgElement lineAbsolute(Draw draw, Double x1, Double y1, Double x2, Double y2, String color ) {
+    SvgElement lineAbsolute(Draw draw,
+                            Double x1, Double y1, Double x2, Double y2,
+                            String color )
+    {
         SvgElement element = draw.element("line");
         element.attribute("x1", x1.toString());
         element.attribute("y1", y1.toString());
@@ -222,131 +240,6 @@ class SvgElement {
 
         this.appendChild( element );
         return element;
-    }
-
-    /*
-    For use by Grid.
-     */
-    public SvgElement scaleLine( Draw draw, Point start, Double width, Double height ){
-        String color = "blue";
-        Double thickness = 19.0;  // width of two lines and numbers
-        Integer lineSpacer = 3;
-        Integer dashSpacer = 6;
-
-        SvgElement scale = groupExceptAppend(draw, "scale");
-
-        SvgElement top = scale.lineAbsolute( draw,
-                thickness - lineSpacer,
-                thickness - lineSpacer,
-                width + thickness + lineSpacer,
-                thickness - lineSpacer,
-                color );
-        top.attribute( "stroke-width", "3" );
-
-//        Double startX =  thickness - dashSpacer;
-//        Double startY = thickness - dashSpacer;
-//        Double endX = width + thickness + dashSpacer;
-//        Double endY = thickness - dashSpacer;
-
-        Integer dashOffsetX = - start.x().intValue() % 48;// + dashSpacer;
-        Integer dashOffsetY = start.y().intValue() % 48 - dashSpacer;
-
-        bumpyLine(draw, scale,
-                thickness,
-                thickness - dashSpacer,
-                width + thickness,
-                thickness - dashSpacer,
-                color, dashOffsetX);
-
-//        Integer incrementX = start.x().intValue();
-        xAxisMeasurements(draw, start, width, 8.0, color, thickness, scale);
-
-        SvgElement bottom = scale.lineAbsolute( draw,
-                thickness - lineSpacer * 1.0,
-                height + thickness + lineSpacer,
-                width + thickness + lineSpacer * 1.0,
-                height + thickness + lineSpacer,
-                color );
-        bottom.attribute( "stroke-width", "3" );
-
-        bumpyLine(draw, scale,
-                thickness,
-                height + thickness + dashSpacer,
-                width + thickness,
-                height + thickness + dashSpacer,
-                color, dashOffsetX);
-
-        xAxisMeasurements(draw, start, width, thickness + height + 16, color, thickness, scale);
-
-        SvgElement left = scale.lineAbsolute( draw,
-                thickness - lineSpacer * 1.0,
-                thickness - lineSpacer,
-                thickness - lineSpacer * 1.0,
-                height + thickness + lineSpacer,
-                color );
-        left.attribute( "stroke-width", "3" );
-
-        bumpyLine( draw, scale,
-                thickness - dashSpacer * 1.0,
-                thickness - dashSpacer,
-                thickness - dashSpacer * 1.0,
-                height + thickness + dashSpacer,
-                color, dashOffsetY );
-
-        yAxisMeasurements(draw, start, height, 1.0, color, thickness, scale, "left");
-
-        SvgElement right = scale.lineAbsolute( draw,
-                width + thickness + lineSpacer * 1.0,
-                thickness - lineSpacer,
-                width + thickness + lineSpacer * 1.0,
-                height + thickness + lineSpacer,
-                color );
-        right.attribute( "stroke-width", "3" );
-
-        bumpyLine( draw, scale,
-                width + thickness + dashSpacer * 1.0,
-                thickness - dashSpacer,
-                width + thickness + dashSpacer * 1.0,
-                height + thickness + dashSpacer,
-                color, dashOffsetY );
-
-        yAxisMeasurements(draw, start, height, width + thickness + 10, color, thickness, scale, "right");
-
-        this.appendChild( scale );
-
-        return scale;
-    }
-
-    void bumpyLine(Draw draw, SvgElement parent, Double startX, Double startY, Double endX, Double endY, String color,
-                   Integer dashOffset) {
-        SvgElement topBumps = parent.lineAbsolute( draw,
-                startX,
-                startY,
-                endX,
-                endY,
-                color );
-        topBumps.attribute( "stroke-width", "3" );
-        topBumps.attribute( "stroke-dasharray", "48" );
-        topBumps.attribute( "stroke-dashoffset", dashOffset.toString() );
-    }
-
-    void xAxisMeasurements(Draw draw, Point start, Double width, Double y, String color, Double thickness, SvgElement scale) {
-        for( Double place = thickness + start.x() % 48; place < width; place += 48 ) {
-            Integer value = (place.intValue() - thickness.intValue() - start.x().intValue()) / 12;
-            SvgElement number =
-                    scale.textAbsolute( draw, value.toString(), place, y, color);
-            number.attribute( "text-anchor", "middle" );
-        }
-    }
-
-    void yAxisMeasurements(Draw draw, Point start, Double height, Double x, String color,
-                          Double thickness, SvgElement scale, String anchor) {
-        for( Double place = thickness + start.y() % 48; place < height; place += 48 ) {
-            Integer value = (int)(place - thickness - start.y()) / 12;
-            SvgElement number = scale.textAbsolute( draw, value.toString(), x, place, color);
-            number.attribute( "dominant-baseline", "central" );
-            number.attribute( "text-anchor", anchor );
-        }
     }
 
     public SvgElement symbol( Draw draw, String id ) {

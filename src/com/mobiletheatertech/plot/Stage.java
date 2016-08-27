@@ -64,7 +64,7 @@ public class Stage extends Stackable implements Legendable {
                     "Stage should not extend beyond the boundaries of the venue." );
         }
 
-//        new Category( CATEGORY, this.getClass() );
+//        new Category( Tag, this.getClass() );
     }
 
     public ArrayList<Device> risers() {

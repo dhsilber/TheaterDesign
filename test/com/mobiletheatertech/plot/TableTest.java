@@ -81,11 +81,11 @@ public class TableTest {
 
 //    @Test
 //    public void layer() throws Exception {
-//        assertNull(Category.Select(Table.CATEGORY));
+//        assertNull(Category.Select(Table.Tag));
 //
 //        new Table( element );
 //
-//        assertNotNull(Category.Select(Table.CATEGORY));
+//        assertNotNull(Category.Select(Table.Tag));
 //    }
 
     @Test

@@ -118,11 +118,11 @@ public class HangPointTest {
 
 //    @Test
 //    public void layer() throws Exception {
-//        assertNull( Category.Select( HangPoint.CATEGORY ) );
+//        assertNull( Category.Select( HangPoint.Tag ) );
 //
 //        new HangPoint( element );
 //
-//        assertNotNull( Category.Select( HangPoint.CATEGORY ) );
+//        assertNotNull( Category.Select( HangPoint.Tag ) );
 //    }
 
     /*
