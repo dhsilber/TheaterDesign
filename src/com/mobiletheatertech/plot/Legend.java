@@ -17,15 +17,17 @@ import java.util.TreeMap;
  */
 public class Legend {
 
+    public static final String Tag = "legend";
+
     public static final String TEXTCOLOR = "black";
 
     private static TreeMap<Integer, Legendable> LEGENDLIST = new TreeMap<>();
-    private static Double HEIGHT = 0.0;
-    private static Double WIDEST = 0.0;
+    protected static Double HEIGHT = 0.0;
+    protected static Double WIDEST = 0.0;
 
     private static PagePoint INITIAL;
     private static Draw DRAW;
-    private static Double Y;
+    protected static Double Y;
     private static Double Center;
 
     static final String CATEGORY = "legend";
@@ -56,14 +58,14 @@ public class Legend {
      * After everything that might want a Legend slot has registered, draw the outline and start off
      * the legend with the name of the plot.
      */
-    public static void Startup( Draw draw, View mode, Double x, Integer width )
+    public static void Startup( Draw draw, View mode, Double x, Double width )
             throws ReferenceException {
         Element group = MainHeaders(draw, x, width);
 
         DrawBox(draw, x, width, group);
     }
 
-    static void DrawBox(Draw draw, Double x, Integer width, Element group) {
+    static void DrawBox(Draw draw, Double x, Double width, Element group) {
         INITIAL = new PagePoint(x + 25, Y);
 
         // TODO Adding the Y offset to the box height is really cheating
@@ -79,11 +81,11 @@ public class Legend {
         group.appendChild(box);
     }
 
-    static Element MainHeaders(Draw draw, Double x, Integer width) throws ReferenceException {
+    static Element MainHeaders(Draw draw, Double x, Double width) throws ReferenceException {
         DRAW = draw;
 
         Element group = draw.document().createElement("g");
-        group.setAttribute("class", "legend");
+        group.setAttribute( "class", Legend.Tag );
         draw.appendRootChild(group);
 
 //        Double x = start;
@@ -97,7 +99,7 @@ public class Legend {
         return group;
     }
 
-    public static void Startup( Draw draw, Drawing drawing, View mode, Double x, Integer width )
+    public static void Startup( Draw draw, Drawing drawing, View mode, Double x, Double width )
             throws ReferenceException {
         Element group = MainHeaders(draw, x, width);
 
@@ -150,7 +152,7 @@ public class Legend {
      * @return
      * @throws ReferenceException
      */
-    public static Integer PlanWidth() throws ReferenceException {
+    public static Double PlanWidth() throws ReferenceException {
         Double widthAvailable;
         if ( Venue.Depth() < Venue.Width() ) {
             widthAvailable = (Venue.Depth() * 1.54)
@@ -166,9 +168,7 @@ public class Legend {
                     - Venue.Width() - SvgElement.OffsetX() * 2 - 5 - 2;
         }
 
-        Integer width = widthAvailable.intValue();
-
-        return width;
+        return widthAvailable;
     }
 
     /**

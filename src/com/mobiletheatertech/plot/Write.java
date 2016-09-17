@@ -107,7 +107,7 @@ public class Write {
 
         String pathname = Configuration.SinkDirectory();
 
-        System.out.println( "Write path: " + pathname );
+//        System.out.println( "Write path: " + pathname );
 
         writeDirectory(pathname);
         writeFile( pathname, "drawings.html", generateHTMLDrawingList( Configuration.BaseName() ) );
@@ -293,26 +293,6 @@ public class Write {
         return output;
     }
 
-    private Draw drawPlan() throws InvalidXMLException, MountingException, ReferenceException {
-
-        resetOneOffs();
-
-        Draw draw = startFile();
-        Legend.Startup(draw, View.PLAN,
-                Venue.Width() + SvgElement.OffsetX() * 2 + 5,
-                Legend.PlanWidth() );
-        MinderDom.DomAllPlan(draw);
-
-        Hack.Dom(draw, View.PLAN );
-
-        Legend.Callback();
-
-//        String pathname = basename + "/plan.svg";
-//
-//        draw.create(pathname);
-        return draw;
-    }
-
     Draw startFile() throws ReferenceException {
         Draw draw = new Draw();
         draw.establishRoot();
@@ -402,13 +382,33 @@ public class Write {
         return row;
     }
 
-    private Draw drawSection() throws InvalidXMLException, MountingException, ReferenceException {
+    protected Draw drawPlan() throws InvalidXMLException, MountingException, ReferenceException {
+
+        resetOneOffs();
+
+        Draw draw = startFile();
+        Legend.Startup(draw, View.PLAN,
+                Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                Legend.PlanWidth() );
+        MinderDom.DomAllPlan(draw);
+
+        Hack.Dom(draw, View.PLAN );
+
+        Legend.Callback();
+
+//        String pathname = basename + "/plan.svg";
+//
+//        draw.create(pathname);
+        return draw;
+    }
+
+    protected Draw drawSection() throws InvalidXMLException, MountingException, ReferenceException {
 
         resetOneOffs();
 
         Draw draw = startFile();
         Legend.Startup(draw, View.SECTION,
-                Venue.Width() + SvgElement.OffsetX() * 2 + 5,
+                Venue.Depth() + SvgElement.OffsetX() * 2 + 5,
                 Legend.PlanWidth() );
         MinderDom.DomAllSection(draw);
 
@@ -455,7 +455,7 @@ public class Write {
 //        Grid.DOM(draw);
 
         // Hardcoded values here are for Arisia '14 flying truss.
-        Legend.Startup(draw, View.TRUSS, 700.0, 300);
+        Legend.Startup(draw, View.TRUSS, 700.0, 300.0 );
 
         MinderDom.DomAllTruss(draw);
 
@@ -503,7 +503,7 @@ public class Write {
     Draw writeIndividualDrawing( Drawing drawing )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
     {
-System.out.println( "Drawing: " + drawing.filename() );
+//System.out.println( "Drawing: " + drawing.filename() );
 
         resetOneOffs();
 
@@ -573,7 +573,7 @@ System.out.println( "Drawing: " + drawing.filename() );
         }
 
         for ( String layerName : drawing.layers ) {
-System.out.println( "LayerName: " + layerName );
+//System.out.println( "LayerName: " + layerName );
             if ( layerName.equals( Legend.CATEGORY )) {
                 switch (view) {
                     case PLAN:
@@ -600,7 +600,7 @@ System.out.println( "LayerName: " + layerName );
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
-System.out.println( "Item: " + item.id );
+//System.out.println( "Item: " + item.id );
                 if( MinderDom.class.isInstance( item ) ) {
                     MinderDom thingy = (MinderDom) item;
                     thingy.dom( draw, view );

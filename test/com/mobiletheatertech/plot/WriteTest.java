@@ -38,6 +38,36 @@ public class WriteTest {
 
     Element venueElement;
 
+    String venueRoom = "Test Room";
+    Integer venueHWidth = 350;
+    Integer venueHDepth = 400;
+    Integer venueHeight = 240;
+
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        Venue.Reset();
+        TestResets.MinderDomReset();
+//        TestResets.DeviceReset();
+        TestResets.ElementalListerReset();
+        UniqueId.Reset();
+        TestResets.DeviceTemplateReset();
+
+        venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", venueRoom );
+        venueElement.setAttribute( "width", venueHWidth.toString() );
+        venueElement.setAttribute( "depth", venueHDepth.toString() );
+        venueElement.setAttribute( "height", venueHeight.toString() );
+        new Venue( venueElement );
+
+        Element eventElement = new IIOMetadataNode( "event" );
+        eventElement.setAttribute( "id", "WriteTest event" );
+        new Event( eventElement );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
 //    @Test
 //    // TODO Is it even possible for this to happen?
@@ -53,7 +83,7 @@ public class WriteTest {
         Random random = new Random();
         String directoryName = ((Integer) random.nextInt()).toString();
         String pathName = System.getProperty( "user.home" ) + "/Dropbox/Plot/out/" + directoryName;
-        System.err.println( "Pathname: " + pathName );
+        System.err.println( "Pathname for test results: " + pathName );
         File tmp = new File( pathName );
         assertFalse( tmp.exists() );
 
@@ -317,6 +347,8 @@ public class WriteTest {
 
         DeviceTemplate deviceTemplate = new DeviceTemplate( deviceTemplateElement );
 
+        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+
         Element deviceElement = new IIOMetadataNode( "device" );
         deviceElement.setAttribute( "id", "Fred" );
         deviceElement.setAttribute( "is", deviceType );
@@ -327,7 +359,7 @@ public class WriteTest {
         Device device = new Device( deviceElement );
         device.verify();
 
-        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
+//        assertEquals( TestHelpers.accessInteger( deviceTemplate, "count" ), (Integer) 0 );
 
         Write write = new Write();
         write.writeIndividualDrawing(drawing);
@@ -367,6 +399,56 @@ public class WriteTest {
         assertEquals( TestHelpers.accessView(bogusMindedDom, "view"), View.PLAN );
     }
 
+    @Test
+    public void drawPlanLegendStartup() throws Exception {
+        Write write = new Write();
+        Draw draw = write.drawPlan();
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        // item 0 exists before dom() adds any content.
+        Node groupNode = groupList.item(1);
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Legend.Tag );
+
+        NodeList groupBoxes = groupElement.getElementsByTagName( "rect" );
+        Node boxNode = groupBoxes.item( 0 );
+        assertEquals( boxNode.getNodeType(), Node.ELEMENT_NODE );
+        Element boxElement = (Element) boxNode;
+        Double x = venueHWidth + SvgElement.OffsetX() * 2 + 5;
+        assertEquals( boxElement.getAttribute( "x" ), x.toString() );
+        assertEquals( boxElement.getAttribute( "y" ), "1" );
+        assertEquals( boxElement.getAttribute( "width" ), Legend.PlanWidth().toString() );
+        Double height = Legend.Y + Legend.HEIGHT + SvgElement.OffsetY();
+        assertEquals( boxElement.getAttribute( "height" ), height.toString() );
+        assertEquals( boxElement.getAttribute( "fill" ), "none" );
+    }
+
+    @Test
+    public void drawSectionLegendStartup() throws Exception {
+        Write write = new Write();
+        Draw draw = write.drawSection();
+
+        NodeList groupList = draw.root().getElementsByTagName( "g" );
+        // item 0 exists before dom() adds any content.
+        Node groupNode = groupList.item(1);
+        assertEquals( groupNode.getNodeType(), Node.ELEMENT_NODE );
+        Element groupElement = (Element) groupNode;
+        assertEquals( groupElement.getAttribute( "class" ), Legend.Tag );
+
+        NodeList groupBoxes = groupElement.getElementsByTagName( "rect" );
+        Node boxNode = groupBoxes.item( 0 );
+        assertEquals( boxNode.getNodeType(), Node.ELEMENT_NODE );
+        Element boxElement = (Element) boxNode;
+        Double x = venueHDepth + SvgElement.OffsetX() * 2 + 5;
+        assertEquals( boxElement.getAttribute( "x" ), x.toString() );
+        assertEquals( boxElement.getAttribute( "y" ), "1" );
+        assertEquals( boxElement.getAttribute( "width" ), Legend.PlanWidth().toString() );
+        Double height = Legend.Y + Legend.HEIGHT + SvgElement.OffsetY();
+        assertEquals( boxElement.getAttribute( "height" ), height.toString() );
+        assertEquals( boxElement.getAttribute( "fill" ), "none" );
+    }
+
 //    @Test
 //    public void writeIndividualDrawingSetsViewSchematic() throws Exception {
 //        String layerId = "MindedDom";
@@ -402,30 +484,5 @@ public class WriteTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        Venue.Reset();
-        TestResets.MinderDomReset();
-//        TestResets.DeviceReset();
-        TestResets.ElementalListerReset();
-        UniqueId.Reset();
-        TestResets.DeviceTemplateReset();
-
-        venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Room" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        new Venue( venueElement );
-
-        Element eventElement = new IIOMetadataNode( "event" );
-        eventElement.setAttribute( "id", "WriteTest event" );
-        new Event( eventElement );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

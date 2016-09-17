@@ -37,6 +37,11 @@ public class LegendTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals( Legend.Tag, "legend" );
+    }
+
+    @Test
     public void hasList() throws Exception {
         Object thingy = TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend",
                                                         "LEGENDLIST" );
@@ -65,7 +70,7 @@ public class LegendTest {
         Draw draw = new Draw();
         draw.establishRoot();
 
-        Legend.Startup( draw, View.PLAN, 100.0, 100 );
+        Legend.Startup( draw, View.PLAN, 100.0, 100.0 );
 //        TestHelpers.setStaticObject(
 //                "com.mobiletheatertech.plot.Legend", "INITIAL", new PagePoint( 1, 2 ) );
 
@@ -93,7 +98,7 @@ public class LegendTest {
         Draw draw = new Draw();
         draw.establishRoot();
 
-        Legend.Startup(draw, View.PLAN, 100.0, 100);
+        Legend.Startup(draw, View.PLAN, 100.0, 100.0 );
 
         NodeList list = draw.root().getElementsByTagName( "text" );
         assertEquals( list.getLength(), 3 );
@@ -128,7 +133,7 @@ public class LegendTest {
         Draw draw = new Draw();
         draw.establishRoot();
 
-        Legend.Startup( draw, drawing, View.PLAN, 100.0, 100 );
+        Legend.Startup( draw, drawing, View.PLAN, 100.0, 100.0 );
 
         NodeList list = draw.root().getElementsByTagName( "text" );
         assertEquals( list.getLength(), 4 );
