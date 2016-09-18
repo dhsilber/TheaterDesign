@@ -511,12 +511,28 @@ public class VenueTest {
         Venue venue = new Venue( element );
 
         NodeList existingChildren = draw.root().getChildNodes();//  getElementsByTagName("rect");
-        assertEquals(existingChildren.getLength(), 3);
+        assertEquals( existingChildren.getLength(), 3 );
 
-        venue.dom(draw, View.PLAN);
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        venue.dom( draw, View.PLAN );
 
         NodeList children = draw.root().getChildNodes();
-        assertEquals(children.getLength(), 3);
+        assertEquals( children.getLength(), 4 );
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+        assertEquals(tableElement.getAttribute("x"), "0.0" );
+        assertEquals(tableElement.getAttribute("y"), "0.0" );
+        assertEquals(tableElement.getAttribute("width"), width.toString() );
+        // Plot attribute is 'depth'. SVG attribute is 'height'.
+        assertEquals(tableElement.getAttribute("height"), depth.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "black");
     }
 
 //    @Test
@@ -544,32 +560,32 @@ public class VenueTest {
 //        assertEquals(tableElement.getAttribute("fill"), "none");
 //        assertEquals(tableElement.getAttribute("stroke"), "black");
 //    }
-//
-//    @Test
-//    public void domSection() throws Exception {
-//        Draw draw = new Draw();
-//
-//        draw.establishRoot();
-//        Venue venue = new Venue( element );
-//
-//        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
-//        assertEquals(existingRectangles.getLength(), 0);
-//
-//        venue.dom(draw, View.SECTION);
-//
-//        NodeList rectangles = draw.root().getElementsByTagName("rect");
-//        assertEquals(rectangles.getLength(), 1);
-//        Node groupNode = rectangles.item(0);
-//        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
-//        Element tableElement = (Element) groupNode;
-//        assertEquals(tableElement.getAttribute("x"), "0.0" );
-//        assertEquals(tableElement.getAttribute("y"), "0.0" );
-//        assertEquals(tableElement.getAttribute("width"), depth.toString() );
-//        // Plot attribute is 'depth'. SVG attribute is 'height'.
-//        assertEquals(tableElement.getAttribute("height"), height.toString() );
-//        assertEquals(tableElement.getAttribute("fill"), "none");
-//        assertEquals(tableElement.getAttribute("stroke"), "black");
-//    }
+
+    @Test
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+
+        draw.establishRoot();
+        Venue venue = new Venue( element );
+
+        NodeList existingRectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(existingRectangles.getLength(), 0);
+
+        venue.dom(draw, View.SECTION);
+
+        NodeList rectangles = draw.root().getElementsByTagName("rect");
+        assertEquals(rectangles.getLength(), 1);
+        Node groupNode = rectangles.item(0);
+        assertEquals(groupNode.getNodeType(), Node.ELEMENT_NODE);
+        Element tableElement = (Element) groupNode;
+        assertEquals(tableElement.getAttribute("x"), "0.0" );
+        assertEquals(tableElement.getAttribute("y"), "0.0" );
+        assertEquals(tableElement.getAttribute("width"), depth.toString() );
+        Double tallness = height - Point.SmallZ();
+        assertEquals(tableElement.getAttribute("height"), tallness.toString() );
+        assertEquals(tableElement.getAttribute("fill"), "none");
+        assertEquals(tableElement.getAttribute("stroke"), "black");
+    }
 
 
     @Test

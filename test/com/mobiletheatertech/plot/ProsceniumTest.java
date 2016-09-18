@@ -27,7 +27,30 @@ public class ProsceniumTest {
     Double y = 144.0;
     Double z = 12.0;
 
-    public ProsceniumTest() {
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.ProsceniumReset();
+        TestResets.PointReset();
+
+        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "550" );
+        venueElement.setAttribute( "depth", "400" );
+        venueElement.setAttribute( "height", "263" );
+        new Venue( venueElement );
+
+        element = new IIOMetadataNode( "proscenium" );
+        element.setAttribute( "width", width.toString() );
+        element.setAttribute( "height", height.toString() );
+        element.setAttribute( "depth", depth.toString() );
+        element.setAttribute( "x", x.toString() );
+        element.setAttribute( "y", y.toString() );
+        element.setAttribute( "z", z.toString() );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
     }
 
     @Test
@@ -245,6 +268,15 @@ public class ProsceniumTest {
     }
 
     @Test
+    public void creationUpdatesMinimumZ() throws Exception {
+        assertEquals( Point.SmallZ(), 0.0 );
+
+        new Proscenium( element );
+
+        assertEquals( Point.SmallZ(), -z );
+    }
+
+    @Test
     public void locateOrigin() throws Exception {
         new Proscenium( element );
         Point origin = new Point( 0.0, 0.0, 0.0 );
@@ -440,29 +472,5 @@ public class ProsceniumTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.ProsceniumReset();
-
-        Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "550" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "263" );
-        new Venue( venueElement );
-
-        element = new IIOMetadataNode( "proscenium" );
-        element.setAttribute( "width", width.toString() );
-        element.setAttribute( "height", height.toString() );
-        element.setAttribute( "depth", depth.toString() );
-        element.setAttribute( "x", x.toString() );
-        element.setAttribute( "y", y.toString() );
-        element.setAttribute( "z", z.toString() );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

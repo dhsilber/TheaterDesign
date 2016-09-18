@@ -144,6 +144,7 @@ public class Proscenium extends MinderDom {
 
         ACTIVE = true;
         ORIGIN = new Point(x, y, z);
+        new Point( x, y, - z );
     }
 
     @Override

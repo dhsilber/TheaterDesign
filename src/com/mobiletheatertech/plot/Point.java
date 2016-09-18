@@ -46,25 +46,13 @@ public class Point {
     }
 
     void keepExtent() {
-        SmallX = this.x < SmallX
-                 ? this.x
-                 : SmallX;
-        SmallY = this.y < SmallY
-                 ? this.y
-                 : SmallY;
-        SmallZ = this.z < SmallZ
-                 ? this.z
-                 : SmallZ;
+        SmallX = this.x < SmallX ? this.x : SmallX;
+        SmallY = this.y < SmallY ? this.y : SmallY;
+        SmallZ = this.z < SmallZ ? this.z : SmallZ;
 
-        LargeX = this.x > LargeX
-                 ? this.x
-                 : LargeX;
-        LargeY = this.y > LargeY
-                 ? this.y
-                 : LargeY;
-        LargeZ = this.z > LargeZ
-                 ? this.z
-                 : LargeZ;
+        LargeX = this.x > LargeX ? this.x : LargeX;
+        LargeY = this.y > LargeY ? this.y : LargeY;
+        LargeZ = this.z > LargeZ ? this.z : LargeZ;
     }
 
     /**

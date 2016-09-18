@@ -50,8 +50,10 @@ class Venue ( element: Element) extends MinderDom(element)
   def dom(draw: Draw, mode: View) {
     mode match {
       case View.PLAN =>
+        draw.rectangle(draw, 0.0, 0.0, width, depth, Venue.COLOR)
       case View.SECTION =>
-        draw.rectangle(draw, 0.0, 0.0, depth, height, Venue.COLOR)
+//        println( s"z: ${Point.SmallZ}")
+        draw.rectangle(draw, 0.0, 0.0, depth, height - Point.SmallZ, Venue.COLOR)
       case View.FRONT =>
         draw.rectangle(draw, 0.0, 0.0, width, height, Venue.COLOR)
       case View.TRUSS =>
