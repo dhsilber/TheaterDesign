@@ -29,6 +29,8 @@ class ProtoWall( element: Element ) extends MinderDom( element: Element )
   }
 
   override def dom(draw: Draw, mode: View): Unit = {
+    if( mode == View.SECTION ) return
+
     val wallStart = start
     val wallEnd = end
     val wallSegment = new Line( wallStart, wallEnd )

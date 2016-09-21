@@ -53,6 +53,59 @@ public class WallTest {
     Double open2Start = 55.4;
 
 
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.WallReset();
+        TestResets.ElementalListerReset();
+
+        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "350" );
+        venueElement.setAttribute( "depth", "400" );
+        venueElement.setAttribute( "height", "240" );
+        new Venue( venueElement );
+
+        wallElement = new IIOMetadataNode( "wall" );
+        wallElement.setAttribute( "x1", x1.toString() );
+        wallElement.setAttribute( "y1", y1.toString() );
+        wallElement.setAttribute( "x2", x2.toString() );
+        wallElement.setAttribute( "y2", y2.toString() );
+
+        wallElement2 = new IIOMetadataNode( "wall" );
+        wallElement2.setAttribute( "x1", x2.toString() );
+        wallElement2.setAttribute( "y1", y2.toString() );
+        wallElement2.setAttribute( "x2", x3.toString() );
+        wallElement2.setAttribute( "y2", y3.toString() );
+
+        wallElement3 = new IIOMetadataNode( "wall" );
+        wallElement3.setAttribute( "x1", x3.toString() );
+        wallElement3.setAttribute( "y1", y3.toString() );
+        wallElement3.setAttribute( "x2", x1.toString() );
+        wallElement3.setAttribute( "y2", y1.toString() );
+
+
+        wallEndWithOpeningElement = new IIOMetadataNode( Wall.Tag() );
+        wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString() );
+        wallEndWithOpeningElement.setAttribute( "y1", wwoY.toString() );
+        wallEndWithOpeningElement.setAttribute( "x2", wwoX2.toString() );
+        wallEndWithOpeningElement.setAttribute( "y2", wwoY.toString() );
+
+        openingElement = new IIOMetadataNode( Opening.Tag );
+        openingElement.setAttribute( "width", openWidth.toString() );
+        openingElement.setAttribute( "height", openHeight.toString() );
+        openingElement.setAttribute( "start", openStart.toString() );
+
+        openingElement2 = new IIOMetadataNode( Opening.Tag );
+        openingElement2.setAttribute( "width", open2Width.toString() );
+        openingElement2.setAttribute( "height", open2Height.toString() );
+        openingElement2.setAttribute( "start", open2Start.toString() );
+
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
+
 
 
     @Test
@@ -867,64 +920,36 @@ public class WallTest {
         assertEquals( list.getLength(), 3 );
     }
 
+    @Test
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Wall wall = new Wall( wallElement );
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        wall.dom( draw, View.SECTION );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+        assertEquals( list.getLength(), 0 );
+//        Node node = list.item( 0 );
+//        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+//        Element wallElement = (Element) node;
+//        assertEquals( wallElement.getAttribute( "x1" ), x1.toString() );
+//        assertEquals( wallElement.getAttribute( "y1" ), y1.toString() );
+//        assertEquals( wallElement.getAttribute( "x2" ), x2.toString() );
+//        assertEquals( wallElement.getAttribute( "y2" ), y2.toString() );
+//
+//        assertEquals( wallElement.getAttribute( "stroke" ), "black" );
+//        assertEquals( wallElement.getAttribute( "stroke-width" ), "2" );
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.WallReset();
-        TestResets.ElementalListerReset();
-
-        Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        new Venue( venueElement );
-
-        wallElement = new IIOMetadataNode( "wall" );
-        wallElement.setAttribute( "x1", x1.toString() );
-        wallElement.setAttribute( "y1", y1.toString() );
-        wallElement.setAttribute( "x2", x2.toString() );
-        wallElement.setAttribute( "y2", y2.toString() );
-
-        wallElement2 = new IIOMetadataNode( "wall" );
-        wallElement2.setAttribute( "x1", x2.toString() );
-        wallElement2.setAttribute( "y1", y2.toString() );
-        wallElement2.setAttribute( "x2", x3.toString() );
-        wallElement2.setAttribute( "y2", y3.toString() );
-
-        wallElement3 = new IIOMetadataNode( "wall" );
-        wallElement3.setAttribute( "x1", x3.toString() );
-        wallElement3.setAttribute( "y1", y3.toString() );
-        wallElement3.setAttribute( "x2", x1.toString() );
-        wallElement3.setAttribute( "y2", y1.toString() );
-
-
-        wallEndWithOpeningElement = new IIOMetadataNode( Wall.Tag() );
-        wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString() );
-        wallEndWithOpeningElement.setAttribute( "y1", wwoY.toString() );
-        wallEndWithOpeningElement.setAttribute( "x2", wwoX2.toString() );
-        wallEndWithOpeningElement.setAttribute( "y2", wwoY.toString() );
-
-        openingElement = new IIOMetadataNode( Opening.Tag );
-        openingElement.setAttribute( "width", openWidth.toString() );
-        openingElement.setAttribute( "height", openHeight.toString() );
-        openingElement.setAttribute( "start", openStart.toString() );
-
-        openingElement2 = new IIOMetadataNode( Opening.Tag );
-        openingElement2.setAttribute( "width", open2Width.toString() );
-        openingElement2.setAttribute( "height", open2Height.toString() );
-        openingElement2.setAttribute( "start", open2Start.toString() );
-
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

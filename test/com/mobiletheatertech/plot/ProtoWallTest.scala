@@ -45,6 +45,47 @@ class ProtoWallTest {
   private[ plot ] val open2Width: Double = 17.0
   private[ plot ] val open2Start: Double = 55.4
 
+
+  @BeforeMethod
+  @throws[Exception]
+  def setUpMethod {
+    TestResets.ElementalListerReset()
+    TestResets.ProsceniumReset()
+    Venue.Reset()
+    //    Wall.Reset()
+    TestResets.WallReset()
+    TestResets.PointReset()
+    SvgElement.Offset( 0.0, 0.0 )
+
+    wallEndWithOpeningElement = new IIOMetadataNode( Opening.Tag )
+    wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString )
+    wallEndWithOpeningElement.setAttribute( "y1", wwoY.toString )
+    wallEndWithOpeningElement.setAttribute( "x2", wwoX2.toString )
+    wallEndWithOpeningElement.setAttribute( "y2", wwoY.toString )
+
+    openingElement = new IIOMetadataNode( Opening.Tag )
+    openingElement.setAttribute( "width", openWidth.toString )
+    openingElement.setAttribute( "height", openHeight.toString )
+    openingElement.setAttribute( "start", openStart.toString )
+
+    openingElement2 = new IIOMetadataNode( Opening.Tag )
+    openingElement2.setAttribute( "width", open2Width.toString )
+    openingElement2.setAttribute( "height", open2Height.toString )
+    openingElement2.setAttribute( "start", open2Start.toString )
+
+    element = new IIOMetadataNode( Opening.Tag )
+    element.setAttribute("x1", x1.toString)
+    element.setAttribute("y1", y1.toString)
+    element.setAttribute("x2", x2.toString)
+    element.setAttribute("y2", y2.toString)
+  }
+
+  @AfterMethod
+  @throws[Exception]
+  def tearDownMethod {
+  }
+
+
   @Test
   @throws[Exception]
   def isA {
@@ -335,43 +376,31 @@ class ProtoWallTest {
     assertEquals( list.getLength, 3 )
   }
 
-  @BeforeMethod
-  @throws[Exception]
-  def setUpMethod {
-    TestResets.ElementalListerReset()
-    TestResets.ProsceniumReset()
-    Venue.Reset()
-//    Wall.Reset()
-    TestResets.WallReset()
-    TestResets.PointReset()
-    SvgElement.Offset( 0.0, 0.0 )
+  @Test
+  @throws[ Exception ]
+  def domSection {
+    val draw: Draw = new Draw
+    draw.establishRoot
+    val flat = new Proto( element )
+    val prelist: NodeList = draw.root.getElementsByTagName( "line" )
+    assertEquals( prelist.getLength, 0 )
 
-    wallEndWithOpeningElement = new IIOMetadataNode( Opening.Tag )
-    wallEndWithOpeningElement.setAttribute( "x1", wwoX1.toString )
-    wallEndWithOpeningElement.setAttribute( "y1", wwoY.toString )
-    wallEndWithOpeningElement.setAttribute( "x2", wwoX2.toString )
-    wallEndWithOpeningElement.setAttribute( "y2", wwoY.toString )
+    flat.dom( draw, View.SECTION )
 
-    openingElement = new IIOMetadataNode( Opening.Tag )
-    openingElement.setAttribute( "width", openWidth.toString )
-    openingElement.setAttribute( "height", openHeight.toString )
-    openingElement.setAttribute( "start", openStart.toString )
+    val list: NodeList = draw.root.getElementsByTagName( "line" )
+    assertEquals( list.getLength, 0 )
 
-    openingElement2 = new IIOMetadataNode( Opening.Tag )
-    openingElement2.setAttribute( "width", open2Width.toString )
-    openingElement2.setAttribute( "height", open2Height.toString )
-    openingElement2.setAttribute( "start", open2Start.toString )
-
-    element = new IIOMetadataNode( Opening.Tag )
-    element.setAttribute("x1", x1.toString)
-    element.setAttribute("y1", y1.toString)
-    element.setAttribute("x2", x2.toString)
-    element.setAttribute("y2", y2.toString)
-  }
-
-  @AfterMethod
-  @throws[Exception]
-  def tearDownMethod {
+//    val node: Node = list.item( 0 )
+//    assertEquals( node.getNodeType, Node.ELEMENT_NODE )
+//
+//    val foundElement: Element = node.asInstanceOf[ Element ]
+//    val foundX1 = foundElement.getAttribute( "x1" )
+//    assertEquals( foundX1, x1.toString )
+//    assertEquals( foundElement.getAttribute( "y1" ), y1.toString )
+//    assertEquals( foundElement.getAttribute( "x2" ), x2.toString )
+//    assertEquals( foundElement.getAttribute( "y2" ), y2.toString )
+//    assertEquals( foundElement.getAttribute( "stroke" ), "purple" )
+//    assertEquals( foundElement.getAttribute( "stroke-width" ), "2" )
   }
 
 }
