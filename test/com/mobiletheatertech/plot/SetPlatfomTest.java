@@ -351,8 +351,19 @@ public class SetPlatfomTest {
                 "rotate(-45.0,"+thisX+","+thisY+")");
     }
 
-//    @Test
-//    public void domSection() throws Exception {
+    @Test
+    public void domSection() throws Exception {
+        draw.establishRoot();
+        element.appendChild( circleElement );
+        SetPlatform instance = new SetPlatform( element );
+
+        NodeList existingGroups = draw.root().getElementsByTagName("g");
+        assertEquals(existingGroups.getLength(), 1);
+
+        instance.dom(draw, View.SECTION);
+
+        NodeList group = draw.root().getElementsByTagName("g");
+        assertEquals(group.getLength(), 1);
 //        draw.establishRoot();
 //        element.appendChild( circleElement );
 //        SetPlatform instance = new SetPlatform( element );
@@ -364,8 +375,8 @@ public class SetPlatfomTest {
 //
 //        NodeList group = draw.root().getElementsByTagName("g");
 //        assertEquals(group.getLength(), 1);
-//    }
-//
+    }
+
 //    @Test
 //    public void domFront() throws Exception {
 //        draw.establishRoot();

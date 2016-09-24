@@ -71,6 +71,8 @@ class SetPlatform (val element: Element) extends MinderDom(element)
 
   def dom(draw: Draw, mode: View)
   {
+    if( mode == View.SECTION ) return
+
     val group: SvgElement = draw.group(draw, SetPlatform.Tag )
     group.element.setAttribute( "stroke", SetPlatform.Color )
 
