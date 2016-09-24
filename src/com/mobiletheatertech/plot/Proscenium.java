@@ -39,8 +39,10 @@ public class Proscenium extends MinderDom {
     private Double z = null;
 
     final static String Tag = "proscenium";
-    private static final String COLOR = "black";
-    private static final String FADEDCOLOR = "gray";
+//    private static final String COLOR = "black";
+    static final String Color = "black";
+    static final String StageColor = "black";
+    static final String FadedColor = "gray";
 
     /**
      * True if a {@code Proscenium} has been defined. False otherwise.
@@ -205,7 +207,7 @@ public class Proscenium extends MinderDom {
      * @param mode drawing mode
      */
     @Override
-    public void dom(Draw draw, View mode) {
+    public void dom(Draw draw, View mode) throws ReferenceException {
         Element element = null;
 //
 //        switch (mode) {
@@ -237,58 +239,44 @@ public class Proscenium extends MinderDom {
             case TRUSS:
                 return;
             case PLAN:
-                Double startX = x - width / 2;
-                Double startY = y;
-                Double endX = x + width / 2;
-                Double endY = y + depth;
-
-                // SR end of proscenium arch
-                SvgElement line = draw.line( draw, startX, startY, startX, endY, COLOR );
-//                draw.element("line");
-//                line.setAttribute("x1", startX.toString());
-//                line.setAttribute("y1", startY.toString());
-//                line.setAttribute("x2", startX.toString());
-//                line.setAttribute("y2", endY.toString());
-//                line.setAttribute("stroke", "black");
-//                line.setAttribute("stroke-width", "1");
-//                draw.appendRootChild(line);
-
-                // SL end of proscenium arch
-                line = draw.line( draw, endX, startY, endX, endY, COLOR );
-//                draw.element("line");
-//                line.setAttribute("x1", endX.toString());
-//                line.setAttribute("y1", startY.toString());
-//                line.setAttribute("x2", endX.toString());
-//                line.setAttribute("y2", endY.toString());
-//                line.setAttribute("stroke", "black");
-//                line.setAttribute("stroke-width", "1");
-//                draw.appendRootChild(line);
-
-                // US side of proscenium arch
-                line = draw.line( draw, startX, startY, endX, startY, FADEDCOLOR );
-//                draw.element("line");
-//                line.setAttribute("x1", startX.toString());
-//                line.setAttribute("y1", startY.toString());
-//                line.setAttribute("x2", endX.toString());
-//                line.setAttribute("y2", startY.toString());
-//                line.setAttribute("stroke", "grey");
-                line.attribute("stroke-opacity", "0.3");
-//                line.setAttribute("stroke-width", "1");
-//                draw.appendRootChild(line);
-
-                // DS side of proscenium arch
-                line = draw.line( draw, startX, endY, endX, endY, FADEDCOLOR );
-//                draw.element("line");
-//                line.setAttribute("x1", startX.toString());
-//                line.setAttribute("y1", endY.toString());
-//                line.setAttribute("x2", endX.toString());
-//                line.setAttribute("y2", endY.toString());
-//                line.setAttribute("stroke", "grey");
-                line.attribute("stroke-opacity", "0.1");
-//                line.setAttribute("stroke-width", "1");
-//                draw.appendRootChild(line);
-
+                domPlan(draw);
+                return;
+            case SECTION:
+                domSection(draw);
+                return;
         }
+    }
+
+    private void domPlan(Draw draw) {
+        Double startX = x - width / 2;
+        Double startY = y;
+        Double endX = x + width / 2;
+        Double endY = y + depth;
+
+        // SR end of proscenium arch
+        draw.line( draw, startX, startY, startX, endY, Color );
+
+        // SL end of proscenium arch
+        draw.line( draw, endX, startY, endX, endY, Color );
+
+        // US side of proscenium arch
+        SvgElement line = draw.line( draw, startX, startY, endX, startY, FadedColor );
+        line.attribute("stroke-opacity", "0.3");
+
+        // DS side of proscenium arch
+        line = draw.line( draw, startX, endY, endX, endY, FadedColor );
+        line.attribute("stroke-opacity", "0.1");
+    }
+
+    void domSection( Draw draw ) throws ReferenceException {
+        Double zee = Venue.Height();
+        SvgElement prosceniumWall = draw.line( draw, y, zee, y, zee - Venue.Height(), FadedColor );
+        Double front = y + depth;
+        SvgElement frontWall = draw.line( draw, front, zee, front, zee - Venue.Height(), FadedColor );
+        Double top = zee - height;
+        SvgElement archTop = draw.line( draw, y, top, front, top, FadedColor );
+        SvgElement stage = draw.line( draw, 0.0, zee, y, zee, StageColor );
+        stage.attribute( "stroke-width", "2" );
     }
 
     /**

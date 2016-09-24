@@ -27,18 +27,26 @@ public class ProsceniumTest {
     Double y = 144.0;
     Double z = 12.0;
 
+    Venue venue = null;
+    Element venueElement = null;
+
+    String venueRoom = "Test Room";
+    Double venueWidth = 550.0;
+    Double venueDepth = 400.0;
+    Double venueHeight = 263.0;
+
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.ProsceniumReset();
         TestResets.PointReset();
 
-        Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "550" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "263" );
-        new Venue( venueElement );
+        venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", venueRoom );
+        venueElement.setAttribute( "width", venueWidth.toString() );
+        venueElement.setAttribute( "depth", venueDepth.toString() );
+        venueElement.setAttribute( "height", venueHeight.toString() );
+        venue = new Venue( venueElement );
 
         element = new IIOMetadataNode( "proscenium" );
         element.setAttribute( "width", width.toString() );
@@ -54,6 +62,26 @@ public class ProsceniumTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals( Proscenium.Tag, "proscenium" );
+    }
+
+    @Test
+    public void constantColor() {
+        assertEquals( Proscenium.Color, "black" );
+    }
+
+    @Test
+    public void constantFadedColor() {
+        assertEquals( Proscenium.FadedColor, "gray" );
+    }
+
+    @Test
+    public void constantStageColor() {
+        assertEquals( Proscenium.StageColor, "black" );
+    }
+
+    @Test
     public void isA() throws Exception {
         Proscenium instance = new Proscenium(element);
 
@@ -62,11 +90,6 @@ public class ProsceniumTest {
         assert Verifier.class.isInstance(instance);
         assert Layerer.class.isInstance(instance);
         assert MinderDom.class.isInstance(instance);
-    }
-
-    @Test
-    public void constantTag() {
-        assertEquals( Proscenium.Tag, "proscenium" );
     }
 
     @Test
@@ -419,7 +442,6 @@ public class ProsceniumTest {
         proscenium.dom( draw, View.PLAN );
 
         NodeList list = draw.root().getElementsByTagName( "line" );
-        assertEquals( list.getLength(), 4 );
 
         Node node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
@@ -428,7 +450,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "85.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), "black" );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color );
         assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -439,7 +461,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), "black" );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color );
         assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -450,7 +472,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "144.0" );
-        assertEquals( element.getAttribute( "stroke" ), "gray" );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.3" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -461,9 +483,78 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "166.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), "gray" );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        assertEquals( list.getLength(), 4 );
+
+    }
+
+    @Test
+    public void domSection() throws Exception {
+        Draw draw = new Draw();
+        draw.establishRoot();
+        Proscenium proscenium = new Proscenium( element );
+
+        NodeList prelist = draw.root().getElementsByTagName( "line" );
+        assertEquals( prelist.getLength(), 0 );
+
+        proscenium.dom( draw, View.SECTION );
+
+        NodeList list = draw.root().getElementsByTagName( "line" );
+
+        // Y values are inverted.
+        Double floor = Venue.Height();
+        Double ceiling = floor - Venue.Height();
+
+        Node node = list.item( 0 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        Element element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), y.toString() );
+        assertEquals( element.getAttribute( "y1" ), floor.toString() );
+        assertEquals( element.getAttribute( "x2" ), y.toString() );
+        assertEquals( element.getAttribute( "y2" ), ceiling.toString() );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+//        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
+//        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 1 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        Double frontWall = y + depth;
+        assertEquals( element.getAttribute( "x1" ), frontWall.toString() );
+        assertEquals( element.getAttribute( "y1" ), floor.toString() );
+        assertEquals( element.getAttribute( "x2" ), frontWall.toString() );
+        assertEquals( element.getAttribute( "y2" ), ceiling.toString() );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+//        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
+//        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 2 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        Double archTop = floor - height;
+        assertEquals( element.getAttribute( "x1" ), y.toString() );
+        assertEquals( element.getAttribute( "y1" ), archTop.toString() );
+        assertEquals( element.getAttribute( "x2" ), frontWall.toString() );
+        assertEquals( element.getAttribute( "y2" ), archTop.toString() );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+//        assertEquals( element.getAttribute( "stroke-opacity" ), "0.3" );
+//        assertEquals( element.getAttribute( "stroke-width" ), "1" );
+
+        node = list.item( 3 );
+        assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
+        element = (Element) node;
+        assertEquals( element.getAttribute( "x1" ), "0.0" );
+        assertEquals( element.getAttribute( "y1" ), floor.toString() );
+        assertEquals( element.getAttribute( "x2" ), y.toString() );
+        assertEquals( element.getAttribute( "y2" ), floor.toString() );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.StageColor );
+//        assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
+        assertEquals( element.getAttribute( "stroke-width" ), "2" );
+
+        assertEquals( list.getLength(), 4 );
     }
 
     @BeforeClass
