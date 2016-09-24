@@ -239,7 +239,7 @@ public class SuspendTest {
     public void setUpMethod() throws Exception {
         System.err.println( "Starting SuspendTest method." );
 
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         UniqueId.Reset();

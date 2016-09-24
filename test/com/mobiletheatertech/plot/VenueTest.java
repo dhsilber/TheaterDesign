@@ -600,7 +600,7 @@ public class VenueTest {
     public void tagCallbackRegisteredProscenium() {
         Venue venue = new Venue( element );
 
-        assertTrue( venue.tags().contains( Proscenium.Tag ) );
+        assertTrue( venue.tags().contains( Proscenium.Tag() ) );
         assertEquals( venue.tags().size(), 2 );
     }
 

@@ -60,7 +60,7 @@ public class GridTest {
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         SvgElement.Offset( 0.0, 0.0 );
     }
 

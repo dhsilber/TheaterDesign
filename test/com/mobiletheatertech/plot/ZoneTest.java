@@ -42,7 +42,7 @@ public class ZoneTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.MinderDomReset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.LayerReset();
 
         Element venueElement = new IIOMetadataNode( "venue" );

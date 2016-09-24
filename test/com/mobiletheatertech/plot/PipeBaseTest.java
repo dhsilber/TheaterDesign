@@ -478,7 +478,7 @@ public class PipeBaseTest {
     public void setUpMethod() throws Exception {
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.LegendReset();
         PipeBase$.MODULE$.Reset();
 

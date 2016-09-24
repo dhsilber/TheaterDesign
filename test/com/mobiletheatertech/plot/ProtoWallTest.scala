@@ -50,7 +50,7 @@ class ProtoWallTest {
   @throws[Exception]
   def setUpMethod {
     TestResets.ElementalListerReset()
-    TestResets.ProsceniumReset()
+    Proscenium.Reset()
     Venue.Reset()
     //    Wall.Reset()
     TestResets.WallReset()

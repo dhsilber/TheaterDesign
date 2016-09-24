@@ -68,7 +68,7 @@ public class SetPlatfomTest {
 
 
 
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
 
         Element venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", "Test Name" );

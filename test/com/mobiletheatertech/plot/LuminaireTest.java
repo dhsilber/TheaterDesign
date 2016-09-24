@@ -909,7 +909,7 @@ public class LuminaireTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Venue.Reset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         TestResets.LuminaireReset();

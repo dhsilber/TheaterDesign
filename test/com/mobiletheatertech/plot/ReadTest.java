@@ -59,7 +59,7 @@ public class ReadTest {
     public void setUpMethod() throws Exception {
         TestResets.ElementalListerReset();
         Venue.Reset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
     }
 
     @AfterMethod

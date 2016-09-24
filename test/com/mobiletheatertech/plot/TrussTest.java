@@ -1127,7 +1127,7 @@ public class TrussTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.ElementalListerReset();
         TestResets.MountableReset();
         TestResets.MinderDomReset();

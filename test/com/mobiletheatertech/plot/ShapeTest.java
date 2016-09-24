@@ -53,10 +53,10 @@ public class ShapeTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Venue.Reset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.ElementalListerReset();
 
-        prosceniumElement = new IIOMetadataNode( Proscenium.Tag );
+        prosceniumElement = new IIOMetadataNode( Proscenium.Tag() );
         prosceniumElement.setAttribute( "width", prosceniumWidth.toString() );
         prosceniumElement.setAttribute( "depth", prosceniumDepth.toString() );
         prosceniumElement.setAttribute( "height", prosceniumHeight.toString() );

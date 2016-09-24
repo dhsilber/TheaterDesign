@@ -1400,7 +1400,7 @@ public class PipeTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.MountableReset();
         TestResets.LayerReset();
         TestResets.ElementalListerReset();

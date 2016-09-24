@@ -38,7 +38,7 @@ public class ProsceniumTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
         TestResets.PointReset();
 
         venueElement = new IIOMetadataNode( "venue" );
@@ -63,22 +63,22 @@ public class ProsceniumTest {
 
     @Test
     public void constantTag() {
-        assertEquals( Proscenium.Tag, "proscenium" );
+        assertEquals( Proscenium.Tag(), "proscenium" );
     }
 
     @Test
     public void constantColor() {
-        assertEquals( Proscenium.Color, "black" );
+        assertEquals( Proscenium.Color(), "black" );
     }
 
     @Test
     public void constantFadedColor() {
-        assertEquals( Proscenium.FadedColor, "gray" );
+        assertEquals( Proscenium.FadedColor(), "gray" );
     }
 
     @Test
     public void constantStageColor() {
-        assertEquals( Proscenium.StageColor, "black" );
+        assertEquals( Proscenium.StageColor(), "black" );
     }
 
     @Test
@@ -302,23 +302,23 @@ public class ProsceniumTest {
     @Test
     public void locateOrigin() throws Exception {
         new Proscenium( element );
-        Point origin = new Point( 0.0, 0.0, 0.0 );
+        Point unfixed = new Point( 1.0, 2.0, 3.0 );
 
-        Point fixed = Proscenium.LocateIfActive( origin );
+        Point fixed = Proscenium.LocateIfActive( unfixed );
 
-        Point expected = new Point( 250.0, 144.0, 12.0 );
+        Point expected = new Point( 251.0, 142.0, 15.0 );
         assertEquals( fixed, expected );
 
-        assert new Point( 250.0, 144.0, 12.0 ).equals( fixed );
+        assert new Point( 251.0, 142.0, 15.0 ).equals( fixed );
     }
 
     @Test
     public void locateNoProsceniumOrigin() throws Exception {
-        Point origin = new Point( 0.0, 0.0, 0.0 );
+        Point unfixed = new Point( 12.0, 21.0, 3.0 );
 
-        Point fixed = Proscenium.LocateIfActive( origin );
+        Point fixed = Proscenium.LocateIfActive( unfixed );
 
-        assertEquals( fixed, origin );
+        assertEquals( fixed, unfixed );
     }
 
     @Test
@@ -450,7 +450,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "85.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color() );
         assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -461,7 +461,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.Color() );
         assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -472,7 +472,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "144.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "144.0" );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor() );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.3" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -483,7 +483,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), "166.0" );
         assertEquals( element.getAttribute( "x2" ), "415.0" );
         assertEquals( element.getAttribute( "y2" ), "166.0" );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor() );
         assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -515,7 +515,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), floor.toString() );
         assertEquals( element.getAttribute( "x2" ), y.toString() );
         assertEquals( element.getAttribute( "y2" ), ceiling.toString() );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor() );
 //        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -527,7 +527,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), floor.toString() );
         assertEquals( element.getAttribute( "x2" ), frontWall.toString() );
         assertEquals( element.getAttribute( "y2" ), ceiling.toString() );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor() );
 //        assertEquals( element.getAttribute( "stroke-opacity" ), "" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -539,7 +539,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), archTop.toString() );
         assertEquals( element.getAttribute( "x2" ), frontWall.toString() );
         assertEquals( element.getAttribute( "y2" ), archTop.toString() );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.FadedColor() );
 //        assertEquals( element.getAttribute( "stroke-opacity" ), "0.3" );
 //        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
@@ -550,7 +550,7 @@ public class ProsceniumTest {
         assertEquals( element.getAttribute( "y1" ), floor.toString() );
         assertEquals( element.getAttribute( "x2" ), y.toString() );
         assertEquals( element.getAttribute( "y2" ), floor.toString() );
-        assertEquals( element.getAttribute( "stroke" ), Proscenium.StageColor );
+        assertEquals( element.getAttribute( "stroke" ), Proscenium.StageColor() );
 //        assertEquals( element.getAttribute( "stroke-opacity" ), "0.1" );
         assertEquals( element.getAttribute( "stroke-width" ), "2" );
 

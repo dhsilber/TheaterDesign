@@ -153,7 +153,7 @@ class FlatTest {
   @BeforeMethod
   @throws[Exception]
   def setUpMethod {
-    TestResets.ProsceniumReset()
+    Proscenium.Reset()
     TestResets.ElementalListerReset()
 
     val prosceniumElement = new IIOMetadataNode( Proscenium.Tag )

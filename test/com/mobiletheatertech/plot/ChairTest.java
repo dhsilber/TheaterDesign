@@ -822,8 +822,8 @@ private    String layerTag = "fred";
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        TestResets.ProsceniumReset();
-         Venue.Reset();
+        Proscenium.Reset();
+        Venue.Reset();
         TestResets.LayerReset();
         SvgElement.Offset( 0.0, 0.0 );
 //        TestResets.

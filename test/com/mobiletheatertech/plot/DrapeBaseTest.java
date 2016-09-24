@@ -343,7 +343,7 @@ public class DrapeBaseTest {
 
         TestResets.YokeableReset();
         TestResets.ElementalListerReset();
-        TestResets.ProsceniumReset();
+        Proscenium.Reset();
 
         Element venueElement = new IIOMetadataNode();
         venueElement.setAttribute( "name", "TrussBase Venue Name" );

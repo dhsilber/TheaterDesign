@@ -303,17 +303,17 @@ public class TestResets {
         TestResets.ZeroDouble(Point.class, "LargeZ");
     }
 
-    public static void ProsceniumReset() throws NoSuchFieldException, IllegalAccessException {
-        Field activeField = Proscenium.class.getDeclaredField( "ACTIVE" );
-        activeField.setAccessible( true );
-        boolean active = activeField.getBoolean( Proscenium.class );
-        activeField.set( active, false );
-
-        Field originField = Proscenium.class.getDeclaredField( "ORIGIN" );
-        originField.setAccessible( true );
-        Point origin = (Point) originField.get( Proscenium.class );
-        originField.set( origin, new Point( 0.0, 0.0, 0.0 ) );
-    }
+//    public static void ProsceniumReset() throws NoSuchFieldException, IllegalAccessException {
+//        Field activeField = Proscenium.class.getDeclaredField( "ACTIVE" );
+//        activeField.setAccessible( true );
+//        boolean active = activeField.getBoolean( Proscenium.class );
+//        activeField.set( active, false );
+//
+//        Field originField = Proscenium.class.getDeclaredField( "ORIGIN" );
+//        originField.setAccessible( true );
+//        Point origin = (Point) originField.get( Proscenium.class );
+//        originField.set( origin, new Point( 0.0, 0.0, 0.0 ) );
+//    }
 
 /*
     public static void ProsceniumActivate() throws NoSuchFieldException, IllegalAccessException {
