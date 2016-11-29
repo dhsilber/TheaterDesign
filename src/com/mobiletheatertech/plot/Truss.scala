@@ -7,11 +7,14 @@ import org.w3c.dom.{Element, Node, NodeList}
 /**
   * Created by DHS on 7/26/16.
   */
-class Truss ( element: Element ) extends UniqueId( element )
+class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   with LinearSupportsClamp
   with Populate
   with Legendable
 {
+  def this( element: Element ) {
+    this( element, null )
+  }
 
   if (Proscenium.Active) {
     throw new InvalidXMLException("Truss not yet supported with Proscenium.")
@@ -59,6 +62,13 @@ class Truss ( element: Element ) extends UniqueId( element )
 //  tagCallback( Cheeseborough.TAG, processCheeseborough )
   populate( element )
 
+  def parentParse(): TrussBase = {
+//    if ( classOf[ PipeBase ].isInstance( parent ) )
+//      parent.asInstanceOf[ PipeBase ]
+//    else
+      null
+  }
+
   def processLuminaire(element: Element ): Unit = {
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
@@ -87,36 +97,43 @@ class Truss ( element: Element ) extends UniqueId( element )
 //  }
 
   def process(): ( Boolean, Boolean, Boolean ) = {
+//
+//    def findBase(): TrussBase = {
+//      val baseList: NodeList = element.getElementsByTagName( "trussbase" )
+//      if ( 1 == baseList.getLength() ) {
+//        val node: Node = baseList.item( 0 )
+//        // Much of this code is copied from HangPoint.ParseXML - refactor
+//        if ( (null != node) & (node.getNodeType == Node.ELEMENT_NODE) ) {
+//          val element: Element = node.asInstanceOf[ Element ]
+//          //          val mark: String = element.getAttribute("processedMark")
+//
+//          if( ! Truss.LegendRegistered ) {
+//            Legend.Register(this, 2.0, 12.0, LegendOrder.Structure)
+//            Truss.LegendRegistered = true;
+//          }
+//
+//          return new TrussBase( element )
+//
+//        }
+//        return null
+//      }
+//      else if ( 1 < baseList.getLength() ) {
+//        throw new InvalidXMLException(
+//          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
+//      }
+//
+//      null
+//    }
 
-    def findBase(): TrussBase = {
-      val baseList: NodeList = element.getElementsByTagName( "trussbase" )
-      if ( 1 == baseList.getLength() ) {
-        val node: Node = baseList.item( 0 )
-        // Much of this code is copied from HangPoint.ParseXML - refactor
-        if ( (null != node) & (node.getNodeType == Node.ELEMENT_NODE) ) {
-          val element: Element = node.asInstanceOf[ Element ]
-          //          val mark: String = element.getAttribute("processedMark")
-
-          if( ! Truss.LegendRegistered ) {
-            Legend.Register(this, 2.0, 12.0, LegendOrder.Structure)
-            Truss.LegendRegistered = true;
-          }
-
-          return new TrussBase( element )
-
-        }
-        return null
-      }
-      else if ( 1 < baseList.getLength() ) {
-        throw new InvalidXMLException(
-          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
-      }
-
-      null
+    def parentParse(): TrussBase = {
+      if ( classOf[ TrussBase ].isInstance( parent ) )
+        parent.asInstanceOf[ TrussBase ]
+      else
+        null
     }
 
     def baseProcessing(): TrussBase = {
-      val base = findBase()
+      val base = parentParse()
       if ( null != base ) {
         start = new Point( base.x, base.y, 0.0 )
 
@@ -170,7 +187,7 @@ class Truss ( element: Element ) extends UniqueId( element )
       else {
         System.err.println("Found " + suspendList.getLength + " suspend child nodes")
         throw new InvalidXMLException(
-          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
+          "Truss (" + id + ") must have position, one trussbase, or two suspend children.( suspecnd) " )
         false
       }
     }
@@ -195,7 +212,7 @@ class Truss ( element: Element ) extends UniqueId( element )
       catch {
         case npe: NullPointerException =>
           throw new InvalidXMLException(
-            "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
+            "Truss (" + id + ") must have position, one trussbase, or two suspend children. (position)" )
       }
       true
     }
@@ -451,6 +468,7 @@ object Truss {
   final val LayerTag = "truss"
   final val LayerName = "Trusses"
   final val Color = "dark blue"
+  final val Tag = LayerTag
 
   final var BaseCount: Int = 0
   final var LegendRegistered: Boolean = false

@@ -222,7 +222,27 @@ public class PipeTest {
 
     @Test
     public void parentIsPipeBase() {
-        
+        PipeBase pipeBase = new PipeBase( baseForPipeElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister pipebase = list.get( 1 );
+        assert MinderDom.class.isInstance( pipebase );
+//        System.out.println( "parentIsPipeBase: " + pipebase.getClass().toString() );
+        assert PipeBase.class.isInstance( pipebase );
+
+        ElementalLister pipe = list.get( 2 );
+        assert MinderDom.class.isInstance( pipe );
+        assert Pipe.class.isInstance( pipe );
+        Pipe actualPipe = (Pipe) pipe;
+
+        assertEquals( list.size(), 3 );
+
+        assertSame( pipeBase, actualPipe.parentParse() );
     }
     
     @Test

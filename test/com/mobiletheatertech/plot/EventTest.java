@@ -26,14 +26,46 @@ public class EventTest {
     String name = "Event Name";
 
     private Element baseForPipeElement = null;
+    private Element baseForTrussElement = null;
     private Double baseX = 42.1;
     private Double baseY = 57.9;
+    private Double baseSize = 12.5;
 
     Element flatElement = null;
     Double x1 = 1.1;
     Double y1 = 2.2;
     Double x2 = 3.3;
     Double y2 = 4.4;
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.ElementalListerReset();
+//        TestResets.EventReset();
+        UniqueId.Reset();
+        Event.Reset();
+
+        baseForPipeElement = new IIOMetadataNode( PipeBase.Tag() );
+        baseForPipeElement.setAttribute( "x", baseX.toString() );
+        baseForPipeElement.setAttribute( "y", baseY.toString() );
+
+        baseForTrussElement = new IIOMetadataNode( TrussBase.Tag() );
+        baseForTrussElement.setAttribute( "x", baseX.toString() );
+        baseForTrussElement.setAttribute( "y", baseY.toString() );
+        baseForTrussElement.setAttribute( "size", baseSize.toString() );
+
+        flatElement = new IIOMetadataNode( Flat.Tag() );
+        flatElement.setAttribute( "x1", x1.toString() );
+        flatElement.setAttribute( "y1", y1.toString() );
+        flatElement.setAttribute( "x2", x2.toString() );
+        flatElement.setAttribute( "y2", y2.toString() );
+
+        element = new IIOMetadataNode( "event" );
+        element.setAttribute( "id", name );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
     public EventTest() {
     }
@@ -109,7 +141,15 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( PipeBase.Tag() ) );
-        assertEquals( event.tags().size(), 2 );
+        assertEquals( event.tags().size(), 3 );
+    }
+
+    @Test
+    public void tagCallbackRegisteredTrussBase() {
+        Event event = new Event( element );
+
+        assertTrue( event.tags().contains( TrussBase.Tag() ) );
+        assertEquals( event.tags().size(), 3 );
     }
 
     @Test
@@ -117,7 +157,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( Flat.Tag() ) );
-        assertEquals( event.tags().size(), 2 );
+        assertEquals( event.tags().size(), 3 );
     }
 
     @Test
@@ -134,6 +174,24 @@ public class EventTest {
         ElementalLister pipebase = list.get( 1 );
         assert MinderDom.class.isInstance( pipebase );
         assert PipeBase.class.isInstance( pipebase );
+
+        assertEquals( list.size(), 2 );
+    }
+
+    @Test
+    public void populateChildrenTrussBase() {
+        element.appendChild( baseForTrussElement );
+        new Event( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister event = list.get( 0 );
+        assert MinderDom.class.isInstance( event );
+        assert Event.class.isInstance( event );
+
+        ElementalLister trussbase = list.get( 1 );
+        assert MinderDom.class.isInstance( trussbase );
+        assert TrussBase.class.isInstance( trussbase );
 
         assertEquals( list.size(), 2 );
     }
@@ -201,30 +259,5 @@ public class EventTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.ElementalListerReset();
-//        TestResets.EventReset();
-        UniqueId.Reset();
-        Event.Reset();
-
-        baseForPipeElement = new IIOMetadataNode( PipeBase.Tag() );
-        baseForPipeElement.setAttribute( "x", baseX.toString() );
-        baseForPipeElement.setAttribute( "y", baseY.toString() );
-
-        flatElement = new IIOMetadataNode( Flat.Tag() );
-        flatElement.setAttribute( "x1", x1.toString() );
-        flatElement.setAttribute( "y1", y1.toString() );
-        flatElement.setAttribute( "x2", x2.toString() );
-        flatElement.setAttribute( "y2", y2.toString() );
-
-        element = new IIOMetadataNode( "event" );
-        element.setAttribute( "id", name );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

@@ -56,7 +56,7 @@ class PipeBase ( element: Element ) extends MinderDom( element )
         circle.attribute( "stroke-opacity", "0.5" )
 
       case default =>
-        return
+//        return
     }
   }
 
@@ -107,7 +107,7 @@ object PipeBase {
     // ... It seems like Scala needs one of its own collection types for this syntax to work.
 
 
-    return null
+    null
   }
 
   def Reset(): Unit = {

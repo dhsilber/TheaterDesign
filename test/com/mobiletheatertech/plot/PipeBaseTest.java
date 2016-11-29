@@ -29,7 +29,6 @@ public class PipeBaseTest {
  */
     Element baseElement = null;
 //    Pipe pipe = null;
-    Element prosceniumElement = null;
 
     Element pipeElement = null;
 
@@ -38,9 +37,55 @@ public class PipeBaseTest {
     Double y = 32.2;
     Double z = -7.0;
 
+    Element prosceniumElement = null;
     Double prosceniumX = 100.0;
     Double prosceniumY = 200.0;
     Double prosceniumZ = 15.0;
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.YokeableReset();
+        TestResets.ElementalListerReset();
+        Proscenium.Reset();
+        TestResets.LegendReset();
+        PipeBase$.MODULE$.Reset();
+
+        Element venueElement = new IIOMetadataNode();
+        venueElement.setAttribute( "name", "TrussBase Venue Name" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "750" );
+        venueElement.setAttribute( "depth", "900" );
+        venueElement.setAttribute( "height", "240" );
+//        Venue venue =
+        new Venue( venueElement );
+//        venue.getClass();
+//        Venue.Height();
+
+        prosceniumElement = new IIOMetadataNode( "proscenium" );
+        prosceniumElement.setAttribute( "x", prosceniumX.toString() );
+        prosceniumElement.setAttribute( "y", prosceniumY.toString() );
+        prosceniumElement.setAttribute( "z", prosceniumZ.toString() );
+        prosceniumElement.setAttribute( "width", "200" );
+        prosceniumElement.setAttribute( "depth", "23" );
+        prosceniumElement.setAttribute( "height", "144" );
+
+//        Element otherBase = new IIOMetadataNode( "base" );
+//        otherBase.setAttribute( "ref", "jane" );
+//        otherBase.setAttribute( "distance", "200" );
+
+        baseElement = new IIOMetadataNode( "pipebase" );
+        baseElement.setAttribute("x", x.toString());
+        baseElement.setAttribute("y", y.toString());
+
+        pipeElement = new IIOMetadataNode( "pipe" );
+        pipeElement.setAttribute( "id", id);
+//        pipeElement.setAttribute( "size", "12" );
+        pipeElement.setAttribute( "length", "120" );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
     @Test
     public void isA() throws Exception {
@@ -472,50 +517,5 @@ public class PipeBaseTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.YokeableReset();
-        TestResets.ElementalListerReset();
-        Proscenium.Reset();
-        TestResets.LegendReset();
-        PipeBase$.MODULE$.Reset();
-
-        Element venueElement = new IIOMetadataNode();
-        venueElement.setAttribute( "name", "TrussBase Venue Name" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "750" );
-        venueElement.setAttribute( "depth", "900" );
-        venueElement.setAttribute( "height", "240" );
-//        Venue venue =
-                new Venue( venueElement );
-//        venue.getClass();
-//        Venue.Height();
-
-        prosceniumElement = new IIOMetadataNode( "proscenium" );
-        prosceniumElement.setAttribute( "x", prosceniumX.toString() );
-        prosceniumElement.setAttribute( "y", prosceniumY.toString() );
-        prosceniumElement.setAttribute( "z", prosceniumZ.toString() );
-        prosceniumElement.setAttribute( "width", "200" );
-        prosceniumElement.setAttribute( "depth", "23" );
-        prosceniumElement.setAttribute( "height", "144" );
-
-//        Element otherBase = new IIOMetadataNode( "base" );
-//        otherBase.setAttribute( "ref", "jane" );
-//        otherBase.setAttribute( "distance", "200" );
-
-        baseElement = new IIOMetadataNode( "pipebase" );
-        baseElement.setAttribute("x", x.toString());
-        baseElement.setAttribute("y", y.toString());
-
-        pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", id);
-        pipeElement.setAttribute( "size", "12" );
-        pipeElement.setAttribute( "length", "120" );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }

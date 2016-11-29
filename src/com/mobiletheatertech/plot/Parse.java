@@ -102,7 +102,7 @@ public class Parse {
         parseXML( Drape.class, "drape" );
 
         // Yokeable
-        parseXML( Truss.class, "truss" );
+//        parseXML( Truss.class, "truss" );
         parseXML( LightingStand.class, LightingStand.TAG );
 //        parseXML( Pipe.class, "pipe" );
 

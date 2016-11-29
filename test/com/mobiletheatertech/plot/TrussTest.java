@@ -169,7 +169,7 @@ public class TrussTest {
         trussOnBaseElement.setAttribute("id", trussOnBaseId );
         trussOnBaseElement.setAttribute("size", size.toString());
         trussOnBaseElement.setAttribute("length", length.toString());
-        trussOnBaseElement.appendChild(baseElement);
+//        trussOnBaseElement.appendChild(baseElement);
 
         trussPositionedElement = new IIOMetadataNode("truss");
         trussPositionedElement.setAttribute("id", trussPositionedId );
@@ -223,6 +223,32 @@ public class TrussTest {
     @Test
     public void constantColor() {
         assertEquals(Truss$.MODULE$.Color(), "dark blue");
+    }
+
+    @Test
+    public void parentIsTrussBase() {
+        baseElement.appendChild( trussOnBaseElement );
+        TrussBase trussBase = new TrussBase( baseElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister trussbase = list.get( 1 );
+        assert MinderDom.class.isInstance( trussbase );
+        System.out.println( "parentIsTrussBase: " + trussbase.getClass().toString() );
+        assert TrussBase.class.isInstance( trussbase );
+
+        ElementalLister truss = list.get( 2 );
+        assert MinderDom.class.isInstance( truss );
+        assert Truss.class.isInstance( truss );
+        Truss actualTruss = (Truss) truss;
+
+        assertEquals( list.size(), 3 );
+
+        assertSame( trussBase, actualTruss.parentParse() );
     }
 
     @Test
@@ -377,8 +403,8 @@ public class TrussTest {
 
     @Test
     public void baseChild() throws Exception {
-        Truss truss = new Truss(trussOnBaseElement);
-        new TrussBase( baseElement );
+        TrussBase base = new TrussBase( baseElement );
+        Truss truss = new Truss( trussOnBaseElement, base );
 
         truss.verify();
 
@@ -902,7 +928,10 @@ public class TrussTest {
     public void domPlanBased() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
-        Truss truss = new Truss( trussOnBaseElement );
+
+        TrussBase base = new TrussBase( baseElement );
+        Truss truss = new Truss( trussOnBaseElement, base );
+
         truss.verify();
 
         truss.dom(draw, View.PLAN);
@@ -970,8 +999,9 @@ public class TrussTest {
     @Test
     public void legendRegistered() throws Exception {
         TestResets.LegendReset();
-        new TrussBase( baseElement );
-        new Truss(trussOnBaseElement);
+
+        TrussBase base = new TrussBase( baseElement );
+        new Truss( trussOnBaseElement, base );
 
         TreeMap<Integer, Legendable> legendList =
                 (TreeMap<Integer, Legendable>)
@@ -985,10 +1015,12 @@ public class TrussTest {
     @Test
     public void legendRegisteredOnce() throws Exception {
         TestResets.LegendReset();
-        new TrussBase( baseElement );
-        new Truss(trussOnBaseElement);
+
+        TrussBase base = new TrussBase( baseElement );
+        new Truss( trussOnBaseElement, base );
+
         trussOnBaseElement.setAttribute( "id", "differentBaseTruss");
-        new Truss(trussOnBaseElement);
+        new Truss(trussOnBaseElement, base );
 
         TreeMap<Integer, Legendable> legendList = (TreeMap<Integer, Legendable>)
                 TestHelpers.accessStaticObject( "com.mobiletheatertech.plot.Legend", "LEGENDLIST" );
@@ -999,8 +1031,10 @@ public class TrussTest {
     public void domLegendItem() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
-        Truss truss = new Truss(trussOnBaseElement);
-        new TrussBase( baseElement );
+
+        TrussBase base = new TrussBase( baseElement );
+        Truss truss = new Truss( trussOnBaseElement, base );
+
         truss.verify();
 //        truss.dom(draw, View.PLAN);
         Truss$.MODULE$.BaseCountIncrement();

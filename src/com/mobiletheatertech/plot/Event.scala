@@ -11,11 +11,16 @@ class Event ( element: Element ) extends UniqueId ( element )
   Event.Only = this
 
   tagCallback( PipeBase.Tag, processPipeBase )
+  tagCallback( TrussBase.Tag, processTrussBase )
   tagCallback( Flat.Tag, processFlat )
   populate( element )
 
   def processPipeBase( element: Element ): Unit = {
     new PipeBase( element )
+  }
+
+  def processTrussBase( element: Element ): Unit = {
+    new TrussBase( element )
   }
 
   def processFlat( element: Element ): Unit = {
