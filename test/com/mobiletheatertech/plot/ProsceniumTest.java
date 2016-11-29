@@ -35,6 +35,10 @@ public class ProsceniumTest {
     Double venueDepth = 400.0;
     Double venueHeight = 263.0;
 
+    Element mouldingElement = null;
+    Double mouldingDepth = 3.4;
+    Double mouldingWidth = 5.2;
+    String mouldingSide = "both";
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
@@ -55,6 +59,9 @@ public class ProsceniumTest {
         element.setAttribute( "x", x.toString() );
         element.setAttribute( "y", y.toString() );
         element.setAttribute( "z", z.toString() );
+
+        mouldingElement = new IIOMetadataNode( Moulding.Tag() );
+//        mouldingElement.setAttribute( "depth", mouldingDepth.toString() );
     }
 
     @AfterMethod
@@ -90,6 +97,8 @@ public class ProsceniumTest {
         assert Verifier.class.isInstance(instance);
         assert Layerer.class.isInstance(instance);
         assert MinderDom.class.isInstance(instance);
+
+        assertTrue( Populate.class.isInstance( instance ) );
     }
 
     @Test
@@ -102,6 +111,30 @@ public class ProsceniumTest {
         assertEquals( TestHelpers.accessDouble( proscenium, "x" ), x );
         assertEquals( TestHelpers.accessDouble( proscenium, "y" ), y );
         assertEquals( TestHelpers.accessDouble( proscenium, "z" ), z );
+    }
+
+    @Test
+    public void tagCallbackRegisteredMoulding() {
+//        see SetPlatformTest for more on testing Proscenium's use of Populate.
+        Proscenium instance = new Proscenium( element );
+
+        assertTrue( instance.tags().contains( Moulding.Tag() ) );
+        assertEquals( instance.tags().size(), 1 );
+    }
+
+    @Test
+    public void populateChildrenNoMouldingStored() {
+        Proscenium proscenium = new Proscenium( element );
+
+        assertEquals( proscenium.mouldings().size(), 0 );
+    }
+
+    @Test
+    public void populateChildrenMouldingStored() {
+        element.appendChild( mouldingElement );
+        Proscenium proscenium = new Proscenium( element );
+
+        assertEquals( proscenium.mouldings().size(), 1 );
     }
 
     // Until such time as I properly implement this class' use of id.

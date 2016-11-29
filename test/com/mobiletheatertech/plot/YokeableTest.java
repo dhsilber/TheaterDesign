@@ -144,10 +144,44 @@ public class YokeableTest {
     Element luminaireElement;
     Double weight = 9.4;
     String unit = "7";
+    String owner = "some organization";
     String type = "6x9";
     String location = "13";
 
-    public YokeableTest() {
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        TestResets.YokeableReset();
+        TestResets.LuminaireReset();
+        UniqueId.Reset();
+
+        element = new IIOMetadataNode( "mounted" );
+        element.setAttribute( "id", id );
+
+        Integer width = 13;
+        Integer length = 27;
+        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", type );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.setAttribute( "weight", weight.toString() );
+        definitionElement.appendChild(new IIOMetadataNode("svg"));
+        new LuminaireDefinition( definitionElement );
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute( "type", type );
+        luminaireElement.setAttribute( "on", id );
+        luminaireElement.setAttribute( "location", location );
+//        luminaireElement.setAttribute("dimmer", dimmer);
+//        luminaireElement.setAttribute("circuit", circuit);
+//        luminaireElement.setAttribute("channel", channel);
+//        luminaireElement.setAttribute("color", color);
+        luminaireElement.setAttribute("unit", unit );
+        luminaireElement.setAttribute("owner", owner );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
     }
 
     @Test
@@ -315,37 +349,4 @@ public class YokeableTest {
     public static void tearDownClass() throws Exception {
     }
 
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        TestResets.YokeableReset();
-        TestResets.LuminaireReset();
-        UniqueId.Reset();
-
-        element = new IIOMetadataNode( "mounted" );
-        element.setAttribute( "id", id );
-
-        Integer width = 13;
-        Integer length = 27;
-        Element definitionElement = new IIOMetadataNode( "luminaire-definition" );
-        definitionElement.setAttribute( "name", type );
-        definitionElement.setAttribute( "width", width.toString() );
-        definitionElement.setAttribute( "length", length.toString() );
-        definitionElement.setAttribute( "weight", weight.toString() );
-        definitionElement.appendChild(new IIOMetadataNode("svg"));
-        new LuminaireDefinition( definitionElement );
-
-        luminaireElement = new IIOMetadataNode( "luminaire" );
-        luminaireElement.setAttribute( "type", type );
-        luminaireElement.setAttribute( "on", id );
-        luminaireElement.setAttribute( "location", location );
-//        luminaireElement.setAttribute("dimmer", dimmer);
-//        luminaireElement.setAttribute("circuit", circuit);
-//        luminaireElement.setAttribute("channel", channel);
-//        luminaireElement.setAttribute("color", color);
-        luminaireElement.setAttribute("unit", unit );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 }

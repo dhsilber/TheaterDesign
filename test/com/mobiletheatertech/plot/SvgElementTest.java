@@ -579,6 +579,7 @@ public class SvgElementTest {
         elementOnLightingStand.setAttribute("on", lightingStandName );
         elementOnLightingStand.setAttribute("location", "a" );
         elementOnLightingStand.setAttribute("unit", "1" );
+        elementOnLightingStand.setAttribute("owner", "me" );
 
         Luminaire luminaire = new Luminaire( elementOnLightingStand );
 

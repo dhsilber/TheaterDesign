@@ -377,7 +377,7 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
   override def toString(): String = {
     "Pipe { " +
-      //                \"id='\" + id + '\\'' +
+      "id='" + id + "' " +
       "origin=" + start +
       ", length=" + length +
       " }"

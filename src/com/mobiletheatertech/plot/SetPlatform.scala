@@ -32,7 +32,7 @@ class SetPlatform (val element: Element) extends MinderDom(element)
   if ( shapes.size() < 1 )
     throw new InvalidXMLException( "SetPlatform has no Shape." )
 
-  def processShape( element: Element ): Unit ={
+  def processShape( element: Element ): Unit = {
     shapes.add( new Shape( element ) )
   }
 

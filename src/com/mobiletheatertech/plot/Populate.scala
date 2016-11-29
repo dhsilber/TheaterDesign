@@ -25,7 +25,7 @@ trait Populate {
     }
   }
 
-  def tagCallback( tag: String, callback: Element => Unit ): Unit ={
+  def tagCallback( tag: String, callback: Element => Unit ): Unit = {
     tags( tag ) = callback
   }
 }

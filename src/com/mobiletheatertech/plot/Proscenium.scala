@@ -1,13 +1,17 @@
 package com.mobiletheatertech.plot
 
 import java.awt.Rectangle
+import java.util
 
 import org.w3c.dom.Element
+import java.util.ArrayList
 
 /**
   * Created by DHS on 9/24/16.
   */
-class Proscenium( element: Element ) extends MinderDom( element ) {
+class Proscenium( element: Element ) extends MinderDom( element )
+  with Populate
+{
 
   val width = getDoubleAttribute( "width" )
   val depth = getDoubleAttribute( "depth" )
@@ -36,28 +40,38 @@ class Proscenium( element: Element ) extends MinderDom( element ) {
       "Proscenium should not extend beyond the boundaries of the venue.")
   }
 
+  Proscenium.origin = new Point( x, y, z )
+
+  Proscenium.active = true
+
+  new Point( x, y, - z )
+
   /*
   Thinking out loud here...
 
   Proscenium arches often have moldings around them. Most commonly, they are
   decorations on the DS side. but I know of at least one stage (Corey Auditorium)
-  where this molding extends US as well.
+  where this molding extends US as well. (Actually, in that case it is a slab of
+  wood applied to the inside of the arch which extends both US & DS of the
+  proscenium, but I'm not planning on yet another way to implement that.)
 
   This molding could be anything from a modern squared-off thing to a more ornate
   sloped and patterned affair.
 
   I think the best way to represent this would be with an element that is a child
   of the proscenium that can describe the cross-section of the molding and where
-  is goes.
+  it goes.
 
    */
 
+  val mouldings: ArrayList[ Moulding ] = new ArrayList[ Moulding ]
 
-  Proscenium.origin = new Point( x, y, z )
+  tagCallback( Moulding.Tag, processMoulding )
+  populate( element )
 
-  Proscenium.active = true
-
-  new Point( x, y, - z )
+  def processMoulding( element: Element ): Unit = {
+    mouldings.add( new Moulding( element ) )
+  }
 
   def dom( draw: Draw, mode: View ): Unit = {
     mode match {

@@ -68,9 +68,128 @@ public class TrussTest {
 
     Element luminaireElement = null;
     final String luminaireUnit = "unit";
+    final String luminaireOwner = "owner";
     final String luminaireType = "Altman 6x9";
     String luminaireLocation = "b 12";
 
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        Proscenium.Reset();
+        TestResets.ElementalListerReset();
+        TestResets.MountableReset();
+        TestResets.MinderDomReset();
+        TestResets.LuminaireReset();
+        Truss.Reset();
+        UniqueId.Reset();
+
+        assertTrue( ElementalLister.List().isEmpty() );
+        assertTrue( Layer.List().isEmpty() );
+
+        Element venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "350" );
+        venueElement.setAttribute( "depth", "400" );
+        venueElement.setAttribute( "height", venueHeight.toString() );
+        new Venue( venueElement );
+
+        prosceniumElement = new IIOMetadataNode("proscenium");
+        prosceniumElement.setAttribute("width", "260");
+        prosceniumElement.setAttribute("height", "200");
+        prosceniumElement.setAttribute("depth", "22");
+        prosceniumElement.setAttribute("x", prosceniumX.toString());
+        prosceniumElement.setAttribute("y", prosceniumY.toString());
+        prosceniumElement.setAttribute("z", prosceniumZ.toString());
+
+        Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
+        hangPoint1.setAttribute( "id", "jim" );
+        hangPoint1.setAttribute("x", x1.toString());
+        hangPoint1.setAttribute("y", y1and2.toString());
+        hanger1 = new HangPoint( hangPoint1 );
+
+        Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
+        hangPoint2.setAttribute( "id", "joan" );
+        hangPoint2.setAttribute("x", x2.toString());
+        hangPoint2.setAttribute("y", y1and2.toString());
+        hanger2 = new HangPoint( hangPoint2 );
+
+        Element hangPoint3 = new IIOMetadataNode( "hangpoint" );
+        hangPoint3.setAttribute( "id", "fred" );
+        hangPoint3.setAttribute("x", suspend3X.toString());
+        hangPoint3.setAttribute("y", suspend3Y.toString());
+        hanger3 = new HangPoint( hangPoint3 );
+
+        suspendElement1a = new IIOMetadataNode( "suspend" );
+        suspendElement1a.setAttribute( "ref", "jim" );
+        suspendElement1a.setAttribute( "distance", suspendDistance.toString() );
+
+        suspendElement1b = new IIOMetadataNode( "suspend" );
+        suspendElement1b.setAttribute( "ref", "jim" );
+        suspendElement1b.setAttribute( "distance", suspendDistance.toString() );
+
+        suspendElement2 = new IIOMetadataNode( "suspend" );
+        suspendElement2.setAttribute( "ref", "joan" );
+        suspendElement2.setAttribute( "distance", suspendDistance.toString() );
+
+        suspendElement3 = new IIOMetadataNode( "suspend" );
+        suspendElement3.setAttribute( "ref", "fred" );
+        suspendElement3.setAttribute( "distance", suspendDistance.toString() );
+
+//        baseElement = new IIOMetadataNode( "base" );
+//        baseElement.setAttribute( "x", "1" );
+//        baseElement.setAttribute( "y", "2" );
+
+        element = new IIOMetadataNode("truss");
+        element.setAttribute("id", trussId );
+        element.setAttribute("size", size.toString());
+        element.setAttribute("length", length.toString());
+        element.appendChild(suspendElement1a);
+        element.appendChild( suspendElement2 );
+
+        positionedTrussElement = new IIOMetadataNode("truss");
+        positionedTrussElement.setAttribute("id", trussId );
+        positionedTrussElement.setAttribute("size", size.toString());
+        positionedTrussElement.setAttribute("length", length.toString());
+        positionedTrussElement.setAttribute("x", x.toString());
+        positionedTrussElement.setAttribute("y", y.toString());
+        positionedTrussElement.setAttribute("z", z.toString());
+
+        elementTrussDiagonal = new IIOMetadataNode("truss");
+        elementTrussDiagonal.setAttribute("id", trussDiagonalId );
+        elementTrussDiagonal.setAttribute("size", size.toString());
+        elementTrussDiagonal.setAttribute("length", length.toString());
+        elementTrussDiagonal.appendChild(suspendElement1b);
+        elementTrussDiagonal.appendChild( suspendElement3 );
+
+        baseElement = new IIOMetadataNode( "trussbase" );
+        baseElement.setAttribute( "size", baseSize.toString() );
+        baseElement.setAttribute("x", baseX.toString());
+        baseElement.setAttribute("y", baseY.toString());
+
+        trussOnBaseElement = new IIOMetadataNode("truss");
+        trussOnBaseElement.setAttribute("id", trussOnBaseId );
+        trussOnBaseElement.setAttribute("size", size.toString());
+        trussOnBaseElement.setAttribute("length", length.toString());
+        trussOnBaseElement.appendChild(baseElement);
+
+        trussPositionedElement = new IIOMetadataNode("truss");
+        trussPositionedElement.setAttribute("id", trussPositionedId );
+        trussPositionedElement.setAttribute("size", size.toString());
+        trussPositionedElement.setAttribute("length", length.toString());
+        trussPositionedElement.setAttribute( "x", x.toString() );
+        trussPositionedElement.setAttribute( "y", y.toString() );
+        trussPositionedElement.setAttribute( "z", z.toString() );
+
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute("unit", luminaireUnit);
+        luminaireElement.setAttribute("owner", luminaireOwner);
+        luminaireElement.setAttribute( "type", luminaireType );
+        luminaireElement.setAttribute("location", luminaireLocation );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
 
     @Test
@@ -1125,121 +1244,4 @@ public class TrussTest {
     public static void tearDownClass() throws Exception {
     }
 
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        Proscenium.Reset();
-        TestResets.ElementalListerReset();
-        TestResets.MountableReset();
-        TestResets.MinderDomReset();
-        TestResets.LuminaireReset();
-        Truss.Reset();
-        UniqueId.Reset();
-
-        assertTrue( ElementalLister.List().isEmpty() );
-        assertTrue( Layer.List().isEmpty() );
-
-        Element venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", venueHeight.toString() );
-        new Venue( venueElement );
-
-        prosceniumElement = new IIOMetadataNode("proscenium");
-        prosceniumElement.setAttribute("width", "260");
-        prosceniumElement.setAttribute("height", "200");
-        prosceniumElement.setAttribute("depth", "22");
-        prosceniumElement.setAttribute("x", prosceniumX.toString());
-        prosceniumElement.setAttribute("y", prosceniumY.toString());
-        prosceniumElement.setAttribute("z", prosceniumZ.toString());
-
-        Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
-        hangPoint1.setAttribute( "id", "jim" );
-        hangPoint1.setAttribute("x", x1.toString());
-        hangPoint1.setAttribute("y", y1and2.toString());
-        hanger1 = new HangPoint( hangPoint1 );
-
-        Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
-        hangPoint2.setAttribute( "id", "joan" );
-        hangPoint2.setAttribute("x", x2.toString());
-        hangPoint2.setAttribute("y", y1and2.toString());
-        hanger2 = new HangPoint( hangPoint2 );
-
-        Element hangPoint3 = new IIOMetadataNode( "hangpoint" );
-        hangPoint3.setAttribute( "id", "fred" );
-        hangPoint3.setAttribute("x", suspend3X.toString());
-        hangPoint3.setAttribute("y", suspend3Y.toString());
-        hanger3 = new HangPoint( hangPoint3 );
-
-        suspendElement1a = new IIOMetadataNode( "suspend" );
-        suspendElement1a.setAttribute( "ref", "jim" );
-        suspendElement1a.setAttribute( "distance", suspendDistance.toString() );
-
-        suspendElement1b = new IIOMetadataNode( "suspend" );
-        suspendElement1b.setAttribute( "ref", "jim" );
-        suspendElement1b.setAttribute( "distance", suspendDistance.toString() );
-
-        suspendElement2 = new IIOMetadataNode( "suspend" );
-        suspendElement2.setAttribute( "ref", "joan" );
-        suspendElement2.setAttribute( "distance", suspendDistance.toString() );
-
-        suspendElement3 = new IIOMetadataNode( "suspend" );
-        suspendElement3.setAttribute( "ref", "fred" );
-        suspendElement3.setAttribute( "distance", suspendDistance.toString() );
-
-//        baseElement = new IIOMetadataNode( "base" );
-//        baseElement.setAttribute( "x", "1" );
-//        baseElement.setAttribute( "y", "2" );
-
-        element = new IIOMetadataNode("truss");
-        element.setAttribute("id", trussId );
-        element.setAttribute("size", size.toString());
-        element.setAttribute("length", length.toString());
-        element.appendChild(suspendElement1a);
-        element.appendChild( suspendElement2 );
-        
-        positionedTrussElement = new IIOMetadataNode("truss");
-        positionedTrussElement.setAttribute("id", trussId );
-        positionedTrussElement.setAttribute("size", size.toString());
-        positionedTrussElement.setAttribute("length", length.toString());
-        positionedTrussElement.setAttribute("x", x.toString());
-        positionedTrussElement.setAttribute("y", y.toString());
-        positionedTrussElement.setAttribute("z", z.toString());
-
-        elementTrussDiagonal = new IIOMetadataNode("truss");
-        elementTrussDiagonal.setAttribute("id", trussDiagonalId );
-        elementTrussDiagonal.setAttribute("size", size.toString());
-        elementTrussDiagonal.setAttribute("length", length.toString());
-        elementTrussDiagonal.appendChild(suspendElement1b);
-        elementTrussDiagonal.appendChild( suspendElement3 );
-
-        baseElement = new IIOMetadataNode( "trussbase" );
-        baseElement.setAttribute( "size", baseSize.toString() );
-        baseElement.setAttribute("x", baseX.toString());
-        baseElement.setAttribute("y", baseY.toString());
-
-        trussOnBaseElement = new IIOMetadataNode("truss");
-        trussOnBaseElement.setAttribute("id", trussOnBaseId );
-        trussOnBaseElement.setAttribute("size", size.toString());
-        trussOnBaseElement.setAttribute("length", length.toString());
-        trussOnBaseElement.appendChild(baseElement);
-
-        trussPositionedElement = new IIOMetadataNode("truss");
-        trussPositionedElement.setAttribute("id", trussPositionedId );
-        trussPositionedElement.setAttribute("size", size.toString());
-        trussPositionedElement.setAttribute("length", length.toString());
-        trussPositionedElement.setAttribute( "x", x.toString() );
-        trussPositionedElement.setAttribute( "y", y.toString() );
-        trussPositionedElement.setAttribute( "z", z.toString() );
-
-
-        luminaireElement = new IIOMetadataNode( "luminaire" );
-        luminaireElement.setAttribute("unit", luminaireUnit);
-        luminaireElement.setAttribute( "type", luminaireType );
-        luminaireElement.setAttribute("location", luminaireLocation );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 }

@@ -63,10 +63,114 @@ public class PipeTest {
     private final String pipeId = "balconyId";
 
     Element luminaireElement = null;
-    final String luminaireUnit = "unit";
+    private final String luminaireUnit = "unit";
+    private final String luminaireOwner = "owner";
     final String luminaireType = "Altman 6x9";
     String luminaireLocation = "12";
 
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        Proscenium.Reset();
+        TestResets.MountableReset();
+        TestResets.LayerReset();
+        TestResets.ElementalListerReset();
+        TestResets.LuminaireReset();
+        element = null;
+        UniqueId.Reset();
+
+
+        Element venueElement = new IIOMetadataNode("venue");
+        venueElement.setAttribute("room", "Test Name");
+        venueElement.setAttribute("width", "350");
+        venueElement.setAttribute("depth", "400");
+        venueElement.setAttribute("height", "240");
+        new Venue(venueElement);
+
+        prosceniumElement = new IIOMetadataNode("proscenium");
+        prosceniumElement.setAttribute("width", "260");
+        prosceniumElement.setAttribute("height", "200");
+        prosceniumElement.setAttribute("depth", "22");
+        prosceniumElement.setAttribute("x", prosceniumX.toString());
+        prosceniumElement.setAttribute("y", prosceniumY.toString());
+        prosceniumElement.setAttribute("z", prosceniumZ.toString());
+
+        element = new IIOMetadataNode("pipe");
+        element.setAttribute("id", pipeId);
+        element.setAttribute("length", length.toString());
+        element.setAttribute("x", x.toString());
+        element.setAttribute("y", y.toString());
+        element.setAttribute("z", z.toString());
+
+        pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
+        pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
+        pipeCrossesProsceniumCenterElement.setAttribute("length", length.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("x", negativeX.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("y", y.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("z", z.toString());
+
+//        anchorElementA = new IIOMetadataNode( "anchor" );
+//        Make an anchor element, which is anything that can hold a pipe.
+//                Perhaps it should just be called "pipeclamp" and a cheeseborough is
+//                made up outof a pair of them
+//                and a half-borough or an lighting hanger is a pipeClamp with a bolt
+//
+//        anchoredElement = new IIOMetadataNode( "pipe" );
+//        anchoredElement.setAttribute("id", pipeId);
+//        anchoredElement.setAttribute("length", length.toString());
+//        anchoredElement.setAttribute("");
+
+
+//        baseElement = new IIOMetadataNode( "pipebase" );
+////        baseElement.setAttribute( "size", baseSize.toString() );
+//        baseElement.setAttribute( "x", baseX.toString() );
+//        baseElement.setAttribute( "y", baseY.toString() );
+
+        trussBaseElement = new IIOMetadataNode( "base" );
+        trussBaseElement.setAttribute( "size", baseSize.toString() );
+        trussBaseElement.setAttribute( "x", baseX.toString() );
+        trussBaseElement.setAttribute( "y", baseY.toString() );
+
+        trussElement = new IIOMetadataNode( "truss" );
+        trussElement.setAttribute( "id", trussID );
+        trussElement.setAttribute( "size", trussSize.toString() );
+        trussElement.setAttribute( "length", trussLength.toString() );
+        trussElement.appendChild( trussBaseElement );
+
+        cheeseborough1Element = new IIOMetadataNode( "cheeseborough" );
+        cheeseborough1Element.setAttribute( "id", cheeseborough1Id );
+        cheeseborough1Element.setAttribute( "on", trussID );
+        cheeseborough1Element.setAttribute( "location", cheeseborough1Location );
+
+        cheeseborough2Element = new IIOMetadataNode( "cheeseborough" );
+        cheeseborough2Element.setAttribute( "id", cheeseborough2Id );
+        cheeseborough2Element.setAttribute( "on", trussID );
+        cheeseborough2Element.setAttribute( "location", cheeseborough2Location );
+
+        pipeOnCheeseboroughsElement = new IIOMetadataNode( "pipe" );
+        pipeOnCheeseboroughsElement.setAttribute( "id", pipeOnCheeseboroughsId );
+        pipeOnCheeseboroughsElement.setAttribute( "length", pipeOnCheeseboroughsLength.toString() );
+        pipeOnCheeseboroughsElement.appendChild( cheeseborough1Element );
+        pipeOnCheeseboroughsElement.appendChild( cheeseborough2Element );
+
+        pipeOnBaseElement = new IIOMetadataNode( "pipe" );
+        pipeOnBaseElement.setAttribute( "id", pipeId );
+        pipeOnBaseElement.setAttribute( "length", length.toString() );
+
+        baseForPipeElement = new IIOMetadataNode( "pipebase" );
+        baseForPipeElement.setAttribute( "x", baseX.toString() );
+        baseForPipeElement.setAttribute( "y", baseY.toString() );
+        baseForPipeElement.appendChild( pipeOnBaseElement );
+
+        luminaireElement = new IIOMetadataNode( "luminaire" );
+        luminaireElement.setAttribute("unit", luminaireUnit);
+        luminaireElement.setAttribute("owner", luminaireOwner);
+        luminaireElement.setAttribute( "type", luminaireType );
+        luminaireElement.setAttribute("location", luminaireLocation );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
 
     @Test
@@ -1119,6 +1223,7 @@ public class PipeTest {
 
         Element elementOnPipe = new IIOMetadataNode( "luminaire" );
         elementOnPipe.setAttribute("unit", unit);
+        elementOnPipe.setAttribute("owner", luminaireOwner);
         elementOnPipe.setAttribute( "type", type );
         elementOnPipe.setAttribute("location", "122" );
 
@@ -1398,106 +1503,4 @@ public class PipeTest {
     public static void tearDownClass() throws Exception {
     }
 
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        Proscenium.Reset();
-        TestResets.MountableReset();
-        TestResets.LayerReset();
-        TestResets.ElementalListerReset();
-        TestResets.LuminaireReset();
-        element = null;
-        UniqueId.Reset();
-
-
-        Element venueElement = new IIOMetadataNode("venue");
-        venueElement.setAttribute("room", "Test Name");
-        venueElement.setAttribute("width", "350");
-        venueElement.setAttribute("depth", "400");
-        venueElement.setAttribute("height", "240");
-        new Venue(venueElement);
-
-        prosceniumElement = new IIOMetadataNode("proscenium");
-        prosceniumElement.setAttribute("width", "260");
-        prosceniumElement.setAttribute("height", "200");
-        prosceniumElement.setAttribute("depth", "22");
-        prosceniumElement.setAttribute("x", prosceniumX.toString());
-        prosceniumElement.setAttribute("y", prosceniumY.toString());
-        prosceniumElement.setAttribute("z", prosceniumZ.toString());
-
-        element = new IIOMetadataNode("pipe");
-        element.setAttribute("id", pipeId);
-        element.setAttribute("length", length.toString());
-        element.setAttribute("x", x.toString());
-        element.setAttribute("y", y.toString());
-        element.setAttribute("z", z.toString());
-
-        pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
-        pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
-        pipeCrossesProsceniumCenterElement.setAttribute("length", length.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute("x", negativeX.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute("y", y.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute("z", z.toString());
-
-//        anchorElementA = new IIOMetadataNode( "anchor" );
-//        Make an anchor element, which is anything that can hold a pipe.
-//                Perhaps it should just be called "pipeclamp" and a cheeseborough is
-//                made up outof a pair of them
-//                and a half-borough or an lighting hanger is a pipeClamp with a bolt
-//
-//        anchoredElement = new IIOMetadataNode( "pipe" );
-//        anchoredElement.setAttribute("id", pipeId);
-//        anchoredElement.setAttribute("length", length.toString());
-//        anchoredElement.setAttribute("");
-
-
-//        baseElement = new IIOMetadataNode( "pipebase" );
-////        baseElement.setAttribute( "size", baseSize.toString() );
-//        baseElement.setAttribute( "x", baseX.toString() );
-//        baseElement.setAttribute( "y", baseY.toString() );
-
-        trussBaseElement = new IIOMetadataNode( "base" );
-        trussBaseElement.setAttribute( "size", baseSize.toString() );
-        trussBaseElement.setAttribute( "x", baseX.toString() );
-        trussBaseElement.setAttribute( "y", baseY.toString() );
-
-        trussElement = new IIOMetadataNode( "truss" );
-        trussElement.setAttribute( "id", trussID );
-        trussElement.setAttribute( "size", trussSize.toString() );
-        trussElement.setAttribute( "length", trussLength.toString() );
-        trussElement.appendChild( trussBaseElement );
-
-        cheeseborough1Element = new IIOMetadataNode( "cheeseborough" );
-        cheeseborough1Element.setAttribute( "id", cheeseborough1Id );
-        cheeseborough1Element.setAttribute( "on", trussID );
-        cheeseborough1Element.setAttribute( "location", cheeseborough1Location );
-
-        cheeseborough2Element = new IIOMetadataNode( "cheeseborough" );
-        cheeseborough2Element.setAttribute( "id", cheeseborough2Id );
-        cheeseborough2Element.setAttribute( "on", trussID );
-        cheeseborough2Element.setAttribute( "location", cheeseborough2Location );
-
-        pipeOnCheeseboroughsElement = new IIOMetadataNode( "pipe" );
-        pipeOnCheeseboroughsElement.setAttribute( "id", pipeOnCheeseboroughsId );
-        pipeOnCheeseboroughsElement.setAttribute( "length", pipeOnCheeseboroughsLength.toString() );
-        pipeOnCheeseboroughsElement.appendChild( cheeseborough1Element );
-        pipeOnCheeseboroughsElement.appendChild( cheeseborough2Element );
-
-        pipeOnBaseElement = new IIOMetadataNode( "pipe" );
-        pipeOnBaseElement.setAttribute( "id", pipeId );
-        pipeOnBaseElement.setAttribute( "length", length.toString() );
-
-        baseForPipeElement = new IIOMetadataNode( "pipebase" );
-        baseForPipeElement.setAttribute( "x", baseX.toString() );
-        baseForPipeElement.setAttribute( "y", baseY.toString() );
-        baseForPipeElement.appendChild( pipeOnBaseElement );
-
-        luminaireElement = new IIOMetadataNode( "luminaire" );
-        luminaireElement.setAttribute("unit", luminaireUnit);
-        luminaireElement.setAttribute( "type", luminaireType );
-        luminaireElement.setAttribute("location", luminaireLocation );
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 }

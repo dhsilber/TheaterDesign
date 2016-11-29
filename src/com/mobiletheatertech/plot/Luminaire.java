@@ -43,6 +43,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     private PagePoint schematicPosition = null;
     private Rectangle2D.Double schematicBox = null;
 
+    private String owner;
     private String unit;
     private String type;
     private String on;
@@ -83,6 +84,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         type     = getStringAttribute(  "type" );
         location = getStringAttribute(  "location" );
         unit     = getStringAttribute(  "unit" );
+        owner    = getStringAttribute(  "owner" );
         circuit = getOptionalStringAttribute( "circuit" );
         dimmer  = getOptionalStringAttribute( "dimmer" );
         channel = getOptionalStringAttribute( "channel" );
@@ -188,7 +190,9 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
             mount.hang( this, Double.parseDouble( location ) );
         }
         catch (NumberFormatException exception) {
-                throw new MountingException(
+            System.out.println ( mount.toString() );
+
+            throw new MountingException(
                     "Pipe (" + on + ") unit '" + unit + "' has invalid location '" + location + "'." );
 //      case exception: Exception =>
 //        throw new Exception( exception.getMessage, exception.getCause )

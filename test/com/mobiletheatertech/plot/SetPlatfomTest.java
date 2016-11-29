@@ -126,8 +126,8 @@ public class SetPlatfomTest {
         assert Verifier.class.isInstance( instance );
         assert Layerer.class.isInstance( instance );
         assert MinderDom.class.isInstance( instance );
-        assertTrue( Populate.class.isInstance( instance ) );
 
+        assertTrue( Populate.class.isInstance( instance ) );
         assert Legendable.class.isInstance( instance );
     }
 

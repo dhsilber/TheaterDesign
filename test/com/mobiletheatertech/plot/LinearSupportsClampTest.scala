@@ -62,6 +62,7 @@ class LinearSupportsClampTest {
   private var pipeOnBaseElement: Element = null
   private[plot] val weight: Double = 9.4
   private[plot] val unit: String = "7"
+  val owner = "nobody"
   private[plot] val `type`: String = "6x9"
   private[plot] val location: String = "13"
   private val baseX: Double = 40.0
@@ -69,6 +70,53 @@ class LinearSupportsClampTest {
   private val pipeId: String = "Pipe ID"
   private val baseId: String = "TrussBase ID"
   private val length: Double = 37.5
+
+  @BeforeMethod
+  @throws[Exception]
+  def setUpMethod {
+    //    TestResets.YokeableReset
+    TestResets.LuminaireReset()
+    TestResets.ElementalListerReset()
+    UniqueId.Reset()
+
+    //    element = new IIOMetadataNode("mounted")
+    //    element.setAttribute("id", id)
+
+    //    val width: Integer = 13
+    //    val length: Integer = 27
+
+    //    val definitionElement: Element = new IIOMetadataNode("luminaire-definition")
+    //    definitionElement.setAttribute("name", `type`)
+    //    definitionElement.setAttribute("width", width.toString)
+    //    definitionElement.setAttribute("length", length.toString)
+    //    definitionElement.setAttribute("weight", weight.toString)
+    //    definitionElement.appendChild(new IIOMetadataNode("svg"))
+    //    new LuminaireDefinition(definitionElement)
+
+    luminaireElement = new IIOMetadataNode("luminaire")
+    luminaireElement.setAttribute("type", `type`)
+    luminaireElement.setAttribute("on", pipeId)
+    luminaireElement.setAttribute("location", location)
+    luminaireElement.setAttribute("unit", unit)
+    luminaireElement.setAttribute("owner", owner)
+
+
+    baseForPipeElement = new IIOMetadataNode("pipebase")
+    //        baseForPipeElement.setAttribute( "size", baseSize.toString() );
+    baseForPipeElement.setAttribute( "id", baseId )
+    baseForPipeElement.setAttribute("x", baseX.toString)
+    baseForPipeElement.setAttribute("y", baseY.toString)
+
+    pipeOnBaseElement = new IIOMetadataNode("pipe")
+    pipeOnBaseElement.setAttribute("id", pipeId)
+    pipeOnBaseElement.setAttribute("length", length.toString)
+    pipeOnBaseElement.appendChild(baseForPipeElement)
+  }
+
+  @AfterMethod
+  @throws[Exception]
+  def tearDownMethod {
+  }
 
   @Test
   @throws[Exception]
@@ -200,52 +248,6 @@ class LinearSupportsClampTest {
     assertEquals( ElementalLister.List().size(), 1 )
     val found: LinearSupportsClamp = LinearSupportsClamp.Select( "bogus" )
     assertNull( found )
-  }
-
-  @BeforeMethod
-  @throws[Exception]
-  def setUpMethod {
-//    TestResets.YokeableReset
-    TestResets.LuminaireReset()
-    TestResets.ElementalListerReset()
-    UniqueId.Reset()
-
-//    element = new IIOMetadataNode("mounted")
-//    element.setAttribute("id", id)
-
-//    val width: Integer = 13
-//    val length: Integer = 27
-
-//    val definitionElement: Element = new IIOMetadataNode("luminaire-definition")
-//    definitionElement.setAttribute("name", `type`)
-//    definitionElement.setAttribute("width", width.toString)
-//    definitionElement.setAttribute("length", length.toString)
-//    definitionElement.setAttribute("weight", weight.toString)
-//    definitionElement.appendChild(new IIOMetadataNode("svg"))
-//    new LuminaireDefinition(definitionElement)
-
-    luminaireElement = new IIOMetadataNode("luminaire")
-    luminaireElement.setAttribute("type", `type`)
-    luminaireElement.setAttribute("on", pipeId)
-    luminaireElement.setAttribute("location", location)
-    luminaireElement.setAttribute("unit", unit)
-
-
-    baseForPipeElement = new IIOMetadataNode("pipebase")
-    //        baseForPipeElement.setAttribute( "size", baseSize.toString() );
-    baseForPipeElement.setAttribute( "id", baseId )
-    baseForPipeElement.setAttribute("x", baseX.toString)
-    baseForPipeElement.setAttribute("y", baseY.toString)
-
-    pipeOnBaseElement = new IIOMetadataNode("pipe")
-    pipeOnBaseElement.setAttribute("id", pipeId)
-    pipeOnBaseElement.setAttribute("length", length.toString)
-    pipeOnBaseElement.appendChild(baseForPipeElement)
-  }
-
-  @AfterMethod
-  @throws[Exception]
-  def tearDownMethod {
   }
 }
 

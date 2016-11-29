@@ -22,6 +22,13 @@ public class ExceptionTest {
         throw new ArgumentException("Message here");
     }
 
+    @Test
+    public void attributeMissingExceptionIsA() {
+        AttributeMissingException instance =
+                new AttributeMissingException("Foo", "sam", "thingy");
+        assert Exception.class.isInstance( instance );
+    }
+
     /**
      * For when a required attribute is missing and an ID is set.
      *
@@ -56,6 +63,50 @@ public class ExceptionTest {
                     "Foo instance is missing required 'thingy' attribute.")
     public void attributeMissingExceptionNullID() throws Exception {
         throw new AttributeMissingException("Foo", null, "thingy");
+    }
+
+
+    @Test
+    public void attributeInvalidExceptionIsA() {
+        AttributeInvalidException instance =
+                new AttributeInvalidException( "Foo", new InstanceId( "sam" ), "thingy" );
+        assert Exception.class.isInstance( instance );
+    }
+
+    /**
+     * For when a required attribute is invalid and an ID is set.
+     *
+     * @since 0.0.2
+     */
+    @Test(expectedExceptions = AttributeInvalidException.class,
+            expectedExceptionsMessageRegExp =
+                    "Foo \\(sam\\) has invalid 'thingy' attribute.")
+    public void attributeInvalidExceptionWithID() throws Exception {
+        throw new AttributeInvalidException("Foo", new InstanceId( "sam" ), "thingy");
+    }
+
+    /**
+     * For when a required attribute is invalid and no ID is known.
+     *
+     * @since 0.0.2
+     */
+    @Test(expectedExceptions = AttributeInvalidException.class,
+            expectedExceptionsMessageRegExp =
+                    "Foo instance has invalid 'thingy' attribute.")
+    public void attributeInvalidExceptionWithoutID() throws Exception {
+        throw new AttributeInvalidException("Foo", new InstanceId( "" ), "thingy");
+    }
+
+    /**
+     * For when a required attribute is invalid and ID is not set.
+     *
+     * @since 0.0.2
+     */
+    @Test(expectedExceptions = AttributeInvalidException.class,
+            expectedExceptionsMessageRegExp =
+                    "Foo instance has invalid 'thingy' attribute.")
+    public void attributeInvalidExceptionNullID() throws Exception {
+        throw new AttributeInvalidException("Foo", new InstanceId( null ), "thingy");
     }
 
     /**

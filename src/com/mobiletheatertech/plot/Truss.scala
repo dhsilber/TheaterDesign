@@ -437,6 +437,14 @@ class Truss ( element: Element ) extends UniqueId( element )
     val finish: PagePoint = new PagePoint(start.x, start.y + 9)
     return finish
   }
+
+  override def toString(): String = {
+    "Truss { " +
+                      "id='" + id + "' " +
+      "origin=" + start +
+      ", length=" + length +
+      " }"
+  }
 }
 
 object Truss {

@@ -28,6 +28,51 @@ class FlatTest {
   private[plot] val y3: Double = 89.0
 
 
+  @BeforeMethod
+  @throws[Exception]
+  def setUpMethod {
+    Proscenium.Reset()
+    TestResets.ElementalListerReset()
+
+    val prosceniumElement = new IIOMetadataNode( Proscenium.Tag )
+    prosceniumElement.setAttribute( "width", "48" )
+    prosceniumElement.setAttribute( "depth", "14" )
+    prosceniumElement.setAttribute( "height", "27" )
+    prosceniumElement.setAttribute( "x", prosceniumX.toString )
+    prosceniumElement.setAttribute( "y", prosceniumY.toString )
+    prosceniumElement.setAttribute( "z", prosceniumZ.toString )
+
+    venueElement = new IIOMetadataNode( Venue.Tag )
+    venueElement.setAttribute("room", "Test Name")
+    venueElement.setAttribute("width", "350")
+    venueElement.setAttribute("depth", "400")
+    venueElement.setAttribute("height", "240")
+    venueElement.appendChild( prosceniumElement )
+
+    flatElement = new IIOMetadataNode( Flat.Tag )
+    flatElement.setAttribute("x1", x1.toString)
+    flatElement.setAttribute("y1", y1.toString)
+    flatElement.setAttribute("x2", x2.toString)
+    flatElement.setAttribute("y2", y2.toString)
+
+    //    flatElement2 = new IIOMetadataNode( Flat.Tag )
+    //    flatElement2.setAttribute("x1", x2.toString)
+    //    flatElement2.setAttribute("y1", y2.toString)
+    //    flatElement2.setAttribute("x2", x3.toString)
+    //    flatElement2.setAttribute("y2", y3.toString)
+    //
+    //    flatElement3 = new IIOMetadataNode( Flat.Tag )
+    //    flatElement3.setAttribute("x1", x3.toString)
+    //    flatElement3.setAttribute("y1", y3.toString)
+    //    flatElement3.setAttribute("x2", x1.toString)
+    //    flatElement3.setAttribute("y2", y1.toString)
+  }
+
+  @AfterMethod
+  @throws[Exception]
+  def tearDownMethod {
+  }
+
   @Test
   @throws[ Exception ]
   def constantTag {
@@ -148,51 +193,6 @@ class FlatTest {
     assertEquals( foundElement.getAttribute( "y2" ), endY.toString )
     assertEquals( foundElement.getAttribute( "stroke" ), Flat.Color )
     assertEquals( foundElement.getAttribute( "stroke-width" ), "2" )
-  }
-
-  @BeforeMethod
-  @throws[Exception]
-  def setUpMethod {
-    Proscenium.Reset()
-    TestResets.ElementalListerReset()
-
-    val prosceniumElement = new IIOMetadataNode( Proscenium.Tag )
-    prosceniumElement.setAttribute( "width", "48" )
-    prosceniumElement.setAttribute( "depth", "14" )
-    prosceniumElement.setAttribute( "height", "27" )
-    prosceniumElement.setAttribute( "x", prosceniumX.toString )
-    prosceniumElement.setAttribute( "y", prosceniumY.toString )
-    prosceniumElement.setAttribute( "z", prosceniumZ.toString )
-
-    venueElement = new IIOMetadataNode( Venue.Tag )
-    venueElement.setAttribute("room", "Test Name")
-    venueElement.setAttribute("width", "350")
-    venueElement.setAttribute("depth", "400")
-    venueElement.setAttribute("height", "240")
-    venueElement.appendChild( prosceniumElement )
-
-    flatElement = new IIOMetadataNode( Flat.Tag )
-    flatElement.setAttribute("x1", x1.toString)
-    flatElement.setAttribute("y1", y1.toString)
-    flatElement.setAttribute("x2", x2.toString)
-    flatElement.setAttribute("y2", y2.toString)
-
-//    flatElement2 = new IIOMetadataNode( Flat.Tag )
-//    flatElement2.setAttribute("x1", x2.toString)
-//    flatElement2.setAttribute("y1", y2.toString)
-//    flatElement2.setAttribute("x2", x3.toString)
-//    flatElement2.setAttribute("y2", y3.toString)
-//
-//    flatElement3 = new IIOMetadataNode( Flat.Tag )
-//    flatElement3.setAttribute("x1", x3.toString)
-//    flatElement3.setAttribute("y1", y3.toString)
-//    flatElement3.setAttribute("x2", x1.toString)
-//    flatElement3.setAttribute("y2", y1.toString)
-  }
-
-  @AfterMethod
-  @throws[Exception]
-  def tearDownMethod {
   }
 
 }

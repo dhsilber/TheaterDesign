@@ -1,6 +1,6 @@
 package com.mobiletheatertech.plot;
 
-import mockit.Mocked;
+//import mockit.Mocked;
 import org.testng.annotations.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -275,22 +275,22 @@ public class TableTest {
         ArrayList<ElementalLister> list = ElementalLister.List();
         assertEquals(list.size(), 2);
     }
-
-    @Mocked
-    Graphics2D mockCanvas;
-
-//    @Test
-//    public void draw() throws Exception {
-//        Table table = new Table( baseElement );
 //
-//        new Expectations() {
-//            {
-//                mockCanvas.setPaint( Color.orange );
-//                mockCanvas.draw( new Rectangle( 56, 16, 288, 144 ) );
-//            }
-//        };
-//        table.drawPlan( mockCanvas );
-//    }
+//    @Mocked
+//    Graphics2D mockCanvas;
+//
+////    @Test
+////    public void draw() throws Exception {
+////        Table table = new Table( baseElement );
+////
+////        new Expectations() {
+////            {
+////                mockCanvas.setPaint( Color.orange );
+////                mockCanvas.draw( new Rectangle( 56, 16, 288, 144 ) );
+////            }
+////        };
+////        table.drawPlan( mockCanvas );
+////    }
 
     @Test
     public void domPlan() throws Exception {

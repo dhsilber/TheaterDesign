@@ -26,6 +26,7 @@ public class LuminaireTest {
     Element definitionElement = null;
 
     final String unit = "unit";
+    final String owner = "owner";
     final String type = "Altman 6x9";
     final String pipeName = "luminaireTestPipe";
     final String lightingStandName = "luminaireTestLightingStand";
@@ -55,6 +56,126 @@ public class LuminaireTest {
     LuminaireDefinition luminaireDefinition = null;
 
     final String id = pipeName + ":" + unit;
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        Venue.Reset();
+        Proscenium.Reset();
+        TestResets.MinderDomReset();
+        TestResets.YokeableReset();
+        TestResets.LuminaireReset();
+        TestResets.MinderDomReset();
+//        Schematic.CountX = 0;
+//        Schematic.CountY = 1;
+//        TestResets.SchematicReset();
+        UniqueId.Reset();
+
+        venueElement = new IIOMetadataNode( "venue" );
+        venueElement.setAttribute( "room", "Test Name" );
+        venueElement.setAttribute( "width", "350" );
+        venueElement.setAttribute( "depth", "400" );
+        venueElement.setAttribute( "height", "240" );
+        Venue venue = new Venue( venueElement );
+        venue.verify();
+
+        Element pipeElement = new IIOMetadataNode( "pipe" );
+        pipeElement.setAttribute( "id", pipeName );
+        pipeElement.setAttribute( "length", "120" );
+        pipeElement.setAttribute( "x", "12" );
+        pipeElement.setAttribute( "y", "34" );
+        pipeElement.setAttribute( "z", "56" );
+        pipe = new Pipe( pipeElement );
+        pipe.verify();
+
+        Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
+        lightingStandElement.setAttribute("id", lightingStandName );
+        lightingStandElement.setAttribute("x", "12");
+        lightingStandElement.setAttribute("y", "34");
+        lightingStand = new LightingStand( lightingStandElement );
+        lightingStand.verify();
+
+        Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
+        hangPoint1.setAttribute( "id", "jim" );
+        hangPoint1.setAttribute("x", hangPoint1X.toString());
+        hangPoint1.setAttribute("y", hangPoint1Y.toString());
+        new HangPoint( hangPoint1 );
+
+        Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
+        hangPoint2.setAttribute( "id", "joan" );
+        hangPoint2.setAttribute("x", hangPoint2X.toString());
+        hangPoint2.setAttribute( "y", "200" );
+        new HangPoint( hangPoint2 );
+
+        Element suspendElement1 = new IIOMetadataNode( "suspend" );
+        suspendElement1.setAttribute( "ref", "jim" );
+        suspendElement1.setAttribute( "distance", "1" );
+        new Suspend( suspendElement1 );
+
+        Element suspendElement2 = new IIOMetadataNode( "suspend" );
+        suspendElement2.setAttribute( "ref", "joan" );
+        suspendElement2.setAttribute( "distance", "2" );
+        new Suspend( suspendElement2 );
+
+        Element trussElement = new IIOMetadataNode("truss");
+        trussElement.setAttribute("id", trussId );
+        trussElement.setAttribute("size", trussSize.toString());
+        trussElement.setAttribute("length", trussLength.toString());
+        trussElement.appendChild( suspendElement1 );
+        trussElement.appendChild( suspendElement2 );
+        Truss truss = new Truss( trussElement );
+        truss.verify();
+
+
+        Integer width = 13;
+        Integer length = 27;
+        definitionElement = new IIOMetadataNode( "luminaire-definition" );
+        definitionElement.setAttribute( "name", type );
+        definitionElement.setAttribute( "width", width.toString() );
+        definitionElement.setAttribute( "length", length.toString() );
+        definitionElement.setAttribute( "weight", weight.toString() );
+        definitionElement.appendChild(new IIOMetadataNode("svg"));
+        luminaireDefinition = new LuminaireDefinition( definitionElement );
+
+
+        elementOnPipe = new IIOMetadataNode( "luminaire" );
+        elementOnPipe.setAttribute("unit", unit);
+        elementOnPipe.setAttribute("owner", owner);
+        elementOnPipe.setAttribute( "type", type );
+        elementOnPipe.setAttribute("on", pipeName);
+        elementOnPipe.setAttribute("location", pipeLocation );
+        elementOnPipe.setAttribute("circuit", circuit);
+        elementOnPipe.setAttribute("dimmer", dimmer);
+        elementOnPipe.setAttribute("channel", channel);
+        elementOnPipe.setAttribute("color", color);
+        elementOnPipe.setAttribute("address", address);
+        elementOnPipe.setAttribute("info", info);
+
+        elementOnTruss = new IIOMetadataNode( "luminaire" );
+        elementOnTruss.setAttribute( "type", type );
+        elementOnTruss.setAttribute("on", trussId);
+        elementOnTruss.setAttribute("location", trussLocation);
+        elementOnTruss.setAttribute("dimmer", dimmer);
+        elementOnTruss.setAttribute("circuit", circuit);
+        elementOnTruss.setAttribute("channel", channel);
+        elementOnTruss.setAttribute("color", color);
+        elementOnTruss.setAttribute("unit", unit);
+        elementOnTruss.setAttribute("owner", owner);
+
+        elementOnLightingStand = new IIOMetadataNode( "luminaire" );
+        elementOnLightingStand.setAttribute( "type", type );
+        elementOnLightingStand.setAttribute("on", lightingStandName );
+        elementOnLightingStand.setAttribute("location", lightingStandLocation );
+        elementOnLightingStand.setAttribute("dimmer", dimmer);
+        elementOnLightingStand.setAttribute("circuit", circuit);
+        elementOnLightingStand.setAttribute("channel", channel);
+        elementOnLightingStand.setAttribute("color", color);
+        elementOnLightingStand.setAttribute("unit", unit);
+//        System.err.println( "setup done.");
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
+    }
 
     @Test
     public void isA() throws Exception {
@@ -86,6 +207,7 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
+        assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), "" );
@@ -103,6 +225,7 @@ public class LuminaireTest {
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
         assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
+        assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), circuit );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), dimmer );
         assertEquals( TestHelpers.accessString( luminaire, "channel" ), channel );
@@ -177,9 +300,16 @@ public class LuminaireTest {
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
-          expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute.")
+            expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'type' attribute.")
     public void noType() throws Exception {
         elementOnPipe.removeAttribute("type");
+        new Luminaire(elementOnPipe);
+    }
+
+    @Test(expectedExceptions = AttributeMissingException.class,
+            expectedExceptionsMessageRegExp = "Luminaire instance is missing required 'owner' attribute.")
+    public void noOwner() throws Exception {
+        elementOnPipe.removeAttribute("owner");
         new Luminaire(elementOnPipe);
     }
 
@@ -906,121 +1036,4 @@ public class LuminaireTest {
     public static void tearDownClass() throws Exception {
     }
 
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        Venue.Reset();
-        Proscenium.Reset();
-        TestResets.MinderDomReset();
-        TestResets.YokeableReset();
-        TestResets.LuminaireReset();
-        TestResets.MinderDomReset();
-//        Schematic.CountX = 0;
-//        Schematic.CountY = 1;
-//        TestResets.SchematicReset();
-        UniqueId.Reset();
-
-        venueElement = new IIOMetadataNode( "venue" );
-        venueElement.setAttribute( "room", "Test Name" );
-        venueElement.setAttribute( "width", "350" );
-        venueElement.setAttribute( "depth", "400" );
-        venueElement.setAttribute( "height", "240" );
-        Venue venue = new Venue( venueElement );
-        venue.verify();
-
-        Element pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", pipeName );
-        pipeElement.setAttribute( "length", "120" );
-        pipeElement.setAttribute( "x", "12" );
-        pipeElement.setAttribute( "y", "34" );
-        pipeElement.setAttribute( "z", "56" );
-        pipe = new Pipe( pipeElement );
-        pipe.verify();
-
-        Element lightingStandElement = new IIOMetadataNode( "lighting-stand" );
-        lightingStandElement.setAttribute("id", lightingStandName );
-        lightingStandElement.setAttribute("x", "12");
-        lightingStandElement.setAttribute("y", "34");
-        lightingStand = new LightingStand( lightingStandElement );
-        lightingStand.verify();
-
-        Element hangPoint1 = new IIOMetadataNode( "hangpoint" );
-        hangPoint1.setAttribute( "id", "jim" );
-        hangPoint1.setAttribute("x", hangPoint1X.toString());
-        hangPoint1.setAttribute("y", hangPoint1Y.toString());
-        new HangPoint( hangPoint1 );
-
-        Element hangPoint2 = new IIOMetadataNode( "hangpoint" );
-        hangPoint2.setAttribute( "id", "joan" );
-        hangPoint2.setAttribute("x", hangPoint2X.toString());
-        hangPoint2.setAttribute( "y", "200" );
-        new HangPoint( hangPoint2 );
-
-        Element suspendElement1 = new IIOMetadataNode( "suspend" );
-        suspendElement1.setAttribute( "ref", "jim" );
-        suspendElement1.setAttribute( "distance", "1" );
-        new Suspend( suspendElement1 );
-
-        Element suspendElement2 = new IIOMetadataNode( "suspend" );
-        suspendElement2.setAttribute( "ref", "joan" );
-        suspendElement2.setAttribute( "distance", "2" );
-        new Suspend( suspendElement2 );
-
-        Element trussElement = new IIOMetadataNode("truss");
-        trussElement.setAttribute("id", trussId );
-        trussElement.setAttribute("size", trussSize.toString());
-        trussElement.setAttribute("length", trussLength.toString());
-        trussElement.appendChild( suspendElement1 );
-        trussElement.appendChild( suspendElement2 );
-        Truss truss = new Truss( trussElement );
-        truss.verify();
-
-
-        Integer width = 13;
-        Integer length = 27;
-        definitionElement = new IIOMetadataNode( "luminaire-definition" );
-        definitionElement.setAttribute( "name", type );
-        definitionElement.setAttribute( "width", width.toString() );
-        definitionElement.setAttribute( "length", length.toString() );
-        definitionElement.setAttribute( "weight", weight.toString() );
-        definitionElement.appendChild(new IIOMetadataNode("svg"));
-        luminaireDefinition = new LuminaireDefinition( definitionElement );
-
-
-        elementOnPipe = new IIOMetadataNode( "luminaire" );
-        elementOnPipe.setAttribute("unit", unit);
-        elementOnPipe.setAttribute( "type", type );
-        elementOnPipe.setAttribute("on", pipeName);
-        elementOnPipe.setAttribute("location", pipeLocation );
-        elementOnPipe.setAttribute("circuit", circuit);
-        elementOnPipe.setAttribute("dimmer", dimmer);
-        elementOnPipe.setAttribute("channel", channel);
-        elementOnPipe.setAttribute("color", color);
-        elementOnPipe.setAttribute("address", address);
-        elementOnPipe.setAttribute("info", info);
-
-        elementOnTruss = new IIOMetadataNode( "luminaire" );
-        elementOnTruss.setAttribute( "type", type );
-        elementOnTruss.setAttribute("on", trussId);
-        elementOnTruss.setAttribute("location", trussLocation);
-        elementOnTruss.setAttribute("dimmer", dimmer);
-        elementOnTruss.setAttribute("circuit", circuit);
-        elementOnTruss.setAttribute("channel", channel);
-        elementOnTruss.setAttribute("color", color);
-        elementOnTruss.setAttribute("unit", unit);
-
-        elementOnLightingStand = new IIOMetadataNode( "luminaire" );
-        elementOnLightingStand.setAttribute( "type", type );
-        elementOnLightingStand.setAttribute("on", lightingStandName );
-        elementOnLightingStand.setAttribute("location", lightingStandLocation );
-        elementOnLightingStand.setAttribute("dimmer", dimmer);
-        elementOnLightingStand.setAttribute("circuit", circuit);
-        elementOnLightingStand.setAttribute("channel", channel);
-        elementOnLightingStand.setAttribute("color", color);
-        elementOnLightingStand.setAttribute("unit", unit);
-//        System.err.println( "setup done.");
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 }

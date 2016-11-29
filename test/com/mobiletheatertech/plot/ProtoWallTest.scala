@@ -157,13 +157,15 @@ class ProtoWallTest {
     assertSame( list.comparator.getClass, new OpeningComparator().getClass )
   }
 
-  @Test def tagCallbackOpening {
+  @Test
+  def tagCallbackOpening {
     val wall = new Proto( element )
     assertTrue( wall.tags.contains( Opening.Tag ) )
     assertEquals( wall.tags.size, 1 )
   }
 
-  @Test def populateChildrenOpeningNone {
+  @Test
+  def populateChildrenOpeningNone {
     val wall = new Proto( element )
 
     val list = ElementalLister.List
