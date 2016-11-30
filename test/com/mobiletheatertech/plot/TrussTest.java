@@ -65,6 +65,7 @@ public class TrussTest {
     private Integer prosceniumY = 144;
     private Integer prosceniumZ = 12;
 
+    Element pipeElement = null;
 
     Element luminaireElement = null;
     final String luminaireUnit = "unit";
@@ -179,6 +180,7 @@ public class TrussTest {
         trussPositionedElement.setAttribute( "y", y.toString() );
         trussPositionedElement.setAttribute( "z", z.toString() );
 
+        pipeElement = new IIOMetadataNode( Pipe.Tag() );
 
         luminaireElement = new IIOMetadataNode( "luminaire" );
         luminaireElement.setAttribute("unit", luminaireUnit);
@@ -190,7 +192,6 @@ public class TrussTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
 
     @Test
     public void isA() throws Exception {
@@ -873,7 +874,7 @@ public class TrussTest {
         Truss truss = new Truss( positionedTrussElement );
 
         assertTrue( truss.tags().contains( Luminaire.LAYERTAG ) );
-        assertEquals( truss.tags().size(), 1 );
+        assertEquals( truss.tags().size(), 3 );
     }
 
     @Test
@@ -882,6 +883,22 @@ public class TrussTest {
 
         assertTrue( truss.tags().contains( Cheeseborough.TAG ) );
         assertEquals( truss.tags().size(), 1 );
+    }
+
+    @Test
+    public void halfboroughCallbackRegistered() {
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertTrue( truss.tags().contains( Halfborough$.MODULE$.Tag() ) );
+        assertEquals( truss.tags().size(), 3 );
+    }
+
+    @Test
+    public void pipeCallbackRegistered() {
+        Truss truss = new Truss( positionedTrussElement );
+
+        assertTrue( truss.tags().contains( Pipe.Tag() ) );
+        assertEquals( truss.tags().size(), 3 );
     }
 
     @Test

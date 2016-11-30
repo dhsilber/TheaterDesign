@@ -22,14 +22,13 @@ else uses something similar, that code should move to here.
  * @since 0.0.7 ({@code getIntegerAttribute} and {@code getStringAttribute} refactored out of {@code
  *        Minder} when {@code Elemental} was created.)
  */
-public class Elemental {
+public class Elemental extends HasID {
     /**
      * If this is set, Exceptions thrown from the various {@code Elemental} methods can name the
      * specific XML element which has a problem, so child classes are encouraged to both use this in
      * preference to a local variable and to parse the appropriate attribute so as to set this at
      * the earliest opportunity.
      */
-    public String id = null;
     Element internalElement = null;
 
     public Elemental( Element element ) throws InvalidXMLException {

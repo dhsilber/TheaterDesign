@@ -59,6 +59,8 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
 
   tagCallback( Luminaire.LAYERTAG, processLuminaire )
+  tagCallback( Halfborough.Tag, processHalfborough )
+  tagCallback( Pipe.Tag, processPipe )
 //  tagCallback( Cheeseborough.TAG, processCheeseborough )
   populate( element )
 
@@ -83,6 +85,38 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       //      case exception: Exception =>
       //        throw new Exception( exception.getMessage, exception.getCause )
     }
+  }
+
+  def processHalfborough(element: Element ): Unit = {
+    element.setAttribute( "on", id )
+    val half = new Halfborough( element )
+//    val distanceFromOrigin = locationDistance( light.locationValue() )
+//    try {
+//      hang(light, distanceFromOrigin.toDouble )
+//    }
+//    catch {
+//      case exception: MountingException =>
+//        throw new MountingException (
+//          "Truss (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+//      //      case exception: Exception =>
+//      //        throw new Exception( exception.getMessage, exception.getCause )
+//    }
+  }
+
+  def processPipe(element: Element ): Unit = {
+    element.setAttribute( "on", id )
+    val pipe = new Pipe( element )
+//    val distanceFromOrigin = locationDistance( light.locationValue() )
+//    try {
+//      hang(light, distanceFromOrigin.toDouble )
+//    }
+//    catch {
+//      case exception: MountingException =>
+//        throw new MountingException (
+//          "Truss (" + id + ") unit '" + light.unit() + "' has " + exception.getMessage )
+//      //      case exception: Exception =>
+//      //        throw new Exception( exception.getMessage, exception.getCause )
+//    }
   }
 
 
@@ -187,7 +221,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       else {
         System.err.println("Found " + suspendList.getLength + " suspend child nodes")
         throw new InvalidXMLException(
-          "Truss (" + id + ") must have position, one trussbase, or two suspend children.( suspecnd) " )
+          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
         false
       }
     }
@@ -212,7 +246,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       catch {
         case npe: NullPointerException =>
           throw new InvalidXMLException(
-            "Truss (" + id + ") must have position, one trussbase, or two suspend children. (position)" )
+            "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
       }
       true
     }

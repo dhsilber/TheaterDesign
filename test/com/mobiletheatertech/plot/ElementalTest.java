@@ -124,6 +124,7 @@ public class ElementalTest {
     public void isa() throws Exception {
         Ellie ellie = new Ellie( element );
 
+        assert HasID.class.isInstance( ellie );
         assert Elemental.class.isInstance( ellie );
     }
 

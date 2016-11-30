@@ -19,7 +19,6 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //  }
 //  if ( based )
 
-
   var base: PipeBase = parentParse()
   override val based: Boolean = (null != base)
   override val positioned = !based
@@ -33,7 +32,6 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   start = Proscenium.LocateIfActive( startUnadjusted )
 
 
-
   // These are set within the *Processing() logic.
   //  var start: Point = null
   var boxOrigin: Point = figureBoxOrigin()
@@ -45,7 +43,6 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
   //  override val ( suspended: Boolean, positioned: Boolean ) = process()
   positionProcessing()
-
 
   new Layer(Pipe.LayerTag, Pipe.LayerName, Pipe.Color)
 
@@ -385,11 +382,13 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 }
 
 object Pipe {
+  final val LayerTag: String = "pipe"
+  final val Tag = LayerTag
+
   final val Diameter: Double = 2.0
   final val DiameterString = Diameter.toString
   final val Radius = Diameter / 2
   final val LayerName: String = "Pipes"
-  final val LayerTag: String = "pipe"
 //  final val Cheeseborough: String = "cheeseborough"
   final val Color: String = "black"
   final val baseOffsetZ: Double = 2.0

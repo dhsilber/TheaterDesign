@@ -191,6 +191,11 @@ public class PipeTest {
     }
 
     @Test
+    public void constantTag() {
+        assertEquals(Pipe$.MODULE$.Tag(), "pipe");
+    }
+
+    @Test
     public void constantColor() {
         assertEquals( Pipe$.MODULE$.Color(), "black" );
     }

@@ -308,7 +308,7 @@ public class TrussBaseTest {
     }
 
     @Test
-    public void tagCallbackRegistered() {
+    public void trussTagCallbackRegistered() {
         TrussBase trussbase = new TrussBase( baseElement );
 
         assertEquals( trussbase.tags().size(), 1 );
