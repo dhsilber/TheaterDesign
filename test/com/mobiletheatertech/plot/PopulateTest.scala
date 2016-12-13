@@ -22,6 +22,19 @@ class PopulateTest {
   val otherChildTag: String = "otherChildTag"
   val parentTag: String = "parentTag"
 
+  @BeforeMethod
+  @throws[Exception]
+  def setUpMethod: Unit = {
+    childElement = new IIOMetadataNode( childTag )
+    elementWithChildren = new IIOMetadataNode( parentTag )
+    elementWithChildren.appendChild( childElement )
+  }
+
+  @AfterMethod
+  @throws[Exception]
+  def tearDownMethod {
+  }
+
   @Test
   @throws[Exception]
   def isA {
@@ -54,18 +67,6 @@ class PopulateTest {
     assertEquals( called, 1 )
   }
 
-  @BeforeMethod
-  @throws[Exception]
-  def setUpMethod: Unit = {
-    childElement = new IIOMetadataNode( childTag )
-    elementWithChildren = new IIOMetadataNode( parentTag )
-    elementWithChildren.appendChild( childElement )
-  }
-
-  @AfterMethod
-  @throws[Exception]
-  def tearDownMethod {
-  }
 }
 
 object PopulateTest {

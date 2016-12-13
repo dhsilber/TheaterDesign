@@ -38,7 +38,7 @@ class AttachmentTest {
 
   @Test
   def add(): Unit = {
-    val halfborough = new Halfborough( halfboroughElement )
+    val halfborough = new Halfborough( halfboroughElement, null )
     Attachment.Add( halfborough )
 
     assertSame( Attachment.Find( id ), halfborough )

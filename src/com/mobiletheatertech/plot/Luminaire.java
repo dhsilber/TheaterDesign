@@ -47,7 +47,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     private String unit;
     private String type;
     private String on;
-    private String location;
+    private Location location;
     private String circuit;
     private String dimmer;
     private String channel;
@@ -82,7 +82,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
         on       = getStringAttribute(  "on") ;
         type     = getStringAttribute(  "type" );
-        location = getStringAttribute(  "location" );
+        location = new Location( getStringAttribute( "location" ) );
         unit     = getStringAttribute(  "unit" );
         owner    = getStringAttribute(  "owner" );
         circuit = getOptionalStringAttribute( "circuit" );
@@ -181,13 +181,15 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
 
+        System.out.println( "On: " + on );
         mount = LinearSupportsClamp$.MODULE$.Select(on);
+        System.out.println( "mount: " + mount );
         if( null == mount ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
         }
         try {
-            mount.hang( this, Double.parseDouble( location ) );
+            mount.hang( this, location );
         }
         catch (NumberFormatException exception) {
             System.out.println ( mount.toString() );
@@ -235,9 +237,11 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
     String on() { return on; }
 
-    String locationValue() {
-        return location;
-    }
+//    String locationValue() {
+//        return location.toString();
+//    }
+
+    Location location() { return location; }
 
     String circuit() {
         return circuit;
@@ -502,7 +506,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
         data.attribute( "type", this.type() );
         data.attribute( "on", this.on() );
-        data.attribute( "location", this.locationValue() );
+        data.attribute( "location", this.location().toString() );
         data.attribute( "circuit", this.circuit() );
         data.attribute( "dimmer", this.dimmer() );
         data.attribute( "channel", this.channel() );

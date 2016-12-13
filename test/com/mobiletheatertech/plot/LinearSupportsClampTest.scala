@@ -36,6 +36,12 @@ class LinearSupportsClampTest {
     override def maxLocation: Double = 12
   }
 
+  private class LinearSupportsClampVertex extends LinearSupportsClamp {
+    override val hasVertex = true
+    override def minLocation: Double = -12
+    override def maxLocation: Double = 12
+  }
+
   private class UniqueIdLinearSupportsClamp(element: Element )
     extends UniqueId( element: Element )
       with LinearSupportsClamp {
@@ -166,7 +172,7 @@ class LinearSupportsClampTest {
   @throws[Exception]
   def hangNull {
     val mounted = new SupporterForClampLinear
-    mounted.hang( null, 0.1 )
+    mounted.hang( null, new Location( "0.1" ) )
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
@@ -175,7 +181,7 @@ class LinearSupportsClampTest {
   def locationTooSmall {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
-    pipe.hang( light, -12.1 )
+    pipe.hang( light, new Location( "-12.1" ) )
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
@@ -184,7 +190,7 @@ class LinearSupportsClampTest {
   def locationTooLarge {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
-    pipe.hang( light, 12.1 )
+    pipe.hang( light, new Location( "12.1" ) )
   }
 
   @Test
@@ -193,7 +199,7 @@ class LinearSupportsClampTest {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
     assertEquals( pipe.IsClampList.size, 0 )
     val light = new Luminaire( luminaireElement )
-    pipe.hang( light, 0.3 )
+    pipe.hang( light, new Location( "0.3" ) )
     assertEquals( pipe.IsClampList.size, 1 )
   }
 
@@ -209,7 +215,7 @@ class LinearSupportsClampTest {
   def containsFound {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
     val light = new Luminaire( luminaireElement )
-    pipe.hang( light, 0.3 )
+    pipe.hang( light, new Location( "0.3" ) )
     assertTrue( pipe.contains( light ) )
   }
 

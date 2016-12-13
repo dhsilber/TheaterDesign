@@ -124,7 +124,7 @@ public abstract class Yokeable extends UniqueId /*implements Schematicable*/ {
             text.append( ": " );
             text.append( lumi.type() );
             text.append( " at " );
-            text.append( lumi.locationValue() );
+            text.append( lumi.location().toString() );
             text.append( " weighs " );
             Double weight = lumi.weight();
             totalWeight += weight;

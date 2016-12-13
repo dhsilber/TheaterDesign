@@ -5,12 +5,11 @@ import org.w3c.dom.Element
 /**
   * Created by dhs on 11/29/16.
   */
-class Halfborough( element: Element ) extends MinderDom( element )
+class Halfborough( element: Element, parent: Truss ) extends MinderDom( element )
   with Gripper
 {
 
   id = getStringAttribute( "id" )
-  val on = getStringAttribute( "on" )
   val location = getStringAttribute( "location" )
 
   Attachment.Add( this )

@@ -68,6 +68,13 @@ public class PipeTest {
     final String luminaireType = "Altman 6x9";
     String luminaireLocation = "12";
 
+    Element halfboroughElement = null;
+    String halfID = "half ID";
+
+    Element attachmentElement = null;
+
+    Element pipeAttachedElement = null;
+
     @BeforeMethod
     public void setUpMethod() throws Exception {
         Proscenium.Reset();
@@ -166,6 +173,17 @@ public class PipeTest {
         luminaireElement.setAttribute("owner", luminaireOwner);
         luminaireElement.setAttribute( "type", luminaireType );
         luminaireElement.setAttribute("location", luminaireLocation );
+
+        halfboroughElement = new IIOMetadataNode( Halfborough.Tag() );
+        halfboroughElement.setAttribute( "id", halfID );
+
+        attachmentElement = new IIOMetadataNode( Attachment.Tag() );
+        attachmentElement.setAttribute( "ref", halfID );
+
+        pipeAttachedElement = new IIOMetadataNode( Pipe.Tag() );
+        pipeAttachedElement.setAttribute( "id", "foo" );
+        pipeAttachedElement.setAttribute( "length", "120" );
+        pipeAttachedElement.appendChild( attachmentElement );
     }
 
     @AfterMethod
@@ -652,6 +670,15 @@ public class PipeTest {
     }
 
     @Test
+    public void getLocationViaAttachment() throws Exception {
+        new Halfborough( halfboroughElement, null );
+
+        Pipe pipe = new Pipe( pipeAttachedElement );
+
+        assertEquals( pipe.start(), new Point( 1.0, 2.0, 3.0 ) );
+    }
+
+    @Test
     public void baseReference() throws Exception {
         new PipeBase( baseForPipeElement );
 
@@ -817,7 +844,7 @@ public class PipeTest {
     public void location() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.mountableLocation("15");
+        Point place = pipe.mountableLocation( new Location( "15" ) );
         assertEquals( place, new Point( 27, 23, 34 ) );
         assert place.equals(new Point(27, 23, 34));
     }
@@ -827,7 +854,7 @@ public class PipeTest {
     public void locationNotNumber() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("a");
+        pipe.mountableLocation( new Location( "a" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -835,7 +862,7 @@ public class PipeTest {
     public void locationOffPipe() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("121");
+        pipe.mountableLocation( new Location( "121" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -844,7 +871,7 @@ public class PipeTest {
     public void locationNegativeOffPipe() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("-1");
+        pipe.mountableLocation( new Location( "-1" ) );
     }
 
     @Test
@@ -852,7 +879,7 @@ public class PipeTest {
         new Proscenium(prosceniumElement);
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.mountableLocation("15");
+        Point place = pipe.mountableLocation( new Location( "15" ) );
 
         assertEquals( place.x(), 227.0 );
         assertEquals( place.y(), 121.0 );
@@ -867,7 +894,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("121");
+        pipe.mountableLocation( new Location( "121" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -878,7 +905,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("-1");
+        pipe.mountableLocation( new Location( "-1" ) );
     }
 
     @Test
@@ -888,7 +915,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.mountableLocation("15");
+        Point place = pipe.mountableLocation( new Location( "15" ) );
         assertEquals( place.x(), 215.0 );
         assertEquals( place.y(), 121.0 );
         assertEquals( place.z(), 46.0 );
@@ -901,7 +928,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        Point place = pipe.mountableLocation("-5");
+        Point place = pipe.mountableLocation( new Location( "-5" ) );
         assertEquals( place.x(), 195.0 );
         assertEquals( place.y(), 121.0 );
         assertEquals( place.z(), 46.0 );
@@ -916,7 +943,7 @@ public class PipeTest {
         element.setAttribute("x", "-12");
         Pipe pipe = new Pipe(element);
 
-        pipe.mountableLocation("120");
+        pipe.mountableLocation( new Location( "120" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -927,14 +954,14 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(pipeCrossesProsceniumCenterElement);
 
-        pipe.mountableLocation("-65");
+        pipe.mountableLocation( new Location( "-65" ) );
     }
 
     @Test
     public void locationDistance() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+        assertEquals( pipe.locationDistance( new Location( "15" ) ), (Integer) 15 );
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
@@ -943,7 +970,7 @@ public class PipeTest {
     public void locationDistanceNotNumber() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.locationDistance("15a");
+        pipe.locationDistance( new Location( "15a" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -952,7 +979,7 @@ public class PipeTest {
     public void locationDistanceOffPipePlus() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.locationDistance( "121" );
+        pipe.locationDistance( new Location( "121" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -961,7 +988,7 @@ public class PipeTest {
     public void locationDistanceOffPipeMinus() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        pipe.locationDistance( "-1" );
+        pipe.locationDistance( new Location( "-1" ) );
     }
 
     @Test
@@ -970,7 +997,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(element);
 
-        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+        assertEquals( pipe.locationDistance( new Location( "15" ) ), (Integer) 15 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -981,7 +1008,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(pipeCrossesProsceniumCenterElement);
 
-        pipe.locationDistance( "109" );
+        pipe.locationDistance( new Location( "109" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -992,7 +1019,7 @@ public class PipeTest {
 
         Pipe pipe = new Pipe(pipeCrossesProsceniumCenterElement);
 
-        pipe.locationDistance( "-13" );
+        pipe.locationDistance( new Location( "-13" ) );
     }
 
     @Test
@@ -1002,7 +1029,7 @@ public class PipeTest {
         element.setAttribute( "orientation", "90" );
         Pipe pipe = new Pipe(element);
 
-        assertEquals( pipe.locationDistance( "15" ), (Integer) 15 );
+        assertEquals( pipe.locationDistance( new Location( "15" ) ), (Integer) 15 );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -1014,7 +1041,7 @@ public class PipeTest {
         element.setAttribute( "orientation", "90" );
         Pipe pipe = new Pipe(element);
 
-        pipe.locationDistance( "121" );
+        pipe.locationDistance( new Location( "121" ) );
     }
 
     @Test(expectedExceptions = MountingException.class,
@@ -1026,14 +1053,14 @@ public class PipeTest {
         element.setAttribute( "orientation", "90" );
         Pipe pipe = new Pipe(element);
 
-        pipe.locationDistance( "-61" );
+        pipe.locationDistance( new Location( "-61" ) );
     }
 
     @Test
     public void rotatedLocationPositioned() throws Exception {
         Pipe pipe = new Pipe(element);
 
-        Place place = pipe.rotatedLocation( "23" );
+        Place place = pipe.rotatedLocation( new Location( "23" ) );
 
         assertNotNull( place );
         assertNotNull( pipe.start() );
@@ -1055,7 +1082,7 @@ public class PipeTest {
         element.setAttribute( "orientation", "90" );
         Pipe pipe = new Pipe( element );
 
-        Place place = pipe.rotatedLocation( "23" );
+        Place place = pipe.rotatedLocation( new Location( "23" ) );
 
         assertNotNull( place );
         assertNotNull( pipe.start() );
@@ -1078,7 +1105,7 @@ public class PipeTest {
         new Proscenium( prosceniumElement );
         Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
 
-        Place place = pipe.rotatedLocation( "23" );
+        Place place = pipe.rotatedLocation( new Location( "23" ) );
 
         assertNotNull( place );
         assertNotNull( pipe.start() );
@@ -1120,7 +1147,7 @@ public class PipeTest {
         PipeBase base = pipe.base();
         assertNotNull( base );
 
-        Place place = pipe.rotatedLocation( "56");
+        Place place = pipe.rotatedLocation( new Location( "56" ) );
 
         assertNotNull( pipe.start() );
         assertNotNull( place );
@@ -1169,7 +1196,7 @@ public class PipeTest {
         PipeBase base = pipe.base();
         assertNotNull( base );
 
-        Place place = pipe.rotatedLocation( "56");
+        Place place = pipe.rotatedLocation( new Location( "56" ) );
 
         assertNotNull( pipe.start() );
         assertNotNull( place );
@@ -1191,7 +1218,7 @@ public class PipeTest {
         new Proscenium( prosceniumElement );
         Pipe pipe = new Pipe( pipeCrossesProsceniumCenterElement );
 
-        Place place = pipe.rotatedLocation( "-9");
+        Place place = pipe.rotatedLocation( new Location( "-9" ) );
 
         assertNotNull( place );
         assertNotNull( pipe.start() );
@@ -1260,7 +1287,16 @@ public class PipeTest {
 //    }
 
     @Test
-    public void tagCallbackRegistered() {
+    public void luminiareCallbackRegistered() {
+        element.appendChild( luminaireElement );
+        Pipe pipe = new Pipe( element );
+
+        assertEquals( pipe.tags().size(), 1 );
+        assertTrue( pipe.tags().contains( Luminaire.LAYERTAG ) );
+    }
+
+    @Test
+    public void attachmentCallbackRegistered() {
         element.appendChild( luminaireElement );
         Pipe pipe = new Pipe( element );
 

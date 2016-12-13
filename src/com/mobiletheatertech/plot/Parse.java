@@ -113,7 +113,7 @@ public class Parse {
         // rather than make a list of Suspend objects and then have to match them up with elements later.
 //        parseXML( Suspend.class, "suspend" );
         parseXML( Zone.class, "zone" );
-        parseXML( Luminaire.class, "luminaire" );
+//        parseXML( Luminaire.class, "luminaire" );
         parseXML( Device.class, "device" );
         parseXML( DanceTile.class, "dancetile" );
         parseXML( SetPlatform.class, "set-platform" );

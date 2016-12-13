@@ -44,7 +44,7 @@ public class LuminaireTest {
     Integer hangPoint2X=30;
     Integer trussSize=12;
     Integer trussLength=120;
-    String pipeLocation = "12";
+    String pipeLocation = "12.0";
     String trussLocation = "a 12";
     String lightingStandLocation = "b";
     String callShowData = "showData(evt)";
@@ -61,6 +61,8 @@ public class LuminaireTest {
     public void setUpMethod() throws Exception {
         Venue.Reset();
         Proscenium.Reset();
+        TestResets.ElementalListerReset();
+        TestResets.MountableReset();
         TestResets.MinderDomReset();
         TestResets.YokeableReset();
         TestResets.LuminaireReset();
@@ -205,7 +207,7 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
-        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
+        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation.toString() );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
@@ -223,7 +225,7 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
-        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation );
+        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation.toString() );
         assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
         assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), circuit );
@@ -412,7 +414,7 @@ public class LuminaireTest {
     public void location() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
 
-        assertEquals( luminaire.locationValue(), pipeLocation );
+        assertEquals( luminaire.location().distance(), pipeLocation );
     }
 
     @Test
@@ -1018,7 +1020,7 @@ public class LuminaireTest {
         assertEquals( data.getTagName(), "plot:Luminaire" );
         TestHelpers.checkAttribute( data, "type", luminaire.type() );
         TestHelpers.checkAttribute( data, "on", luminaire.on() );
-        TestHelpers.checkAttribute( data, "location", luminaire.locationValue() );
+        TestHelpers.checkAttribute( data, "location", luminaire.location().toString() );
         TestHelpers.checkAttribute( data, "circuit", luminaire.circuit() );
         TestHelpers.checkAttribute( data, "dimmer", luminaire.dimmer() );
         TestHelpers.checkAttribute( data, "channel", luminaire.channel() );

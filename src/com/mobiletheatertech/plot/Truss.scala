@@ -1,6 +1,7 @@
 package com.mobiletheatertech.plot
 
 import java.text.DecimalFormat
+import java.util
 
 import org.w3c.dom.{Element, Node, NodeList}
 
@@ -15,6 +16,28 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   def this( element: Element ) {
     this( element, null )
   }
+
+//  println( "Truss has parent of " + parent.getClass.toString )
+
+  val endAttachments: java.util.ArrayList[ Point ] = new util.ArrayList[Point]()
+
+  if ( null != parent ) {
+//    println( "Truss has parent of " + parent.getClass.toString )
+    if ( parent.isInstanceOf[TrussBase] ) {
+      val base = parent.asInstanceOf[ TrussBase ]
+      val baseAttachments: Array[ Point ] = base.mountPoints()
+      for( baseAttach <- baseAttachments ) {
+        println( "Attach: " + baseAttach.asInstanceOf[ Point ].toString )
+        endAttachments.add( baseAttach )
+      }
+//      println( "Truss has TrussBase parent.")
+    }
+  }
+//  println( "Past that point" )
+
+
+  // Configure LinearSupportsClamp to work with a Truss
+  override val hasVertex: Boolean = true
 
   if (Proscenium.Active) {
     throw new InvalidXMLException("Truss not yet supported with Proscenium.")
@@ -68,15 +91,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //    if ( classOf[ PipeBase ].isInstance( parent ) )
 //      parent.asInstanceOf[ PipeBase ]
 //    else
-      null
+      parent.asInstanceOf[ TrussBase ]
   }
 
   def processLuminaire(element: Element ): Unit = {
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
-    val distanceFromOrigin = locationDistance( light.locationValue() )
     try {
-      hang(light, distanceFromOrigin.toDouble )
+      hang(light, light.location() )
     }
     catch {
       case exception: MountingException =>
@@ -89,7 +111,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
   def processHalfborough(element: Element ): Unit = {
     element.setAttribute( "on", id )
-    val half = new Halfborough( element )
+    val half = new Halfborough( element, this )
 //    val distanceFromOrigin = locationDistance( light.locationValue() )
 //    try {
 //      hang(light, distanceFromOrigin.toDouble )
@@ -159,15 +181,12 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //      null
 //    }
 
-    def parentParse(): TrussBase = {
-      if ( classOf[ TrussBase ].isInstance( parent ) )
-        parent.asInstanceOf[ TrussBase ]
-      else
-        null
+    def parentParse(): MinderDom = {
+      parent
     }
 
     def baseProcessing(): TrussBase = {
-      val base = parentParse()
+      val base: TrussBase = parent.asInstanceOf[TrussBase]
       if ( null != base ) {
         start = new Point( base.x, base.y, 0.0 )
 
@@ -201,8 +220,8 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
         false
       }
       else if (2 == suspendList.getLength) {
-        suspend1 = instatiateSuspend(suspendList, 0)
-        suspend2 = instatiateSuspend(suspendList, 1)
+        suspend1 = instantiateSuspend(suspendList, 0)
+        suspend2 = instantiateSuspend(suspendList, 1)
         if (suspend1.locate.x > suspend2.locate.x) {
           val temp: Suspend = suspend1
           suspend1 = suspend2
@@ -230,7 +249,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
     @throws[DataException]
     @throws[InvalidXMLException]
     @throws[ReferenceException]
-    def instatiateSuspend( suspendList: NodeList, index: Int): Suspend =
+    def instantiateSuspend( suspendList: NodeList, index: Int): Suspend =
     {
       val suspendNode: Node = suspendList.item(index)
       if (suspendNode.getNodeType == Node.ELEMENT_NODE) {
@@ -260,14 +279,21 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   }
 
 //  override
-  def mountableLocation(location: String): Point = {
-    val vertex: Char = location.charAt(0)
-    val distance: Integer = locationDistance(location)
+  def mountableLocation(location: Location): Point = {
+    if ( ! location.vertexProvided )
+      throw new InvalidXMLException(
+        "Truss (" + id + ") location does not include a valid vertex.")
 
-    if (based) {
+    if ( based ) {
+      if ( ! location.distanceProvided ) {
+        val vertexOrdinal = location.vertex.toInt - 97
+        val lowerPoint = trussBase.mountPoints()( vertexOrdinal )
+        return new Point( lowerPoint.x(), lowerPoint.y(), lowerPoint.z() + length )
+      }
+      else {
       var northOffset: Double = halfSize * -1
       var westOffset: Double = halfSize * -1
-      vertex match {
+      location.vertex match {
         case 'a' =>
         case 'b' =>
           westOffset *= -1
@@ -278,13 +304,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
           westOffset *= -1
         case _ =>
           throw new InvalidXMLException(
-            "Truss (" + id + ") location does not include a valid vertex.")
+            "Truss (" + id + ") location does not include a valid vertex." )
       }
-      return new Point(x + westOffset, y + northOffset, z + distance)
+      return new Point( x + westOffset, y + northOffset, z + location.distance )
+      }
     }
     else {
       var offset: Double = halfSize
-      vertex match {
+      location.vertex match {
         case 'a' | 'c' =>
           offset *= -1
         case 'b' | 'd' =>
@@ -294,14 +321,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       }
       if (positioned) {
         var verticalOffset: Double = halfSize
-        vertex match {
+        location.vertex match {
           case 'a' | 'b' =>
           case 'c' | 'd' =>
             verticalOffset *= -1
           case _ =>
             throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
-        return new Point(x - length / 2 + distance, y + offset, z + verticalOffset)
+        return new Point(x - length / 2 + location.distance, y + offset, z + verticalOffset)
       }
       else {
         if (null == suspend1) {
@@ -309,14 +336,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
         }
         val point: Point = suspend1.locate
         var verticalOffset: Double = 0.0
-        vertex match {
+        location.vertex match {
           case 'a' | 'b' =>
           case 'c' | 'd' =>
             verticalOffset += size
           case _ =>
             throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
-        return new Point(point.x - overHang + distance, point.y + offset, point.z - verticalOffset)
+        return new Point(point.x - overHang + location.distance, point.y + offset, point.z - verticalOffset)
       }
     }
   }
@@ -344,7 +371,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       fourPlaces.format(suspend2.load) + " on " + suspend2.refId + "."
   }
 
-  override def rotatedLocation(location: String): Place = {
+  override def rotatedLocation(location: Location): Place = {
     if (positioned) {
       return new Place(mountableLocation(location), start, 0.0)
     }
@@ -432,7 +459,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   }
 
   @throws[MountingException]
-  def relocate(location: String): Point = {
+  def relocate(location: Location): Point = {
 //    var y: Double = .0
 //    val vertex: Character = location.charAt(0)
 //    var offset: Double = size / 2

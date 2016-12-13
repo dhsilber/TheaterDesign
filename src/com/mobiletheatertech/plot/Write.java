@@ -126,9 +126,9 @@ public class Write {
 //        System.err.println( " Drawings");
         writeDrawings( pathname );
         writeWeightCalculations( pathname );
-//        System.err.println( " Spreadsheet");
-//        writeGearSpreadsheet(pathname + "/gear.ods");
-//        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
+        System.err.println( " Spreadsheet");
+        writeGearSpreadsheet(pathname + "/gear.ods");
+        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {

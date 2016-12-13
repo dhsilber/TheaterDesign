@@ -16,27 +16,40 @@ class HalfboroughTest {
   val on = "bar"
   val location = "d"
 
+  var trussBaseElement: Element = null
+  val trussBaseSize = 36
+  val trussBaseY = 12
+  val trussBaseX = 24
+
+  var trussElement: Element = null
+
   @BeforeMethod
-  @throws[Exception]
   def setUpMethod(): Unit = {
     Halfborough.Reset()
 
+    trussElement = new IIOMetadataNode( Truss.Tag )
+
+    trussBaseElement = new IIOMetadataNode( TrussBase.Tag )
+    trussBaseElement.setAttribute( "size", trussBaseSize.toString )
+    trussBaseElement.setAttribute( "y", trussBaseY.toString )
+    trussBaseElement.setAttribute( "x", trussBaseX.toString )
+    trussBaseElement.appendChild( trussElement )
+
     element = new IIOMetadataNode( Halfborough.Tag )
     element.setAttribute( "id", id )
-    element.setAttribute( "on", on )
     element.setAttribute( "location", location )
+
+    trussElement.appendChild( element )
   }
 
   @Test
-  @throws[ Exception ]
   def constantTag(): Unit = {
     assertEquals( Halfborough.Tag, "halfborough" )
   }
 
   @Test
-  @throws[Exception]
   def isA() {
-    val instance: Halfborough = new Halfborough( element )
+    val instance: Halfborough = new Halfborough( element, null )
     assertTrue( classOf[ Elemental ].isInstance( instance ) )
     assertTrue( classOf[ ElementalLister ].isInstance( instance ) )
     assert( classOf[ Verifier ].isInstance(instance) )
@@ -52,24 +65,29 @@ class HalfboroughTest {
   }
 
   @Test
-  @throws[ Exception ]
   def storesInitialAttributes() {
-    val instance: Halfborough = new Halfborough( element )
+    val instance: Halfborough = new Halfborough( element, null )
 
     assertEquals( instance.id, id )
-    assertEquals( instance.on, on )
     assertEquals( instance.location, location )
   }
 
   @Test
-  @throws[ Exception ]
   def storesAttachment() {
-    val instance: Halfborough = new Halfborough( element )
+    val instance: Halfborough = new Halfborough( element, null )
 
     assertSame( instance, Attachment.Find( id ) )
   }
 
-//  @Test
+  @Test
+  def getLocationViaParent() {
+    val trussBase = new TrussBase( trussBaseElement )
+//    val truss = trussBase.truss
+//
+//    assertEquals(half.start, new Point(1.0, 2.0, 3.0))
+  }
+
+  //  @Test
 //  @throws[ Exception ]
 //  def findsReferencedHalfborough() {
 //    val instance: Halfborough = new Halfborough( element )

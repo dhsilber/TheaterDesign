@@ -15,15 +15,16 @@ trait LinearSupportsClamp {
   val based: Boolean = false
   val positioned: Boolean = false
   val suspended: Boolean = false
+  val hasVertex: Boolean = false
   var start: Point = null
 
 
   @throws[MountingException]
-  def hang( luminaire: IsClamp, location: Double ): Unit = {
+  def hang( luminaire: IsClamp, location: Location ): Unit = {
     if( null == luminaire )
       throw new DataException( "mounted element unexpectedly null!" )
 
-    if ( location < minLocation || maxLocation < location ) {
+    if ( location.distance < minLocation || maxLocation < location.distance ) {
       println( "minLocation: " + minLocation.toString )
       println( "location: " + location.toString )
       println( "maxLocation: " + maxLocation.toString )
@@ -58,7 +59,7 @@ trait LinearSupportsClamp {
    - Pipe supports a 90-degree rotation of a positioned pipe
    - Pipe uses support1 where Truss uses point1
   */
-  def rotatedLocation( location: String ): Place = ???
+  def rotatedLocation( location: Location ): Place = ???
 
 //  def weights( id: String ): String = {
 //    val text: StringBuilder = new StringBuilder

@@ -15,6 +15,7 @@ public abstract class Layerer extends Verifier {
 
         String name = this.getClass().getSimpleName();
         layer = Layer.Register( name, name );
+//        System.out.println( "Layerer adding " + name );
         layer.register(this);
     }
 }

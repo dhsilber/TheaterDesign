@@ -3,6 +3,8 @@ package com.mobiletheatertech.plot
 /**
   * Created by dhs on 11/29/16.
   */
+import java.util
+
 import org.w3c.dom.Element
 
 /**
@@ -18,11 +20,14 @@ import org.w3c.dom.Element
 class TrussBase (val element: Element) extends MinderDom(element)
   with Populate
 {
+  final val spacing = 3.0
+
   val size = getDoubleAttribute("size")
   val y = getDoubleAttribute("y")
   val x = getDoubleAttribute("x")
   val z = getOptionalDoubleAttributeOrZero( "z" )
   val rotation = getOptionalDoubleAttributeOrZero("rotation")
+  var truss: Truss = null
 
 
   // Give the base's element a unique id so that its Plot object can be recognized
@@ -37,20 +42,27 @@ class TrussBase (val element: Element) extends MinderDom(element)
 
 
   def processTruss( element: Element ): Unit = {
-    new Truss( element, this )
+    println( "TrussBase creates child Truss")
+    truss = new Truss( element, this )
   }
 
   def verify() {
     drawPlace = Proscenium.LocateIfActive( new Point( x, y, z ) )
   }
 
-  def mountPoint(): Point = {
-    new Point( x, y, z + 2.0 )
+  def mountPoints(): Array[Point] = {
+    val foo = new Array[Point](4)
+    foo( 0 ) = new Point( x - spacing, y - spacing, z + 2.0 )
+    foo( 1 ) = new Point( x + spacing, y - spacing, z + 2.0 )
+    foo( 2 ) = new Point( x - spacing, y + spacing, z + 2.0 )
+    foo( 3 ) = new Point( x + spacing, y + spacing, z + 2.0 )
+    foo
   }
 
   def dom(draw: Draw, mode: View) {
     mode match {
       case View.PLAN =>
+        println( "TrussBase.dom." )
         val group = MinderDom.svgClassGroup(draw, Truss.LayerTag)
         draw.appendRootChild(group)
 

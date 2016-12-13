@@ -26,6 +26,8 @@ public abstract class MinderDom extends Layerer {
     public MinderDom( Element element )
             throws AttributeMissingException, DataException, InvalidXMLException {
         super (element);
+        String name = this.getClass().getSimpleName();
+//        System.out.println( "MinderDom " + name );
 
 //        System.err.println( "D" );
 

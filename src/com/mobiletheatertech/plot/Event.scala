@@ -12,22 +12,29 @@ class Event ( element: Element ) extends UniqueId ( element )
 
   tagCallback( PipeBase.Tag, processPipeBase )
   tagCallback( TrussBase.Tag, processTrussBase )
+  tagCallback( Truss.Tag, processTruss )
   tagCallback( Flat.Tag, processFlat )
+  println( "Event poplulating...")
   populate( element )
+  println( "Event done poplulating.")
 
   def processPipeBase( element: Element ): Unit = {
     new PipeBase( element )
   }
 
   def processTrussBase( element: Element ): Unit = {
+    println( "Event about to create TrussBase")
     new TrussBase( element )
+  }
+
+  def processTruss( element: Element ): Unit = {
+    println( "Event about to create Truss")
+    new Truss( element )
   }
 
   def processFlat( element: Element ): Unit = {
     new Flat( element )
   }
-
-//  if ( null == Venue.)
 
   def dom( draw: Draw, mode: View ): Unit = {
 

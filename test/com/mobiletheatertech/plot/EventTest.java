@@ -141,7 +141,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( PipeBase.Tag() ) );
-        assertEquals( event.tags().size(), 3 );
+        assertEquals( event.tags().size(), 4 );
     }
 
     @Test
@@ -149,7 +149,15 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( TrussBase.Tag() ) );
-        assertEquals( event.tags().size(), 3 );
+        assertEquals( event.tags().size(), 4 );
+    }
+
+    @Test
+    public void tagCallbackRegisteredTruss() {
+        Event event = new Event( element );
+
+        assertTrue( event.tags().contains( Truss.Tag() ) );
+        assertEquals( event.tags().size(), 4 );
     }
 
     @Test
@@ -157,7 +165,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( Flat.Tag() ) );
-        assertEquals( event.tags().size(), 3 );
+        assertEquals( event.tags().size(), 4 );
     }
 
     @Test

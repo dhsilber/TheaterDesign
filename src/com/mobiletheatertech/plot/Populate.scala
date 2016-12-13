@@ -10,7 +10,9 @@ trait Populate {
   val tags = collection.mutable.Map[ String, Element => Unit ]()
 
   def populate( element: Element ): Unit = {
+//    println( "In Populate")
     val nodes: NodeList = element.getChildNodes
+//    println ( "nodes: " + nodes.getLength() )
     val count = nodes.getLength()
 
     for ( index <- 0 until count ) {
@@ -18,6 +20,7 @@ trait Populate {
       if( (null != childNode) && (childNode.getNodeType == Node.ELEMENT_NODE) ) {
         val childElement: Element = nodes.item( index ).asInstanceOf[Element]
         val tag = childElement.getTagName()
+//        println( "Tag: " + tag )
         if(tags.contains(tag)) {
           tags(tag)(childElement)
         }

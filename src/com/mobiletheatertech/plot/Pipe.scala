@@ -164,7 +164,7 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
     try {
-      hang(light, light.locationValue().toDouble )
+      hang(light, light.location )
     }
     catch {
       case exception: MountingException => {
@@ -296,8 +296,9 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
   // Members declared in com.mobiletheatertech.plot.Yokeable
   def calculateIndividualLoad(x$1: Luminaire): String = { "" }
-  def locationDistance( location: String ): Integer = {
-    val distance = numberFromLocation( location )
+
+  def locationDistance( location: Location ): Double = {
+    val distance = location.distance
 
     if ( (begin > distance) || (distance > end) ) {
       ElementalLister.Remove(this)
@@ -308,7 +309,7 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
     distance
   }
 
-  override def rotatedLocation( location: String ): Place = {
+  override def rotatedLocation( location: Location ): Place = {
     if (positioned) {
       if ( 90.0 == orientationValue ) {
         new Place(mountableLocation(location), origin(), 90.0 )
@@ -333,8 +334,8 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
     }
   }
 
-  def mountableLocation( location: String ): Point = {
-    val offset: Double = numberFromLocation(location)
+  def mountableLocation( location: Location ): Point = {
+    val offset: Double = location.distance.toDouble
 
     if ((offset < begin) || (end < offset)) {
       ElementalLister.Remove(this)
@@ -351,18 +352,18 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //      new Point(start.x - begin + offset, start.y, start.z)
   }
 
-  def numberFromLocation( location: String ): Int = {
-    try {
-      new Integer( location )
-    }
-    catch {
-      case nfe: NumberFormatException => {
-        ElementalLister.Remove(this)
-        throw new InvalidXMLException(
-          this.getClass.getSimpleName, id, "location must be a number")
-      }
-    }
-  }
+//  def numberFromLocation( location: String ): Int = {
+//    try {
+//      new Integer( location )
+//    }
+//    catch {
+//      case nfe: NumberFormatException => {
+//        ElementalLister.Remove(this)
+//        throw new InvalidXMLException(
+//          this.getClass.getSimpleName, id, "location must be a number")
+//      }
+//    }
+//  }
 
   def schematicLocation(x$1: String): com.mobiletheatertech.plot.PagePoint = {
     new PagePoint( 0.0, 0.0 ) }
