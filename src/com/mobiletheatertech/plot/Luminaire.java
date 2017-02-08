@@ -25,7 +25,8 @@ import java.util.ArrayList;
  * @author dhs
  * @since 0.0.7
  */
-public class Luminaire extends MinderDom implements IsClamp /*implements Schematicable*/ {
+public class Luminaire extends MinderDom
+        implements IsClamp, Gear/*implements Schematicable*/ {
 
     private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
@@ -99,7 +100,7 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
         id = on + ":" + unit;
 
-//        System.err.println("Got to middle of constructor");
+        System.out.println("Got to middle of Luminaire constructor");
 
         Luminaire prior = Select( id );
         if( null != prior ) {
@@ -110,17 +111,17 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
         }
 
 
-//        System.err.println("selected");
+        System.out.println("Luminaire selected");
         new Layer( LAYERTAG, LAYERNAME, COLOR );
-//        System.err.println("Made Layer");
+        System.out.println("Made Layer for Luminaire");
         new LuminaireInformation( element, this );
-//        System.err.println("Made Information");
+        System.out.println("Made LuminaireInformation");
 
-        GearList.Add(type);
-//        System.err.println("Added to gear list");
+        GearList.Add( this );
+        System.out.println("Added Luminaire to gear list");
 
         LUMINAIRELIST.add( this );
-//        System.err.println("added to luminaire list");
+        System.out.println("added to Luminaire list");
     }
 
     public static Luminaire Select( String identifier ) {
@@ -356,6 +357,18 @@ public class Luminaire extends MinderDom implements IsClamp /*implements Schemat
 
     @Override
     public void position( Point point ) {
+    }
+
+    public String item() {
+        return type;
+    }
+
+    public String owner() {
+        return owner;
+    }
+
+    public String room() {
+        return "Room info needs to be gotten";
     }
 
     /**

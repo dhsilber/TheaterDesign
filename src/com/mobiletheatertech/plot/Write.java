@@ -128,6 +128,7 @@ public class Write {
         writeWeightCalculations( pathname );
         System.err.println( " Spreadsheet");
         writeGearSpreadsheet(pathname + "/gear.ods");
+        writeGearOwnerSpreadsheet(pathname + "/gearByOwner.ods");
         writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
     }
 
@@ -668,7 +669,39 @@ public class Write {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void writeGearOwnerSpreadsheet( String pathname) {
+//        // Create the data to save.
+//        final Object[][] data = GearList.OwnerReport();
+////        new Object[6][2];
+////        data[0] = new Object[] { "January", 1 };
+////        data[1] = new Object[] { "February", 3 };
+////        data[2] = new Object[] { "March", 8 };
+////        data[3] = new Object[] { "April", 10 };
+////        data[4] = new Object[] { "May", 15 };
+////        data[5] = new Object[] { "June", 18 };
+//
+//        if ( 0 == data.length ) {
+//            System.err.println( "No data in GearList, not generating owner spreadsheet.");
+//            return;
+//        }
+//
+//        String[] columns = new String[] { "Owner", "Item", "Quantity" };
+//
+//        TableModel model = new DefaultTableModel(data, columns);
+//
+//        // Save the data to an ODS file and open it.
+//        final File file = new File( pathname );
+//
+//        try {
+//            SpreadSheet.createEmpty(model).saveAs(file);
+//
+////        OOUtils.open(file);
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void writeLuminaireSpreadsheet( String pathname) {

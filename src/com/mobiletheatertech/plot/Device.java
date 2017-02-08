@@ -28,7 +28,7 @@ import java.util.LinkedList;
 /*
 If I need it, implement 'inclination' for vertical rotation.
  */
-public class Device extends Stackable // implements Schematicable
+public class Device extends Stackable implements Gear // implements Schematicable
 {
     private static ArrayList<Device> DEVICELIST = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class Device extends Stackable // implements Schematicable
                     ") needs either the 'on' attribute or the set of x, y, and z coordinates." );
         }
 
-        GearList.Add(is);
+        GearList.Add( this );
 
         DEVICELIST.add( this );
 
@@ -234,8 +234,20 @@ public class Device extends Stackable // implements Schematicable
 //        schematicPosition = null;
 //    }
 
+    public String item() {
+        return is;
+    }
+
+    public String owner() {
+        return "owner";
+    }
+
+    public String room() {
+        return "Room info needs to be gotten";
+    }
+
     @Override
-    public void dom(Draw draw, View view)
+    public void dom( Draw draw, View view)
             throws MountingException, ReferenceException
     {
         SvgElement group = null;

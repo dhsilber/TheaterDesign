@@ -6,6 +6,7 @@ import org.w3c.dom.Element
  * Created by dhs on 7/15/15.
  */
 class PipeBase ( element: Element ) extends MinderDom( element )
+  with Gear
   with Populate
   with Legendable
 {

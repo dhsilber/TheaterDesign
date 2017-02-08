@@ -30,6 +30,7 @@ class Event ( element: Element ) extends UniqueId ( element )
   def processTruss( element: Element ): Unit = {
     println( "Event about to create Truss")
     new Truss( element )
+    println( "Event completed creating Truss")
   }
 
   def processFlat( element: Element ): Unit = {

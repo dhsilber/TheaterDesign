@@ -85,6 +85,8 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   tagCallback( Halfborough.Tag, processHalfborough )
   tagCallback( Pipe.Tag, processPipe )
 //  tagCallback( Cheeseborough.TAG, processCheeseborough )
+//  println( "Truss about to populate children")
+
   populate( element )
 
   def parentParse(): TrussBase = {
@@ -95,6 +97,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   }
 
   def processLuminaire(element: Element ): Unit = {
+//    println( "Truss about to create Luminaire")
     element.setAttribute( "on", id )
     val light: Luminaire = new Luminaire(element)
     try {
@@ -107,9 +110,11 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       //      case exception: Exception =>
       //        throw new Exception( exception.getMessage, exception.getCause )
     }
+//    println( "Truss completed creating Luminaire")
   }
 
   def processHalfborough(element: Element ): Unit = {
+//    println( "Truss about to create Halfborough")
     element.setAttribute( "on", id )
     val half = new Halfborough( element, this )
 //    val distanceFromOrigin = locationDistance( light.locationValue() )
@@ -123,9 +128,11 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //      //      case exception: Exception =>
 //      //        throw new Exception( exception.getMessage, exception.getCause )
 //    }
+//    println( "Truss completed creating Halfborough")
   }
 
   def processPipe(element: Element ): Unit = {
+//    println( "Truss about to create Pipe")
     element.setAttribute( "on", id )
     val pipe = new Pipe( element )
 //    val distanceFromOrigin = locationDistance( light.locationValue() )
@@ -139,6 +146,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //      //      case exception: Exception =>
 //      //        throw new Exception( exception.getMessage, exception.getCause )
 //    }
+//    println( "Truss completed creating Pipe")
   }
 
 
