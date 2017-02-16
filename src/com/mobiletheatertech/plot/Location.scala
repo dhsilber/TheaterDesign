@@ -11,9 +11,10 @@ class Location( location: String ) {
   val distance: Double = locationDistance(location)
 
   def letterAtStart: Char = {
-    var letter: Char = ' '
-    letter = location.charAt(0)
-    if (! letter.isDigit) vertexProvided = true
+    val letter = location.charAt(0)
+//    var letter: Char = ' '
+//    letter = location.charAt(0)
+    if (letter.isLetter) vertexProvided = true
     letter
   }
 

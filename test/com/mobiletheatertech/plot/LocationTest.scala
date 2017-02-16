@@ -16,6 +16,7 @@ class LocationTest {
   val complexNumber = 15
   val complexLetter = 'b'
   val integerString = integer.toString
+  val negativeIntegerString = '-' + integer.toString
   val complexString = complexLetter + " " + complexNumber.toString
   val vertexLetter: String = "c"
 
@@ -35,7 +36,17 @@ class LocationTest {
     val instance = new Location( integerString )
 
     assertTrue( instance.distanceProvided )
-    assertEquals( instance.distance, integerString + ".0" )
+    val doubleString = integerString + ".0"
+    assertEquals( instance.distance, doubleString.toDouble )
+  }
+
+  @Test
+  def distanceFromNegativeInteger() {
+    val instance = new Location( negativeIntegerString )
+
+    assertTrue( instance.distanceProvided )
+    val doubleNegativeIntegerString = negativeIntegerString + ".0"
+    assertEquals( instance.distance, doubleNegativeIntegerString.toDouble )
   }
 
   @Test
@@ -43,7 +54,8 @@ class LocationTest {
     val instance = new Location( complexString )
 
     assertTrue( instance.distanceProvided )
-    assertEquals( instance.distance, complexString + ".0" )
+    val doubleComplexNumberString = complexNumber + ".0"
+    assertEquals( instance.distance, doubleComplexNumberString.toDouble )
   }
 
   @Test
@@ -61,7 +73,6 @@ class LocationTest {
     assertTrue( instance.vertexProvided )
     assertTrue( instance.distanceProvided )
     assertEquals( instance.vertex, complexLetter )
-    assertEquals( instance.distance, complexString + ".0" )
   }
 
   @Test
@@ -70,8 +81,8 @@ class LocationTest {
 
     assertTrue( instance.vertexProvided )
     assertFalse( instance.distanceProvided )
-    assertEquals( instance.vertex, vertexLetter.toString )
-    assertEquals( instance.distance, 0 )
+    assertEquals( instance.vertex.toString, vertexLetter.toString )
+    assertEquals( instance.distance, 0.0 )
   }
 
   @Test

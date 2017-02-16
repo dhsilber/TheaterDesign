@@ -37,6 +37,12 @@ public class EventTest {
     Double x2 = 3.3;
     Double y2 = 4.4;
 
+
+    Element venueElement = null;
+    Element luminaireElement = null;
+    Element eventLuminaireElement = null;
+
+
     @BeforeMethod
     public void setUpMethod() throws Exception {
         TestResets.ElementalListerReset();
@@ -61,6 +67,22 @@ public class EventTest {
 
         element = new IIOMetadataNode( "event" );
         element.setAttribute( "id", name );
+
+
+        venueElement = new IIOMetadataNode( Venue.Tag() );
+        venueElement.setAttribute( "room", "venue room" );
+        venueElement.setAttribute( "width", "200" );
+        venueElement.setAttribute( "depth", "250" );
+        venueElement.setAttribute( "height", "100" );
+//        Venue venue = new Venue( venueElement );
+
+        luminaireElement = new IIOMetadataNode( Luminaire.LAYERTAG );
+        luminaireElement.setAttribute( "on", "luminairePipe" );
+        luminaireElement.setAttribute( "type", "luminaireType" );
+        luminaireElement.setAttribute( "location", "78" );
+        luminaireElement.setAttribute( "unit", "luminaireUnit" );
+        luminaireElement.setAttribute( "owner", "luminaireOwner" );
+//        eventLuminaireElement = new IIOMetadataNode( Event.)
     }
 
     @AfterMethod
@@ -70,6 +92,11 @@ public class EventTest {
     public EventTest() {
     }
 
+
+    @Test
+    public void constantTag() {
+        assertEquals( Event.Tag(), "event" );
+    }
 
     @Test
     public void isA() throws Exception {
@@ -141,7 +168,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( PipeBase.Tag() ) );
-        assertEquals( event.tags().size(), 4 );
+        assertEquals( event.tags().size(), 5 );
     }
 
     @Test
@@ -149,7 +176,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( TrussBase.Tag() ) );
-        assertEquals( event.tags().size(), 4 );
+        assertEquals( event.tags().size(), 5 );
     }
 
     @Test
@@ -157,7 +184,7 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( Truss.Tag() ) );
-        assertEquals( event.tags().size(), 4 );
+        assertEquals( event.tags().size(), 5 );
     }
 
     @Test
@@ -165,7 +192,15 @@ public class EventTest {
         Event event = new Event( element );
 
         assertTrue( event.tags().contains( Flat.Tag() ) );
-        assertEquals( event.tags().size(), 4 );
+        assertEquals( event.tags().size(), 5 );
+    }
+
+    @Test
+    public void tagCallbackRegisteredLuminaire() {
+        Event event = new Event( element );
+
+        assertTrue( event.tags().contains( Luminaire.LAYERTAG ) );
+        assertEquals( event.tags().size(), 5 );
     }
 
     @Test
@@ -220,6 +255,34 @@ public class EventTest {
         assert Flat.class.isInstance( flat );
 
         assertEquals( list.size(), 2 );
+    }
+
+    @Test
+    public void populateChildrenLuminaire() {
+        new Venue( venueElement );
+        element.appendChild( luminaireElement );
+        new Event( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister event = list.get( 1 );
+        assert MinderDom.class.isInstance( event );
+        assert Event.class.isInstance( event );
+
+        ElementalLister luminaire = list.get( 2 );
+        assert MinderDom.class.isInstance( luminaire );
+        assert Luminaire.class.isInstance( luminaire );
+
+        ElementalLister luminaireInformation = list.get( 3 );
+        assert MinderDom.class.isInstance( luminaireInformation );
+//        System.err.println( "Class: " + dunno.getClass().toString() );
+        assert LuminaireInformation.class.isInstance( luminaireInformation );
+
+        assertEquals( list.size(), 4 );
     }
 
     @Test

@@ -14,6 +14,7 @@ class Event ( element: Element ) extends UniqueId ( element )
   tagCallback( TrussBase.Tag, processTrussBase )
   tagCallback( Truss.Tag, processTruss )
   tagCallback( Flat.Tag, processFlat )
+  tagCallback( Luminaire.LAYERTAG, processLuminaire )
   println( "Event poplulating...")
   populate( element )
   println( "Event done poplulating.")
@@ -37,6 +38,10 @@ class Event ( element: Element ) extends UniqueId ( element )
     new Flat( element )
   }
 
+  def processLuminaire( element: Element ): Unit = {
+    new Luminaire( element )
+  }
+
   def dom( draw: Draw, mode: View ): Unit = {
 
     val title = new StringBuilder( id )
@@ -57,12 +62,15 @@ class Event ( element: Element ) extends UniqueId ( element )
 }
 
 object Event {
+  final val Tag: String = "event"
+
   var Only: Event = null
+
   def Name: String = {
     if ( null == Only ) {
       throw new InvalidXMLException( "Event is not defined." )
     }
-  return Only.id
+    Only.id
   }
 
   def Reset: Unit = {

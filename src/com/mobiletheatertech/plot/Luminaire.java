@@ -100,7 +100,7 @@ public class Luminaire extends MinderDom
 
         id = on + ":" + unit;
 
-        System.out.println("Got to middle of Luminaire constructor");
+//        System.out.println("Got to middle of Luminaire constructor");
 
         Luminaire prior = Select( id );
         if( null != prior ) {
@@ -182,9 +182,9 @@ public class Luminaire extends MinderDom
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
 
-        System.out.println( "On: " + on );
+        System.out.println( "On: " + on + ", Location: " + location );
         mount = LinearSupportsClamp$.MODULE$.Select(on);
-        System.out.println( "mount: " + mount );
+//        System.out.println( "mount: " + mount );
         if( null == mount ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
