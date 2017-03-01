@@ -33,11 +33,16 @@ class Venue ( element: Element) extends MinderDom(element)
   Venue.StaticVenue = this
 
   tagCallback( Proscenium.Tag, processProscenium )
+  tagCallback( Raceway.Tag, processRaceway )
   tagCallback( Pipe.LayerTag, processPipe )
   populate( element )
 
   def processProscenium( element: Element ): Unit = {
     new Proscenium( element )
+  }
+
+  def processRaceway( element: Element ): Unit = {
+    new Raceway( element )
   }
 
   def processPipe( element: Element ): Unit = {

@@ -43,8 +43,62 @@ public class VenueTest {
     Double z = 74.0;
     String pipeId = "pipe id";
 
+    Element racewayElement = null;
+    Double startx = 1.1;
+    Double starty = 1.2;
+    Double startz = 1.3;
+    Double endx = 2.1;
+    Double endy = 2.2;
+    Double endz = 2.3;
 
-    public VenueTest() {
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
+        Venue.Reset();
+        TestResets.ElementalListerReset();
+        UniqueId.Reset();
+
+        element = new IIOMetadataNode();
+        element.setAttribute( "building", building );
+        element.setAttribute( "room", room );
+        element.setAttribute( "width", width.toString() );
+        element.setAttribute( "depth", depth.toString() );
+        element.setAttribute( "height", height.toString() );
+
+        prosceniumElement = new IIOMetadataNode("proscenium");
+        prosceniumElement.setAttribute("width", "260");
+        prosceniumElement.setAttribute("height", "200");
+        prosceniumElement.setAttribute("depth", "22");
+        prosceniumElement.setAttribute("x", prosceniumX.toString());
+        prosceniumElement.setAttribute("y", prosceniumY.toString());
+        prosceniumElement.setAttribute("z", prosceniumZ.toString());
+
+        pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
+        pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
+        pipeCrossesProsceniumCenterElement.setAttribute("length", longLength.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("x", negativeX.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute("y", y.toString());
+        pipeCrossesProsceniumCenterElement.setAttribute( "z", z.toString());
+
+        pipeElement = new IIOMetadataNode( "pipe" );
+        pipeElement.setAttribute( "id", pipeId);
+        pipeElement.setAttribute( "size", "12" );
+        pipeElement.setAttribute( "length", "120" );
+        pipeElement.setAttribute("x", x.toString());
+        pipeElement.setAttribute("y", y.toString());
+        pipeElement.setAttribute("z", z.toString());
+
+        racewayElement = new IIOMetadataNode( Raceway.Tag() );
+        racewayElement.setAttribute( "startx", startx.toString() );
+        racewayElement.setAttribute( "starty", starty.toString() );
+        racewayElement.setAttribute( "startz", startz.toString() );
+        racewayElement.setAttribute( "endx", endx.toString() );
+        racewayElement.setAttribute( "endy", endy.toString() );
+        racewayElement.setAttribute( "endz", endz.toString() );
+    }
+
+    @AfterMethod
+    public void tearDownMethod() throws Exception {
     }
 
 
@@ -593,7 +647,15 @@ public class VenueTest {
         Venue venue = new Venue( element );
 
         assertTrue( venue.tags().contains( Pipe.LayerTag() ) );
-        assertEquals( venue.tags().size(), 2 );
+        assertEquals( venue.tags().size(), 3 );
+    }
+
+    @Test
+    public void tagCallbackRegisteredRaceway() {
+        Venue venue = new Venue( element );
+
+        assertTrue( venue.tags().contains( Raceway.Tag() ) );
+        assertEquals( venue.tags().size(), 3 );
     }
 
     @Test
@@ -601,11 +663,11 @@ public class VenueTest {
         Venue venue = new Venue( element );
 
         assertTrue( venue.tags().contains( Proscenium.Tag() ) );
-        assertEquals( venue.tags().size(), 2 );
+        assertEquals( venue.tags().size(), 3 );
     }
 
     @Test
-    public void populateChildren() {
+    public void populateChildPipe() {
         element.appendChild( pipeElement );
         new Venue( element );
 
@@ -623,7 +685,25 @@ public class VenueTest {
     }
 
     @Test
-    public void populateChildrenWithProscenium() {
+    public void populateChildRaceway() {
+        element.appendChild( racewayElement );
+        new Venue( element );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+
+        ElementalLister venue = list.get( 0 );
+        assert MinderDom.class.isInstance( venue );
+        assert Venue.class.isInstance( venue );
+
+        ElementalLister raceway = list.get( 1 );
+        assert MinderDom.class.isInstance( raceway );
+        assert Raceway.class.isInstance( raceway );
+
+        assertEquals( list.size(), 2 );
+    }
+
+    @Test
+    public void populateChildPipeWithProscenium() {
         element.appendChild( prosceniumElement );
         element.appendChild( pipeCrossesProsceniumCenterElement );
         new Venue( element );
@@ -651,47 +731,5 @@ public class VenueTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        Venue.Reset();
-        TestResets.ElementalListerReset();
-        UniqueId.Reset();
-
-        element = new IIOMetadataNode();
-        element.setAttribute( "building", building );
-        element.setAttribute( "room", room );
-        element.setAttribute( "width", width.toString() );
-        element.setAttribute( "depth", depth.toString() );
-        element.setAttribute( "height", height.toString() );
-
-        prosceniumElement = new IIOMetadataNode("proscenium");
-        prosceniumElement.setAttribute("width", "260");
-        prosceniumElement.setAttribute("height", "200");
-        prosceniumElement.setAttribute("depth", "22");
-        prosceniumElement.setAttribute("x", prosceniumX.toString());
-        prosceniumElement.setAttribute("y", prosceniumY.toString());
-        prosceniumElement.setAttribute("z", prosceniumZ.toString());
-
-        pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
-        pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
-        pipeCrossesProsceniumCenterElement.setAttribute("length", longLength.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute("x", negativeX.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute("y", y.toString());
-        pipeCrossesProsceniumCenterElement.setAttribute( "z", z.toString());
-
-        pipeElement = new IIOMetadataNode( "pipe" );
-        pipeElement.setAttribute( "id", pipeId);
-        pipeElement.setAttribute( "size", "12" );
-        pipeElement.setAttribute( "length", "120" );
-        pipeElement.setAttribute("x", x.toString());
-        pipeElement.setAttribute("y", y.toString());
-        pipeElement.setAttribute("z", z.toString());
-
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 }
