@@ -134,7 +134,7 @@ public class Luminaire extends MinderDom
     }
 
     public static Object[][] Report () {
-        final Object[][] data = new Object[ LUMINAIRELIST.size()][7];
+        final Object[][] data = new Object[ LUMINAIRELIST.size()][8];
 
         int dataIndex = 0;
         for (Luminaire selection : LUMINAIRELIST) {
@@ -142,11 +142,12 @@ public class Luminaire extends MinderDom
             data[dataIndex][1]= selection.type;
             data[dataIndex][2]= selection.location;
 //            data[dataIndex][3]= selection.circuit();
-            data[dataIndex][3]= selection.dimmer();
+            data[dataIndex][3]= Integer.parseInt( selection.dimmer() );
             data[dataIndex][4]= selection.channel();
 //            data[dataIndex][6]= selection.target;
             data[dataIndex][5]= selection.address;
-            data[dataIndex][6]= selection.info;
+            data[dataIndex][6]= selection.color;
+            data[dataIndex][7]= selection.info;
             dataIndex++;
         }
 

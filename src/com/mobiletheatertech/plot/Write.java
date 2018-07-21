@@ -721,7 +721,7 @@ public class Write {
         }
 
         String[] columns = new String[]
-                { "Unit", "Type", "Location", "Dimmer", "Channel", "Address", "Notes" };
+                { "Unit", "Type", "Location", "Dimmer", "Channel", "Address", "Color", "Notes" };
 
         TableModel model = new DefaultTableModel(data, columns);
 
