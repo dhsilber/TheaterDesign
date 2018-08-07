@@ -40,7 +40,7 @@ public class HangPoint extends MinderDom implements Legendable {
 
     static final String CATEGORY = SYMBOL;
 
-    private static final String COLOR = "light blue";
+    public static final String COLOR = "light blue";
 
     static final Double RADIUS = 6.0;
 

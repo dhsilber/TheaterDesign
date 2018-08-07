@@ -334,15 +334,16 @@ public class HangPointTest {
         Node textNode = textList.item(0);
         assertEquals(textNode.getNodeType(), Node.ELEMENT_NODE);
         Element textElement = (Element) textNode;
-        Double x = startPoint.x() + 20;
-        Double y = startPoint.y() + 3;
+        Double x = startPoint.x() + Legend.TEXTOFFSET;
+        Double y = startPoint.y() + HangPoint.RADIUS * 3 / 2;
         assertEquals(textElement.getAttribute("x"), x.toString() );
         assertEquals(textElement.getAttribute("y"), y.toString() );
-        assertEquals(textElement.getAttribute("fill"), "black" );
+        assertEquals(textElement.getAttribute("fill"), HangPoint.COLOR );
 
         // TODO Check for text here
 
-        assertEquals( endPoint, new PagePoint( startPoint.x(), startPoint.y() + 7 ));
+        assertEquals( endPoint,
+                new PagePoint( startPoint.x(), startPoint.y() + HangPoint.RADIUS * 2 ));
     }
 
     @BeforeClass
