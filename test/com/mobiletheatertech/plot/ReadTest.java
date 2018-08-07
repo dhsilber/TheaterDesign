@@ -16,8 +16,9 @@ import static org.testng.Assert.fail;
 public class ReadTest {
 
     static String boguspath = "/boguspath/";
-    String pathname = "~/Dropbox/Plot/testfiles/";
+    String pathname = "./files/";
     static String basename = "minimal";
+    static String emptyFile = "empty";
 
 //    Does not apply, as Configuration cannot be initialized with no arguments.
 //    @Test(expectedExceptions = FileNotFoundException.class,
@@ -37,14 +38,25 @@ public class ReadTest {
     }
 
     @Test
-    public void reads() throws Exception {
-        TestResets.MinderDomReset();
+    public void readsEmpty() throws Exception {
+        String[] arguments = new String[] { pathname + emptyFile };
+        Configuration.Initialize( arguments );
+        assertEquals( ElementalLister.List().size(), 0 );
 
+        new Read();
+
+        assertEquals( ElementalLister.List().size(), 0 );
+    }
+
+    @Test
+    public void reads() throws Exception {
         String[] arguments = new String[] { pathname + basename };
         Configuration.Initialize( arguments );
+        assertEquals( ElementalLister.List().size(), 0 );
+
         new Read();
-System.out.println( "ElementalLister: " + ElementalLister.List() );
-        assertEquals( ElementalLister.List().size(), 18 );
+
+        assertEquals( ElementalLister.List().size(), 2 );
     }
 
 
@@ -61,6 +73,8 @@ System.out.println( "ElementalLister: " + ElementalLister.List() );
         TestResets.ElementalListerReset();
         Venue.Reset();
         Proscenium.Reset();
+        TestResets.MinderDomReset();
+        UniqueId.Reset();
     }
 
     @AfterMethod

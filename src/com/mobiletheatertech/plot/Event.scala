@@ -15,9 +15,9 @@ class Event ( element: Element ) extends UniqueId ( element )
   tagCallback( Truss.Tag, processTruss )
   tagCallback( Flat.Tag, processFlat )
   tagCallback( Luminaire.LAYERTAG, processLuminaire )
-  println( "Event poplulating...")
+//  println( "Event populating...")
   populate( element )
-  println( "Event done poplulating.")
+//  println( "Event done populating.")
 
   def processPipeBase( element: Element ): Unit = {
     new PipeBase( element )
