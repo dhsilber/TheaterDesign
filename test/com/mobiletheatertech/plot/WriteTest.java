@@ -52,6 +52,8 @@ public class WriteTest {
         TestResets.ElementalListerReset();
         UniqueId.Reset();
         TestResets.DeviceTemplateReset();
+        TestResets.GearListReset();
+        TestResets.LuminaireReset();
 
         venueElement = new IIOMetadataNode( "venue" );
         venueElement.setAttribute( "room", venueRoom );
