@@ -16,15 +16,16 @@ public class GearList {
     private static ArrayList<Integer> COUNT = new ArrayList<>();
     private static ArrayList<String> ITEMS = new ArrayList<>();
 
-//    public GearList( String item ) {
-//    }
+    public static final int ITEM = 0;
+    public static final int QUANTITY = 1;
+    public static final int EXTENT = 2;
+
 
     public static void Add (Gear thing) {
 //        System.out.println( "In GearList.Add: Adding " + thing.item() );
         if( ITEMS.contains( thing.item() ) ) {
             int index = ITEMS.indexOf( thing.item() );
-            int count = COUNT.get( index );
-            COUNT.set(index, ++count);
+            COUNT.set(index, 1 + COUNT.get( index ) );
         }
         else {
             ITEMS.add( thing.item() );
@@ -45,19 +46,16 @@ public class GearList {
     }
 
     public static Object[][] Report () {
-        final Object[][] data = new Object[ GEARS.size()][2];
+        final Object[][] data = new Object[ GEARS.size()][EXTENT];
 
         int dataIndex = 0;
         for ( Gear thing : GEARS ) {
             int index = GEARS.indexOf( thing );
             int count = COUNT.get( index);
-            data[dataIndex][0] = thing.item();
-            data[dataIndex][1] = count;
+            data[dataIndex][ITEM] = thing.item();
+            data[dataIndex][QUANTITY] = count;
             dataIndex++;
         }
-
-//        data[0] = new Object[] { GEARS.get(0), CHAIRCOUNT.get(0) };
-//        data[1] = new Object[] { GEARS.get(1), CHAIRCOUNT.get(1) };
 
         return data;
     }

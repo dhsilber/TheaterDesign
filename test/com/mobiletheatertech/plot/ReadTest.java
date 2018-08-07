@@ -43,6 +43,7 @@ public class ReadTest {
         String[] arguments = new String[] { pathname + basename };
         Configuration.Initialize( arguments );
         new Read();
+System.out.println( "ElementalLister: " + ElementalLister.List() );
         assertEquals( ElementalLister.List().size(), 18 );
     }
 

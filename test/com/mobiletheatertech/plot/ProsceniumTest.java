@@ -62,6 +62,8 @@ public class ProsceniumTest {
 
         mouldingElement = new IIOMetadataNode( Moulding.Tag() );
         mouldingElement.setAttribute( "depth", mouldingDepth.toString() );
+        mouldingElement.setAttribute( "width", mouldingWidth.toString() );
+        mouldingElement.setAttribute( "side", mouldingSide );
     }
 
     @AfterMethod

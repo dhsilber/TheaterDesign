@@ -161,33 +161,6 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //  }
 
   def process(): ( Boolean, Boolean, Boolean ) = {
-//
-//    def findBase(): TrussBase = {
-//      val baseList: NodeList = element.getElementsByTagName( "trussbase" )
-//      if ( 1 == baseList.getLength() ) {
-//        val node: Node = baseList.item( 0 )
-//        // Much of this code is copied from HangPoint.ParseXML - refactor
-//        if ( (null != node) & (node.getNodeType == Node.ELEMENT_NODE) ) {
-//          val element: Element = node.asInstanceOf[ Element ]
-//          //          val mark: String = element.getAttribute("processedMark")
-//
-//          if( ! Truss.LegendRegistered ) {
-//            Legend.Register(this, 2.0, 12.0, LegendOrder.Structure)
-//            Truss.LegendRegistered = true;
-//          }
-//
-//          return new TrussBase( element )
-//
-//        }
-//        return null
-//      }
-//      else if ( 1 < baseList.getLength() ) {
-//        throw new InvalidXMLException(
-//          "Truss (" + id + ") must have position, one trussbase, or two suspend children." )
-//      }
-//
-//      null
-//    }
 
     def parentParse(): MinderDom = {
       parent
@@ -198,17 +171,10 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       if ( null != base ) {
         start = new Point( base.x, base.y, 0.0 )
 
-//        if ( Proscenium.Active() ) {
-//          boxOrigin = new Point( start.x - 1, start.y + 1, start.z )
-//          boxOrigin = Proscenium.Locate( boxOrigin )
-//        }
-//        else {
-          boxOrigin = new Point( start.x - 1, start.y - 1, start.z )
-//        }
+        boxOrigin = new Point( start.x - 1, start.y - 1, start.z )
 
         val space: Space = new Space( boxOrigin, Pipe.Diameter, Pipe.Diameter, length )
         if ( ! Venue.Contains( space ) ) {
-//          Yokeable.Remove(this)
           throw new LocationException(
             "Truss (" + id + ") should not extend beyond the boundaries of the venue.")
         }

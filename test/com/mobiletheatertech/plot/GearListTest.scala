@@ -26,6 +26,21 @@ class GearListTest {
   }
 
   @Test
+  def constantItem: Unit = {
+    assertEquals( GearList.ITEM, 0 )
+  }
+
+  @Test
+  def constantQuantity: Unit = {
+    assertEquals( GearList.QUANTITY, 1 )
+  }
+
+  @Test
+  def constantExtent: Unit = {
+    assertEquals( GearList.EXTENT, 2 )
+  }
+
+  @Test
   def checkByItemEmpty() {
     assertEquals(GearList.Check(item), 0.asInstanceOf[Integer])
   }
@@ -63,12 +78,12 @@ class GearListTest {
     GearList.Add( gearlyJim )
     GearList.Add( gearlyJane )
     val data = GearList.Report
-    assertEquals(data(0)(0), jim + "'s room" )
-    assertEquals(data(0)(1), jim )
-    assertEquals(data(0)(2), 3.asInstanceOf[Integer])
-    assertEquals(data(1)(0), jane + "'s room" )
-    assertEquals(data(1)(1), jane )
-    assertEquals(data(1)(2), 1.asInstanceOf[Integer])
+//    assertEquals(data(0)(0), jim + "'s room" )
+    assertEquals(data(0)(GearList.ITEM), jim )
+    assertEquals(data(0)(GearList.QUANTITY), 3.asInstanceOf[Integer])
+//    assertEquals(data(1)(0), jane + "'s room" )
+    assertEquals(data(1)(GearList.ITEM), jane )
+    assertEquals(data(1)(GearList.QUANTITY), 1.asInstanceOf[Integer])
   }
 
   @Test
@@ -96,14 +111,14 @@ class GearListTest {
     GearList.Add( gearlyJoe )
     val data = GearList.Report
     assertEquals(GearList.Size, 4)
-    assertEquals(data(0)(0), jim )
-    assertEquals(data(0)(1), 3.asInstanceOf[Integer])
-    assertEquals(data(1)(0), jane )
-    assertEquals(data(1)(1), 1.asInstanceOf[Integer])
-    assertEquals(data(2)(0), jo )
-    assertEquals(data(2)(1), 1.asInstanceOf[Integer])
-    assertEquals(data(3)(0), joe )
-    assertEquals(data(3)(1), 1.asInstanceOf[Integer])
+    assertEquals(data(0)(GearList.ITEM), jim )
+    assertEquals(data(0)(GearList.QUANTITY), 3.asInstanceOf[Integer])
+    assertEquals(data(1)(GearList.ITEM), jane )
+    assertEquals(data(1)(GearList.QUANTITY), 1.asInstanceOf[Integer])
+    assertEquals(data(2)(GearList.ITEM), jo )
+    assertEquals(data(2)(GearList.QUANTITY), 1.asInstanceOf[Integer])
+    assertEquals(data(3)(GearList.ITEM), joe )
+    assertEquals(data(3)(GearList.QUANTITY), 1.asInstanceOf[Integer])
   }
 }
 

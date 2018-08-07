@@ -13,12 +13,6 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
     this( element, null )
   }
 
-//  parent.getClass().getTypeName match {
-//    case "Null" => ;
-//    case "PipeBase" => ;
-//  }
-//  if ( based )
-
   var base: PipeBase = parentParse()
   override val based: Boolean = (null != base)
   override val positioned = !based
@@ -29,12 +23,15 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   val offsetX = getOptionalDoubleAttributeOrZero("offsetx")
 
   val startUnadjusted: Point = startPosition()
+//println( "startUnadjusted: " + startUnadjusted )
   start = Proscenium.LocateIfActive( startUnadjusted )
+//println( "start          : " + start )
 
 
   // These are set within the *Processing() logic.
   //  var start: Point = null
   var boxOrigin: Point = figureBoxOrigin()
+//println( "boxOrigin      : " + boxOrigin )
 
 
   //  // A pipe can be supported by a base or explicitly positioned within the drawing.
@@ -94,12 +91,15 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
       val y = getOptionalDoubleAttributeOrNull("y")
       val z = getOptionalDoubleAttributeOrNull("z")
       try {
+//val thingy: Point = new Point( x, y, z )
+//println ( "New pipe point: " + thingy + "." )
+
         new Point(x, y, z)
       }
       catch {
         case npe: NullPointerException => {
           ElementalLister.Remove(this)
-          throw new InvalidXMLException(
+          throw new InvalidXMLException (
             "Pipe (" + id + ") must be on a base or explicitly positioned.")
         }
       }
@@ -117,6 +117,7 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
       new Point(start.x, start.y + 1, start.z - 1)
     }
   }
+
 
   def positionProcessing(): Unit = {
 //    tooSmall( start.x )
@@ -146,10 +147,12 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
         new Space( boxOrigin, Pipe.Diameter, length, Pipe.Diameter )
       }
       else {
+//println ( "BoxOrigin: " + boxOrigin + ". Length: " + length + ". Diameter: " + Pipe.Diameter + "." )
         new Space( boxOrigin, length, Pipe.Diameter, Pipe.Diameter )
       }
     }
   }
+
 
   def crossesProsceniumCenterline(): Boolean = {
     if (90 == orientationValue)

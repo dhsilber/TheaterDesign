@@ -22,12 +22,14 @@ class HalfboroughTest {
   val trussBaseX = 24
 
   var trussElement: Element = null
+  val trussId = "truss ID"
 
   @BeforeMethod
   def setUpMethod(): Unit = {
     Halfborough.Reset()
 
     trussElement = new IIOMetadataNode( Truss.Tag )
+    trussElement.setAttribute( "id", trussId )
 
     trussBaseElement = new IIOMetadataNode( TrussBase.Tag )
     trussBaseElement.setAttribute( "size", trussBaseSize.toString )
@@ -79,28 +81,4 @@ class HalfboroughTest {
     assertSame( instance, Attachment.Find( id ) )
   }
 
-  @Test
-  def getLocationViaParent() {
-    val trussBase = new TrussBase( trussBaseElement )
-//    val truss = trussBase.truss
-//
-//    assertEquals(half.start, new Point(1.0, 2.0, 3.0))
-  }
-
-  //  @Test
-//  @throws[ Exception ]
-//  def findsReferencedHalfborough() {
-//    val instance: Halfborough = new Halfborough( element )
-//    val reference: Halfborough = new Halfborough( referringElement )
-//
-//    assertSame( instance, reference )
-//  }
-
-//  @Test( expectedExceptions = Array( classOf[ AttributeInvalidException ] ),
-//    expectedExceptionsMessageRegExp = "Moulding instance has invalid 'side' attribute." )
-//  @throws[ Exception ]
-//  def unsupportedSideAttributeValue {
-//    element.setAttribute( "side", sideUnsupported )
-//    val moulding: Moulding = new Moulding( element )
-//  }
 }

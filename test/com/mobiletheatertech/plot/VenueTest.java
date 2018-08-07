@@ -57,6 +57,7 @@ public class VenueTest {
         Venue.Reset();
         TestResets.ElementalListerReset();
         UniqueId.Reset();
+        Proscenium.Reset();
 
         element = new IIOMetadataNode();
         element.setAttribute( "building", building );
@@ -82,7 +83,6 @@ public class VenueTest {
 
         pipeElement = new IIOMetadataNode( "pipe" );
         pipeElement.setAttribute( "id", pipeId);
-        pipeElement.setAttribute( "size", "12" );
         pipeElement.setAttribute( "length", "120" );
         pipeElement.setAttribute("x", x.toString());
         pipeElement.setAttribute("y", y.toString());
