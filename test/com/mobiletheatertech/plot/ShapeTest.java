@@ -161,7 +161,7 @@ public class ShapeTest {
     }
 
     @Test(expectedExceptions = DataException.class,
-            expectedExceptionsMessageRegExp = "Invalid Shape specification.")
+            expectedExceptionsMessageRegExp = "Invalid Shape specification: too few points in polygon.")
     public void tooFewVertices() throws Exception {
         Element element = new IIOMetadataNode( Shape.Tag );
         element.setAttribute( "polygon", "1 2 3 4" );

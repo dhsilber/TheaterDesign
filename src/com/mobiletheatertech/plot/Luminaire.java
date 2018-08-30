@@ -142,7 +142,7 @@ public class Luminaire extends MinderDom
             data[dataIndex][1]= selection.type;
             data[dataIndex][2]= selection.location;
 //            data[dataIndex][3]= selection.circuit();
-            data[dataIndex][3]= Integer.parseInt( selection.dimmer() );
+            data[dataIndex][3]= selection.dimmer();
             data[dataIndex][4]= selection.channel();
 //            data[dataIndex][6]= selection.target;
             data[dataIndex][5]= selection.address;

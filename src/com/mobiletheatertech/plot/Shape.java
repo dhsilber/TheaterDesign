@@ -33,11 +33,11 @@ public class Shape extends Elemental {
     public Shape( Element element )  throws DataException, InvalidXMLException {
         super( element );
 
-        String prototype = getOptionalStringAttributeOrNull( "polygon" );
+        String polygon = getOptionalStringAttributeOrNull( "polygon" );
         String circle = getOptionalStringAttributeOrNull( "circle" );
 
-        if( null != prototype ) {
-            String[] numbers = prototype.split("\\s+");
+        if( null != polygon ) {
+            String[] numbers = polygon.split("\\s+");
             int size = numbers.length;
             int pointCount = size / 2;
 
@@ -46,7 +46,7 @@ public class Shape extends Elemental {
 
             // Need at least three points to make a shape.
             if (6 > size) {
-                throw new DataException("Invalid Shape specification.");
+                throw new DataException("Invalid Shape specification: too few points in polygon.");
             }
 
             for (int index = 0, pointIndex = 0; index < size; ) {
@@ -64,7 +64,7 @@ public class Shape extends Elemental {
 
                 pointIndex++;
             }
-            polygon = new Polygon(xPoints, yPoints, pointCount);
+            this.polygon = new Polygon(xPoints, yPoints, pointCount);
         }
         else if ( null != circle ) {
             radius = new Double( circle );
@@ -102,6 +102,8 @@ public class Shape extends Elemental {
     SvgElement toSvg( SvgElement parent, Draw draw, Double centerX, Double centerY )
     {
         String color = parent.attribute( "stroke" );
+
+
         if( null != radius )
         {
             if( Proscenium.Active() ) {

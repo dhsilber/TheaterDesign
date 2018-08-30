@@ -10,7 +10,6 @@ import org.w3c.dom.Element
 class ProtoWall( element: Element ) extends MinderDom( element: Element )
   with Populate
 {
-
   val openingList = new util.TreeSet[ Opening ]( new OpeningComparator )
 
   val x1: Double = getDoubleAttribute( "x1" )
