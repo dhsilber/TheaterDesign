@@ -40,7 +40,9 @@ public class SvgElementTest {
     String type = "Type";
     String text = "Test words";
     String path = "M 75 90 L 65 90 A 5 10 0 0 0 75 90";
-    String pathOffset = "M 195.0 166.0 L 185.0 166.0 A 5 10 0 0 0 195.0 166.0";
+    String pathDoubled = "M 75.0 90.0 L 65.0 90.0 A 5 10 0 0 0 75.0 90.0";
+//    String pathOffset = "M 195 166 L 185 166 A 5 10 0 0 0 195 166";
+    String pathOffsetDoubled = "M 195.0 166.0 L 185.0 166.0 A 5 10 0 0 0 195.0 166.0";
     String color = "blue";
     String group = "g";
 
@@ -258,13 +260,13 @@ public class SvgElementTest {
         Draw draw = new Draw();
         SvgElement parent = draw.element("defs");
 
-        basePath(draw, parent);
+        basePath(draw, parent, pathDoubled );
     }
 
-    void basePath(Draw draw, SvgElement parent) {
+    void basePath(Draw draw, SvgElement parent, String expectedPath ) {
         SvgElement result = parent.path(draw, path, color);
 
-        assertEquals( result.attribute( "d"), path );
+        assertEquals( result.attribute( "d"), expectedPath );
         assertEquals( result.attribute( "stroke"), color );
         assertEquals(result.attribute("stroke-width"), "2");
         assertEquals(result.attribute("fill"), color );
@@ -273,12 +275,6 @@ public class SvgElementTest {
         assert( childNode.isSameNode( result.element() ) );
     }
 
-    /*
-    Unlike all of the other SvgElement shape-drawing things, 'path' does not have
-    a version that adjusts for the current offest.
-
-    In order to make it not fail, I need to parse a path and update selected elements.
-    I will do that work if I ever need to.
     @Test
     public void svgPathOffset() throws InvalidXMLException {
         SvgElement.Offset( xOffset, yOffset );
@@ -287,22 +283,21 @@ public class SvgElementTest {
 
         SvgElement result = parent.path( draw, path, color );
 
-        assertEquals( result.attribute( "d"), pathOffset );
+        assertEquals( result.attribute( "d"), pathOffsetDoubled );
         assertEquals( result.attribute( "stroke"), color );
         assertEquals( result.attribute("stroke-width"), "2" );
-        assertEquals( result.attribute( "fill"), "none" );
+        assertEquals( result.attribute( "fill"), color );
 
         Node childNode = parent.element().getLastChild();
         assert( childNode.isSameNode( result.element() ) );
     }
-     */
 
     @Test
     public void svgPathSymbol() throws InvalidXMLException {
         Draw draw = new Draw();
         SvgElement symbol = draw.element("symbol");
 
-        basePath(draw, symbol);
+        basePath(draw, symbol, path );
     }
 
     @Test
@@ -311,7 +306,7 @@ public class SvgElementTest {
         Draw draw = new Draw();
         SvgElement symbol = draw.element("symbol");
 
-        basePath(draw, symbol);
+        basePath(draw, symbol, path);
     }
 
     @Test

@@ -406,41 +406,6 @@ public class ProsceniumTest {
 
         assertEquals( fixed, "100.0 120.0 " );
     }
-//
-//    @Test
-//    public void parse() throws Exception {
-//        String xml = "<plot>" +
-//                "<proscenium width=\"12\" height=\"22\" depth=\"65\" x=\"30\" y=\"6\" z=\"9\" />" +
-//                "</plot>";
-//        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-//
-//        TestResets.MinderDomReset();
-//
-//        // TODO Takes too long
-////        new Parse( stream );
-//
-//        ArrayList<ElementalLister> list = ElementalLister.List();
-//        assertEquals( list.size(), 1 );
-//    }
-//
-//    @Test(expectedExceptions = InvalidXMLException.class,
-//          expectedExceptionsMessageRegExp =
-//                  "Multiple Prosceniums are not currently supported.")
-//    public void parseMultiple() throws Exception {
-//        String xml = "<plot>" +
-//                "<proscenium width=\"12\" height=\"22\" depth=\"65\" x=\"30\" y=\"6\" z=\"9\" />" +
-//                "<proscenium width=\"12\" height=\"22\" depth=\"65\" x=\"30\" y=\"6\" z=\"9\" />" +
-//                "</plot>";
-//        InputStream stream = new ByteArrayInputStream( xml.getBytes() );
-//
-//        TestResets.MinderDomReset();
-//
-//        // TODO Takes too long
-////        new Parse( stream );
-//
-//        ArrayList<ElementalLister> list = ElementalLister.List();
-//        assertEquals( list.size(), 2 );
-//    }
 
 //    @Mocked
 //    Graphics2D mockCanvas;

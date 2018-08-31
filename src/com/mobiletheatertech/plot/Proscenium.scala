@@ -123,7 +123,7 @@ object Proscenium {
   final val FadedColor = "gray"
   final val StageColor = "black"
   var active = false
-  var origin = new Point( 0.0 ,0.0, 0.0 )
+  var origin = new Point( 0.0, 0.0, 0.0 )
 
   def Origin: Point = {
     origin
@@ -158,6 +158,6 @@ object Proscenium {
 
   def Reset(): Unit = {
     active = false
-    origin = new Point( 0.0 ,0.0, 0.0 )
+    origin = new Point( 0.0, 0.0, 0.0 )
   }
 }

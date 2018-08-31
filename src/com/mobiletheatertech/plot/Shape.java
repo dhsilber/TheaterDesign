@@ -12,8 +12,6 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 /**
  * Represents an area in space.
@@ -28,7 +26,7 @@ public class Shape extends Elemental {
     private int[] yPoints;
     private Double radius = null;
 
-    private ArrayList<Point> vertices = new ArrayList<>();
+//    private ArrayList<Point> vertices = new ArrayList<>();
 
     public Shape( Element element )  throws DataException, InvalidXMLException {
         super( element );
@@ -73,30 +71,6 @@ public class Shape extends Elemental {
             throw new InvalidXMLException("Empty Shape specification.");
         }
 
-    }
-
-    double x() {
-        Rectangle2D rectangle = polygon.getBounds2D();
-
-        return rectangle.getX();
-    }
-
-    double y() {
-        Rectangle2D rectangle = polygon.getBounds2D();
-
-        return rectangle.getY();
-    }
-
-    double width() {
-        Rectangle2D rectangle = polygon.getBounds2D();
-
-        return rectangle.getWidth();
-    }
-
-    double depth() {
-        Rectangle2D rectangle = polygon.getBounds2D();
-
-        return rectangle.getHeight();
     }
 
     SvgElement toSvg( SvgElement parent, Draw draw, Double centerX, Double centerY )

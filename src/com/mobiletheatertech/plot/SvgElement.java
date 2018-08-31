@@ -199,8 +199,53 @@ class SvgElement {
     If I ever need to make that happen, see SvgElementTest.svgPathOffset()
      */
     public SvgElement path( Draw draw,
-                                      String path,
-                                      String color) {
+                            String path,
+                            String color) {
+
+        if( ! "symbol".equals( element.getTagName() )) {
+            StringBuilder newPath = new StringBuilder();
+            String[] pathItem = path.split("\\s+");
+            int xoffset = xOffset.intValue();
+            int yoffset = yOffset.intValue();
+            boolean x = true;
+            for ( int index = 0; index < pathItem.length; index++ ) {
+                double number;
+                try {
+                    number = Double.valueOf(pathItem[index]);
+                }
+                catch (NumberFormatException e) {
+                    newPath.append( pathItem[index] );
+                    newPath.append( " " );
+                    if( "A".equals( pathItem[index] ) ) {
+                        index++;
+                        for ( int arcCount = 0;
+                              index < pathItem.length && arcCount < 5;
+                              arcCount++, index++ ) {
+                            newPath.append( pathItem[index] );
+                            newPath.append( " " );
+                        }
+                        index--;
+                    }
+                    continue;
+                }
+
+                double newNumber = number + (x ? xoffset : yoffset);
+                newPath.append( newNumber );
+                newPath.append( " " );
+
+                x = ! x;
+            }
+            return pathAbsolute(draw, newPath.toString().trim(), color);
+        }
+        else {
+            return pathAbsolute(draw, path, color);
+        }
+    }
+
+    public SvgElement pathAbsolute( Draw draw,
+                            String path,
+                            String color) {
+
         SvgElement element = draw.element( "path" );
         element.attribute("fill", color );
         element.attribute( "fill-opacity", "0.1" );

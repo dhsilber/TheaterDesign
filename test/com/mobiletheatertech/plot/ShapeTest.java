@@ -20,6 +20,12 @@ import static org.testng.Assert.*;
  */
 public class ShapeTest {
 
+//
+//    Polygons drawn when a Proscenium is defined should have a location that makes sense.
+//    E.G. The origin of the shape should be relative to the origin of the Proscenium.
+//
+//    Circles are already properly positioned.
+
     String square = "1 1 1 8 8 8 8 1"; // square
     String polygon = "1 1 21 1 21 34 12 34 12 54 1 54";
 
@@ -94,18 +100,6 @@ public class ShapeTest {
     }
 
     @Test
-    public void circleCreatesEmptyVertexList() throws Exception {
-        Element element = new IIOMetadataNode( Shape.Tag );
-        element.setAttribute("circle", "4");
-        Shape shape = new Shape(element);
-        Field vertexListField = TestHelpers.accessField(shape, "vertices");
-        ArrayList<Point> vertices = (ArrayList<Point>) vertexListField.get(shape);
-
-        assertNotNull(vertices);
-        assertEquals(0, vertices.size());
-    }
-
-    @Test
     public void polygonCreatesSquareVertexList() throws Exception {
         Element element = new IIOMetadataNode( Shape.Tag );
         element.setAttribute( "polygon", square );
@@ -174,42 +168,6 @@ public class ShapeTest {
         Element element = new IIOMetadataNode( Shape.Tag );
         element.setAttribute( "polygon", "1 2 3 4 5 6 7" );
         new Shape( element );
-    }
-
-    @Test
-    public void x() throws Exception {
-        Element element = new IIOMetadataNode( Shape.Tag );
-        element.setAttribute( "polygon", square );
-        Shape shape = new Shape( element );
-
-        assertEquals(shape.x(), 1.0 );
-    }
-
-    @Test
-    public void y() throws Exception {
-        Element element = new IIOMetadataNode( Shape.Tag );
-        element.setAttribute( "polygon", square );
-        Shape shape = new Shape( element );
-
-        assertEquals(shape.y(), 1.0 );
-    }
-
-    @Test
-    public void width() throws Exception {
-        Element element = new IIOMetadataNode( Shape.Tag );
-        element.setAttribute( "polygon", square );
-        Shape shape = new Shape( element );
-
-        assertEquals(shape.width(), 7.0 );
-    }
-
-    @Test
-    public void depth() throws Exception {
-        Element element = new IIOMetadataNode( Shape.Tag );
-        element.setAttribute( "polygon", square );
-        Shape shape = new Shape( element );
-
-        assertEquals(shape.depth(), 7.0 );
     }
 
     @Test
