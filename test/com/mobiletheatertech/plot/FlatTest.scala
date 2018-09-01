@@ -155,7 +155,7 @@ class FlatTest {
     assertEquals( foundElement.getAttribute( "x2" ), x2.toString )
     assertEquals( foundElement.getAttribute( "y2" ), y2.toString )
     assertEquals( foundElement.getAttribute( "stroke" ), Flat.Color )
-    assertEquals( foundElement.getAttribute( "stroke-width" ), "2" )
+    assertEquals( foundElement.getAttribute( "stroke-width" ), "3" )
   }
 
   @Test
@@ -192,7 +192,7 @@ class FlatTest {
     assertEquals( foundElement.getAttribute( "x2" ), endX.toString )
     assertEquals( foundElement.getAttribute( "y2" ), endY.toString )
     assertEquals( foundElement.getAttribute( "stroke" ), Flat.Color )
-    assertEquals( foundElement.getAttribute( "stroke-width" ), "2" )
+    assertEquals( foundElement.getAttribute( "stroke-width" ), "3" )
   }
 
 }

@@ -231,6 +231,7 @@ public class SetPlatfomTest {
         assertEquals( element.getAttribute("cy"), y.toString() );
         assertEquals( element.getAttribute("r"), circleRadius.toString() );
         assertEquals( element.getAttribute("stroke"), SetPlatform.Color() );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
     }
 
     @Test
@@ -263,6 +264,7 @@ public class SetPlatfomTest {
         assertEquals( element.getAttribute("cx"), x.toString() );
         assertEquals( element.getAttribute("cy"), y.toString() );
         assertEquals( element.getAttribute("r"), largerRadius.toString() );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
         node = list.item( 1 );
         assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
@@ -270,6 +272,7 @@ public class SetPlatfomTest {
         assertEquals( element.getAttribute("cx"), x.toString() );
         assertEquals( element.getAttribute("cy"), y.toString() );
         assertEquals( element.getAttribute("r"), circleRadius.toString() );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
 
         assertEquals(list.getLength(), 2 );
     }
@@ -309,6 +312,7 @@ public class SetPlatfomTest {
         assertEquals( element.getAttribute("cx"), ex.toString() );
         assertEquals( element.getAttribute("cy"), wy.toString() );
         assertEquals( element.getAttribute("r"), circleRadius.toString() );
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
     }
 
     @Test
@@ -349,6 +353,7 @@ public class SetPlatfomTest {
         Double thisY = y+SvgElement.OffsetY();
         assertEquals(element.getAttribute("transform"),
                 "rotate(-45.0,"+thisX+","+thisY+")");
+        assertEquals( element.getAttribute( "stroke-width" ), "1" );
     }
 
     @Test

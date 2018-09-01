@@ -43,6 +43,9 @@ class SetPlatform (val element: Element) extends MinderDom(element)
     for ( thing <- shapes) {
       val element = thing.toSvg( group, draw, x, y )
       element.attribute( "transform", "rotate(" + orientation + "," + x + "," + y + ")" )
+      element.attribute( "stroke-width", "1" )
+      element.attribute("fill", SetPlatform.Color )
+      element.attribute("fill-opacity", "0.1")
     }
   }
 

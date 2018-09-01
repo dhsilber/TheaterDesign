@@ -17,7 +17,7 @@ class Flat( element: Element ) extends ProtoWall( element: Element ) {
   override def drawLine( draw: Draw, segmentStart: Point, segmentEnd: Point ): Unit = {
     val lineElement = draw.line( draw,
       segmentStart.x, segmentStart.y, segmentEnd.x, segmentEnd.y, Flat.Color )
-    lineElement.attribute( "stroke-width", "2" )
+    lineElement.attribute( "stroke-width", "3" )
   }
 
 }
