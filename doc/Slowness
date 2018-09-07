@@ -1,0 +1,4 @@
+Each run of Plot takes a stupid amount of time. Part of that is that I generate a number of views whether I need them or not.
+
+Now that I have the Drawing mechanism, which allows me to specify the layers I want, I should be able to also specify the view I want to see, and so only generate a drawing for a view if I actually want to see it.
+

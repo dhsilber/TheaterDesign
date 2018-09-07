@@ -1,0 +1,20 @@
+Back when I wrote this in Java, I needed to have a stage where some Elemental
+types were verified after all the  constructors had run, so I made a Verifier
+class which all of those Elementals could inherit from. Unfortunately, running
+the verify loop on all of the Elements takes forever. (Well, a long time.)
+
+If I make 'Verifier' into a trait rather than having all of the MinderDom
+objects incorporate it, then only the types that need it will have it.
+
+These are the remaining Java classes which make use of Verify, and so would have
+to be converted to Scala:
+  Chair.java 
+  Cheeseborough.java 
+  Device.java 
+  Luminaire.java
+  Zone.java 
+
+Plus, of course: Verifier.java
+
+As a bonus, I would be able to remove the bogus 'verify()' stub from everything
+that doesn't actually use the Veritfier.
