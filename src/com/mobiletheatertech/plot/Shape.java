@@ -19,7 +19,7 @@ import java.awt.*;
  * Provides a method to determine if a rectangle fits entirely withing the {@code Shape}.
  */
 public class Shape extends Elemental {
-    final static String Tag = "shape";
+    public final static String Tag = "shape";
 
     private Polygon polygon = null;
     private int[] xPoints;

@@ -5,8 +5,24 @@ import org.w3c.dom.Element
 /**
   * Created by DHS on 8/6/16.
   */
-class Flat( element: Element ) extends ProtoWall( element: Element ) {
+class Flat( element: Element, parent: SetPiece ) extends ProtoWall( element: Element )
+{
+  def this( element: Element ) {
+    this( element, null )
+  }
 
+  if( null != parent ) {
+    start = new Point(
+      start.x + parent.origin.x(),
+      start.y + parent.origin.y(),
+      start.z
+    )
+    end = new Point(
+      end.x + parent.origin.x(),
+      end.y + parent.origin.y(),
+      end.z
+    )
+  }
   start = Proscenium.LocateIfActive( start )
   end = Proscenium.LocateIfActive( end )
 
@@ -21,6 +37,8 @@ class Flat( element: Element ) extends ProtoWall( element: Element ) {
   }
 
 }
+
+//Next step is to clean up tests & code from this work and push to github.
 
 object Flat {
   final val Tag = "flat"

@@ -120,8 +120,8 @@ public class ProsceniumTest {
 //        see SetPlatformTest for more on testing Proscenium's use of Populate.
         Proscenium instance = new Proscenium( element );
 
-        assertTrue( instance.tags().contains( Moulding.Tag() ) );
-        assertEquals( instance.tags().size(), 1 );
+        assertTrue( instance.populateTags().contains( Moulding.Tag() ) );
+        assertEquals( instance.populateTags().size(), 1 );
     }
 
     @Test

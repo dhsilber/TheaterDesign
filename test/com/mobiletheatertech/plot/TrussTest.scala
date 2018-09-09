@@ -1,5 +1,6 @@
 package com.mobiletheatertech.plot
 
+import org.testng.Assert._
 import org.testng.annotations.{Test, _}
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -9,10 +10,8 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.lang.reflect.Field
 import java.util.ArrayList
-import java.util.TreeMap
 
 import scala.collection.mutable.ArrayBuffer
-import org.testng.Assert._
 
 /**
   * @author dhs
@@ -819,26 +818,26 @@ class TrussTest {
 
   @Test def luminaireCallbackRegistered() {
     val truss: Truss = new Truss(positionedTrussElement)
-    assertTrue(truss.tags.contains(Luminaire.LAYERTAG))
-    assertEquals(truss.tags.size, 3)
+    assertTrue(truss.populateTags.contains(Luminaire.LAYERTAG))
+    assertEquals(truss.populateTags.size, 3)
   }
 
   @Test def cheeseboroughCallbackRegistered() {
     val truss: Truss = new Truss(positionedTrussElement)
-    assertTrue(truss.tags.contains(Cheeseborough.TAG))
-    assertEquals(truss.tags.size, 1)
+    assertTrue(truss.populateTags.contains(Cheeseborough.TAG))
+    assertEquals(truss.populateTags.size, 1)
   }
 
   @Test def halfboroughCallbackRegistered() {
     val truss: Truss = new Truss(positionedTrussElement)
-    assertTrue(truss.tags.contains(Halfborough.Tag))
-    assertEquals(truss.tags.size, 3)
+    assertTrue(truss.populateTags.contains(Halfborough.Tag))
+    assertEquals(truss.populateTags.size, 3)
   }
 
   @Test def pipeCallbackRegistered() {
     val truss: Truss = new Truss(positionedTrussElement)
-    assertTrue(truss.tags.contains(Pipe.Tag))
-    assertEquals(truss.tags.size, 3)
+    assertTrue(truss.populateTags.contains(Pipe.Tag))
+    assertEquals(truss.populateTags.size, 3)
   }
 
   @Test def populateChildren() {

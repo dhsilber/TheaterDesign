@@ -646,24 +646,24 @@ public class VenueTest {
     public void tagCallbackRegisteredPipe() {
         Venue venue = new Venue( element );
 
-        assertTrue( venue.tags().contains( Pipe.LayerTag() ) );
-        assertEquals( venue.tags().size(), 3 );
+        assertTrue( venue.populateTags().contains( Pipe.LayerTag() ) );
+        assertEquals( venue.populateTags().size(), 3 );
     }
 
     @Test
     public void tagCallbackRegisteredRaceway() {
         Venue venue = new Venue( element );
 
-        assertTrue( venue.tags().contains( Raceway.Tag() ) );
-        assertEquals( venue.tags().size(), 3 );
+        assertTrue( venue.populateTags().contains( Raceway.Tag() ) );
+        assertEquals( venue.populateTags().size(), 3 );
     }
 
     @Test
     public void tagCallbackRegisteredProscenium() {
         Venue venue = new Venue( element );
 
-        assertTrue( venue.tags().contains( Proscenium.Tag() ) );
-        assertEquals( venue.tags().size(), 3 );
+        assertTrue( venue.populateTags().contains( Proscenium.Tag() ) );
+        assertEquals( venue.populateTags().size(), 3 );
     }
 
     @Test

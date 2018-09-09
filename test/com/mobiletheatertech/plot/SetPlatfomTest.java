@@ -7,7 +7,6 @@ import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.testng.Assert.assertEquals;
@@ -24,8 +23,6 @@ public class SetPlatfomTest {
 
     Element prosceniumElement = null;
 
-    final String id = "Lighitng Stand ID";
-    String id2 = "Other Lighitng Stand ID";
     Draw draw;
     Double x = 76.7;
     Double y = 93.6;
@@ -42,6 +39,10 @@ public class SetPlatfomTest {
 //    String wideTriangle = "-20 0 20 -4 20 4";
     
 //    String wide = "-7 -12 7 -12 11 12 -11 12";
+
+    Element setPieceElement = null;
+    Double setPieceX = 1.1;
+    Double setPieceY = 2.2;
     
 
     @BeforeMethod
@@ -56,16 +57,12 @@ public class SetPlatfomTest {
         circleElement.setAttribute( "circle", circleRadius.toString() );
 
         element = new IIOMetadataNode( SetPlatform.Tag() );
-//        element.setAttribute("id", id);
         element.setAttribute("x", x.toString() );
         element.setAttribute("y", y.toString() );
 
         element2 = new IIOMetadataNode( SetPlatform.Tag() );
-//        element2.setAttribute("id", id2 );
         element2.setAttribute("x", x.toString() );
         element2.setAttribute("y", y.toString() );
-
-
 
 
         Proscenium.Reset();
@@ -92,6 +89,9 @@ public class SetPlatfomTest {
         prosceniumElement.setAttribute( "y", y.toString() );
         prosceniumElement.setAttribute( "z", z.toString() );
 
+        setPieceElement= new IIOMetadataNode( SetPiece.Tag() );
+        setPieceElement.setAttribute( "x", setPieceX.toString() );
+        setPieceElement.setAttribute( "y", setPieceY.toString() );
 
 
 
@@ -132,6 +132,25 @@ public class SetPlatfomTest {
     }
 
     @Test
+    public void locationOffsetFromParent() throws Exception {
+        setPieceElement.appendChild( element );
+        element.appendChild( circleElement );
+        new SetPiece( setPieceElement );
+
+        ArrayList<ElementalLister> list = ElementalLister.List();
+//        assertEquals( list.size(), 3 );
+
+        ElementalLister platform = list.get( 1 );
+        assert SetPlatform.class.isInstance( platform );
+
+        Double ex = x + setPieceX;
+        Double wy = y + setPieceY;
+
+        assertEquals(TestHelpers.accessDouble(platform, "x"), ex.doubleValue());
+        assertEquals(TestHelpers.accessDouble(platform, "y"), wy.doubleValue());
+    }
+
+    @Test
     public void storesAttributes() throws Exception {
         element.appendChild( circleElement );
         SetPlatform instance = new SetPlatform( element );
@@ -157,8 +176,8 @@ public class SetPlatfomTest {
         element.appendChild( circleElement );
         SetPlatform instance = new SetPlatform( element );
 
-        assertTrue( instance.tags().contains( Shape.Tag ) );
-        assertEquals( instance.tags().size(), 1 );
+        assertTrue( instance.populateTags().contains( Shape.Tag ) );
+        assertEquals( instance.populateTags().size(), 1 );
     }
 
     @Test
@@ -197,7 +216,7 @@ public class SetPlatfomTest {
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "SetPlatform has no Shape." )
+            expectedExceptionsMessageRegExp = "SetPlatform at \\(76.7, 93.6\\) has no Shape." )
     public void noShape() {
         new SetPlatform( element );
     }

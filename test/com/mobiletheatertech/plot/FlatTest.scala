@@ -1,7 +1,9 @@
 package com.mobiletheatertech.plot
 
-import javax.imageio.metadata.IIOMetadataNode
+import java.util
+import java.util.ArrayList
 
+import javax.imageio.metadata.IIOMetadataNode
 import org.testng.Assert._
 import org.testng.annotations._
 import org.w3c.dom.{Element, Node, NodeList}
@@ -18,14 +20,18 @@ class FlatTest {
   val prosceniumZ = 12.0
 
   private[plot] var flatElement: Element = null
-  private[plot] var flatElement2: Element = null
-  private[plot] var flatElement3: Element = null
+//  private[plot] var flatElement2: Element = null
+//  private[plot] var flatElement3: Element = null
   private[plot] val x1: Double = 12.0
   private[plot] val y1: Double = 34.0
   private[plot] val x2: Double = 19.0
   private[plot] val y2: Double = 30.0
-  private[plot] val x3: Double = 78.0
-  private[plot] val y3: Double = 89.0
+//  private[plot] val x3: Double = 78.0
+//  private[plot] val y3: Double = 89.0
+
+  private[plot] var setPieceElement: Element = null
+  private[plot] val setPieceX = 3.3
+  private[plot] val setPieceY = 4.4
 
 
   @BeforeMethod
@@ -66,6 +72,10 @@ class FlatTest {
     //    flatElement3.setAttribute("y1", y3.toString)
     //    flatElement3.setAttribute("x2", x1.toString)
     //    flatElement3.setAttribute("y2", y1.toString)
+
+    setPieceElement = new IIOMetadataNode(SetPiece.Tag)
+    setPieceElement.setAttribute("x", setPieceX.toString)
+    setPieceElement.setAttribute("y", setPieceY.toString)
   }
 
   @AfterMethod
@@ -99,6 +109,25 @@ class FlatTest {
 
     assertFalse(classOf[IsClamp].isInstance(instance))
     assertFalse(classOf[Legendable].isInstance(instance))
+  }
+
+  @Test
+  @throws[Exception]
+  def locationOffsetFromParent(): Unit = {
+    setPieceElement.appendChild( flatElement )
+    new SetPiece(setPieceElement)
+
+    val list: util.ArrayList[ElementalLister] = ElementalLister.List
+    assertEquals( list.size(), 2 )
+
+    assert(classOf[Flat].isInstance(list.get(1)))
+    val flat: Flat = list.get(1).asInstanceOf[Flat]
+    var ex1 = setPieceX + x1
+    var ex2 = setPieceX + x2
+    var wy1 = setPieceY + y1
+    var wy2 = setPieceY + y2
+    assertEquals( flat.start, new Point( ex1, wy1, 0.0 ) )
+    assertEquals( flat.end, new Point( ex2, wy2, 0.0 ) )
   }
 
   @Test

@@ -50,7 +50,7 @@ class PopulateTest {
     val thingy = new Populator( elementWithChildren )
     thingy.tagCallback( childTag, callBack )
 
-    assertEquals( thingy.tags.size, 1 )
+    assertEquals( thingy.populateTags.size, 1 )
   }
 
   @Test

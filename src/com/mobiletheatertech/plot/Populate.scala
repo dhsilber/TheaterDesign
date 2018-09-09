@@ -7,12 +7,13 @@ import org.w3c.dom.{Element, Node, NodeList}
   */
 trait Populate {
 
-  val tags = collection.mutable.Map[ String, Element => Unit ]()
+  val populateTags = collection.mutable.Map[ String, Element => Unit ]()
 
   def populate( element: Element ): Unit = {
-//    println( "In Populate")
+//    print( "In Populate")
+//    print( " " + this.getClass.toString )
     val nodes: NodeList = element.getChildNodes
-//    println ( "nodes: " + nodes.getLength() )
+//    println ( " nodes: " + nodes.getLength() )
     val count = nodes.getLength()
 
     for ( index <- 0 until count ) {
@@ -21,14 +22,14 @@ trait Populate {
         val childElement: Element = nodes.item( index ).asInstanceOf[Element]
         val tag = childElement.getTagName()
 //        println( "Tag: " + tag )
-        if(tags.contains(tag)) {
-          tags(tag)(childElement)
+        if(populateTags.contains(tag)) {
+          populateTags(tag)(childElement)
         }
       }
     }
   }
 
   def tagCallback( tag: String, callback: Element => Unit ): Unit = {
-    tags( tag ) = callback
+    populateTags( tag ) = callback
   }
 }

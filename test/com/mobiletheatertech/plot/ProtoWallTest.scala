@@ -160,8 +160,8 @@ class ProtoWallTest {
   @Test
   def tagCallbackOpening {
     val wall = new Proto( element )
-    assertTrue( wall.tags.contains( Opening.Tag ) )
-    assertEquals( wall.tags.size, 1 )
+    assertTrue( wall.populateTags.contains( Opening.Tag ) )
+    assertEquals( wall.populateTags.size, 1 )
   }
 
   @Test

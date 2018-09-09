@@ -25,6 +25,16 @@ public class TestHelpers {
         Field field;
         try {
             field = thingy.getClass().getDeclaredField( name );
+
+//  I had a problem with accessing the "x1" field of a Flat object.
+//  Perhaps it has something to do with that field being inherited from ProtoWall?
+//  Flat & ProtoWall are scala.
+//  I tried changing "x1" from a val to a var, but that made no difference.
+//  Never resolved, but instead worked-around, so I'm leaving this code for the
+//    next time I run into this.
+//            java.lang.Class clazz = thingy.getClass();
+//            System.out.println( clazz.toString() );
+//            field = clazz.getDeclaredField( name );
         }
         catch ( NoSuchFieldException a ) {
             field = thingy.getClass().getField( name );

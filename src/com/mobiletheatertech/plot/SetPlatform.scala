@@ -9,12 +9,24 @@ import scala.collection.JavaConversions._
   * Created by DHS on 8/11/16.
   */
 
-class SetPlatform (val element: Element) extends MinderDom(element)
+class SetPlatform (val element: Element, parent: SetPiece ) extends MinderDom(element)
   with Populate
   with Legendable
 {
-  val x = getDoubleAttribute("x")
-  val y = getDoubleAttribute("y")
+  def this( element: Element ) {
+    this( element, null )
+  }
+
+  var x: Double = 0.0
+  var y: Double = 0.0
+  if( null != parent ) {
+    x = parent.origin.x
+    y = parent.origin.y()
+  }
+
+  x += getDoubleAttribute("x")
+  y += getDoubleAttribute("y")
+
   val orientation = getOptionalDoubleAttributeOrZero("orientation")
 
   val shapes: ArrayList[ Shape ] = new ArrayList[ Shape ]
@@ -23,7 +35,10 @@ class SetPlatform (val element: Element) extends MinderDom(element)
   populate( element )
 
   if ( shapes.size() < 1 )
-    throw new InvalidXMLException( "SetPlatform has no Shape." )
+    throw new InvalidXMLException(
+      "SetPlatform at (" + x + ", " + y + ") has no Shape." )
+
+  println( this.toString )
 
   def processShape( element: Element ): Unit = {
     shapes.add( new Shape( element ) )
@@ -55,6 +70,16 @@ class SetPlatform (val element: Element) extends MinderDom(element)
 
   def domLegendItem(draw: Draw, start: PagePoint): PagePoint =
     null
+
+  override def toString: String = {
+    var result: String = "SetPlatform at (" + x + ", " + y +
+      ") has " + shapes.size() + " Shapes."
+    if (null != parent) {
+      result += "\n  Parent: " + parent.toString
+    }
+
+    result
+  }
 
 }
 

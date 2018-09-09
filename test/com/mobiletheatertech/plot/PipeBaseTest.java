@@ -6,8 +6,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -374,8 +372,8 @@ public class PipeBaseTest {
     public void tagCallbackRegistered() {
         PipeBase pipebase = new PipeBase( baseElement );
 
-        assertEquals( pipebase.tags().size(), 1 );
-        assertTrue( pipebase.tags().contains( Pipe.LayerTag() ) );
+        assertEquals( pipebase.populateTags().size(), 1 );
+        assertTrue( pipebase.populateTags().contains( Pipe.LayerTag() ) );
     }
 
     @Test

@@ -6,8 +6,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.imageio.metadata.IIOMetadataNode;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1291,8 +1289,8 @@ public class PipeTest {
         element.appendChild( luminaireElement );
         Pipe pipe = new Pipe( element );
 
-        assertEquals( pipe.tags().size(), 1 );
-        assertTrue( pipe.tags().contains( Luminaire.LAYERTAG ) );
+        assertEquals( pipe.populateTags().size(), 1 );
+        assertTrue( pipe.populateTags().contains( Luminaire.LAYERTAG ) );
     }
 
     @Test
@@ -1300,8 +1298,8 @@ public class PipeTest {
         element.appendChild( luminaireElement );
         Pipe pipe = new Pipe( element );
 
-        assertEquals( pipe.tags().size(), 1 );
-        assertTrue( pipe.tags().contains( Luminaire.LAYERTAG ) );
+        assertEquals( pipe.populateTags().size(), 1 );
+        assertTrue( pipe.populateTags().contains( Luminaire.LAYERTAG ) );
     }
 
     @Test

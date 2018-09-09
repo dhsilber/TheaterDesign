@@ -249,8 +249,8 @@ class TrussBaseTest {
 
   @Test def trussTagCallbackRegistered() {
     val trussbase: TrussBase = new TrussBase(baseElement)
-    assertEquals(trussbase.tags.size, 1)
-    assertTrue(trussbase.tags.contains(Truss.LayerTag))
+    assertEquals(trussbase.populateTags.size, 1)
+    assertTrue(trussbase.populateTags.contains(Truss.LayerTag))
   }
 
   @Test def populateChildren() {

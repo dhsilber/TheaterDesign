@@ -8,12 +8,14 @@ import org.w3c.dom.Element
 class Event ( element: Element ) extends UniqueId ( element )
   with Populate
 {
+//  println( "Event")
+
   Event.Only = this
 
   tagCallback( PipeBase.Tag, processPipeBase )
   tagCallback( TrussBase.Tag, processTrussBase )
   tagCallback( Truss.Tag, processTruss )
-  tagCallback( Flat.Tag, processFlat )
+  tagCallback( SetPiece.Tag, processSetPiece )
   tagCallback( Luminaire.LAYERTAG, processLuminaire )
 //  println( "Event populating...")
   populate( element )
@@ -24,18 +26,18 @@ class Event ( element: Element ) extends UniqueId ( element )
   }
 
   def processTrussBase( element: Element ): Unit = {
-    println( "Event about to create TrussBase")
+//    println( "Event about to create TrussBase")
     new TrussBase( element )
   }
 
   def processTruss( element: Element ): Unit = {
-    println( "Event about to create Truss")
+//    println( "Event about to create Truss")
     new Truss( element )
-    println( "Event completed creating Truss")
+//    println( "Event completed creating Truss")
   }
 
-  def processFlat( element: Element ): Unit = {
-    new Flat( element )
+  def processSetPiece( element: Element ): Unit = {
+    new SetPiece( element )
   }
 
   def processLuminaire( element: Element ): Unit = {
