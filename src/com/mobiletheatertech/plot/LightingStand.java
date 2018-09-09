@@ -32,9 +32,7 @@ public class LightingStand extends Yokeable implements Legendable //, Schematica
     }
 
     @Override
-    public void verify() {
-
-    }
+    public void verify() { }
 
     /*
     Hanging position at a specified location on this LightingStand.

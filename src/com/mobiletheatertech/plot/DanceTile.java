@@ -36,9 +36,7 @@ public class DanceTile extends MinderDom implements Legendable {
         }
     }
 
-    public void verify() {
-
-    }
+    public void verify() { }
 
     public void dom( Draw draw, View mode ) {
 
