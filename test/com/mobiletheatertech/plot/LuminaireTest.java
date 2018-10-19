@@ -139,7 +139,7 @@ public class LuminaireTest {
         luminaireDefinition = new LuminaireDefinition( definitionElement );
 
 
-        elementOnPipe = new IIOMetadataNode( "luminaire" );
+        elementOnPipe = new IIOMetadataNode( Luminaire.Tag );
         elementOnPipe.setAttribute("unit", unit);
         elementOnPipe.setAttribute("owner", owner);
         elementOnPipe.setAttribute( "type", type );
@@ -152,7 +152,7 @@ public class LuminaireTest {
         elementOnPipe.setAttribute("address", address);
         elementOnPipe.setAttribute("info", info);
 
-        elementOnTruss = new IIOMetadataNode( "luminaire" );
+        elementOnTruss = new IIOMetadataNode( Luminaire.Tag );
         elementOnTruss.setAttribute( "type", type );
         elementOnTruss.setAttribute("on", trussId);
         elementOnTruss.setAttribute("location", trussLocation);
@@ -163,7 +163,7 @@ public class LuminaireTest {
         elementOnTruss.setAttribute("unit", unit);
         elementOnTruss.setAttribute("owner", owner);
 
-        elementOnLightingStand = new IIOMetadataNode( "luminaire" );
+        elementOnLightingStand = new IIOMetadataNode( Luminaire.Tag );
         elementOnLightingStand.setAttribute( "type", type );
         elementOnLightingStand.setAttribute("on", lightingStandName );
         elementOnLightingStand.setAttribute("location", lightingStandLocation );

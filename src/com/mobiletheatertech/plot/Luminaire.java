@@ -39,13 +39,15 @@ public class Luminaire extends MinderDom
      */
     public static final String LAYERTAG = "luminaire";
 
+    public static final String Tag = LAYERTAG;
+
     LuminaireDefinition definition;
 
     private PagePoint schematicPosition = null;
     private Rectangle2D.Double schematicBox = null;
 
     private String owner;
-    private String unit;
+    private Integer unit;
     private String type;
     private String on;
     private Location location;
@@ -63,6 +65,8 @@ public class Luminaire extends MinderDom
     private Double pipeRotation;
     private String transform;
     private LinearSupportsClamp mount = null;
+
+    private Point standAlonePipeOffset = new Point( 0, 0, 0 );
 
     static final String COLOR = "black";
 
@@ -84,7 +88,7 @@ public class Luminaire extends MinderDom
         on       = getStringAttribute(  "on") ;
         type     = getStringAttribute(  "type" );
         location = new Location( getStringAttribute( "location" ) );
-        unit     = getStringAttribute(  "unit" );
+//        unit     = getStringAttribute(  "unit" );
         owner    = getStringAttribute(  "owner" );
         circuit = getOptionalStringAttribute( "circuit" );
         dimmer  = getOptionalStringAttribute( "dimmer" );
@@ -98,30 +102,28 @@ public class Luminaire extends MinderDom
             rotation = new Double(rotate);
         }
 
-        id = on + ":" + unit;
-
-//        System.out.println("Got to middle of Luminaire constructor");
-
-        Luminaire prior = Select( id );
-        if( null != prior ) {
-//            if ( element.getParentElement() )
-//            throw new InvalidXMLException(
-            System.out.println(
-                    this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
-        }
+//        id = on + ":" + unit;
+//
+//        Luminaire prior = Select( id );
+//        if( null != prior ) {
+////            if ( element.getParentElement() )
+////            throw new InvalidXMLException(
+//            System.out.println(
+//                    this.getClass().getSimpleName()+" id '"+id+"' is not unique.");
+//        }
 
 
-        System.out.println("Luminaire selected");
+//        System.out.println("Luminaire selected");
         new Layer( LAYERTAG, LAYERNAME, COLOR );
-        System.out.println("Made Layer for Luminaire");
+//        System.out.println("Made Layer for Luminaire");
         new LuminaireInformation( element, this );
-        System.out.println("Made LuminaireInformation");
+//        System.out.println("Made LuminaireInformation");
 
         GearList.Add( this );
-        System.out.println("Added Luminaire to gear list");
+//        System.out.println("Added Luminaire to gear list");
 
         LUMINAIRELIST.add( this );
-        System.out.println("added to Luminaire list");
+//        System.out.println("added to Luminaire list");
     }
 
     public static Luminaire Select( String identifier ) {
@@ -183,7 +185,7 @@ public class Luminaire extends MinderDom
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
 
-        System.out.println( "On: " + on + ", Location: " + location );
+//        System.out.println( "On: " + on + ", Location: " + location );
         mount = LinearSupportsClamp$.MODULE$.Select(on);
 //        System.out.println( "mount: " + mount );
         if( null == mount ) {
@@ -217,6 +219,8 @@ public class Luminaire extends MinderDom
         if( null == definition ) {
             throw new ReferenceException( "Unable to find definition for "+ type );
         }
+
+        System.out.println( "Luminaire.verify::  " + this.toString() );
     }
 
 //    @Override
@@ -233,7 +237,9 @@ public class Luminaire extends MinderDom
         return mount;
     }
 
-    String unit() { return unit; }
+    Integer unit() { return unit; }
+
+    void unit( int newUnit ) { unit = newUnit; id = on + ":" + unit; }
 
     String type() { return type; }
 
@@ -271,6 +277,10 @@ public class Luminaire extends MinderDom
 
     String address() {
         return address;
+    }
+
+    void setStandAloneOffset( Point point ) {
+        standAlonePipeOffset = point;
     }
 
     public double weight() {
@@ -481,8 +491,8 @@ public class Luminaire extends MinderDom
 
     void domPlan(Draw draw, SvgElement group) {
         SvgElement use;
-        Double x = point.x();
-        Double y = point.y();
+        Double x = point.x() - standAlonePipeOffset.x();
+        Double y = point.y() - standAlonePipeOffset.y();
 
         group.attribute("transform", transform);
 //        group.mouseover( "showData(evt)", "hideData(evt)" );
@@ -494,8 +504,10 @@ public class Luminaire extends MinderDom
         // See verify() for the transform that rotates the position of the luminaire to
         // keep it with a truss that has been rotated.
         String transform;
-        Double transformX = point.x() + SvgElement.OffsetX();
-        Double transformY = point.y() + SvgElement.OffsetY();
+//        Double transformX = point.x() + SvgElement.OffsetX();
+//        Double transformY = point.y() + SvgElement.OffsetY();
+        Double transformX = x + SvgElement.OffsetX();
+        Double transformY = y + SvgElement.OffsetY();
         if ( !target.equals("") ) {
             // With this I lose the alignment with zones. :-(
             Integer rotation = alignWithZone(point);
@@ -507,7 +519,7 @@ public class Luminaire extends MinderDom
         use.attribute("transform", transform );
 
         // Unit number to overlay on icon
-        SvgElement unitText = group.text( draw, unit, x, y + 3, "green" );
+        SvgElement unitText = group.text( draw, unit.toString(), x, y + 3, "green" );
         unitText.attribute("font-size", "7");
         unitText.attribute("text-anchor", "middle");
 //        unitText.mouseover( "showData(evt)", "hideData(evt)" );
@@ -539,6 +551,6 @@ public class Luminaire extends MinderDom
      */
     @Override
     public String toString() {
-        return "Luminaire: " + id + ": " + type + ", " + circuit;
+        return "Luminaire: " + id + ": " + type + ", " + circuit + ", " + info + ", " + location ;
     }
 }
