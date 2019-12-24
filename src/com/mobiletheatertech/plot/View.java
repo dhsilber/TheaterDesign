@@ -8,6 +8,7 @@ package com.mobiletheatertech.plot;
  */
 public enum View {
     PLAN,
+//    HIGHLIGHT,
     SECTION,
     FRONT,
     TRUSS //,

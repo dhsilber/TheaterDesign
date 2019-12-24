@@ -49,7 +49,14 @@ class DrapeBase ( element: Element ) extends MinderDom( element ) {
         return
     }
   }
-
+  override def toString(): String = {
+    "DrapeBase { " +
+      "id='" + id + "' " +
+      "x=" + x +
+      ", y=" + y +
+      ", z=" + z +
+      " }"
+  }
 }
 
 object DrapeBase {

@@ -15,6 +15,8 @@ public class Drawing extends ElementalLister {
     View view = null;
     String viewString = null;
     String legend = null;
+    String linear = null;
+    String pipeId = null;
 
     public ArrayList<String> layers = new ArrayList<>();
     public ArrayList<String> devices = new ArrayList<>();
@@ -30,6 +32,10 @@ public class Drawing extends ElementalLister {
         if ( "".equals( legend ) ) {
             legend = id;
         }
+        pipeId = getOptionalStringAttributeOrNull( "pipe" );
+        if( null != pipeId ) {
+
+        }
 
         switch ( viewString ) {
 //            case "schematic":
@@ -38,11 +44,14 @@ public class Drawing extends ElementalLister {
             case "":
                 view = View.PLAN;
                 break;
+//            case "highlight":
+//                view = View.HIGHLIGHT;
+//                break;
             case "spreadsheet":
                 return;
             default:
                 throw new InvalidXMLException( this.getClass().getSimpleName(), id,
-                        "has invalid 'view' attribute. Valid is 'schematic' or 'spreadsheet'" );
+                        "has invalid 'view' attribute. Valid is default or 'spreadsheet'" );
         }
 
         NodeList displays = element.getElementsByTagName( "display" );
@@ -78,4 +87,5 @@ public class Drawing extends ElementalLister {
     }
 
     public String legend() { return legend; }
+
 }

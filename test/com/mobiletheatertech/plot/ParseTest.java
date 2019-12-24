@@ -344,7 +344,11 @@ public class ParseTest {
         ArrayList<ElementalLister> list = ElementalLister.List();
 //        assertEquals( list.size(), 3 );
 
-        ElementalLister devicetemplate = list.get( 0 );
+        ElementalLister plot = list.get( 0 );
+        assert Elemental.class.isInstance( plot );
+        assert Plot.class.isInstance( plot );
+
+        ElementalLister devicetemplate = list.get( 1 );
         assert Elemental.class.isInstance( devicetemplate );
         assert DeviceTemplate.class.isInstance( devicetemplate );
     }

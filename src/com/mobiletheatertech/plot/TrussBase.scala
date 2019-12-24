@@ -62,16 +62,20 @@ class TrussBase (val element: Element) extends MinderDom(element)
   def dom(draw: Draw, mode: View) {
     mode match {
       case View.PLAN =>
-        println( "TrussBase.dom." )
+        println( "TrussBase.dom. Size: " + size)
         val group = MinderDom.svgClassGroup(draw, Truss.LayerTag)
         draw.appendRootChild(group)
+        println( "Trussbase group: " + group.toString() )
 
         val base = group.rectangle(draw, x - size / 2, y - size / 2, size, size, TrussBase.Color )
+        println( "TrussBase base: " + base.toString() )
 
         val transformX: Double = x + SvgElement.OffsetX
         val transformY: Double = y + SvgElement.OffsetY
         val transform: String = "rotate(" + rotation + "," + transformX + "," + transformY + ")"
         base.attribute("transform", transform)
+        base.attribute( "class", "TrussBase")
+        println( "Trussbase width: " +   base.element.getAttribute("width") )
 
       case default =>
     }

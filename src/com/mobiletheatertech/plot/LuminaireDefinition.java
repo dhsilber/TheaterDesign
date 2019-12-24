@@ -29,6 +29,8 @@ import java.util.ArrayList;
  */
 public class LuminaireDefinition extends MinderDom implements Legendable {
 
+    static final String Tag = "luminaire-definition";
+
     // TODO Keep this until I resolve how Luminaire knows what type it is.
     private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
 

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class Luminaire extends MinderDom
         implements IsClamp, Gear/*implements Schematicable*/ {
 
-    private static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
+    static ArrayList<Luminaire> LUMINAIRELIST = new ArrayList<>();
     /**
      * Name of {@code Layer} of {@code Luminaoire}s.
      */
@@ -58,6 +58,7 @@ public class Luminaire extends MinderDom
     private String target;
     private String address;
     private String info;
+    private String label;
     private Double rotation = 0.0;
     private Point point;
     private Place place;
@@ -97,6 +98,7 @@ public class Luminaire extends MinderDom
         target  = getOptionalStringAttribute( "target" );
         address = getOptionalStringAttribute( "address" );
         info    = getOptionalStringAttribute( "info" );
+        label   = getOptionalStringAttribute( "label" );
         String rotate = getOptionalStringAttribute( "rotation" );
         if (null != rotate && ! rotate.isEmpty() ) {
             rotation = new Double(rotate);
@@ -185,9 +187,8 @@ public class Luminaire extends MinderDom
     public void verify() throws AttributeMissingException, DataException,
             InvalidXMLException, MountingException, ReferenceException {
 
-//        System.out.println( "On: " + on + ", Location: " + location );
         mount = LinearSupportsClamp$.MODULE$.Select(on);
-//        System.out.println( "mount: " + mount );
+
         if( null == mount ) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
@@ -196,12 +197,11 @@ public class Luminaire extends MinderDom
             mount.hang( this, location );
         }
         catch (NumberFormatException exception) {
-            System.out.println ( mount.toString() );
+//            System.out.println ( mount.toString() );
 
             throw new MountingException(
-                    "Pipe (" + on + ") unit '" + unit + "' has invalid location '" + location + "'." );
-//      case exception: Exception =>
-//        throw new Exception( exception.getMessage, exception.getCause )
+                    "Luminaire on pipe (" + on + ") has invalid location '"
+                            + location + "'." );
         }
 
 
@@ -219,8 +219,6 @@ public class Luminaire extends MinderDom
         if( null == definition ) {
             throw new ReferenceException( "Unable to find definition for "+ type );
         }
-
-        System.out.println( "Luminaire.verify::  " + this.toString() );
     }
 
 //    @Override
@@ -273,6 +271,10 @@ public class Luminaire extends MinderDom
 
     String info() {
         return info;
+    }
+
+    String label() {
+        return label;
     }
 
     String address() {
@@ -519,10 +521,15 @@ public class Luminaire extends MinderDom
         use.attribute("transform", transform );
 
         // Unit number to overlay on icon
-        SvgElement unitText = group.text( draw, unit.toString(), x, y + 3, "green" );
-        unitText.attribute("font-size", "7");
-        unitText.attribute("text-anchor", "middle");
+        if( null == unit ) {
+            System.out.println( "Unit numbers have not been set." );
+        }
+        else {
+            SvgElement unitText = group.text( draw, unit.toString(), x, y + 3, "green" );
+            unitText.attribute("font-size", "7");
+            unitText.attribute("text-anchor", "middle");
 //        unitText.mouseover( "showData(evt)", "hideData(evt)" );
+        }
 
         this.data( draw, group );
     }

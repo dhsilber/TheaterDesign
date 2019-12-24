@@ -42,8 +42,7 @@ public abstract class MinderDom extends Layerer {
      *
      * @param draw graphics manager
      */
-    public static void
-    DomAllPlan( Draw draw )
+    public static void DomAllPlan( Draw draw )
             throws InvalidXMLException, MountingException, ReferenceException {
         for (ElementalLister item : LIST) {
             if ( MinderDom.class.isInstance( item )) {

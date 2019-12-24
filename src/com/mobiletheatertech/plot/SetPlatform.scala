@@ -56,8 +56,23 @@ class SetPlatform (val element: Element, parent: SetPiece ) extends MinderDom(el
     group.element.setAttribute( "stroke", SetPlatform.Color )
 
     for ( thing <- shapes) {
+      println( "SetPlatform  x: " + x + "  y: " + y )
       val element = thing.toSvg( group, draw, x, y )
-      element.attribute( "transform", "rotate(" + orientation + "," + x + "," + y + ")" )
+      if( null != parent ) {
+        if( 0 != parent.rotation) {
+          element.rotate( parent.rotation,
+                    Proscenium.Origin.x + parent.origin.x,
+                    Proscenium.Origin.y - parent.origin.y )
+        }
+//        var centerOfRotation = Proscenium.LocateIfActive( parent.origin )
+//        element.attribute( "transform", "rotate(" + "-45" + "," +
+//          (Proscenium.Origin.x + parent.origin.x) + "," +
+//          (Proscenium.Origin.y - parent.origin.y) + ")" )
+      }
+//      else {
+//        element.attribute( "transform", "rotate(" + orientation + "," +
+//          x + "," + y + ")" )
+//      }
       element.attribute( "stroke-width", "1" )
       element.attribute("fill", SetPlatform.Color )
       element.attribute("fill-opacity", "0.1")

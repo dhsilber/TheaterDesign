@@ -22,6 +22,7 @@ class SvgElement {
     }
 
     public static void Offset( Double x, Double y ) {
+//        System.out.println( "SvgElement.Offset   x: " + x + ",  y: " + y );
         xOffset = x;
         yOffset = y;
     }
@@ -275,6 +276,7 @@ class SvgElement {
     SvgElement rectangleAbsolute(Draw draw,
                                  Double x, Double y, Double width, Double height,
                                  String color) {
+        System.out.println("draw = [" + draw + "], x = [" + x + "], y = [" + y + "], width = [" + width + "], height = [" + height + "], color = [" + color + "]");
         SvgElement element = draw.element("rect");
         element.attribute("x", x.toString());
         element.attribute("y", y.toString());
@@ -298,9 +300,17 @@ class SvgElement {
     }
 
     public SvgElement text( Draw draw,
-                                      String text,
-                                      Double x, Double y,
-                                      String color ) {
+                            String text,
+                            Double x, Double y,
+                            String color ) {
+        return text( draw, text, x, y, color, "10" );
+    }
+
+    public SvgElement text( Draw draw,
+                            String text,
+                            Double x, Double y,
+                            String color, String size ) {
+
         Double xSet = x;
         Double ySet = y;
         if( ! "symbol".equals( element.getTagName() )) {
@@ -308,12 +318,18 @@ class SvgElement {
             ySet += yOffset;
         }
 
-        SvgElement element = textAbsolute(draw, text, xSet, ySet, color );
+        SvgElement element = textAbsolute(draw, text, xSet, ySet, color, size );
 
         return element;
     }
 
     SvgElement textAbsolute ( Draw draw, String text, Double x, Double y, String color ) {
+        SvgElement element = textAbsolute(draw, text, x, y, color, "10" );
+
+        return element;
+    }
+
+    SvgElement textAbsolute ( Draw draw, String text, Double x, Double y, String color, String size ) {
         SvgElement element = draw.element("text");
 
         element.attribute( "x", x.toString() );
@@ -322,13 +338,40 @@ class SvgElement {
         element.attribute( "stroke", "none" );
         element.attribute( "font-weight", "100" );
         element.attribute( "font-family", "sans-serif" );
-        element.attribute( "font-size", "10" );
+        element.attribute( "font-size", size );
 
         Text foo = draw.document().createTextNode( text );
         element.appendChild( foo );
 
         this.appendChild( element );
         return element;
+    }
+
+    SvgElement headerText ( Draw draw, String text, Double x, Double y ) {
+
+        Double xSet = x;
+        Double ySet = y;
+        if( ! "symbol".equals( element.getTagName() )) {
+            xSet += xOffset;
+            ySet += yOffset;
+        }
+
+        Text textNode = draw.document().createTextNode( text );
+        SvgElement element = draw.element("text");
+        element.attribute( "class", "drawingHeader" );
+        element.attribute( "x", xSet.toString() );
+        element.attribute( "y", ySet.toString() );
+        element.appendChild( textNode );
+
+        this.appendChild( element.element() );
+        return element;
+    }
+
+    public void rotate( Double angle, Double x, Double y ) {
+        x += xOffset;
+        y += yOffset;
+//        System.out.println( "SvgELement rotate  angle: " + angle + "  x: " + x + "  y: " + y );
+        this.attribute( "transform", "rotate(" + angle + "," + x + "," + y + ")" );
     }
 
     public SvgElement use( Draw draw,

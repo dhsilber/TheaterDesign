@@ -1307,7 +1307,7 @@ public class PipeTest {
         element.appendChild( luminaireElement );
         Pipe pipe = new Pipe( element );
 
-        scala.collection.mutable.ArrayBuffer<IsClamp> list = pipe.IsClampList();
+        scala.collection.mutable.ArrayBuffer<Luminaire> list = pipe.IsClampList();
         assertEquals( list.size(), 1 );
     }
 

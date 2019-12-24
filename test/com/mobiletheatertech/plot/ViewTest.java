@@ -19,6 +19,7 @@ public class ViewTest {
     @Test
     public void values() {
         assertNotNull( View.PLAN );
+//        assertNotNull( View.HIGHLIGHT );
         assertNotNull( View.SECTION );
         assertNotNull( View.FRONT );
         assertNotNull( View.TRUSS );
@@ -43,5 +44,9 @@ public class ViewTest {
         assertNotEquals( View.FRONT, View.TRUSS );
 //        assertNotEquals( View.FRONT, View.SCHEMATIC );
 //        assertNotEquals( View.TRUSS, View.SCHEMATIC );
+//        assertNotEquals( View.PLAN, View.HIGHLIGHT );
+//        assertNotEquals( View.SECTION, View.HIGHLIGHT );
+//        assertNotEquals( View.FRONT, View.HIGHLIGHT );
+//        assertNotEquals( View.TRUSS, View.HIGHLIGHT );
     }
 }

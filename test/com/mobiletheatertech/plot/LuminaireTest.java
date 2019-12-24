@@ -25,7 +25,7 @@ public class LuminaireTest {
     Element elementOnLightingStand = null;
     Element definitionElement = null;
 
-    final String unit = "unit";
+    final Integer unit = 1;
     final String owner = "owner";
     final String type = "Altman 6x9";
     final String pipeName = "luminaireTestPipe";
@@ -44,7 +44,7 @@ public class LuminaireTest {
     Integer hangPoint2X=30;
     Integer trussSize=12;
     Integer trussLength=120;
-    String pipeLocation = "12.0";
+    Double pipeLocation = 12.0;
     String trussLocation = "a 12";
     String lightingStandLocation = "b";
     String callShowData = "showData(evt)";
@@ -140,11 +140,10 @@ public class LuminaireTest {
 
 
         elementOnPipe = new IIOMetadataNode( Luminaire.Tag );
-        elementOnPipe.setAttribute("unit", unit);
         elementOnPipe.setAttribute("owner", owner);
         elementOnPipe.setAttribute( "type", type );
         elementOnPipe.setAttribute("on", pipeName);
-        elementOnPipe.setAttribute("location", pipeLocation );
+        elementOnPipe.setAttribute("location", pipeLocation.toString() );
         elementOnPipe.setAttribute("circuit", circuit);
         elementOnPipe.setAttribute("dimmer", dimmer);
         elementOnPipe.setAttribute("channel", channel);
@@ -160,7 +159,6 @@ public class LuminaireTest {
         elementOnTruss.setAttribute("circuit", circuit);
         elementOnTruss.setAttribute("channel", channel);
         elementOnTruss.setAttribute("color", color);
-        elementOnTruss.setAttribute("unit", unit);
         elementOnTruss.setAttribute("owner", owner);
 
         elementOnLightingStand = new IIOMetadataNode( Luminaire.Tag );
@@ -171,8 +169,6 @@ public class LuminaireTest {
         elementOnLightingStand.setAttribute("circuit", circuit);
         elementOnLightingStand.setAttribute("channel", channel);
         elementOnLightingStand.setAttribute("color", color);
-        elementOnLightingStand.setAttribute("unit", unit);
-//        System.err.println( "setup done.");
     }
 
     @AfterMethod
@@ -207,8 +203,8 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
-        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation.toString() );
-        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
+        Location loc = (Location) TestHelpers.accessObject( luminaire, "location" );
+        assertEquals( loc.toString(), pipeLocation.toString() );
         assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), "" );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), "" );
@@ -225,8 +221,8 @@ public class LuminaireTest {
 
         assertEquals( TestHelpers.accessString( luminaire, "type" ), type );
         assertEquals( TestHelpers.accessString( luminaire, "on" ), pipeName );
-        assertEquals( TestHelpers.accessString( luminaire, "location" ), pipeLocation.toString() );
-        assertEquals( TestHelpers.accessString( luminaire, "unit" ), unit );
+        Location loc = (Location) TestHelpers.accessObject( luminaire, "location" );
+        assertEquals( loc.toString(), pipeLocation.toString() );
         assertEquals( TestHelpers.accessString( luminaire, "owner" ), owner );
         assertEquals( TestHelpers.accessString( luminaire, "circuit" ), circuit );
         assertEquals( TestHelpers.accessString( luminaire, "dimmer" ), dimmer );
@@ -236,17 +232,11 @@ public class LuminaireTest {
     }
 
     @Test
-    public void buildsID() throws Exception {
+    public void unitBuildsID() throws Exception {
         Luminaire instance = new Luminaire(elementOnPipe);
+        instance.unit( unit );
 
         assertEquals( instance.id, pipeName + ":" + unit );
-    }
-
-    @Test( expectedExceptions = InvalidXMLException.class,
-            expectedExceptionsMessageRegExp = "Luminaire id '"+id+"' is not unique.")
-    public void badId() throws Exception {
-        new Luminaire(elementOnPipe);
-        new Luminaire(elementOnPipe);
     }
 
         // TODO: commented out 2014-07-15 as it was hanging the whole test run.
@@ -353,7 +343,7 @@ public class LuminaireTest {
 
     @Test(expectedExceptions = MountingException.class,
           expectedExceptionsMessageRegExp =
-                  "Pipe \\(" + pipeName + "\\) unit 'unit' has invalid location -1.0." )
+                  pipeName + " does not include invalid location -1.0." )
 //                  "Luminaire of type '" + type +
 //                  "' has location -1 which is beyond the end of pipe '" + pipeName + "'.")
     public void locateOffPipe() throws Exception {
@@ -372,8 +362,8 @@ public class LuminaireTest {
 
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp =
-                    "Pipe \\("+pipeName+"\\) unit '" + unit +
-                            "' has invalid location '" + letterOnlyLocation + "'.")
+                    "Luminaire on pipe \\("+pipeName+"\\) has invalid location '"
+                            + letterOnlyLocation + "'." )
     public void verifyBadPipeLocation() throws Exception {
         elementOnPipe.setAttribute( "location", letterOnlyLocation );
         Luminaire luminaire = new Luminaire(elementOnPipe);
@@ -392,6 +382,7 @@ public class LuminaireTest {
     @Test
     public void unit() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
+        luminaire.unit( unit );
 
         assertEquals( luminaire.unit(), unit );
     }
@@ -414,7 +405,11 @@ public class LuminaireTest {
     public void location() throws Exception {
         Luminaire luminaire = new Luminaire(elementOnPipe);
 
-        assertEquals( luminaire.location().distance(), pipeLocation );
+        ValidatedDouble distance = luminaire.location().distance();
+
+        assertTrue( distance.valid() );
+
+        assertEquals( distance.value(), pipeLocation );
     }
 
     @Test
@@ -481,6 +476,7 @@ public class LuminaireTest {
         draw.establishRoot();
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
+        pipe.numberLuminaires();
 
         luminaire.dom( draw, View.PLAN );
 
@@ -540,7 +536,7 @@ public class LuminaireTest {
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element textElement = (Element) node;
-        assertEquals( textElement.getTextContent(), unit );
+        assertEquals( textElement.getTextContent(), unit.toString() );
 
         domGeneratesData( groupElement, luminaire );
 
@@ -582,6 +578,8 @@ public class LuminaireTest {
 
         elementOnPipe.setAttribute( "on", "rotatedPipe" );
         Luminaire luminaire = new Luminaire(elementOnPipe);
+        luminaire.unit( 1 );
+//        pipe.numberLuminaires();
         luminaire.verify();
 
         luminaire.dom( draw, View.PLAN );
@@ -603,7 +601,7 @@ public class LuminaireTest {
         assertEquals( diversionElement.getAttribute( "xlink:href" ), "#" + type );
         assertEquals( diversionElement.getAttribute( "x" ), "12.0" );
         assertEquals( diversionElement.getAttribute( "y" ), "46.0" );
-        assertEquals( diversionElement.getAttribute( "id" ), "rotatedPipe:unit" );
+        assertEquals( diversionElement.getAttribute( "id" ), "rotatedPipe:1" );
         assertEquals( diversionElement.getAttribute( "onmouseover" ), callShowData );
         assertEquals( diversionElement.getAttribute( "onmouseout" ), callHideData );
 
@@ -616,7 +614,7 @@ public class LuminaireTest {
         node = list.item( 0 );
         assertEquals( node.getNodeType(), Node.ELEMENT_NODE );
         Element textElement = (Element) node;
-        assertEquals( textElement.getTextContent(), unit );
+        assertEquals( textElement.getTextContent(), unit.toString() );
 
         domGeneratesData( groupElement, luminaire );
     }

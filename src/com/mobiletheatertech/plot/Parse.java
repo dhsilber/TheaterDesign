@@ -76,11 +76,13 @@ public class Parse {
             throw new InvalidXMLException( "Top level element must be 'plot'." );
         }
 
+        Plot plot = new Plot( root );
+
         parseXML( Drawing.class, "drawing" );
         parseXML( UserLayer.class, "layer" );
         parseXML( Grid.class, "grid" );
         parseXML( CableDiversion.class, "cable-diversion" );
-        parseXML( LuminaireDefinition.class, "luminaire-definition");
+//        parseXML( LuminaireDefinition.class, "luminaire-definition");
         parseXML( DeviceTemplate.class, "device-template");
         parseXML( CableType.class, "cable-type" );
         parseXML( Venue.class, "venue");
@@ -125,6 +127,7 @@ public class Parse {
             System.err.println( "... unable to continue." );
             System.exit( 42 );
         }
+
 
         Verifier.VerifyAll();
 

@@ -843,7 +843,7 @@ class TrussTest {
   @Test def populateChildren() {
     positionedTrussElement.appendChild(luminaireElement)
     val truss: Truss = new Truss(positionedTrussElement)
-    val list: ArrayBuffer[IsClamp] = truss.IsClampList
+    val list = truss.IsClampList
     assertEquals(list.size, 1)
   }
 

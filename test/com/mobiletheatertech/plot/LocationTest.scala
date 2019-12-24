@@ -35,59 +35,84 @@ class LocationTest {
   def distanceInteger() {
     val instance = new Location( integerString )
 
-    assertTrue( instance.distanceProvided )
-    val doubleString = integerString + ".0"
-    assertEquals( instance.distance, doubleString.toDouble )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertFalse( vertex.valid )
+    assertTrue( distance.valid )
+
+    assertEquals( distance.value, integerString.toDouble )
   }
 
   @Test
   def distanceFromNegativeInteger() {
     val instance = new Location( negativeIntegerString )
 
-    assertTrue( instance.distanceProvided )
-    val doubleNegativeIntegerString = negativeIntegerString + ".0"
-    assertEquals( instance.distance, doubleNegativeIntegerString.toDouble )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertFalse( vertex.valid )
+    assertTrue( distance.valid )
+
+    assertEquals( distance.value, negativeIntegerString.toDouble )
   }
 
   @Test
   def distanceFromComplex() {
     val instance = new Location( complexString )
 
-    assertTrue( instance.distanceProvided )
-    val doubleComplexNumberString = complexNumber + ".0"
-    assertEquals( instance.distance, doubleComplexNumberString.toDouble )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertTrue( vertex.valid )
+    assertTrue( distance.valid )
+
+    assertEquals( distance.value, complexNumber.toDouble )
   }
 
   @Test
   def vertexFromNumber() {
     val instance = new Location( integerString )
 
-    assertFalse( instance.vertexProvided )
-    assertTrue( instance.distanceProvided )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertFalse( vertex.valid )
+    assertTrue( distance.valid )
   }
 
   @Test
   def vertexFromComplex() {
     val instance = new Location( complexString )
 
-    assertTrue( instance.vertexProvided )
-    assertTrue( instance.distanceProvided )
-    assertEquals( instance.vertex, complexLetter )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertTrue( vertex.valid )
+    assertTrue( distance.valid )
+
+    assertEquals( vertex.value, complexLetter )
   }
 
   @Test
   def vertexOnly() {
     val instance = new Location( vertexLetter )
 
-    assertTrue( instance.vertexProvided )
-    assertFalse( instance.distanceProvided )
-    assertEquals( instance.vertex.toString, vertexLetter.toString )
-    assertEquals( instance.distance, 0.0 )
+    val vertex = instance.vertex
+    val distance = instance.distance
+
+    assertTrue( vertex.valid )
+    assertFalse( distance.valid )
+
+    assertEquals( vertex.value.toString, vertexLetter.toString )
   }
 
   @Test
   def vertexOnlyToString(): Unit = {
     val instance = new Location( vertexLetter )
+
+    assertTrue( instance.vertex.valid )
+    assertFalse( instance.distance.valid )
 
     assertEquals( instance.toString(), vertexLetter )
   }
@@ -96,6 +121,9 @@ class LocationTest {
   def distanceOnlyToString(): Unit = {
     val instance = new Location( double.toString )
 
+    assertTrue( instance.distance.valid )
+    assertFalse( instance.vertex.valid )
+
     assertEquals( instance.toString(), double.toString )
   }
 
@@ -103,14 +131,9 @@ class LocationTest {
   def complexToString(): Unit = {
     val instance = new Location( complexString )
 
+    assertTrue( instance.vertex.valid )
+    assertTrue( instance.distance.valid )
+
     assertEquals( instance.toString(), complexString + ".0" )
   }
-
-  //  @Test( expectedExceptions = Array( classOf[ AttributeInvalidException ] ),
-  //    expectedExceptionsMessageRegExp = "Moulding instance has invalid 'side' attribute." )
-  //  @throws[ Exception ]
-  //  def unsupportedSideAttributeValue {
-  //    element.setAttribute( "side", sideUnsupported )
-  //    val moulding: Moulding = new Moulding( element )
-  //  }
 }

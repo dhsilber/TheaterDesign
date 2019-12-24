@@ -1,6 +1,7 @@
 package com.mobiletheatertech.plot
 
-import org.w3c.dom.{NodeList, Element}
+import org.w3c.dom.{Element, NodeList}
+import sun.security.util.Length
 
 import scala.collection.mutable.ListBuffer
 
@@ -23,6 +24,30 @@ class Drape ( element: Element ) extends MinderDom( element ) {
 
   }
   val bases = basesMutable.toList
+  println( "Drape bases at " + bases(0).toString() + " and " + bases(1).toString() )
+
+  var reindex = 0;
+  for (reindex <- 0 until bases.length - 1 ) {
+    var base1 = bases( reindex )
+    var base2 = bases( reindex + 1 )
+    println( "Drape from " + base1.toString() + " to " + base2.toString() )
+    var xLen = base2.x - base1.x
+//    println( "   xLen " + xLen)
+    var xSegment = xLen * xLen
+//    println( "   xSegment " + xSegment)
+    var yLength = base2.y - base1.y
+//    println( "   yLength " + yLength)
+    var ySegment = yLength * yLength
+//    println( "   ySegment " + ySegment)
+    var drapeLengthProto = xSegment + ySegment
+//    println( "   drapeLengthProto " + drapeLengthProto)
+    var drapeLength = Math.sqrt(drapeLengthProto)
+//    println( "   drapeLength " + drapeLength)
+    var drapeLengthFeet = drapeLength / 12
+//    println( "   drapeLengthFeet " + drapeLengthFeet )
+    println( "Length of drape segment: " + drapeLengthFeet.toString())
+  }
+
 
   override def dom(draw: Draw, mode: View): Unit = {
 //    import com.mobiletheatertech.plot.MinderDom
@@ -48,14 +73,14 @@ class Drape ( element: Element ) extends MinderDom( element ) {
     // TODO: make a wavyline method in SvgElement
 //    group.line( draw, x1, y1 + 10, x2, y2 + 10, color )
 
-    val offsetX = SvgElement.OffsetX()
-    val offsetY = SvgElement.OffsetY()
+    val offsetX = 0//SvgElement.OffsetX()
+    val offsetY = 0//SvgElement.OffsetY()
 
     var path = "M " + (x1 + offsetX).toString +
       " " + (y1 + offsetY).toString +
 //    "Q " + (x1 - 10 + offsetX).toString +
 //    " " + (y1 + 5 + offsetY).toString +
-      "L " + (x2 + offsetX).toString +
+      " L " + (x2 + offsetX).toString +
       " " + (y2 + offsetY).toString
     group.path( draw, path, "purple" )
 

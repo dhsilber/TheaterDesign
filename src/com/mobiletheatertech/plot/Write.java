@@ -6,6 +6,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.*;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -25,7 +26,8 @@ public class Write {
     private String home = null;
 
     static String CSS = "\n"
-            + ".heading { font-size: 14pt; text-anchor: middle; font-weight: bold; stroke: none }\n"
+            + ".legendHeader { font-size: 14pt; text-anchor: middle; font-weight: bold; stroke: none }\n"
+            + ".drawingHeader { font-size: 14pt; text-anchor: start; font-weight: bold; stroke: none }\n"
             + "iframe { display: inline }\n"
             + "@media print {\n"
             + "  .noprint { display: none }"
@@ -109,10 +111,27 @@ public class Write {
 
 //        System.out.println( "Write path: " + pathname );
 
+
+
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+//        System.out.println( "Write init()");
+//        Pipe pipe = Pipe.Select( "house" );
+//        pipe.dump();
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+
+
+
         writeDirectory(pathname);
         writeFile( pathname, "drawings.html", generateHTMLDrawingList( Configuration.BaseName() ) );
         writeFile( pathname, "designer.html", generateDesigner() );
         writeFile( pathname, "styles.css", CSS );
+        writeFile( pathname, "patch.asc", generatePatchFragment() );
+        writeFile( pathname, "channels.asc", generateChannelNameFragment() );
+
         // TODO factor out heading generation for these:
 //        System.err.println( " Plan");
         drawPlan().create( pathname + "/plan.svg" );
@@ -124,7 +143,12 @@ public class Write {
         drawTruss().create( pathname + "/truss.svg" );
 
 //        System.err.println( " Drawings");
+
+
+
         writeDrawings( pathname );
+
+
         writeWeightCalculations( pathname );
         System.err.println( " Spreadsheet");
         writeGearSpreadsheet(pathname + "/gear.ods");
@@ -292,6 +316,92 @@ public class Write {
                 "</html>\n";
 
         return output;
+    }
+
+    private String generatePatchFragment() {
+        SortedMap<Integer, Luminaire> luminaires = new TreeMap<>();
+
+        for ( Luminaire luminaire : Luminaire.LUMINAIRELIST ) {
+            int dmx;
+            try {
+                dmx = Integer.parseInt( luminaire.dimmer() );
+            }
+            catch ( NumberFormatException e ) {
+                continue;
+            }
+            luminaires.put( dmx, luminaire );
+        }
+
+        StringBuilder patch = new StringBuilder( "! Patch" );
+
+        for ( int dmx = 1; dmx <= 512; dmx++ ) {
+            if ( (dmx - 1) % 5 == 0 ) {
+                patch.append( "\nPATCH 1 " );
+            }
+            Luminaire luminaire = luminaires.get( dmx );
+            int channel = 0;
+            if ( null != luminaire ) {
+                try {
+                    channel = Integer.parseInt(luminaire.channel());
+                }
+                catch (NumberFormatException e ) {
+                    channel = 0;
+                }
+            }
+
+            patch.append( "" + dmx + "/" + channel + "/100 " );
+        }
+        patch.append( "\n\n" );
+
+        return patch.toString();
+    }
+
+    private String generateChannelNameFragment() {
+        SortedMap<Integer, Luminaire> luminaires = new TreeMap<>();
+
+        for ( Luminaire luminaire : Luminaire.LUMINAIRELIST ) {
+            int channel;
+            try {
+                channel = Integer.parseInt( luminaire.channel() );
+            }
+            catch ( NumberFormatException e ) {
+                continue;
+            }
+            luminaires.put( channel, luminaire );
+        }
+
+        StringBuilder channelInfo = new StringBuilder( "! Channel Info\n" );
+
+        for ( int channel = 1; channel <= 96; channel++ ) {
+            channelInfo.append( "$CHANNEL " + channel + "\n" );
+            Luminaire luminaire = luminaires.get( channel );
+            String text1 = "";
+            String text2 = "";
+            String text3 = "";
+            if ( null != luminaire ) {
+                String label = luminaire.label();
+                if ( null == label || "" == label ) {
+                    label = luminaire.target();
+                }
+                int length = label.length();
+                System.out.println( "Channel label: '"+ label + "', length: " + length + ", min: " + Math.min( 6, length));
+                text1 = label.substring( 0, Math.min( 6, length ) );
+                if (7 <= length) {
+                    int span = Math.min( 12, length );
+                    text2 = label.substring( 6, span );
+                }
+                String color = luminaire.color();
+                System.out.println( "Channel color: "+ color);
+                text3 = color.substring(0, Math.min( 6, color.length() ));
+            }
+
+            channelInfo.append( "Text " + text1 + "\n" );
+            channelInfo.append( "$$Text 1 " + text1 + "\n" );
+            channelInfo.append( "$$Text 2 " + text2 + "\n" );
+            channelInfo.append( "$$Text 3 " + text3 + "\n\n" );
+        }
+
+        return channelInfo.toString();
     }
 
     Draw startFile() throws ReferenceException {
@@ -504,12 +614,17 @@ public class Write {
     Draw writeIndividualDrawing( Drawing drawing )
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
     {
-//System.out.println( "Drawing: " + drawing.filename() );
+System.out.println( "Drawing: " + drawing.filename() );
 
         resetOneOffs();
 
         Draw draw = startFile();
         View view = drawing.view();
+
+        if( null != drawing.pipeId ) {
+            writePipeDetail( drawing, draw );
+            return draw;
+        }
 
         for ( String mountableName : drawing.mountables ) {
             Yokeable yokeable = Yokeable.Select( mountableName );
@@ -601,7 +716,7 @@ public class Write {
                 continue;
             }
             for ( Layerer item : layer.contents() ) {
-//System.out.println( "Item: " + item.id );
+System.out.println( "Layerer Item: " + item.id );
                 if( MinderDom.class.isInstance( item ) ) {
                     MinderDom thingy = (MinderDom) item;
                     thingy.dom( draw, view );
@@ -617,6 +732,21 @@ public class Write {
 //        CableRun.DomAll( draw, view );
 
         return draw;
+    }
+
+    private void writePipeDetail( Drawing drawing, Draw draw ) {
+
+        for (ElementalLister item : ElementalLister.LIST) {
+            if ( LuminaireDefinition.class.isInstance( item )) {
+                LuminaireDefinition thing = (LuminaireDefinition) item;
+
+                thing.dom( draw, View.PLAN );
+            }
+        }
+
+        Pipe pipe = Pipe.Select( drawing.pipeId );
+
+        pipe.draw( draw, drawing.legend );
     }
 
     protected void writeWeightCalculations( String pathname )  {
@@ -736,7 +866,6 @@ public class Write {
         catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void resetOneOffs() {

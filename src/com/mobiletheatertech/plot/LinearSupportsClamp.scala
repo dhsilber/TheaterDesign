@@ -3,6 +3,7 @@ package com.mobiletheatertech.plot
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
+import scala.util.Sorting
 
 
 /**
@@ -10,7 +11,10 @@ import scala.collection.mutable.ArrayBuffer
   */
 trait LinearSupportsClamp {
 
-  val IsClampList = new ArrayBuffer[ IsClamp ]
+  val IsClampList = new ArrayBuffer[ Luminaire ]
+  var sortedClampList: Array[ Luminaire ] = new Array[Luminaire]( 0 )
+
+  var name: String
 
   val based: Boolean = false
   val positioned: Boolean = false
@@ -20,20 +24,30 @@ trait LinearSupportsClamp {
 
 
   @throws[MountingException]
-  def hang( luminaire: IsClamp, location: Location ): Unit = {
+  def hang( luminaire: Luminaire, location: Location ): Unit = {
     if( null == luminaire )
       throw new DataException( "mounted element unexpectedly null!" )
 
-    if ( location.distance < minLocation || maxLocation < location.distance ) {
+    if( ! hasVertex && location.vertex.valid ) {
+      throw new NumberFormatException()
+    }
+
+    val distance = location.distance
+
+    if( ! distance.valid  ) {
+      throw new MountingException( "Location specified does not contain a valid distance." )
+    }
+
+    if ( distance.value < minLocation || maxLocation < distance.value ) {
       println( "minLocation: " + minLocation.toString )
       println( "location: " + location.toString )
       println( "maxLocation: " + maxLocation.toString )
-      throw new MountingException( "does not include location " + location.toString + "." )
+      throw new MountingException( name + " does not include invalid location " + location.toString + "." )
     }
 
     IsClampList += luminaire
 
-    luminaire.position( new Point( 1.2, 3.4, 5.6 ) )
+//    luminaire.position( new Point( 1.2, 3.4, 5.6 ) )
   }
 
   def loads: Array[ IsClamp ] = {
@@ -88,6 +102,23 @@ trait LinearSupportsClamp {
 //    text.append("\n")
 //    return text.toString
 //  }
+
+  def numberLuminaires(): Unit = {
+    sortedClampList = IsClampList.toArray
+    Sorting.quickSort(sortedClampList)(LocationOrdering)
+    //    val sort = new Sort(
+    //    val sortedLocations = locationOrdering IsClampList )
+    var unit = 0
+//    println()
+    for (luminaire <- sortedClampList) {
+      unit += 1
+      luminaire.unit(unit)
+//      println( "on: " + luminaire.on +
+//        ", Luminaire: " + luminaire.unit() +
+//        ", type: " + luminaire.`type`() +
+//        ", location: " + luminaire.location() )
+    }
+  }
 }
 
 object LinearSupportsClamp {

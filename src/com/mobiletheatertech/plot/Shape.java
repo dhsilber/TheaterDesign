@@ -84,6 +84,7 @@ public class Shape extends Elemental {
                 centerX = Proscenium.Origin().x() + centerX;
                 centerY = Proscenium.Origin().y() - centerY;
             }
+            System.out.println( "Circle drawn at... x: " + centerX + "  y: " + centerY );
             return parent.circle( draw, centerX, centerY, radius, color );
         }
         else
@@ -97,6 +98,9 @@ public class Shape extends Elemental {
 
             path.append("Z");
 
+            System.out.println( "Rectangle relative to ... x: " + centerX + "  y: " + centerY );
+            System.out.println( "  polygon: " + polygon.toString() );
+            System.out.println( "  path   : " + path.toString() );
             return parent.path( draw, path.toString(), color );
         }
     }

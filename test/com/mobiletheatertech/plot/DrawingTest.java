@@ -72,7 +72,7 @@ public class DrawingTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp =
-                    "Drawing \\(" + id + "\\) has invalid 'view' attribute. Valid is 'schematic' or 'spreadsheet'." )
+                    "Drawing \\(" + id + "\\) has invalid 'view' attribute. Valid is default or 'spreadsheet'." )
     public void invalidView() throws Exception {
         drawingElement.setAttribute("view", "bogus");
         new Drawing( drawingElement );

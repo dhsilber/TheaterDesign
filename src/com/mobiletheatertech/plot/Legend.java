@@ -124,7 +124,7 @@ public class Legend {
     {
         Text textNode = draw.document().createTextNode( text );
         SvgElement element = draw.element("text");
-        element.attribute( "class", "heading" );
+        element.attribute( "class", "legendHeader" );
         element.attribute( "x", center.toString() );
         element.attribute( "y", y.toString() );
         element.appendChild( textNode );

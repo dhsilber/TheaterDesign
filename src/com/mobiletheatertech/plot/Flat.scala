@@ -34,6 +34,13 @@ class Flat( element: Element, parent: SetPiece ) extends ProtoWall( element: Ele
     val lineElement = draw.line( draw,
       segmentStart.x, segmentStart.y, segmentEnd.x, segmentEnd.y, Flat.Color )
     lineElement.attribute( "stroke-width", "3" )
+    if( null != parent ) {
+      if (0 != parent.rotation) {
+        lineElement.rotate(parent.rotation,
+          Proscenium.Origin.x + parent.origin.x,
+          Proscenium.Origin.y - parent.origin.y)
+      }
+    }
   }
 
 }

@@ -298,8 +298,11 @@ public class DeviceTest {
 
     @Test
     public void deviceTemplateLayerRegistered() throws Exception {
+        assertEquals( deviceLayer.contents().size(), 0 );
         new DeviceTemplate( layeredTemplateElement );
+        assertEquals( deviceLayer.contents().size(), 0 );
         element.setAttribute( "is", layeredTemplateName );
+        assertEquals( deviceLayer.contents().size(), 0 );
         element.removeAttribute( "on" );
 
         assertEquals( deviceLayer.contents().size(), 0 );
@@ -728,6 +731,7 @@ public class DeviceTest {
         new Venue(venueElement);
 
         deviceLayer = new Layer( layerTag, "Layer Description", layerColor );
+        assertEquals( deviceLayer.contents().size(), 0 );
 
 //        Element layerElement = new IIOMetadataNode("layer");
 //        layerElement.setAttribute("id", layerTag);

@@ -14,29 +14,34 @@ import scala.Boolean
 class LinearSupportsClampTest {
 
   private class SupporterForClampLinear extends LinearSupportsClamp {
+    var name = "supporter"
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampBased extends LinearSupportsClamp {
+    var name = "based"
     override val based = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampPositioned extends LinearSupportsClamp {
+    var name = "positioned"
     override val positioned = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampSuspended extends LinearSupportsClamp {
+    var name = "suspended"
     override val suspended = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampVertex extends LinearSupportsClamp {
+    var name = "vertex"
     override val hasVertex = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
@@ -45,6 +50,7 @@ class LinearSupportsClampTest {
   private class UniqueIdLinearSupportsClamp(element: Element )
     extends UniqueId( element: Element )
       with LinearSupportsClamp {
+    var name = "unique ID"
 
     override def dom(draw: Draw, mode: View): Unit = ???
 
@@ -176,7 +182,7 @@ class LinearSupportsClampTest {
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
-    expectedExceptionsMessageRegExp = "does not include location -12.1." )
+    expectedExceptionsMessageRegExp = "supporter does not include invalid location -12.1." )
   @throws[Exception]
   def locationTooSmall {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear
@@ -185,7 +191,7 @@ class LinearSupportsClampTest {
   }
 
   @Test(expectedExceptions = Array(classOf[MountingException]),
-    expectedExceptionsMessageRegExp = "does not include location 12.1." )
+    expectedExceptionsMessageRegExp = "supporter does not include invalid location 12.1." )
   @throws[Exception]
   def locationTooLarge {
     val pipe: SupporterForClampLinear = new SupporterForClampLinear

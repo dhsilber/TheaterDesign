@@ -41,6 +41,7 @@ class Proscenium( element: Element ) extends MinderDom( element )
   }
 
   Proscenium.origin = new Point( x, y, z )
+  println( "Proscenium origin... " + Proscenium.origin.toString )
 
   Proscenium.active = true
 

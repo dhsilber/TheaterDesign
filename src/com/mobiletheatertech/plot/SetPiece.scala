@@ -17,6 +17,8 @@ class SetPiece( element: Element )
     val y = getDoubleAttribute( "y" )
     new Point( x, y, 0.0 )
   }
+//  var location =
+  val rotation = getOptionalDoubleAttributeOrZero( "rotation" )
 
   tagCallback( Flat.Tag, processFlat )
   tagCallback( SetPlatform.Tag, processSetPlatform )
@@ -46,7 +48,12 @@ class SetPiece( element: Element )
     * @param mode drawing mode
     * @throws MountingException if mounting location cannot be established
     */
-  override def dom(draw: Draw, mode: View): Unit = {}
+  override def dom(draw: Draw, mode: View): Unit = {
+
+//    val group: SvgElement = draw.group(draw, SetPiece.Tag )
+//    group.element.setAttribute( "stroke", "red" )
+
+  }
 
   /**
     * Hook to allow each {@code Verifier}-derived instance to perform sanity checks after all XML has

@@ -2,6 +2,8 @@ package com.mobiletheatertech.plot
 
 import org.w3c.dom.{Element, Node, NodeList}
 
+import scala.util.Sorting
+
 /**
   * Created by DHS on 7/18/16.
   */
@@ -9,6 +11,9 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   with LinearSupportsClamp
   with Populate
 {
+  var name = id
+  var standAlone: Boolean = false
+
   def this( element: Element ) {
     this( element, null )
   }
@@ -53,6 +58,9 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   tagCallback( Luminaire.LAYERTAG, processLuminaire )
   populate( element )
 
+  def setStandAlone(): Unit = {
+    standAlone = true
+  }
 
   def parentParse(): PipeBase = {
     if ( classOf[ PipeBase ].isInstance( parent ) )
@@ -165,19 +173,26 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
   def processLuminaire(element: Element ): Unit = {
     element.setAttribute( "on", id )
-    val light: Luminaire = new Luminaire(element)
-    try {
-      hang(light, light.location )
-    }
-    catch {
-      case exception: MountingException => {
-        ElementalLister.Remove(this)
-        throw new MountingException(
-          "Pipe (" + id + ") unit '" + light.unit() + "' " + exception.getMessage)
-        //      case exception: Exception =>
-        //        throw new Exception( exception.getMessage, exception.getCause )
-      }
-    }
+    new Luminaire(element)
+
+    // Commented this out 2018-01-16 because Luminaire does this for itself.
+    // leaving the code here because arguably hanging the light should be directed from above.
+    //
+    // OTOH, Luminaires are created either with/by the pipe or by Event, which argues for Luminaire
+    // handling this in one location in the code.
+    //
+//    try {
+//      hang(light, light.location )
+//    }
+//    catch {
+//      case exception: MountingException => {
+//        ElementalLister.Remove(this)
+//        throw new MountingException(
+//          "Pipe (" + id + ") unit '" + light.unit() + "' " + exception.getMessage)
+//        //      case exception: Exception =>
+//        //        throw new Exception( exception.getMessage, exception.getCause )
+//      }
+//    }
   }
 
 //  def process(): ( Boolean, Boolean ) = {
@@ -249,9 +264,86 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
 
 
+  def draw( draw: Draw, title: String ): Unit = {
+
+    numberLuminaires()
+
+    val group: SvgElement = MinderDom.svgClassGroup(draw, Pipe.LayerTag)
+    draw.appendRootChild(group)
+
+    val ex = 10.0
+    var wy = 0.0
+    group.headerText( draw, Event.Name, ex, wy )
+    wy += 20
+    group.headerText( draw, Venue.Building + " -- " + Venue.Name, ex, wy )
+
+    wy += 20.0
+    group.text(draw, title, ex, wy, Pipe.Color, "14" )
+
+    wy += 20.0
+    val drawBox: Point = new Point( ex, wy, 0.0 )
+    group.rectangle(draw, drawBox.x(), drawBox.y(), length, Pipe.Diameter, Pipe.Color)
+
+    val normalDrawBox: Point = new Point(boxOrigin.x() + offsetX, boxOrigin.y(), boxOrigin.z())
+    val offset: Point = new Point(
+      normalDrawBox.x() - drawBox.x(),
+      normalDrawBox.y() - drawBox.y(),
+      normalDrawBox.z() - normalDrawBox.z() )
+    for ( luminaire <- IsClampList ) {
+      luminaire.setStandAloneOffset( offset )
+      luminaire.dom(draw, View.PLAN)
+    }
+
+    wy += 10
+    var totalWeight = 0.0
+    for ( luminaire <- sortedClampList ) {
+      wy += 15
+      val dmx = if ( ! luminaire.address().isEmpty) { luminaire.address() } else { luminaire.dimmer() }
+      val kind = luminaire.`type`()
+      var text = luminaire.unit().toString +
+        ": [" + dmx +
+        "] (" + luminaire.channel() + ") " +
+        kind +
+        "  --  (location: " + luminaire.location.feet() + ")" +
+        "  --  " + luminaire.info()
+      if ( ! luminaire.target().isEmpty ) {
+        text += "  --  target is " + luminaire.target()
+      }
+      if ( ! luminaire.color().isEmpty ) {
+        text += "  --  [color: " + luminaire.color() + "]"
+      }
+
+      val luminaireDefinition = LuminaireDefinition.Select( kind )
+      if (null == luminaireDefinition) {
+        throw new ReferenceException("Unable to find definition for " + kind )
+      }
+      val weight = luminaireDefinition.weight()
+      text += "  -- weight: " + weight.toString
+      totalWeight += weight
+
+      group.text( draw, text, ex, wy, Luminaire.COLOR )
+    }
+
+    wy += 20
+    val weightText = "Total weight on this pipe is " + totalWeight + "."
+    group.text( draw, weightText, ex, wy, Luminaire.COLOR )
+
+    wy += 20
+    val keyText = "* detail lines start with \"<unit number>: [<dimmer or address>] (<channel>)\"."
+    group.text( draw, keyText, ex, wy, Luminaire.COLOR )
+  }
+
+  def dump(): Unit = {
+    for ( luminaire <- IsClampList ) {
+      System.out.println( luminaire.toString )
+    }
+  }
+
   // Members declared in com.mobiletheatertech.plot.MinderDom
   def dom( draw: Draw, mode: View): Unit = {
     if (mode == View.TRUSS) return
+
+    numberLuminaires()
 
 
     //    val height: Double = Venue.Height() - boxOrigin.z()
@@ -281,6 +373,7 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
       //        group.rectangle( draw, drawBox.y(), height, Pipe.Diameter, Pipe.Diameter, Pipe.Color );
       case View.FRONT => return
       //        group.rectangle( draw, drawBox.x(), height, length, Pipe.Diameter, Pipe.Color );
+      case _ => throw new Exception( "In Pipe.dom, id = " + id + " -- Invalid View.")
     }
     //        group.appendChild(pipeRectangle);
 
@@ -303,13 +396,17 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   def locationDistance( location: Location ): Double = {
     val distance = location.distance
 
-    if ( (begin > distance) || (distance > end) ) {
+    if( ! distance.valid  ) {
+      throw new MountingException( "Location specified does not contain a valid distance." )
+    }
+
+    if ( (begin > distance.value) || (distance.value > end) ) {
       ElementalLister.Remove(this)
       throw new MountingException(
         "Pipe (" + id + ") location must be in the range of " + begin.toString() +
           " to " + end.toString() + ".")
     }
-    distance
+    distance.value
   }
 
   override def rotatedLocation( location: Location ): Place = {
@@ -338,19 +435,23 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
   }
 
   def mountableLocation( location: Location ): Point = {
-    val offset: Double = location.distance.toDouble
+    val offset = location.distance
 
-    if ((offset < begin) || (end < offset)) {
+    if( ! offset.valid  ) {
+      throw new MountingException( "Location specified does not contain a valid distance." )
+    }
+
+    if ((offset.value < begin) || (end < offset.value)) {
       ElementalLister.Remove(this)
       throw new MountingException("beyond the end of pipe")
     }
 
     if (based)
-      new Point( start.x, start.y, start.z + offset )
+      new Point( start.x, start.y, start.z + offset.value )
     else if (90 == orientationValue)
-      new Point(start.x, start.y + offset, start.z )
+      new Point(start.x, start.y + offset.value, start.z )
     else //if ((startUnadjusted.x< 0) && (startUnadjusted.x + length > 0))
-      new Point(start.x - begin + offset, start.y, start.z)
+      new Point(start.x - begin + offset.value, start.y, start.z)
 //    else
 //      new Point(start.x - begin + offset, start.y, start.z)
   }
@@ -383,6 +484,10 @@ class Pipe ( element: Element, parent: MinderDom ) extends UniqueId( element )
       ", length=" + length +
       " }"
   }
+
+
+
+
 }
 
 object Pipe {
@@ -398,4 +503,8 @@ object Pipe {
   final val baseOffsetZ: Double = 2.0
 
   def SchematicPositionReset() {}
+
+  def Select( id: String ): Pipe = {
+    return LinearSupportsClamp.Select( id ).asInstanceOf[ Pipe ]
+  }
 }

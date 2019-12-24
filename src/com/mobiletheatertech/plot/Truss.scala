@@ -13,6 +13,8 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   with Populate
   with Legendable
 {
+  var name = id
+
   def this( element: Element ) {
     this( element, null )
   }
@@ -22,7 +24,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   val endAttachments: java.util.ArrayList[ Point ] = new util.ArrayList[Point]()
 
   if ( null != parent ) {
-//    println( "Truss has parent of " + parent.getClass.toString )
+    println( "Truss has parent of " + parent.getClass.toString )
     if ( parent.isInstanceOf[TrussBase] ) {
       val base = parent.asInstanceOf[ TrussBase ]
       val baseAttachments: Array[ Point ] = base.mountPoints()
@@ -30,7 +32,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
         println( "Attach: " + baseAttach.asInstanceOf[ Point ].toString )
         endAttachments.add( baseAttach )
       }
-//      println( "Truss has TrussBase parent.")
+      println( "Truss has TrussBase parent.")
     }
   }
 //  println( "Past that point" )
@@ -254,20 +256,27 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 
 //  override
   def mountableLocation(location: Location): Point = {
-    if ( ! location.vertexProvided )
+    val distance = location.distance
+    val vertex = location.vertex
+
+    if( ! distance.valid  ) {
+      throw new MountingException( "Location specified does not contain a valid distance." )
+    }
+
+    if ( ! vertex.valid )
       throw new InvalidXMLException(
         "Truss (" + id + ") location does not include a valid vertex.")
 
     if ( based ) {
-      if ( ! location.distanceProvided ) {
-        val vertexOrdinal = location.vertex.toInt - 97
+      if ( ! distance.valid ) {
+        val vertexOrdinal = vertex.value.toInt - 97
         val lowerPoint = trussBase.mountPoints()( vertexOrdinal )
         return new Point( lowerPoint.x(), lowerPoint.y(), lowerPoint.z() + length )
       }
       else {
       var northOffset: Double = halfSize * -1
       var westOffset: Double = halfSize * -1
-      location.vertex match {
+      vertex.value match {
         case 'a' =>
         case 'b' =>
           westOffset *= -1
@@ -280,12 +289,12 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
           throw new InvalidXMLException(
             "Truss (" + id + ") location does not include a valid vertex." )
       }
-      return new Point( x + westOffset, y + northOffset, z + location.distance )
+      return new Point( x + westOffset, y + northOffset, z + distance.value )
       }
     }
     else {
       var offset: Double = halfSize
-      location.vertex match {
+      vertex.value match {
         case 'a' | 'c' =>
           offset *= -1
         case 'b' | 'd' =>
@@ -295,14 +304,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       }
       if (positioned) {
         var verticalOffset: Double = halfSize
-        location.vertex match {
+        vertex.value match {
           case 'a' | 'b' =>
           case 'c' | 'd' =>
             verticalOffset *= -1
           case _ =>
             throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
-        return new Point(x - length / 2 + location.distance, y + offset, z + verticalOffset)
+        return new Point(x - length / 2 + distance.value, y + offset, z + verticalOffset)
       }
       else {
         if (null == suspend1) {
@@ -310,14 +319,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
         }
         val point: Point = suspend1.locate
         var verticalOffset: Double = 0.0
-        location.vertex match {
+        vertex.value match {
           case 'a' | 'b' =>
           case 'c' | 'd' =>
             verticalOffset += size
           case _ =>
             throw new InvalidXMLException("Truss (" + id + ") location does not include a valid vertex.")
         }
-        return new Point(point.x - overHang + location.distance, point.y + offset, point.z - verticalOffset)
+        return new Point(point.x - overHang + distance.value, point.y + offset, point.z - verticalOffset)
       }
     }
   }
@@ -396,6 +405,8 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       case View.PLAN | View.TRUSS =>
         group = MinderDom.svgClassGroup(draw, Truss.LayerTag)
         draw.appendRootChild(group)
+        println( "Truss group: " + group.toString() )
+
       case _ =>
         return
     }
@@ -407,10 +418,14 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
         else if (null != trussBase) {
           val verticalTruss: SvgElement =
             group.rectangle(draw, start.x - size / 2, start.y - size / 2, size, size, Truss.Color)
+          println( "TrussBase verticalTruss: " + verticalTruss.toString() )
+
           val transformX: Double = start.x + SvgElement.OffsetX
           val transformY: Double = start.y + SvgElement.OffsetY
           val transform: String = "rotate(" + trussBase.rotation + "," + transformX + "," + transformY + ")"
           verticalTruss.attribute("transform", transform)
+          verticalTruss.attribute( "class", "Vertical Truss on Base")
+          println( "Truss size: " + size.toString() )
           Truss.BaseCountIncrement()
         }
         else {

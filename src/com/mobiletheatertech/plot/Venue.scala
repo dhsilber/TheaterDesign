@@ -34,7 +34,11 @@ class Venue ( element: Element) extends MinderDom(element)
 
   tagCallback( Proscenium.Tag, processProscenium )
   tagCallback( Raceway.Tag, processRaceway )
+//  tagCallback( PipeBase.Tag, processPipeBase )
   tagCallback( Pipe.LayerTag, processPipe )
+//  tagCallback( TrussBase.Tag, processTrussBase )
+//  tagCallback( Truss.Tag, processTruss )
+
   populate( element )
 
   def processProscenium( element: Element ): Unit = {
@@ -45,9 +49,24 @@ class Venue ( element: Element) extends MinderDom(element)
     new Raceway( element )
   }
 
+//  def processPipeBase( element: Element ): Unit = {
+//    new PipeBase( element )
+//  }
+
   def processPipe( element: Element ): Unit = {
     new Pipe( element )
   }
+
+//  def processTrussBase( element: Element ): Unit = {
+//    //    println( "Event about to create TrussBase")
+//    new TrussBase( element )
+//  }
+//
+//  def processTruss( element: Element ): Unit = {
+//    //    println( "Event about to create Truss")
+//    new Truss( element )
+//    //    println( "Event completed creating Truss")
+//  }
 
   def verify {
   }
