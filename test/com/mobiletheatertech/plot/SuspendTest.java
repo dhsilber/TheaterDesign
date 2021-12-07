@@ -44,7 +44,7 @@ public class SuspendTest {
         Suspend suspend = new Suspend( element );
 
         assertEquals( TestHelpers.accessString( suspend, "refId" ), "jim" );
-        assertEquals( TestHelpers.accessDouble( suspend, "distance" ), 32.0 );
+        assertEquals( TestHelpers.accessDouble( suspend, "distance" ), (Double)32.0 );
     }
 
     // Until such time as I properly implement this class' use of id.
@@ -211,9 +211,9 @@ public class SuspendTest {
 
         Point location = suspend.locate();
 
-        assertEquals( location.x(), 100.0 );
-        assertEquals( location.y(), 200.0 );
-        assertEquals( location.z(), 208.0 );
+        assertEquals( location.x(), (Double)100.0 );
+        assertEquals( location.y(), (Double)200.0 );
+        assertEquals( location.z(), (Double)208.0 );
     }
 
     @Test

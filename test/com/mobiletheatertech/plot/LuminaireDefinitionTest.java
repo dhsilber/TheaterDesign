@@ -44,8 +44,8 @@ public class LuminaireDefinitionTest {
         LuminaireDefinition luminaireDefinition = new LuminaireDefinition( element );
 
         assertEquals( TestHelpers.accessString( luminaireDefinition, "id" ), id );
-        assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), 0.0 );
-        assertEquals( TestHelpers.accessDouble( luminaireDefinition, "length"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(luminaireDefinition, "width"), (Double)0.0 );
+        assertEquals( TestHelpers.accessDouble( luminaireDefinition, "length"), (Double)0.0 );
         assertEquals( TestHelpers.accessDouble( luminaireDefinition, "weight"), weight );
         assertEquals( TestHelpers.accessBoolean(luminaireDefinition, "complete"), Boolean.FALSE );
     }
@@ -115,7 +115,7 @@ public class LuminaireDefinitionTest {
         element.removeAttribute( "length" );
         LuminaireDefinition instance = new LuminaireDefinition( element );
 
-        assertEquals(instance.length(), 0.0 );
+        assertEquals(instance.length(), (Double)0.0 );
     }
 
     @Test
@@ -130,7 +130,7 @@ public class LuminaireDefinitionTest {
         element.removeAttribute( "width" );
         LuminaireDefinition instance = new LuminaireDefinition( element );
 
-        assertEquals( instance.width(), 0.0 );
+        assertEquals( instance.width(), (Double)0.0 );
     }
 
     /*

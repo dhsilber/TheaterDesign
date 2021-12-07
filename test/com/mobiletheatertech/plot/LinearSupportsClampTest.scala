@@ -21,21 +21,21 @@ class LinearSupportsClampTest {
 
   private class LinearSupportsClampBased extends LinearSupportsClamp {
     var name = "based"
-    override val based = true
+    based = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampPositioned extends LinearSupportsClamp {
     var name = "positioned"
-    override val positioned = true
+    positioned = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }
 
   private class LinearSupportsClampSuspended extends LinearSupportsClamp {
     var name = "suspended"
-    override val suspended = true
+    suspended = true
     override def minLocation: Double = -12
     override def maxLocation: Double = 12
   }

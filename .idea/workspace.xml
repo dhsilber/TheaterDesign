@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/test/com/mobiletheatertech/plot/RacewayTest.scala" line="14" mnemonic="8" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9800586-e25f-4160-a287-66f3bf78597e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/scala_sdk_2_12_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LocationType.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDMXComparator.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Plot.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/ValidatedChar.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/ValidatedDouble.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/ValidatedValue.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LocationTypeTest.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ValidatedCharTest.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ValidatedDoubleTest.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jopendocument_jOpenDocument_1_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/batik_1_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/cupv10k_runtime.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/xml_apis_ext.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/TechDebt.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Batik_1_8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jOpenDocument_1_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/scala_sdk_2_12_7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/scala_sdk_2_12_7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Plot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drape.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drape.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/DrapeBase.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/DrapeBase.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drawing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drawing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Flat.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Flat.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Legend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Legend.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LinearSupportsClamp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LinearSupportsClamp.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Location.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Location.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDefinition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/MinderDom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/MinderDom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Parse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Parse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Proscenium.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Proscenium.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SetPiece.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SetPiece.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SetPlatform.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SetPlatform.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Shape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/PipeBase.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/PipeBase.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Read.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Read.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Space.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Space.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SvgElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SvgElement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Truss.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Truss.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/TrussBase.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/TrussBase.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/UniqueId.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/UniqueId.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Venue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Venue.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/View.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Write.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Write.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/AirwallTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/AirwallTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ChairTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ChairTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DanceTileTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DanceTileTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DeviceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DeviceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrawingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrawingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DistanceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DistanceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrapeBaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrapeBaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ElementalTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ElementalTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GridTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GridTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/HangPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/HangPointTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LightingStandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LightingStandTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LinearSupportsClampTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LinearSupportsClampTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LocationOrderingTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LocationOrderingTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LocationTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LocationTest.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireDefinitionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireDefinitionTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ParseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ParseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PagePointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PagePointTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeBaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeBaseTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TrussTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TrussTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ViewTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ViewTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PointTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ProsceniumTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ProsceniumTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SetPlatfomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SetPlatfomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SpaceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SpaceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SuspendTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SuspendTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TableTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/VenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/VenueTest.java" afterDir="false" />
     </list>
-    <ignored path="Plot.iws" />
-    <ignored path=".idea/workspace.xml" />
-    <ignored path="$PROJECT_DIR$/out/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -67,196 +82,6 @@
   </component>
   <component name="FavoritesManager">
     <favorites_list name="Plot" />
-  </component>
-  <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.467074">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="43">
-                  <caret line="35" selection-start-line="35" selection-end-line="35" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Venue.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="461">
-                  <caret line="68" column="5" lean-forward="true" selection-start-line="59" selection-start-column="18" selection-end-line="68" selection-end-column="5" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drawing.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="763">
-                  <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/FeatureException.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Event.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="329">
-                  <caret line="37" lean-forward="true" selection-start-line="13" selection-end-line="37" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drape.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="151">
-                  <caret line="47" selection-start-line="47" selection-end-line="47" />
-                  <folding>
-                    <element signature="e#36#74#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/SvgElement.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="11" column="18" lean-forward="true" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Draw.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="132">
-                  <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
-                  <folding>
-                    <element signature="e#4955#4956#0" expanded="true" />
-                    <element signature="e#5008#5009#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Truss.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="334">
-                  <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Device.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="179">
-                  <caret line="149" column="31" selection-start-line="149" selection-start-column="26" selection-end-line="149" selection-end-column="31" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/DrapeBase.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="408">
-                  <caret line="58" column="3" selection-start-line="58" selection-start-column="3" selection-end-line="58" selection-end-column="3" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Main.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="240">
-                  <caret line="16" column="11" lean-forward="true" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/DeviceTemplate.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="411">
-                  <caret line="112" column="9" selection-start-line="112" selection-start-column="9" selection-end-line="112" selection-end-column="9" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/TrussBase.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="471">
-                  <caret line="84" column="1" lean-forward="true" selection-start-line="82" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Write.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="739" column="29" selection-start-line="739" selection-start-column="25" selection-end-line="739" selection-end-column="29" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="411">
-                  <caret line="268" column="14" selection-start-line="266" selection-start-column="2" selection-end-line="266" selection-end-column="10" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/LinearSupportsClamp.scala">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="105" column="17" selection-start-line="105" selection-start-column="6" selection-end-line="105" selection-end-column="17" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/MinderDom.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="159">
-                  <caret line="44" column="22" selection-start-line="44" selection-start-column="22" selection-end-line="44" selection-end-column="22" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -312,6 +137,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -370,12 +203,16 @@
       </list>
     </option>
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1280" />
     <option name="y" value="-227" />
     <option name="width" value="1680" />
     <option name="height" value="1027" />
   </component>
+  <component name="ProjectId" id="20mgZz9qp2w9uxDhEXJxiXmQvJj" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -407,13 +244,21 @@
       <pane id="Scope" />
     </panes>
   </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/DHS/Dropbox/IdeaProjects/TheaterDesign/src/com/mobiletheatertech/plot/Write.java" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541014759143" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
@@ -423,74 +268,7 @@
       <recent name="com.mobiletheatertech.plot" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Application.Main">
-    <configuration default="true" type="AndroidRunConfigurationType">
-      <option name="DEPLOY" value="true" />
-      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
-      <option name="DEPLOY_AS_INSTANT" value="false" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Java />
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <method v="2">
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType">
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Java />
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
-      </Profilers>
-      <method v="2">
-        <option name="Make" enabled="true" />
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Applet">
       <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -499,10 +277,69 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java />
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
+      <option name="TESTING_TYPE" value="0" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="INCLUDE_GRADLE_EXTRA_OPTIONS" value="true" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java />
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.Main" />
       <module name="Plot" />
-      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/../../Plot/plotfiles/arisia-grandab-2020" />
+      <option name="PROGRAM_PARAMETERS" value="$USER_HOME$/Dropbox/Plot/plotfiles/arisia-grandab-2022" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/out/production/Plot" />
       <extension name="coverage">
         <pattern>
@@ -528,36 +365,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -580,7 +389,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LocationTest" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="PipeTest" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="Plot" />
       <extension name="coverage">
         <pattern>
@@ -589,7 +398,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
-      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.LocationTest" />
+      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
       <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -599,7 +408,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LuminaireTest" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="PipeTest.parentIsPipeBase" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="Plot" />
       <extension name="coverage">
         <pattern>
@@ -608,8 +417,9 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
-      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.LuminaireTest" />
-      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
+      <option name="METHOD_NAME" value="parentIsPipeBase" />
+      <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
@@ -618,7 +428,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ValidatedCharTest" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="PipeTest.parentIsVerticalPipeOnBase" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="Plot" />
       <extension name="coverage">
         <pattern>
@@ -627,8 +437,9 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
-      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.ValidatedCharTest" />
-      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
+      <option name="METHOD_NAME" value="parentIsVerticalPipeOnBase" />
+      <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
@@ -678,18 +489,18 @@
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="TestNG.All" />
-      <item itemvalue="TestNG.LocationTest" />
-      <item itemvalue="TestNG.LuminaireTest" />
-      <item itemvalue="TestNG.ValidatedCharTest" />
       <item itemvalue="TestNG.ValidatedDoubleTest" />
+      <item itemvalue="TestNG.PipeTest" />
+      <item itemvalue="TestNG.PipeTest.parentIsPipeBase" />
+      <item itemvalue="TestNG.PipeTest.parentIsVerticalPipeOnBase" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="TestNG.PipeTest.parentIsVerticalPipeOnBase" />
+        <item itemvalue="TestNG.PipeTest.parentIsPipeBase" />
+        <item itemvalue="TestNG.PipeTest" />
         <item itemvalue="TestNG.ValidatedDoubleTest" />
-        <item itemvalue="TestNG.ValidatedCharTest" />
-        <item itemvalue="TestNG.LuminaireTest" />
-        <item itemvalue="TestNG.LocationTest" />
       </list>
     </recent_temporary>
   </component>
@@ -700,6 +511,7 @@
       </map>
     </option>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -790,6 +602,17 @@
       <window_info anchor="right" id="Maven" order="9" />
     </layout>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
@@ -804,8 +627,37 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/HangPoint.java</url>
           <line>233</line>
-          <properties />
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java</url>
+          <line>313</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDefinition.java</url>
+          <line>139</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Parse.java</url>
+          <line>84</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java</url>
+          <line>183</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java</url>
+          <line>176</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala</url>
+          <line>482</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -815,11 +667,20 @@
         <watch expression="SvgElement.OffsetX()" language="JAVA" />
         <watch expression="SvgElement.OffsetY()" language="JAVA" />
       </configuration>
+      <configuration name="Application">
+        <watch expression="((Plot)$this).internalElement" custom="com.mobiletheatertech.plot.Plot" />
+        <watch expression="((Pipe)this).base" custom="com.mobiletheatertech.plot.Pipe" />
+      </configuration>
     </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Plot$Main.ic" NAME="Main Coverage Results" MODIFIED="1638581554674" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mobiletheatertech.plot.*</FILTER>
+    </SUITE>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/IsClamp.scala">

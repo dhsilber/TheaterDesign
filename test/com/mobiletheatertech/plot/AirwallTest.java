@@ -38,7 +38,7 @@ public class AirwallTest {
     public void storesAttributes() throws Exception {
         Airwall airwall = new Airwall( element );
 
-        assertEquals( TestHelpers.accessDouble( airwall, "depth" ), 77.0 );
+        assertEquals( TestHelpers.accessDouble( airwall, "depth" ), (Double)77.0 );
     }
 
     @Test(expectedExceptions = LocationException.class,

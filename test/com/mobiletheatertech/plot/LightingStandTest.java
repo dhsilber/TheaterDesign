@@ -45,9 +45,9 @@ public class LightingStandTest {
     public void storesAttributes() throws Exception {
         LightingStand instance = new LightingStand( element );
 
-        assertEquals(TestHelpers.accessDouble(instance, "x"), x.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "orientation"), 0.0 );
+        assertEquals(TestHelpers.accessDouble(instance, "x"), (Double)x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "y"), (Double)y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "orientation"), (Double)0.0 );
     }
 
     @Test
@@ -55,9 +55,9 @@ public class LightingStandTest {
         element.setAttribute("orientation", orientation.toString());
         LightingStand instance = new LightingStand( element );
 
-        assertEquals(TestHelpers.accessDouble(instance, "x"), x.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "orientation"), orientation.doubleValue() );
+        assertEquals(TestHelpers.accessDouble(instance, "x"), (Double)x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "y"), (Double)y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "orientation"), (Double)orientation.doubleValue() );
     }
 
     @Test( expectedExceptions = InvalidXMLException.class,
@@ -390,9 +390,9 @@ public class LightingStandTest {
         Element element = (Element) node;
         assertEquals(element.getAttribute("xlink:href"), "#"+LightingStand.TAG);
         Double thisX = new Double( element.getAttribute("x") );
-        assertEquals( thisX, x + SvgElement.OffsetX() );
+        assertEquals( thisX, (Double)(x + SvgElement.OffsetX()) );
         Double thisY = new Double( element.getAttribute("y") );
-        assertEquals( thisY, y + SvgElement.OffsetY() );
+        assertEquals( thisY, (Double)(y + SvgElement.OffsetY()) );
         thisX = x+SvgElement.OffsetX();
         thisY = y+SvgElement.OffsetY();
         assertEquals(element.getAttribute("transform"), "rotate(-45.0,"+thisX+","+thisY+")");

@@ -327,11 +327,11 @@ public class ProsceniumTest {
 
     @Test
     public void creationUpdatesMinimumZ() throws Exception {
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
 
         new Proscenium( element );
 
-        assertEquals( Point.SmallZ(), -z );
+        assertEquals( Point.SmallZ(), (Double)(-z) );
     }
 
     @Test
@@ -361,9 +361,9 @@ public class ProsceniumTest {
         new Proscenium( element );
         Point fixed = Proscenium.LocateIfActive( new Point( 100.0, 120.0, 60.0 ) );
 //        assert new Point( 150, 24, 72 ).equals( fixed );
-        assertEquals( fixed.x(), 350.0, "X" );
-        assertEquals( fixed.y(), 24.0, "Y" );
-        assertEquals( fixed.z(), 72.0, "Z" );
+        assertEquals( fixed.x(), (Double)350.0, "X" );
+        assertEquals( fixed.y(), (Double)24.0, "Y" );
+        assertEquals( fixed.z(), (Double)72.0, "Z" );
     }
 
     @Test

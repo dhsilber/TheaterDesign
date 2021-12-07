@@ -72,7 +72,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
   var span: Double = 0.0
   var trussBase: TrussBase = null
 
-  override val (based: Boolean, suspended: Boolean, positioned: Boolean ) = process()
+  process()
 
 
 //  val foo = null
@@ -162,7 +162,7 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
 //      false
 //  }
 
-  def process(): ( Boolean, Boolean, Boolean ) = {
+  def process(): Unit={//( Boolean, Boolean, Boolean ) = {
 
     def parentParse(): MinderDom = {
       parent
@@ -245,11 +245,18 @@ class Truss ( element: Element, parent: MinderDom ) extends UniqueId( element )
       }
       true
     }
+//    (based, suspended, positioned)  =
+      trussBase = baseProcessing()
+    if ( null != trussBase ) {
+      based = true
+//      suspended = false
+      positioned = false
+      return ( true, false, false )
+    }
 
-    trussBase = baseProcessing()
-    if ( null != trussBase ) return ( true, false, false )
-
-    if( suspended() ) return ( false, true, false )
+    if( suspended() ) {
+      return ( false, true, false )
+    }
 
     ( false, false, positionProcessing() )
   }

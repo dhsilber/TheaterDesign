@@ -4,6 +4,8 @@ import org.w3c.dom.Element;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+import static java.lang.Double.parseDouble;
 //import java.awt.geom.Line2D;
 
 /**
@@ -59,7 +61,7 @@ public class Luminaire extends MinderDom
     private String address;
     private String info;
     private String label;
-    private Double rotation = 0.0;
+    private double rotation = 0.0;
     private Point point;
     private Place place;
     private Point origin;
@@ -67,7 +69,7 @@ public class Luminaire extends MinderDom
     private String transform;
     private LinearSupportsClamp mount = null;
 
-    private Point standAlonePipeOffset = new Point( 0, 0, 0 );
+    private Point standAlonePipeOffset = new Point(0, 0, 0);
 
     static final String COLOR = "black";
 
@@ -82,26 +84,25 @@ public class Luminaire extends MinderDom
      */
     public Luminaire(Element element)
             throws AttributeMissingException, DataException,
-            InvalidXMLException
-    {
+            InvalidXMLException {
         super(element);
 
-        on       = getStringAttribute(  "on") ;
-        type     = getStringAttribute(  "type" );
-        location = new Location( getStringAttribute( "location" ) );
+        on = getStringAttribute("on");
+        type = getStringAttribute("type");
+        location = new Location(getStringAttribute("location"));
 //        unit     = getStringAttribute(  "unit" );
-        owner    = getStringAttribute(  "owner" );
-        circuit = getOptionalStringAttribute( "circuit" );
-        dimmer  = getOptionalStringAttribute( "dimmer" );
-        channel = getOptionalStringAttribute( "channel" );
-        color   = getOptionalStringAttribute( "color" );
-        target  = getOptionalStringAttribute( "target" );
-        address = getOptionalStringAttribute( "address" );
-        info    = getOptionalStringAttribute( "info" );
-        label   = getOptionalStringAttribute( "label" );
-        String rotate = getOptionalStringAttribute( "rotation" );
-        if (null != rotate && ! rotate.isEmpty() ) {
-            rotation = new Double(rotate);
+        owner = getStringAttribute("owner");
+        circuit = getOptionalStringAttribute("circuit");
+        dimmer = getOptionalStringAttribute("dimmer");
+        channel = getOptionalStringAttribute("channel");
+        color = getOptionalStringAttribute("color");
+        target = getOptionalStringAttribute("target");
+        address = getOptionalStringAttribute("address");
+        info = getOptionalStringAttribute("info");
+        label = getOptionalStringAttribute("label");
+        String rotate = getOptionalStringAttribute("rotation");
+        if (null != rotate && !rotate.isEmpty()) {
+            rotation = parseDouble(rotate);
         }
 
 //        id = on + ":" + unit;
@@ -116,42 +117,42 @@ public class Luminaire extends MinderDom
 
 
 //        System.out.println("Luminaire selected");
-        new Layer( LAYERTAG, LAYERNAME, COLOR );
+        new Layer(LAYERTAG, LAYERNAME, COLOR);
 //        System.out.println("Made Layer for Luminaire");
-        new LuminaireInformation( element, this );
+        new LuminaireInformation(element, this);
 //        System.out.println("Made LuminaireInformation");
 
-        GearList.Add( this );
+        GearList.Add(this);
 //        System.out.println("Added Luminaire to gear list");
 
-        LUMINAIRELIST.add( this );
+        LUMINAIRELIST.add(this);
 //        System.out.println("added to Luminaire list");
     }
 
-    public static Luminaire Select( String identifier ) {
+    public static Luminaire Select(String identifier) {
         for (Luminaire selection : LUMINAIRELIST) {
-            if (selection.id.equals( identifier )) {
+            if (selection.id.equals(identifier)) {
                 return selection;
             }
         }
         return null;
     }
 
-    public static Object[][] Report () {
-        final Object[][] data = new Object[ LUMINAIRELIST.size()][8];
+    public static Object[][] Report() {
+        final Object[][] data = new Object[LUMINAIRELIST.size()][8];
 
         int dataIndex = 0;
         for (Luminaire selection : LUMINAIRELIST) {
-            data[dataIndex][0]= selection.on + ":" + selection.unit;
-            data[dataIndex][1]= selection.type;
-            data[dataIndex][2]= selection.location;
+            data[dataIndex][0] = selection.on + ":" + selection.unit;
+            data[dataIndex][1] = selection.type;
+            data[dataIndex][2] = selection.location;
 //            data[dataIndex][3]= selection.circuit();
-            data[dataIndex][3]= selection.dimmer();
-            data[dataIndex][4]= selection.channel();
+            data[dataIndex][3] = selection.dimmer();
+            data[dataIndex][4] = selection.channel();
 //            data[dataIndex][6]= selection.target;
-            data[dataIndex][5]= selection.address;
-            data[dataIndex][6]= selection.color;
-            data[dataIndex][7]= selection.info;
+            data[dataIndex][5] = selection.address;
+            data[dataIndex][6] = selection.color;
+            data[dataIndex][7] = selection.info;
             dataIndex++;
         }
 
@@ -173,7 +174,7 @@ public class Luminaire extends MinderDom
             InvalidXMLException, MountingException, ReferenceException {
         Place result;
 //        try {
-            result = mount.rotatedLocation(location);
+        result = mount.rotatedLocation(location);
 //        } catch (MountingException e) {
 //            System.err.println( e.toString() );
 //            throw new MountingException(
@@ -189,35 +190,34 @@ public class Luminaire extends MinderDom
 
         mount = LinearSupportsClamp$.MODULE$.Select(on);
 
-        if( null == mount ) {
+        if (null == mount) {
             throw new MountingException(
                     "Luminaire of type '" + type + "' has unknown mounting: '" + on + "'.");
         }
         try {
-            mount.hang( this, location );
-        }
-        catch (NumberFormatException exception) {
+            mount.hang(this, location);
+        } catch (NumberFormatException exception) {
 //            System.out.println ( mount.toString() );
 
             throw new MountingException(
                     "Luminaire on pipe (" + on + ") has invalid location '"
-                            + location + "'." );
+                            + location + "'.");
         }
 
 
         place = drawingLocation();
-        point=place.location();
-        origin=place.origin();
-        pipeRotation=place.rotation();
+        point = place.location();
+        origin = place.origin();
+        pipeRotation = place.rotation();
         rotation += 180;
 //        Integer transformY = origin.y() + SvgElement.OffsetY();
 //        transform = "rotate(" + pipeRotation + "," + origin.x() + "," + transformY + ")";
         transform = "rotate(" + pipeRotation + "," + origin.x() + "," + origin.y() + ")";
 
         // TODO Keep this until I resolve how Luminaire knows what type it is.
-        definition = LuminaireDefinition.Select( type );
-        if( null == definition ) {
-            throw new ReferenceException( "Unable to find definition for "+ type );
+        definition = LuminaireDefinition.Select(type);
+        if (null == definition) {
+            throw new ReferenceException("Unable to find definition for " + type);
         }
     }
 
@@ -235,19 +235,30 @@ public class Luminaire extends MinderDom
         return mount;
     }
 
-    Integer unit() { return unit; }
+    Integer unit() {
+        return unit;
+    }
 
-    void unit( int newUnit ) { unit = newUnit; id = on + ":" + unit; }
+    void unit(int newUnit) {
+        unit = newUnit;
+        id = on + ":" + unit;
+    }
 
-    String type() { return type; }
+    String type() {
+        return type;
+    }
 
-    String on() { return on; }
+    String on() {
+        return on;
+    }
 
 //    String locationValue() {
 //        return location.toString();
 //    }
 
-    Location location() { return location; }
+    Location location() {
+        return location;
+    }
 
     String circuit() {
         return circuit;
@@ -281,14 +292,14 @@ public class Luminaire extends MinderDom
         return address;
     }
 
-    void setStandAloneOffset( Point point ) {
+    void setStandAloneOffset(Point point) {
         standAlonePipeOffset = point;
     }
 
     public double weight() {
         Double result = 0.0;
 
-        if( null != definition ) {
+        if (null != definition) {
             result = definition.weight();
         }
 
@@ -369,7 +380,7 @@ public class Luminaire extends MinderDom
     }
 
     @Override
-    public void position( Point point ) {
+    public void position(Point point) {
     }
 
     public String item() {
@@ -393,15 +404,16 @@ public class Luminaire extends MinderDom
      * @throws MountingException if the {@code Pipe} that this is supposed to be on does not exist
      */
     @Override
-    public void dom( Draw draw, View view )
+    public void dom(Draw draw, View view)
             throws InvalidXMLException, MountingException, ReferenceException {
-        if( View.TRUSS == view && !Truss.class.isInstance(mount)) {
+        if (View.TRUSS == view && !Truss.class.isInstance(mount)) {
             return;
         }
+        System.out.println("In Luminaire: " + this + "  draw = " + draw + ", view = " + view);
 
         Double z = Venue.Height() - point.z();
 
-        SvgElement group = svgClassGroup( draw, LAYERTAG );
+        SvgElement group = svgClassGroup(draw, LAYERTAG);
         draw.appendRootChild(group);
 
         // use element for luminaire icon
@@ -415,16 +427,16 @@ public class Luminaire extends MinderDom
 
                 break;
             case SECTION:
-                group.use( draw, type, point.y(), z );
+                group.use(draw, type, point.y(), z);
                 break;
             case FRONT:
-                group.use( draw, type, point.x(), z );
+                group.use(draw, type, point.x(), z);
                 break;
             case TRUSS:
                 Truss truss = (Truss) mount;
-                Point newPoint = truss.relocate( location );
-                use = group.use( draw, type, newPoint.x(), newPoint.y() );
-                use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")" );
+                Point newPoint = truss.relocate(location);
+                use = group.use(draw, type, newPoint.x(), newPoint.y());
+                use.attribute("transform", "rotate(" + rotation + "," + newPoint.x() + "," + newPoint.y() + ")");
                 break;
 //            case SCHEMATIC:
 //                if( null == schematicPosition ) {
@@ -499,8 +511,8 @@ public class Luminaire extends MinderDom
         group.attribute("transform", transform);
 //        group.mouseover( "showData(evt)", "hideData(evt)" );
 
-        use = group.use( draw, type, x, y, id );
-        use.mouseover( "showData(evt)", "hideData(evt)" );
+        use = group.use(draw, type, x, y, id);
+        use.mouseover("showData(evt)", "hideData(evt)");
 
         // This transform is to orient the luminaire.
         // See verify() for the transform that rotates the position of the luminaire to
@@ -510,43 +522,41 @@ public class Luminaire extends MinderDom
 //        Double transformY = point.y() + SvgElement.OffsetY();
         Double transformX = x + SvgElement.OffsetX();
         Double transformY = y + SvgElement.OffsetY();
-        if ( !target.equals("") ) {
+        if (!target.equals("")) {
             // With this I lose the alignment with zones. :-(
-            Integer rotation = alignWithZone(point);
+            Integer rotationToFaceZone = alignWithZone(point);
+            transform = "rotate(" + rotationToFaceZone + "," + transformX + "," + transformY + ")";
+        } else {
             transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
         }
-        else {
-            transform = "rotate(" + rotation + "," + transformX + "," + transformY + ")";
-        }
-        use.attribute("transform", transform );
+        use.attribute("transform", transform);
 
         // Unit number to overlay on icon
-        if( null == unit ) {
-            System.out.println( "Unit numbers have not been set." );
-        }
-        else {
-            SvgElement unitText = group.text( draw, unit.toString(), x, y + 3, "green" );
+        if (null == unit) {
+            System.out.println("Unit numbers have not been set.");
+        } else {
+            SvgElement unitText = group.text(draw, unit.toString(), x, y + 3, "green");
             unitText.attribute("font-size", "7");
             unitText.attribute("text-anchor", "middle");
 //        unitText.mouseover( "showData(evt)", "hideData(evt)" );
         }
 
-        this.data( draw, group );
+        this.data(draw, group);
     }
 
-    SvgElement data( Draw draw, SvgElement parent ) {
-        SvgElement data = parent.data( draw, this );
+    SvgElement data(Draw draw, SvgElement parent) {
+        SvgElement data = parent.data(draw, this);
 
-        data.attribute( "type", this.type() );
-        data.attribute( "on", this.on() );
-        data.attribute( "location", this.location().toString() );
-        data.attribute( "circuit", this.circuit() );
-        data.attribute( "dimmer", this.dimmer() );
-        data.attribute( "channel", this.channel() );
-        data.attribute( "color", this.color() );
-        data.attribute( "target", this.target() );
-        data.attribute( "address", this.address() );
-        data.attribute( "info", this.info() );
+        data.attribute("type", this.type());
+        data.attribute("on", this.on());
+        data.attribute("location", this.location().toString());
+        data.attribute("circuit", this.circuit());
+        data.attribute("dimmer", this.dimmer());
+        data.attribute("channel", this.channel());
+        data.attribute("color", this.color());
+        data.attribute("target", this.target());
+        data.attribute("address", this.address());
+        data.attribute("info", this.info());
 
         return data;
     }
@@ -558,6 +568,6 @@ public class Luminaire extends MinderDom
      */
     @Override
     public String toString() {
-        return "Luminaire: " + id + ": " + type + ", " + circuit + ", " + info + ", " + location ;
+        return "Luminaire: " + id + ": " + type + ", " + circuit + ", " + info + ", " + location;
     }
 }

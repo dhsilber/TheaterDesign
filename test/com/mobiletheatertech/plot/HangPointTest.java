@@ -242,7 +242,7 @@ public class HangPointTest {
         Point location = hangPoint.locate();
         assertEquals( location.x(), x );
         assertEquals( location.y(), y );
-        assertEquals( location.z(), 240.0 );
+        assertEquals( location.z(), (Double)240.0 );
     }
 
 //    @Mocked

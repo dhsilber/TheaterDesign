@@ -193,6 +193,7 @@ object Venue {
   }
 
   def ToString: String = {
-    return StaticVenue.toString
+    StaticVenue.toString()
+//    return "Venue " + Name + ": width " + Width + ", depth " + Depth + ", height " + Height
   }
 }

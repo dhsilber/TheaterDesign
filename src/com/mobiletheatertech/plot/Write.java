@@ -11,7 +11,9 @@ import java.util.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
+// 2021-11-11 DHS Resurrecting this project after ignoring it for way too long...
+// I don't have OpenOffice library easily at hand, so I'm just disabling this for now.
+//import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 
 /**
@@ -97,9 +99,8 @@ public class Write {
      * @throws MountingException
      * @throws ReferenceException
      */
-    public void init( /*String basename*/ )
-            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
-    {
+    public void init( /*String basename*/)
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException {
 //        home = System.getProperty("user.home");
 //
 //        // TODO Is it even possible for this to happen?
@@ -110,7 +111,6 @@ public class Write {
         String pathname = Configuration.SinkDirectory();
 
 //        System.out.println( "Write path: " + pathname );
-
 
 
 //        System.out.println();
@@ -124,36 +124,34 @@ public class Write {
 //        System.out.println();
 
 
-
         writeDirectory(pathname);
-        writeFile( pathname, "drawings.html", generateHTMLDrawingList( Configuration.BaseName() ) );
-        writeFile( pathname, "designer.html", generateDesigner() );
-        writeFile( pathname, "styles.css", CSS );
-        writeFile( pathname, "patch.asc", generatePatchFragment() );
-        writeFile( pathname, "channels.asc", generateChannelNameFragment() );
+        writeFile(pathname, "drawings.html", generateHTMLDrawingList(Configuration.BaseName()));
+        writeFile(pathname, "designer.html", generateDesigner());
+        writeFile(pathname, "styles.css", CSS);
+//        writeFile(pathname, "patch.asc", generatePatchFragment());
+//        writeFile(pathname, "channels.asc", generateChannelNameFragment());
 
         // TODO factor out heading generation for these:
 //        System.err.println( " Plan");
-        drawPlan().create( pathname + "/plan.svg" );
+        drawPlan().create(pathname + "/plan.svg");
 //        System.err.println( " Section");
-        drawSection().create( pathname + "/section.svg" );
+//        drawSection().create(pathname + "/section.svg");
 //        System.err.println( " Front");
-        drawFront().create( pathname + "/front.svg" );
+        drawFront().create(pathname + "/front.svg");
 //        System.err.println( " Create");
-        drawTruss().create( pathname + "/truss.svg" );
+//        drawTruss().create(pathname + "/truss.svg");
 
 //        System.err.println( " Drawings");
 
 
+        writeDrawings(pathname);
 
-        writeDrawings( pathname );
 
-
-        writeWeightCalculations( pathname );
-        System.err.println( " Spreadsheet");
+        writeWeightCalculations(pathname);
+        System.err.println(" Spreadsheet");
         writeGearSpreadsheet(pathname + "/gear.ods");
         writeGearOwnerSpreadsheet(pathname + "/gearByOwner.ods");
-        writeLuminaireSpreadsheet( pathname + "/luminaires.ods" );
+        writeLuminaireSpreadsheet(pathname + "/luminaires.ods");
     }
 
     private void writeDirectory(String basename) /*throws MountingException, ReferenceException*/ {
@@ -162,7 +160,7 @@ public class Write {
 //        System.err.println("Directory: " + basename + ". Good? " + dir.toString());
     }
 
-    public String OLDgenerateIndex( String basename ) throws ReferenceException {
+    public String OLDgenerateIndex(String basename) throws ReferenceException {
         String output = "" +
                 "<!DOCTYPE html>\n" +
                 "<head>\n" +
@@ -182,7 +180,7 @@ public class Write {
                 "<a href=\"mailto:theater@davidsilber.name\">theater@davidsilber.name</a> " +
                 "or at 240-997-6646.\n" +
                 "</p>\n" +
-                generateHTMLDrawingList( basename ) +
+                generateHTMLDrawingList(basename) +
                 "<h2>Designers' View</h2>\n" +
                 "<p>\n" +
                 "The Designers' View allows users to turn off selected layers " +
@@ -204,20 +202,20 @@ public class Write {
         return output;
     }
 
-    private String generateHTMLDrawingList( String basename ) throws ReferenceException {
-        StringBuilder generated = new StringBuilder( "<p>\n" );
+    private String generateHTMLDrawingList(String basename) throws ReferenceException {
+        StringBuilder generated = new StringBuilder("<p>\n");
 
-        for (ElementalLister thingy : MinderDom.List() ) {
-            if ( Drawing.class.isInstance( thingy ) ) {
+        for (ElementalLister thingy : MinderDom.List()) {
+            if (Drawing.class.isInstance(thingy)) {
                 Drawing drawing = (Drawing) thingy;
-                String extension =".svg";
+                String extension = ".svg";
                 switch (drawing.viewString) {
                     case "spreadsheet":
                         extension = ".ods";
                         break;
                 }
-                generated.append( "<a href=\"" + basename + "/" + drawing.filename + extension + "\">" +
-                        Venue.Name() + ": " + drawing.id + "</a><br/>\n" );
+                generated.append("<a href=\"" + basename + "/" + drawing.filename + extension + "\">" +
+                        Venue.Name() + ": " + drawing.id + "</a><br/>\n");
             }
 //            generated.append( "<a href=\"" + basename + "/gear.ods\">" +
 //                    Venue.Name() + ": Gear spreadsheet</a><br/>\n" );
@@ -225,7 +223,7 @@ public class Write {
 //                    Venue.Name() + ": Luminaires spreadsheet</a><br/>\n" );
         }
 
-        generated.append( "</p>\n" );
+        generated.append("</p>\n");
 
         return generated.toString();
     }
@@ -321,37 +319,35 @@ public class Write {
     private String generatePatchFragment() {
         SortedMap<Integer, Luminaire> luminaires = new TreeMap<>();
 
-        for ( Luminaire luminaire : Luminaire.LUMINAIRELIST ) {
+        for (Luminaire luminaire : Luminaire.LUMINAIRELIST) {
             int dmx;
             try {
-                dmx = Integer.parseInt( luminaire.dimmer() );
-            }
-            catch ( NumberFormatException e ) {
+                dmx = Integer.parseInt(luminaire.dimmer());
+            } catch (NumberFormatException e) {
                 continue;
             }
-            luminaires.put( dmx, luminaire );
+            luminaires.put(dmx, luminaire);
         }
 
-        StringBuilder patch = new StringBuilder( "! Patch" );
+        StringBuilder patch = new StringBuilder("! Patch");
 
-        for ( int dmx = 1; dmx <= 512; dmx++ ) {
-            if ( (dmx - 1) % 5 == 0 ) {
-                patch.append( "\nPATCH 1 " );
+        for (int dmx = 1; dmx <= 512; dmx++) {
+            if ((dmx - 1) % 5 == 0) {
+                patch.append("\nPATCH 1 ");
             }
-            Luminaire luminaire = luminaires.get( dmx );
+            Luminaire luminaire = luminaires.get(dmx);
             int channel = 0;
-            if ( null != luminaire ) {
+            if (null != luminaire) {
                 try {
                     channel = Integer.parseInt(luminaire.channel());
-                }
-                catch (NumberFormatException e ) {
+                } catch (NumberFormatException e) {
                     channel = 0;
                 }
             }
 
-            patch.append( "" + dmx + "/" + channel + "/100 " );
+            patch.append("" + dmx + "/" + channel + "/100 ");
         }
-        patch.append( "\n\n" );
+        patch.append("\n\n");
 
         return patch.toString();
     }
@@ -359,46 +355,45 @@ public class Write {
     private String generateChannelNameFragment() {
         SortedMap<Integer, Luminaire> luminaires = new TreeMap<>();
 
-        for ( Luminaire luminaire : Luminaire.LUMINAIRELIST ) {
+        for (Luminaire luminaire : Luminaire.LUMINAIRELIST) {
             int channel;
             try {
-                channel = Integer.parseInt( luminaire.channel() );
-            }
-            catch ( NumberFormatException e ) {
+                channel = Integer.parseInt(luminaire.channel());
+            } catch (NumberFormatException e) {
                 continue;
             }
-            luminaires.put( channel, luminaire );
+            luminaires.put(channel, luminaire);
         }
 
-        StringBuilder channelInfo = new StringBuilder( "! Channel Info\n" );
+        StringBuilder channelInfo = new StringBuilder("! Channel Info\n");
 
-        for ( int channel = 1; channel <= 96; channel++ ) {
-            channelInfo.append( "$CHANNEL " + channel + "\n" );
-            Luminaire luminaire = luminaires.get( channel );
+        for (int channel = 1; channel <= 96; channel++) {
+            channelInfo.append("$CHANNEL " + channel + "\n");
+            Luminaire luminaire = luminaires.get(channel);
             String text1 = "";
             String text2 = "";
             String text3 = "";
-            if ( null != luminaire ) {
+            if (null != luminaire) {
                 String label = luminaire.label();
-                if ( null == label || "" == label ) {
+                if (null == label || "" == label) {
                     label = luminaire.target();
                 }
                 int length = label.length();
-                System.out.println( "Channel label: '"+ label + "', length: " + length + ", min: " + Math.min( 6, length));
-                text1 = label.substring( 0, Math.min( 6, length ) );
+//                System.out.println("Channel label: '" + label + "', length: " + length + ", min: " + Math.min(6, length));
+                text1 = label.substring(0, Math.min(6, length));
                 if (7 <= length) {
-                    int span = Math.min( 12, length );
-                    text2 = label.substring( 6, span );
+                    int span = Math.min(12, length);
+                    text2 = label.substring(6, span);
                 }
                 String color = luminaire.color();
-                System.out.println( "Channel color: "+ color);
-                text3 = color.substring(0, Math.min( 6, color.length() ));
+//                System.out.println("Channel color: " + color);
+                text3 = color.substring(0, Math.min(6, color.length()));
             }
 
-            channelInfo.append( "Text " + text1 + "\n" );
-            channelInfo.append( "$$Text 1 " + text1 + "\n" );
-            channelInfo.append( "$$Text 2 " + text2 + "\n" );
-            channelInfo.append( "$$Text 3 " + text3 + "\n\n" );
+            channelInfo.append("Text " + text1 + "\n");
+            channelInfo.append("$$Text 1 " + text1 + "\n");
+            channelInfo.append("$$Text 2 " + text2 + "\n");
+            channelInfo.append("$$Text 3 " + text3 + "\n\n");
         }
 
         return channelInfo.toString();
@@ -411,7 +406,7 @@ public class Write {
         // Specify the size of the generated SVG so that when it is larger than the display area,
         // scrollbars will be provided.
         Element rootElement = draw.root();
-        rootElement.setAttribute( "xmlns:plot", "http://www.davidsilber.name/namespaces/plot" );
+        rootElement.setAttribute("xmlns:plot", "http://www.davidsilber.name/namespaces/plot");
 
         Double width = Venue.Width() + Legend.PlanWidth() + SvgElement.OffsetX() * 2 + 5;
         width += width / 100 + 5;
@@ -440,7 +435,7 @@ public class Write {
         foreignObject.attribute("requiredExtensions", "http://www.w3.org/1999/xhtml");
         rootElement.appendChild(foreignObject.element());
 
-        foreignObject.appendChild( embededHtml( draw ) );
+        foreignObject.appendChild(embededHtml(draw));
 
 //        SvgElement textBox = draw.element("text");
 //        textBox.attribute("id", "persistent");
@@ -455,40 +450,40 @@ public class Write {
         return draw;
     }
 
-    private SvgElement embededHtml( Draw draw ) {
-        SvgElement body = draw.element( "body" );
+    private SvgElement embededHtml(Draw draw) {
+        SvgElement body = draw.element("body");
         body.attribute("xmlns", "http://www.w3.org/1999/xhtml");
 
-        SvgElement table = draw.element( "table" );
-        body.appendChild( table );
+        SvgElement table = draw.element("table");
+        body.appendChild(table);
 
-        table.appendChild( buildTableRow( draw, "on" ) );
-        table.appendChild( buildTableRow( draw, "unit" ) );
-        table.appendChild( buildTableRow( draw, "location" ) );
-        table.appendChild( buildTableRow( draw, "type" ) );
-        table.appendChild( buildTableRow( draw, "color" ) );
-        table.appendChild( buildTableRow( draw, "address" ) );
-        table.appendChild( buildTableRow( draw, "channel" ) );
-        table.appendChild( buildTableRow( draw, "dimmer" ) );
-        table.appendChild( buildTableRow( draw, "circuit" ) );
-        table.appendChild( buildTableRow( draw, "info" ) );
+        table.appendChild(buildTableRow(draw, "on"));
+        table.appendChild(buildTableRow(draw, "unit"));
+        table.appendChild(buildTableRow(draw, "location"));
+        table.appendChild(buildTableRow(draw, "type"));
+        table.appendChild(buildTableRow(draw, "color"));
+        table.appendChild(buildTableRow(draw, "address"));
+        table.appendChild(buildTableRow(draw, "channel"));
+        table.appendChild(buildTableRow(draw, "dimmer"));
+        table.appendChild(buildTableRow(draw, "circuit"));
+        table.appendChild(buildTableRow(draw, "info"));
 
         return body;
     }
 
-    SvgElement buildTableRow( Draw draw, String content ) {
-        SvgElement row = draw.element( "tr" );
+    SvgElement buildTableRow(Draw draw, String content) {
+        SvgElement row = draw.element("tr");
 
-        SvgElement header = draw.element( "th" );
-        Text headerText = draw.document().createTextNode( content );
-        header.appendChild( headerText );
-        row.appendChild( header );
+        SvgElement header = draw.element("th");
+        Text headerText = draw.document().createTextNode(content);
+        header.appendChild(headerText);
+        row.appendChild(header);
 
-        SvgElement data = draw.element( "td" );
-        data.attribute( "id", "persistent-" + content );
-        Text dataText = draw.document().createTextNode( content + " data" );
-        data.appendChild( dataText );
-        row.appendChild( data );
+        SvgElement data = draw.element("td");
+        data.attribute("id", "persistent-" + content);
+        Text dataText = draw.document().createTextNode(content + " data");
+        data.appendChild(dataText);
+        row.appendChild(data);
 
         return row;
     }
@@ -500,10 +495,10 @@ public class Write {
         Draw draw = startFile();
         Legend.Startup(draw, View.PLAN,
                 Venue.Width() + SvgElement.OffsetX() * 2 + 5,
-                Legend.PlanWidth() );
+                Legend.PlanWidth());
         MinderDom.DomAllPlan(draw);
 
-        Hack.Dom(draw, View.PLAN );
+        Hack.Dom(draw, View.PLAN);
 
         Legend.Callback();
 
@@ -520,10 +515,10 @@ public class Write {
         Draw draw = startFile();
         Legend.Startup(draw, View.SECTION,
                 Venue.Depth() + SvgElement.OffsetX() * 2 + 5,
-                Legend.PlanWidth() );
+                Legend.PlanWidth());
         MinderDom.DomAllSection(draw);
 
-        Hack.Dom(draw, View.SECTION );
+        Hack.Dom(draw, View.SECTION);
 
         Legend.Callback();
 
@@ -556,30 +551,30 @@ public class Write {
         return draw;
     }
 
-    private Draw drawTruss() throws InvalidXMLException, MountingException, ReferenceException {
-
-        resetOneOffs();
-
-        Draw draw = startFile();
-
-
-//        Grid.DOM(draw);
-
-        // Hardcoded values here are for Arisia '14 flying truss.
-        Legend.Startup(draw, View.TRUSS, 700.0, 300.0 );
-
-        MinderDom.DomAllTruss(draw);
-
-        Hack.Dom(draw, View.TRUSS);
-
-        Legend.Callback();
-
-//        String pathname = basename + "/truss.svg";
+//    private Draw drawTruss() throws InvalidXMLException, MountingException, ReferenceException {
 //
-//        draw.create(pathname);
-
-        return draw;
-    }
+//        resetOneOffs();
+//
+//        Draw draw = startFile();
+//
+//
+////        Grid.DOM(draw);
+//
+//        // Hardcoded values here are for Arisia '14 flying truss.
+//        Legend.Startup(draw, View.TRUSS, 700.0, 300.0);
+//
+//        MinderDom.DomAllTruss(draw);
+//
+//        Hack.Dom(draw, View.TRUSS);
+//
+//        Legend.Callback();
+//
+////        String pathname = basename + "/truss.svg";
+////
+////        draw.create(pathname);
+//
+//        return draw;
+//    }
 
     private void writeFile(String basename, String filename, String output) {
         String pathname = basename + "/" + filename;
@@ -599,59 +594,58 @@ public class Write {
         }
     }
 
-    private void writeDrawings( String pathname )
-            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
-    {
-        for (ElementalLister thingy : ElementalLister.List() ) {
-            if ( Drawing.class.isInstance( thingy ) ) {
+    private void writeDrawings(String pathname)
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException {
+        for (ElementalLister thingy : ElementalLister.List()) {
+            if (Drawing.class.isInstance(thingy)) {
                 Drawing drawing = (Drawing) thingy;
-                if ("spreadsheet".equals( drawing.viewString )) { return; }
-                writeIndividualDrawing( drawing ).create( pathname + "/" + drawing.filename() + ".svg" );
+                if ("spreadsheet".equals(drawing.viewString)) {
+                    return;
+                }
+                writeIndividualDrawing(drawing).create(pathname + "/" + drawing.filename() + ".svg");
             }
         }
     }
 
-    Draw writeIndividualDrawing( Drawing drawing )
-            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException
-    {
-System.out.println( "Drawing: " + drawing.filename() );
+    Draw writeIndividualDrawing(Drawing drawing)
+            throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException {
+        System.out.println("Drawing: " + drawing.filename());
 
         resetOneOffs();
 
         Draw draw = startFile();
         View view = drawing.view();
 
-        if( null != drawing.pipeId ) {
-            writePipeDetail( drawing, draw );
+        if (null != drawing.pipeId) {
+            writePipeDetail(drawing, draw);
             return draw;
         }
 
-        for ( String mountableName : drawing.mountables ) {
-            Yokeable yokeable = Yokeable.Select( mountableName );
-            if ( null == yokeable) {
+        for (String mountableName : drawing.mountables) {
+            Yokeable yokeable = Yokeable.Select(mountableName);
+            if (null == yokeable) {
                 System.err.println(
-                        "For " + drawing.filename() +", " + mountableName + " is not a valid yokeable." );
+                        "For " + drawing.filename() + ", " + mountableName + " is not a valid yokeable.");
                 continue;
             }
 //            yokeable.preview( view);
         }
 
-        for ( String deviceName : drawing.devices ) {
-            Device device = Device.Select( deviceName );
-            if ( null == device ) {
+        for (String deviceName : drawing.devices) {
+            Device device = Device.Select(deviceName);
+            if (null == device) {
                 System.err.println(
-                        "For " + drawing.filename() +", " + deviceName + " is not a valid device." );
+                        "For " + drawing.filename() + ", " + deviceName + " is not a valid device.");
                 continue;
             }
 //            device.preview( view);
         }
 
-        for ( String layerName : drawing.layers ) {
-            Layer layer = Layer.List().get( layerName );
-            if ( null == layer ) {
-                if( ! "legend".equals( layerName ) ) {
-                    System.err.println(
-                            "For " + drawing.filename() + ", " + layerName + " is not a Layer.");
+        for (String layerName : drawing.layers) {
+            Layer layer = Layer.List().get(layerName);
+            if (null == layer) {
+                if (!"legend".equals(layerName)) {
+                    System.err.println("For " + drawing.filename() + ", " + layerName + " is not a Layer.");
                 }
                 continue;
             }
@@ -672,30 +666,30 @@ System.out.println( "Drawing: " + drawing.filename() );
 //                break;
 //        }
 
-        for ( String mountableName : drawing.mountables ) {
-            Yokeable yokeable = Yokeable.Select( mountableName );
-            if ( null == yokeable) {
+        for (String mountableName : drawing.mountables) {
+            Yokeable yokeable = Yokeable.Select(mountableName);
+            if (null == yokeable) {
                 continue;
             }
-            yokeable.dom( draw, view );
+            yokeable.dom(draw, view);
         }
 
-        for ( String deviceName : drawing.devices ) {
-            Device device = Device.Select( deviceName );
-            if ( null == device ) {
+        for (String deviceName : drawing.devices) {
+            Device device = Device.Select(deviceName);
+            if (null == device) {
                 continue;
             }
-            device.dom( draw, view );
+            device.dom(draw, view);
         }
 
-        for ( String layerName : drawing.layers ) {
+        for (String layerName : drawing.layers) {
 //System.out.println( "LayerName: " + layerName );
-            if ( layerName.equals( Legend.CATEGORY )) {
+            if (layerName.equals(Legend.CATEGORY)) {
                 switch (view) {
                     case PLAN:
                         Legend.Startup(draw, drawing, View.PLAN,
                                 Venue.Width() + SvgElement.OffsetX() + Grid.SCALETHICKNESS + 45,
-                                Legend.PlanWidth() );
+                                Legend.PlanWidth());
                         break;
 //                    case SCHEMATIC:
 //                        Legend.Startup(draw, drawing, View.SCHEMATIC,
@@ -711,15 +705,15 @@ System.out.println( "Drawing: " + drawing.filename() );
 //                continue;
 //            }
 
-            Layer layer = Layer.List().get( layerName );
-            if ( null == layer ) {
+            Layer layer = Layer.List().get(layerName);
+            if (null == layer) {
                 continue;
             }
-            for ( Layerer item : layer.contents() ) {
-System.out.println( "Layerer Item: " + item.id );
-                if( MinderDom.class.isInstance( item ) ) {
+            for (Layerer item : layer.contents()) {
+//                System.out.println("Layerer Item: " + item.id);
+                if (MinderDom.class.isInstance(item)) {
                     MinderDom thingy = (MinderDom) item;
-                    thingy.dom( draw, view );
+                    thingy.dom(draw, view);
                 }
             }
 
@@ -734,41 +728,42 @@ System.out.println( "Layerer Item: " + item.id );
         return draw;
     }
 
-    private void writePipeDetail( Drawing drawing, Draw draw ) {
+    private void writePipeDetail(Drawing drawing, Draw draw) {
 
         for (ElementalLister item : ElementalLister.LIST) {
-            if ( LuminaireDefinition.class.isInstance( item )) {
+            if (LuminaireDefinition.class.isInstance(item)) {
                 LuminaireDefinition thing = (LuminaireDefinition) item;
 
-                thing.dom( draw, View.PLAN );
+                thing.dom(draw, View.PLAN);
             }
         }
 
-        Pipe pipe = Pipe.Select( drawing.pipeId );
+        Pipe pipe = Pipe.Select(drawing.pipeId);
 
-        pipe.draw( draw, drawing.legend );
+        // 2021-11-11 DHS pipe is (at least sometimes) null???
+        if (pipe != null)
+            pipe.draw(draw, drawing.legend);
     }
 
-    protected void writeWeightCalculations( String pathname )  {
+    protected void writeWeightCalculations(String pathname) {
         String weightsPath = pathname + "/weights";
 
-        writeDirectory( weightsPath );
+        writeDirectory(weightsPath);
 
-        for( Yokeable mount : Yokeable.MountableList() ) {
+        for (Yokeable mount : Yokeable.MountableList()) {
             String text = "";
             try {
                 text = mount.weights();
-            }
-            catch (Exception e) {
-                System.err.println( "writing weights: " + mount.id() + "  " + e.getMessage() );
+            } catch (Exception e) {
+                System.err.println("writing weights: " + mount.id() + "  " + e.getMessage());
                 continue;
             }
             String name = mount.id();
-            writeFile( weightsPath, name, text );
+            writeFile(weightsPath, name, text);
         }
     }
 
-    private void writeGearSpreadsheet( String pathname) {
+    private void writeGearSpreadsheet(String pathname) {
         // Create the data to save.
         final Object[][] data = GearList.Report();
 //        new Object[6][2];
@@ -779,29 +774,31 @@ System.out.println( "Layerer Item: " + item.id );
 //        data[4] = new Object[] { "May", 15 };
 //        data[5] = new Object[] { "June", 18 };
 
-        if ( 0 == data.length ) {
-            System.err.println( "No data in GearList, not generating spreadsheet.");
+        if (0 == data.length) {
+            System.err.println("No data in GearList, not generating spreadsheet.");
             return;
         }
 
-        String[] columns = new String[] { "Item", "Quantity" };
+        String[] columns = new String[]{"Item", "Quantity"};
 
         TableModel model = new DefaultTableModel(data, columns);
 
         // Save the data to an ODS file and open it.
-        final File file = new File( pathname );
+        final File file = new File(pathname);
 
-        try {
-            SpreadSheet.createEmpty(model).saveAs(file);
-
-//        OOUtils.open(file);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        // 2021-11-11 DHS Resurrecting this project after ignoring it for way too long...
+        // I don't have OpenOffice library easily at hand, so I'm just disabling this for now.
+//        try {
+//            SpreadSheet.createEmpty(model).saveAs(file);
+//
+////        OOUtils.open(file);
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    private void writeGearOwnerSpreadsheet( String pathname) {
+    private void writeGearOwnerSpreadsheet(String pathname) {
 //        // Create the data to save.
 //        final Object[][] data = GearList.OwnerReport();
 ////        new Object[6][2];
@@ -834,7 +831,7 @@ System.out.println( "Layerer Item: " + item.id );
 //        }
     }
 
-    private void writeLuminaireSpreadsheet( String pathname) {
+    private void writeLuminaireSpreadsheet(String pathname) {
         // Create the data to save.
         final Object[][] data = Luminaire.Report();
 //        new Object[6][2];
@@ -845,27 +842,29 @@ System.out.println( "Layerer Item: " + item.id );
 //        data[4] = new Object[] { "May", 15 };
 //        data[5] = new Object[] { "June", 18 };
 
-        if ( 0 == data.length ) {
-            System.err.println( "No data in Luminaire list, not generating spreadsheet.");
+        if (0 == data.length) {
+            System.err.println("No data in Luminaire list, not generating spreadsheet.");
             return;
         }
 
         String[] columns = new String[]
-                { "Unit", "Type", "Location", "Dimmer", "Channel", "Address", "Color", "Notes" };
+                {"Unit", "Type", "Location", "Dimmer", "Channel", "Address", "Color", "Notes"};
 
         TableModel model = new DefaultTableModel(data, columns);
 
         // Save the data to an ODS file and open it.
-        final File file = new File( pathname );
+        final File file = new File(pathname);
 
-        try {
-            SpreadSheet.createEmpty(model).saveAs(file);
-
-//        OOUtils.open(file);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        // 2021-11-11 DHS Resurrecting this project after ignoring it for way too long...
+        // I don't have OpenOffice library easily at hand, so I'm just disabling this for now.
+//        try {
+//            SpreadSheet.createEmpty(model).saveAs(file);
+//
+////        OOUtils.open(file);
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void resetOneOffs() {

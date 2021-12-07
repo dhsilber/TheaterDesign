@@ -146,8 +146,8 @@ public class SetPlatfomTest {
         Double ex = x + setPieceX;
         Double wy = y + setPieceY;
 
-        assertEquals(TestHelpers.accessDouble(platform, "x"), ex.doubleValue());
-        assertEquals(TestHelpers.accessDouble(platform, "y"), wy.doubleValue());
+        assertEquals(TestHelpers.accessDouble(platform, "x"), (Double)ex.doubleValue());
+        assertEquals(TestHelpers.accessDouble(platform, "y"), (Double)wy.doubleValue());
     }
 
     @Test
@@ -155,9 +155,9 @@ public class SetPlatfomTest {
         element.appendChild( circleElement );
         SetPlatform instance = new SetPlatform( element );
 
-        assertEquals(TestHelpers.accessDouble(instance, "x"), x.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "orientation"), 0.0 );
+        assertEquals(TestHelpers.accessDouble(instance, "x"), (Double)x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "y"), (Double)y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "orientation"), (Double)0.0 );
     }
 
     @Test
@@ -166,9 +166,9 @@ public class SetPlatfomTest {
         element.setAttribute("orientation", orientation.toString());
         SetPlatform instance = new SetPlatform( element );
 
-        assertEquals(TestHelpers.accessDouble(instance, "x"), x.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "y"), y.doubleValue());
-        assertEquals(TestHelpers.accessDouble(instance, "orientation"), orientation.doubleValue() );
+        assertEquals(TestHelpers.accessDouble(instance, "x"), (Double)x.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "y"), (Double)y.doubleValue());
+        assertEquals(TestHelpers.accessDouble(instance, "orientation"), (Double)orientation.doubleValue() );
     }
 
     @Test

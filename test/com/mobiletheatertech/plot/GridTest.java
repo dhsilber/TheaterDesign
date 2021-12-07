@@ -76,7 +76,7 @@ public class GridTest {
 
     @Test
     public void constantScaleThickness() {
-        assertEquals( Grid.SCALETHICKNESS, 21.0 );
+        assertEquals( Grid.SCALETHICKNESS, (Double)21.0 );
     }
 
     @Test
@@ -90,9 +90,9 @@ public class GridTest {
     public void storesAttributes() throws Exception {
         Grid grid = new Grid( element );
 
-        assertEquals( TestHelpers.accessDouble(grid, "startx"), 0.0 );
-        assertEquals( TestHelpers.accessDouble( grid, "starty" ), 0.0 );
-        assertEquals( TestHelpers.accessDouble( grid, "startz" ), 0.0 );
+        assertEquals( TestHelpers.accessDouble(grid, "startx"), (Double)0.0 );
+        assertEquals( TestHelpers.accessDouble( grid, "starty" ), (Double)0.0 );
+        assertEquals( TestHelpers.accessDouble( grid, "startz" ), (Double)0.0 );
     }
 
     @Test

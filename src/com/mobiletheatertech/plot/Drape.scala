@@ -24,13 +24,13 @@ class Drape ( element: Element ) extends MinderDom( element ) {
 
   }
   val bases = basesMutable.toList
-  println( "Drape bases at " + bases(0).toString() + " and " + bases(1).toString() )
+//  println( "Drape bases at " + bases(0).toString() + " and " + bases(1).toString() )
 
   var reindex = 0;
   for (reindex <- 0 until bases.length - 1 ) {
     var base1 = bases( reindex )
     var base2 = bases( reindex + 1 )
-    println( "Drape from " + base1.toString() + " to " + base2.toString() )
+//    println( "Drape from " + base1.toString() + " to " + base2.toString() )
     var xLen = base2.x - base1.x
 //    println( "   xLen " + xLen)
     var xSegment = xLen * xLen
@@ -45,7 +45,7 @@ class Drape ( element: Element ) extends MinderDom( element ) {
 //    println( "   drapeLength " + drapeLength)
     var drapeLengthFeet = drapeLength / 12
 //    println( "   drapeLengthFeet " + drapeLengthFeet )
-    println( "Length of drape segment: " + drapeLengthFeet.toString())
+//    println( "Length of drape segment: " + drapeLengthFeet.toString())
   }
 
 

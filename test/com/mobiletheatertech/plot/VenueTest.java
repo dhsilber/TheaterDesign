@@ -144,9 +144,9 @@ public class VenueTest {
 
         assertEquals( TestHelpers.accessString( venue, "building" ), "" );
         assertEquals( TestHelpers.accessString( venue, "room" ), room );
-        assertEquals( TestHelpers.accessDouble(venue, "width"), 1296.0 );
-        assertEquals( TestHelpers.accessDouble(venue, "depth"), 1320.0 );
-        assertEquals( TestHelpers.accessDouble(venue, "height"), 240.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "width"), (Double)1296.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "depth"), (Double)1320.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "height"), (Double)240.0 );
         assertEquals( TestHelpers.accessString( venue, "circuiting" ), "" );
     }
 
@@ -158,9 +158,9 @@ public class VenueTest {
 
         assertEquals( TestHelpers.accessString( venue, "building" ), building );
         assertEquals( TestHelpers.accessString( venue, "room" ), room );
-        assertEquals( TestHelpers.accessDouble(venue, "width"), 1296.0 );
-        assertEquals( TestHelpers.accessDouble(venue, "depth"), 1320.0 );
-        assertEquals( TestHelpers.accessDouble( venue, "height" ), 240.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "width"), (Double)1296.0 );
+        assertEquals( TestHelpers.accessDouble(venue, "depth"), (Double)1320.0 );
+        assertEquals( TestHelpers.accessDouble( venue, "height" ), (Double)240.0 );
         assertEquals( TestHelpers.accessString( venue, "circuiting" ), "one-to-one" );
     }
 
@@ -244,12 +244,12 @@ public class VenueTest {
 
         new Venue( element );
 
-        assertEquals( Point.LargeX(), 1296.0 );
-        assertEquals( Point.LargeY(), 1320.0 );
-        assertEquals( Point.LargeZ(), 240.0 );
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)1296.0 );
+        assertEquals( Point.LargeY(), (Double)1320.0 );
+        assertEquals( Point.LargeZ(), (Double)240.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(), (Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     @Test( expectedExceptions = AttributeMissingException.class,

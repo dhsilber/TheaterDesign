@@ -441,7 +441,7 @@ public class DeviceTest {
 
         assertEquals( place.x(), tableX );
         assertEquals( place.y(), tableY );
-        assertEquals( place.z(), tableZ + tableHeight );
+        assertEquals( place.z(), (Double)(tableZ + tableHeight) );
     }
 
     @Test
@@ -456,9 +456,9 @@ public class DeviceTest {
 
         Point place = stacked.drawingLocation().location();
 
-        assertEquals( place.x(), tableX + stackedX );
-        assertEquals( place.y(), tableY + stackedY );
-        assertEquals( place.z(), tableZ + tableHeight + height );
+        assertEquals( place.x(), (Double)(tableX + stackedX) );
+        assertEquals( place.y(), (Double)(tableY + stackedY) );
+        assertEquals( place.z(), (Double)(tableZ + tableHeight + height) );
     }
 
     @Test

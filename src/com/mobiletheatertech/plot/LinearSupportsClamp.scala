@@ -16,9 +16,9 @@ trait LinearSupportsClamp {
 
   var name: String
 
-  val based: Boolean = false
-  val positioned: Boolean = false
-  val suspended: Boolean = false
+  var based: Boolean = _ // true implies vertical
+  var positioned: Boolean = false // true implies horizontal
+  var suspended: Boolean = false
   val hasVertex: Boolean = false
   var start: Point = null
 

@@ -46,7 +46,7 @@ public class DanceTileTest {
     @Test
     public void size() throws Exception {
         DanceTile danceTile = new DanceTile( element );
-        assertEquals( danceTile.Size, 36.0 );
+        assertEquals( danceTile.Size, (Double)36.0 );
     }
 
     @Test

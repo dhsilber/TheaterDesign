@@ -32,7 +32,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     static final String Tag = "luminaire-definition";
 
     // TODO Keep this until I resolve how Luminaire knows what type it is.
-    private static ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
+    private static final ArrayList<LuminaireDefinition> LUMINAIRELIST = new ArrayList<>();
 
     Integer count = 0;
 
@@ -94,6 +94,7 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
             throw new InvalidXMLException( this.getClass().getSimpleName(), id,
                     "svg element is required");
         }
+        System.out.println("In LuminaireDefinition: " + this.id + ", svg: " + svgList + ", length: " + svgList.getLength() );//+ ", allList length: " + allList.getLength());
 
         LUMINAIRELIST.add( this );
 
@@ -171,6 +172,8 @@ public class LuminaireDefinition extends MinderDom implements Legendable {
     @Override
     public PagePoint domLegendItem( Draw draw, PagePoint start ) {
         if ( 0 >= count ) { return start; }
+        System.out.println("LuminaireDefinition.domLegendItem "+ this.id);
+        System.out.println("draw = " + draw + ", start = " + start);
 
         SvgElement group = svgClassGroup( draw , "" );
         group.attribute( "transform", "translate(" + start.x() + "," + start.y() + ")" );

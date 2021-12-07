@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="xml-apis-ext">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Dropbox/Libraries/xml-commons-external-1.4.01/xml-apis-ext.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Libraries/xml-commons-external-1.4.01/xml-apis.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

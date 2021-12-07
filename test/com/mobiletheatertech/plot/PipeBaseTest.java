@@ -131,7 +131,7 @@ public class PipeBaseTest {
 
         assertEquals( TestHelpers.accessDouble(base, "x"), x );
         assertEquals( TestHelpers.accessDouble(base, "y"), y );
-        assertEquals( TestHelpers.accessDouble(base, "z"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(base, "z"), (Double)0.0 );
     }
 
     @Test

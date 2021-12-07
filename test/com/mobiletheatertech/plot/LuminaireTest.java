@@ -409,7 +409,7 @@ public class LuminaireTest {
 
         assertTrue( distance.valid() );
 
-        assertEquals( distance.value(), pipeLocation );
+        assertEquals( (Double)distance.value(), pipeLocation );
     }
 
     @Test
@@ -467,7 +467,7 @@ public class LuminaireTest {
         Luminaire luminaire = new Luminaire(elementOnPipe);
         luminaire.verify();
 
-        assertEquals( luminaire.weight(), weight );
+        assertEquals( (Double)luminaire.weight(), weight );
     }
 
     @Test

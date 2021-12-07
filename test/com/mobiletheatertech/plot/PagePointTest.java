@@ -22,8 +22,8 @@ public class PagePointTest {
     public void storesCoordinates() {
         PagePoint point = new PagePoint( 1.0, 2.0 );
 
-        assertEquals( point.x(), 1.0 );
-        assertEquals( point.y(), 2.0 );
+        assertEquals( point.x(), (Double)1.0 );
+        assertEquals( point.y(), (Double)2.0 );
     }
 
     @Test
@@ -31,11 +31,11 @@ public class PagePointTest {
         PagePoint point1 = new PagePoint( 1.0, 2.0 );
         PagePoint point2 = new PagePoint( 4.0, 5.0 );
 
-        assertEquals( point1.x(), 1.0 );
-        assertEquals( point1.y(), 2.0 );
+        assertEquals( point1.x(), (Double)1.0 );
+        assertEquals( point1.y(), (Double)2.0 );
 
-        assertEquals( point2.x(), 4.0 );
-        assertEquals( point2.y(), 5.0 );
+        assertEquals( point2.x(), (Double)4.0 );
+        assertEquals( point2.y(), (Double)5.0 );
     }
 
 //    @Test

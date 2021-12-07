@@ -276,7 +276,7 @@ class SvgElement {
     SvgElement rectangleAbsolute(Draw draw,
                                  Double x, Double y, Double width, Double height,
                                  String color) {
-        System.out.println("draw = [" + draw + "], x = [" + x + "], y = [" + y + "], width = [" + width + "], height = [" + height + "], color = [" + color + "]");
+//        System.out.println("draw = [" + draw + "], x = [" + x + "], y = [" + y + "], width = [" + width + "], height = [" + height + "], color = [" + color + "]");
         SvgElement element = draw.element("rect");
         element.attribute("x", x.toString());
         element.attribute("y", y.toString());
@@ -310,6 +310,7 @@ class SvgElement {
                             String text,
                             Double x, Double y,
                             String color, String size ) {
+//        System.out.println("Drawing text = " + text);
 
         Double xSet = x;
         Double ySet = y;
@@ -433,7 +434,7 @@ class SvgElement {
             if( Node.ELEMENT_NODE == checkNode.getNodeType() ) {
                 checkElement = (Element) checkNode;
             }
-        } while( ! checkElement.isSameNode( root )  );
+        } while( checkElement != root );
 
         return false;
     }

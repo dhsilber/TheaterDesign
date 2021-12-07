@@ -96,7 +96,7 @@ public class Parse {
 //        parseXML( ChairBlock.class, "chairblock" );
         parseXML( HangPoint.class, "hangpoint" );
         parseXML( Event.class, "event" );
-        // Since all 'base' elements are direct children of a truss,
+        // Since all 'TrussBase' elements are direct children of a truss,
         // Truss will instantiate each TrussBase as it is discovered,
         // rather than make a list of TrussBase objects and then have to match them up with elements later.
 //        parseXML( TrussBase.class, "base" );
@@ -106,9 +106,9 @@ public class Parse {
         // Yokeable
 //        parseXML( Truss.class, "truss" );
         parseXML( LightingStand.class, LightingStand.TAG );
-//        parseXML( Pipe.class, "pipe" );
 
-//        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
+        parseXML( PipeBase.class, PipeBase$.MODULE$.Tag() );
+//        parseXML( Pipe.class, "pipe" );
 
         // Since all 'suspend' elements are direct children of a truss,
         // Truss will instantiate each Suspend as it is discovered,
@@ -148,6 +148,7 @@ public class Parse {
         int length = list.getLength();
         for (int index = 0; index < length; index++) {
             Node node = list.item( index );
+//            System.out.println( "Node: " + node.getNodeName() + " Id: " + node.getAttributes());
 
             if (null != node && node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;

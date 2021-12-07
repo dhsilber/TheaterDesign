@@ -397,7 +397,7 @@ public class TableTest {
 
         assertEquals( place.x(), x );
         assertEquals( place.y(), y );
-        assertEquals( place.z(), z+height );
+        assertEquals( place.z(), (Double)(z+height) );
     }
 
     // TODO: Allow for two devices on a surface.

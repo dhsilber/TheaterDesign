@@ -10,15 +10,22 @@ import scala.collection.mutable.ArrayBuffer
 abstract class UniqueId( element: Element ) extends MinderDom( element: Element ) {
   id = getStringAttribute( "id" )
 
-  if( UniqueId.Check(id) )
+  if( UniqueId.Check(id) ) {
+    println("For " + this.getClass.getSimpleName )
+    UniqueId.Display()
     throw new InvalidXMLException(
       this.getClass.getSimpleName + " id '" + id + "' is not unique.")
+  }
 
   UniqueId.UniqueList += id
 }
 
 object UniqueId {
   val UniqueList = new ArrayBuffer[ String ]
+
+  def Display(): Unit ={
+    println(UniqueList)
+  }
 
   def Check (id: String): Boolean = {
     UniqueList.contains( id )

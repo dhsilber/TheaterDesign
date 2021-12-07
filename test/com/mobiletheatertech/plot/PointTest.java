@@ -47,9 +47,9 @@ public class PointTest {
         assertEquals( point.y(), y );
         assertEquals( point.z(), z );
 
-        assertEquals( point2.x(), 4.0 );
-        assertEquals( point2.y(), 5.0 );
-        assertEquals( point2.z(), 6.0 );
+        assertEquals( point2.x(), (Double)4.0 );
+        assertEquals( point2.y(), (Double)5.0 );
+        assertEquals( point2.z(), (Double)6.0 );
     }
 
     @Test
@@ -63,9 +63,9 @@ public class PointTest {
         assertEquals( Point.LargeY(), y );
         assertEquals( Point.LargeZ(), z );
 
-        assertEquals( Point.SmallX(), -1.0 );
-        assertEquals( Point.SmallY(), -2.0 );
-        assertEquals( Point.SmallZ(), -3.0 );
+        assertEquals( Point.SmallX(), (Double)(-1.0) );
+        assertEquals( Point.SmallY(), (Double)(-2.0 ));
+        assertEquals( Point.SmallZ(), (Double)(-3.0) );
     }
 
     @Test
@@ -79,9 +79,9 @@ public class PointTest {
         assertEquals( Point.LargeY(), y );
         assertEquals( Point.LargeZ(), z );
 
-        assertEquals( Point.SmallX(), -1.0 );
-        assertEquals( Point.SmallY(), -2.0 );
-        assertEquals( Point.SmallZ(), -3.0 );
+        assertEquals( Point.SmallX(), (Double)(-1.0) );
+        assertEquals( Point.SmallY(),(Double)( -2.0) );
+        assertEquals( Point.SmallZ(), (Double)(-3.0) );
     }
 
     /**
@@ -94,13 +94,13 @@ public class PointTest {
 
         new Point( -1.0, 0.0, 0.0 );
 
-        assertEquals( Point.LargeX(), 0.0 );
-        assertEquals( Point.LargeY(), 0.0 );
-        assertEquals( Point.LargeZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)0.0 );
+        assertEquals( Point.LargeY(), (Double)0.0 );
+        assertEquals( Point.LargeZ(), (Double)0.0 );
 
-        assertEquals( Point.SmallX(), -1.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallX(), (Double)(-1.0) );
+        assertEquals( Point.SmallY(), (Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     /**
@@ -113,13 +113,13 @@ public class PointTest {
 
         new Point( 1.0, 0.0, 0.0 );
 
-        assertEquals( Point.LargeX(), 1.0 );
-        assertEquals( Point.LargeY(), 0.0 );
-        assertEquals( Point.LargeZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)1.0 );
+        assertEquals( Point.LargeY(), (Double)0.0 );
+        assertEquals( Point.LargeZ(), (Double)0.0 );
 
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(), (Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     /**
@@ -132,13 +132,13 @@ public class PointTest {
 
         new Point( 0.0, -1.0, 0.0 );
 
-        assertEquals( Point.LargeX(), 0.0 );
-        assertEquals( Point.LargeY(), 0.0 );
-        assertEquals( Point.LargeZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)0.0 );
+        assertEquals( Point.LargeY(), (Double)0.0 );
+        assertEquals( Point.LargeZ(), (Double)0.0 );
 
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), -1.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(), (Double)(-1.0) );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     /**
@@ -151,13 +151,13 @@ public class PointTest {
 
         new Point( 0.0, 1.0, 0.0 );
 
-        assertEquals( Point.LargeX(), 0.0 );
-        assertEquals( Point.LargeY(), 1.0 );
-        assertEquals( Point.LargeZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)0.0 );
+        assertEquals( Point.LargeY(), (Double)1.0 );
+        assertEquals( Point.LargeZ(), (Double)0.0 );
 
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(), (Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     /**
@@ -170,13 +170,13 @@ public class PointTest {
 
         new Point( 0.0, 0.0, -1.0 );
 
-        assertEquals( Point.LargeX(), 0.0 );
-        assertEquals( Point.LargeY(), 0.0 );
-        assertEquals( Point.LargeZ(), 0.0 );
+        assertEquals( Point.LargeX(), (Double)0.0 );
+        assertEquals( Point.LargeY(), (Double)0.0 );
+        assertEquals( Point.LargeZ(), (Double)0.0 );
 
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), -1.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(), (Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)(-1.0) );
     }
 
     /**
@@ -189,13 +189,13 @@ public class PointTest {
 
         new Point( 0.0, 0.0, 1.0 );
 
-        assertEquals( Point.LargeX(), 0.0 );
-        assertEquals( Point.LargeY(), 0.0 );
-        assertEquals( Point.LargeZ(), 1.0 );
+        assertEquals( Point.LargeX(), (Double)0.0 );
+        assertEquals( Point.LargeY(), (Double)0.0 );
+        assertEquals( Point.LargeZ(), (Double)1.0 );
 
-        assertEquals( Point.SmallX(), 0.0 );
-        assertEquals( Point.SmallY(), 0.0 );
-        assertEquals( Point.SmallZ(), 0.0 );
+        assertEquals( Point.SmallX(), (Double)0.0 );
+        assertEquals( Point.SmallY(),(Double)0.0 );
+        assertEquals( Point.SmallZ(), (Double)0.0 );
     }
 
     @Test

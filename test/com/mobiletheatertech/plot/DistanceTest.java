@@ -16,7 +16,7 @@ public class DistanceTest {
 
         Distance distance = new Distance( inch );
 
-        assertEquals(distance.inch(), inch);
+        assertEquals((Double)distance.inch(), inch);
     }
 
     @Test

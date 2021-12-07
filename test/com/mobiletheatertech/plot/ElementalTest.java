@@ -209,28 +209,28 @@ public class ElementalTest {
     public void getOptionalDoubleAttributeOrZeroEmpty() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyZero"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceEmptyZero"), (Double)0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrZeroUnset() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUnsetZero"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUnsetZero"), (Double)0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrZeroZero() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroZero"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroZero"), (Double)0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrZeroUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedZero"), 4.32 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedZero"), (Double)4.32 );
     }
 
 
@@ -252,28 +252,28 @@ public class ElementalTest {
     public void getOptionalDoubleAttributeOrNullZero() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroNull"), 0.0 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceZeroNull"), (Double)0.0 );
     }
 
     @Test
     public void getOptionalDoubleAttributeOrNullUsed() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedNull"), 4.32 );
+        assertEquals( TestHelpers.accessDouble(ellie, "twiceUsedNull"), (Double)4.32 );
     }
 
     @Test
     public void getDoubleAttribute() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "doubleValue"), 12.3 );
+        assertEquals( TestHelpers.accessDouble(ellie, "doubleValue"), (Double)12.3 );
     }
 
     @Test
     public void getPositiveDoubleAttributePositive() throws Exception {
         Ellie ellie = new Ellie( element );
 
-        assertEquals( TestHelpers.accessDouble(ellie, "positiveDoubleValue"), 45.6 );
+        assertEquals( TestHelpers.accessDouble(ellie, "positiveDoubleValue"), (Double)45.6 );
     }
 
     @Test
