@@ -50,7 +50,7 @@ public class Read {
 //
 //        String pathname = home + "/Dropbox/Plot/plotfiles/" + basename + ".xml";
 
-        System.out.println("pathname + basename + \".xml\" = " + pathname + basename + ".xml");
+//        System.out.println("pathname + basename + \".xml\" = " + pathname + basename + ".xml");
 
         InputStream stream = new FileInputStream( pathname + basename + ".xml" );
 

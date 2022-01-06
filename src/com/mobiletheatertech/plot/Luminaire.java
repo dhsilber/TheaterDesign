@@ -409,7 +409,7 @@ public class Luminaire extends MinderDom
         if (View.TRUSS == view && !Truss.class.isInstance(mount)) {
             return;
         }
-        System.out.println("In Luminaire: " + this + "  draw = " + draw + ", view = " + view);
+//        System.out.println("In Luminaire: " + this + "  draw = " + draw + ", view = " + view);
 
         Double z = Venue.Height() - point.z();
 

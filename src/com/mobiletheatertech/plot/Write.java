@@ -609,7 +609,7 @@ public class Write {
 
     Draw writeIndividualDrawing(Drawing drawing)
             throws CorruptedInternalInformationException, InvalidXMLException, MountingException, ReferenceException {
-        System.out.println("Drawing: " + drawing.filename());
+//        System.out.println("Drawing: " + drawing.filename());
 
         resetOneOffs();
 

@@ -8,63 +8,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9800586-e25f-4160-a287-66f3bf78597e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jopendocument_jOpenDocument_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/batik_1_8.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/cupv10k_runtime.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/xml_apis_ext.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/TechDebt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Batik_1_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/jOpenDocument_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/scala_sdk_2_12_7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/scala_sdk_2_12_7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/batik_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/KnowsChildren.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/batik_1_8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/cupv10k_runtime.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/xml_apis_ext.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Plot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drape.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Drape.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LinearSupportsClamp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LinearSupportsClamp.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/TechDebt.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TechDebt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Elemental.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Elemental.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Gripper.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Gripper.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Hack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Hack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/HasID.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/HasId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Inference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Inference.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Luminaire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/LuminaireDefinition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Parse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Parse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/PipeBase.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/PipeBase.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Read.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Read.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Space.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Space.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SvgElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/SvgElement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Truss.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Truss.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/UniqueId.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/UniqueId.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Venue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Venue.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Shape.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Write.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mobiletheatertech/plot/Write.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/AirwallTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/AirwallTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ChairTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ChairTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DanceTileTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DanceTileTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DeviceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DeviceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DistanceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DistanceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrapeBaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/DrapeBaseTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ElementalTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ElementalTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GridTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GridTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/HangPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/HangPointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LightingStandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LightingStandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LinearSupportsClampTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LinearSupportsClampTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireDefinitionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireDefinitionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/LuminaireTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PagePointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PagePointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeBaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeBaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GripperTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/GripperTest.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/PointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ProsceniumTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/ProsceniumTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SetPlatfomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SetPlatfomTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SpaceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SpaceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SuspendTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/SuspendTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/TableTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/VenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/mobiletheatertech/plot/VenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +228,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="project.structure.side.proportion" value="0.3057041" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
@@ -408,7 +376,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PipeTest.parentIsPipeBase" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="PipeTest.attributeOrientationNot90" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="Plot" />
       <extension name="coverage">
         <pattern>
@@ -418,7 +386,27 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
       <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
-      <option name="METHOD_NAME" value="parentIsPipeBase" />
+      <option name="METHOD_NAME" value="attributeOrientationNot90" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PipeTest.explicitlyPositionedPipe" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="Plot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mobiletheatertech.plot.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
+      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
+      <option name="METHOD_NAME" value="explicitlyPositionedPipe" />
       <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -440,25 +428,6 @@
       <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.PipeTest" />
       <option name="METHOD_NAME" value="parentIsVerticalPipeOnBase" />
       <option name="TEST_OBJECT" value="METHOD" />
-      <option name="VM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ValidatedDoubleTest" type="TestNG" temporary="true" nameIsGenerated="true">
-      <module name="Plot" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.mobiletheatertech.plot.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.mobiletheatertech.plot" />
-      <option name="MAIN_CLASS_NAME" value="com.mobiletheatertech.plot.ValidatedDoubleTest" />
-      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
@@ -489,18 +458,18 @@
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="TestNG.All" />
-      <item itemvalue="TestNG.ValidatedDoubleTest" />
       <item itemvalue="TestNG.PipeTest" />
-      <item itemvalue="TestNG.PipeTest.parentIsPipeBase" />
       <item itemvalue="TestNG.PipeTest.parentIsVerticalPipeOnBase" />
+      <item itemvalue="TestNG.PipeTest.attributeOrientationNot90" />
+      <item itemvalue="TestNG.PipeTest.explicitlyPositionedPipe" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="TestNG.PipeTest.parentIsVerticalPipeOnBase" />
-        <item itemvalue="TestNG.PipeTest.parentIsPipeBase" />
         <item itemvalue="TestNG.PipeTest" />
-        <item itemvalue="TestNG.ValidatedDoubleTest" />
+        <item itemvalue="TestNG.PipeTest.explicitlyPositionedPipe" />
+        <item itemvalue="TestNG.PipeTest.attributeOrientationNot90" />
+        <item itemvalue="TestNG.PipeTest.parentIsVerticalPipeOnBase" />
       </list>
     </recent_temporary>
   </component>
@@ -612,6 +581,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -631,7 +601,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/com/mobiletheatertech/plot/PipeTest.java</url>
-          <line>313</line>
+          <line>317</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -654,10 +624,30 @@
           <line>176</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Elemental.java</url>
+          <line>142</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Elemental.java</url>
+          <line>145</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala</url>
-          <line>482</line>
+          <line>356</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala</url>
+          <line>132</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/com/mobiletheatertech/plot/Pipe.scala</url>
+          <line>32</line>
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -670,6 +660,7 @@
       <configuration name="Application">
         <watch expression="((Plot)$this).internalElement" custom="com.mobiletheatertech.plot.Plot" />
         <watch expression="((Pipe)this).base" custom="com.mobiletheatertech.plot.Pipe" />
+        <watch expression="id = &quot;projectionPipe&quot;" language="Scala" />
       </configuration>
     </watches-manager>
   </component>

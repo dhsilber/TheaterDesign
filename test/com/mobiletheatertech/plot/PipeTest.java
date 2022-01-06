@@ -21,7 +21,7 @@ import static org.testng.Assert.assertEquals;
  */
 public class PipeTest {
 
-    Element element = null;
+    Element explicitlyPositionedElement = null;
     final String unit = "unit";
     private Element prosceniumElement = null;
     private Element pipeCrossesProsceniumCenterElement = null;
@@ -80,7 +80,7 @@ public class PipeTest {
         TestResets.LayerReset();
         TestResets.ElementalListerReset();
         TestResets.LuminaireReset();
-        element = null;
+        explicitlyPositionedElement = null;
         UniqueId.Reset();
 
 
@@ -99,12 +99,12 @@ public class PipeTest {
         prosceniumElement.setAttribute("y", prosceniumY.toString());
         prosceniumElement.setAttribute("z", prosceniumZ.toString());
 
-        element = new IIOMetadataNode("pipe");
-        element.setAttribute("id", pipeId);
-        element.setAttribute("length", length.toString());
-        element.setAttribute("x", x.toString());
-        element.setAttribute("y", y.toString());
-        element.setAttribute("z", z.toString());
+        explicitlyPositionedElement = new IIOMetadataNode("pipe");
+        explicitlyPositionedElement.setAttribute("id", pipeId);
+        explicitlyPositionedElement.setAttribute("length", length.toString());
+        explicitlyPositionedElement.setAttribute("x", x.toString());
+        explicitlyPositionedElement.setAttribute("y", y.toString());
+        explicitlyPositionedElement.setAttribute("z", z.toString());
 
         pipeCrossesProsceniumCenterElement = new IIOMetadataNode("pipe");
         pipeCrossesProsceniumCenterElement.setAttribute("id", pipeId);
@@ -188,10 +188,9 @@ public class PipeTest {
     public void tearDownMethod() throws Exception {
     }
 
-
     @Test
     public void isA() throws Exception {
-        Pipe instance = new Pipe(element);
+        Pipe instance = new Pipe(explicitlyPositionedElement);
 
         assert Elemental.class.isInstance(instance);
         assert ElementalLister.class.isInstance(instance);
@@ -237,9 +236,14 @@ public class PipeTest {
     }
 
     @Test
-    public void constantCheeseborough() {
-//        assertEquals(Pipe$.MODULE$.Cheeseborough(), "cheeseborough");
+    public void explicitlyPositionedPipe() {
+        new Pipe(explicitlyPositionedElement);
     }
+
+//    @Test
+//    public void constantCheeseborough() {
+////        assertEquals(Pipe$.MODULE$.Cheeseborough(), "cheeseborough");
+//    }
 
     @Test
     public void parentIsPipeBase() {
@@ -317,7 +321,7 @@ public class PipeTest {
 
     @Test
     public void storesAttributesWithPosition() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals(TestHelpers.accessString(pipe, "id"), pipeId);
         assertEquals(TestHelpers.accessDouble(pipe, "length"), length);
@@ -357,10 +361,10 @@ public class PipeTest {
 
     @Test
     public void storesOptionalAttributes() throws Exception {
-        element.setAttribute("orientation", "90");
-        element.setAttribute("offsetx", "-50");
+        explicitlyPositionedElement.setAttribute("orientation", "90");
+        explicitlyPositionedElement.setAttribute("offsetx", "-50");
 
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals(TestHelpers.accessString(pipe, "id"), pipeId);
         assertEquals(TestHelpers.accessDouble(pipe, "length"), length);
@@ -371,10 +375,16 @@ public class PipeTest {
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) orientation may only be set to 90.")
-    public void attributeOrientationNot90() throws Exception {
-        element.setAttribute("orientation", "45");
+    public void invalidParent() throws Exception {
+        new Pipe(explicitlyPositionedElement);
+    }
 
-        new Pipe(element);
+    @Test(expectedExceptions = InvalidXMLException.class,
+            expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) orientation may only be set to 90.")
+    public void attributeOrientationNot90() throws Exception {
+        explicitlyPositionedElement.setAttribute("orientation", "45");
+
+        new Pipe(explicitlyPositionedElement);
     }
 
     // Tested in YokeableTest
@@ -396,7 +406,7 @@ public class PipeTest {
         LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select(pipeId);
         assertNull(nothing);
 
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         LinearSupportsClamp thingy = LinearSupportsClamp$.MODULE$.Select(pipeId);
         assertSame(thingy, pipe);
@@ -407,10 +417,10 @@ public class PipeTest {
         LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select(pipeId);
         assertNull(nothing);
 
-        element.setAttribute("length", "0");
+        explicitlyPositionedElement.setAttribute("length", "0");
 
         try {
-            new Pipe(element);
+            new Pipe(explicitlyPositionedElement);
         } catch (Exception e) {
         }
 
@@ -423,10 +433,10 @@ public class PipeTest {
         LinearSupportsClamp nothing = LinearSupportsClamp$.MODULE$.Select(pipeId);
         assertNull(nothing);
 
-        element.setAttribute("length", "339");
+        explicitlyPositionedElement.setAttribute("length", "339");
 
         try {
-            new Pipe(element);
+            new Pipe(explicitlyPositionedElement);
         } catch (Exception e) {
         }
 
@@ -440,10 +450,10 @@ public class PipeTest {
         assertNull(nothing);
 
         new Proscenium(prosceniumElement);
-        element.setAttribute("length", "339");
+        explicitlyPositionedElement.setAttribute("length", "339");
 
         try {
-            new Pipe(element);
+            new Pipe(explicitlyPositionedElement);
         } catch (Exception e) {
         }
 
@@ -453,7 +463,7 @@ public class PipeTest {
 
     @Test
     public void registersLayer() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         HashMap<String, Layer> layers = Layer.List();
 
@@ -506,7 +516,7 @@ public class PipeTest {
 
     @Test
     public void storesSelf() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         ArrayList<ElementalLister> thing = ElementalLister.List();
 
@@ -518,75 +528,75 @@ public class PipeTest {
      */
     @Test
     public void justFine() throws Exception {
-        new Pipe(element);
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
             expectedExceptionsMessageRegExp = "Pipe instance is missing required 'id' attribute.")
     public void noId() throws Exception {
-        element.removeAttribute("id");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("id");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = AttributeMissingException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) is missing required 'length' attribute.")
     public void noLength() throws Exception {
-        element.removeAttribute("length");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("length");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoX() throws Exception {
-        element.removeAttribute("x");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("x");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoY() throws Exception {
-        element.removeAttribute("y");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("y");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void positionedNoZ() throws Exception {
-        element.removeAttribute("z");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("z");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) must be on a base or explicitly positioned.")
     public void noLocation() throws Exception {
-        element.removeAttribute("x");
-        element.removeAttribute("y");
-        element.removeAttribute("z");
-        new Pipe(element);
+        explicitlyPositionedElement.removeAttribute("x");
+        explicitlyPositionedElement.removeAttribute("y");
+        explicitlyPositionedElement.removeAttribute("z");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should have a positive length.")
     public void tooSmallLengthZero() throws Exception {
-        element.setAttribute("length", "0");
-        new Pipe(element);
+        explicitlyPositionedElement.setAttribute("length", "0");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = SizeException.class,
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should have a positive length.")
     public void tooSmallLength() throws Exception {
-        element.setAttribute("length", "-1");
-        new Pipe(element);
+        explicitlyPositionedElement.setAttribute("length", "-1");
+        new Pipe(explicitlyPositionedElement);
     }
 
     @Test(expectedExceptions = LocationException.class,
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeLength() throws Exception {
-        element.setAttribute("length", "339");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("length", "339");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 //        pipe.verify();
     }
 
@@ -596,8 +606,8 @@ public class PipeTest {
     public void tooLargeLengthProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("length", "339");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("length", "339");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 //        pipe.verify();
     }
 
@@ -605,8 +615,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallX() throws Exception {
-        element.setAttribute("x", "-1");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "-1");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 //        pipe.verify();
     }
 
@@ -614,8 +624,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeX() throws Exception {
-        element.setAttribute("x", "351");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "351");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -623,8 +633,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallY() throws Exception {
-        element.setAttribute("y", "-2");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("y", "-2");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -632,8 +642,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeY() throws Exception {
-        element.setAttribute("y", "401");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("y", "401");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -641,8 +651,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallZ() throws Exception {
-        element.setAttribute("z", "-1");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("z", "-1");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -650,8 +660,8 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeZ() throws Exception {
-        element.setAttribute("z", "241");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("z", "241");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -660,8 +670,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallXProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        element.setAttribute("x", "-" + (prosceniumX + 1));
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "-" + (prosceniumX + 1));
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 //        pipe.verify();
     }
 
@@ -670,8 +680,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeXProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        element.setAttribute("x", "351");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "351");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -681,8 +691,8 @@ public class PipeTest {
     public void tooSmallYProscenium() throws Exception {
         new Proscenium(prosceniumElement);
         Integer y = prosceniumY + 2;
-        element.setAttribute("y", y.toString());
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("y", y.toString());
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -691,8 +701,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeYProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        element.setAttribute("y", "401");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("y", "401");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -701,8 +711,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooSmallZProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        element.setAttribute("z", "-" + (prosceniumZ + 1));
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("z", "-" + (prosceniumZ + 1));
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -711,8 +721,8 @@ public class PipeTest {
                     "Pipe \\(" + pipeId + "\\) should not extend beyond the boundaries of the venue.")
     public void tooLargeZProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        element.setAttribute("z", "241");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("z", "241");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
     }
 
@@ -889,7 +899,7 @@ public class PipeTest {
 
     @Test
     public void location() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Point place = pipe.mountableLocation(new Location("15"));
         assertEquals(place, new Point(27, 23, 34));
@@ -899,7 +909,7 @@ public class PipeTest {
     @Test(expectedExceptions = InvalidXMLException.class,
             expectedExceptionsMessageRegExp = "Pipe \\(" + pipeId + "\\) location must be a number.")
     public void locationNotNumber() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("a"));
     }
@@ -907,7 +917,7 @@ public class PipeTest {
     @Test(expectedExceptions = MountingException.class,
             expectedExceptionsMessageRegExp = "beyond the end of pipe")
     public void locationOffPipe() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("121"));
     }
@@ -916,7 +926,7 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "beyond the end of pipe")
     public void locationNegativeOffPipe() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("-1"));
     }
@@ -924,7 +934,7 @@ public class PipeTest {
     @Test
     public void locationWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Point place = pipe.mountableLocation(new Location("15"));
 
@@ -939,7 +949,7 @@ public class PipeTest {
     public void locationOffPipeWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("121"));
     }
@@ -950,7 +960,7 @@ public class PipeTest {
     public void locationNegativeOffPipeWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("-1"));
     }
@@ -959,8 +969,8 @@ public class PipeTest {
     public void locationPipeCrossesCenterlineWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("x", "-12");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "-12");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Point place = pipe.mountableLocation(new Location("15"));
         assertEquals(place.x(), (Double) 215.0);
@@ -972,8 +982,8 @@ public class PipeTest {
     public void locationNegativePipeCrossesCenterlineWithProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("x", "-12");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "-12");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Point place = pipe.mountableLocation(new Location("-5"));
         assertEquals(place.x(), (Double) 195.0);
@@ -987,8 +997,8 @@ public class PipeTest {
     public void locationOffPipeCrossingCenterlineOfProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("x", "-12");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("x", "-12");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.mountableLocation(new Location("120"));
     }
@@ -1006,7 +1016,7 @@ public class PipeTest {
 
     @Test
     public void locationDistance() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals((Double) pipe.locationDistance(new Location("15")), (Integer) 15);
     }
@@ -1015,7 +1025,7 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) location must be a number.")
     public void locationDistanceNotNumber() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.locationDistance(new Location("15a"));
     }
@@ -1024,7 +1034,7 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
     public void locationDistanceOffPipePlus() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.locationDistance(new Location("121"));
     }
@@ -1033,7 +1043,7 @@ public class PipeTest {
             expectedExceptionsMessageRegExp =
                     "Pipe \\(" + pipeId + "\\) location must be in the range of 0.0 to 120.0.")
     public void locationDistanceOffPipeMinus() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.locationDistance(new Location("-1"));
     }
@@ -1042,7 +1052,7 @@ public class PipeTest {
     public void locationDistanceProscenium() throws Exception {
         new Proscenium(prosceniumElement);
 
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals((Double) pipe.locationDistance(new Location("15")), (Integer) 15);
     }
@@ -1073,8 +1083,8 @@ public class PipeTest {
     public void locationDistanceProsceniumOrientation90() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("orientation", "90");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("orientation", "90");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals((Double) pipe.locationDistance(new Location("15")), (Integer) 15);
     }
@@ -1085,8 +1095,8 @@ public class PipeTest {
     public void locationDistanceOffProsceniumOrientation90PipePlus() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("orientation", "90");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("orientation", "90");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.locationDistance(new Location("121"));
     }
@@ -1097,15 +1107,15 @@ public class PipeTest {
     public void locationDistanceOffProsceniumOrientation90PipeMinus() throws Exception {
         new Proscenium(prosceniumElement);
 
-        element.setAttribute("orientation", "90");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("orientation", "90");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         pipe.locationDistance(new Location("-61"));
     }
 
     @Test
     public void rotatedLocationPositioned() throws Exception {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Place place = pipe.rotatedLocation(new Location("23"));
 
@@ -1126,8 +1136,8 @@ public class PipeTest {
 
     @Test
     public void rotatedLocationPositioned90() throws Exception {
-        element.setAttribute("orientation", "90");
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.setAttribute("orientation", "90");
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         Place place = pipe.rotatedLocation(new Location("23"));
 
@@ -1284,14 +1294,14 @@ public class PipeTest {
 
     @Test
     public void minLocation() {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals(pipe.minLocation(), 0.0);
     }
 
     @Test
     public void maxLocation() {
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals((Double) pipe.maxLocation(), length);
     }
@@ -1326,8 +1336,8 @@ public class PipeTest {
         elementOnPipe.setAttribute("type", type);
         elementOnPipe.setAttribute("location", "122");
 
-        element.appendChild(elementOnPipe);
-        new Pipe(element);
+        explicitlyPositionedElement.appendChild(elementOnPipe);
+        new Pipe(explicitlyPositionedElement);
     }
 
 //    void callBack( Element element ) {
@@ -1335,8 +1345,8 @@ public class PipeTest {
 
     @Test
     public void luminiareCallbackRegistered() {
-        element.appendChild(luminaireElement);
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.appendChild(luminaireElement);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals(pipe.populateTags().size(), 1);
         assertTrue(pipe.populateTags().contains(Luminaire.LAYERTAG));
@@ -1344,8 +1354,8 @@ public class PipeTest {
 
     @Test
     public void attachmentCallbackRegistered() {
-        element.appendChild(luminaireElement);
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.appendChild(luminaireElement);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         assertEquals(pipe.populateTags().size(), 1);
         assertTrue(pipe.populateTags().contains(Luminaire.LAYERTAG));
@@ -1353,8 +1363,8 @@ public class PipeTest {
 
     @Test
     public void populateChildren() {
-        element.appendChild(luminaireElement);
-        Pipe pipe = new Pipe(element);
+        explicitlyPositionedElement.appendChild(luminaireElement);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 
         scala.collection.mutable.ArrayBuffer<Luminaire> list = pipe.IsClampList();
         assertEquals(list.size(), 1);
@@ -1364,7 +1374,7 @@ public class PipeTest {
     public void domPlan() throws Exception {
         Draw draw = new Draw();
         draw.establishRoot();
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
         pipe.verify();
 
         pipe.dom(draw, View.PLAN);
@@ -1435,7 +1445,7 @@ public class PipeTest {
         Draw draw = new Draw();
         draw.establishRoot();
         new Proscenium(prosceniumElement);
-        Pipe pipe = new Pipe(element);
+        Pipe pipe = new Pipe(explicitlyPositionedElement);
 //        pipe.verify();
 
         pipe.dom(draw, View.PLAN);

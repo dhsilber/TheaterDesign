@@ -3,6 +3,8 @@ package com.mobiletheatertech.plot;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import static java.lang.Double.valueOf;
+
 /*
 
 TODO: Upgrade notes...
@@ -22,7 +24,7 @@ else uses something similar, that code should move to here.
  * @since 0.0.7 ({@code getIntegerAttribute} and {@code getStringAttribute} refactored out of {@code
  *        Minder} when {@code Elemental} was created.)
  */
-public class Elemental extends HasID {
+public class Elemental extends HasId {
     /**
      * If this is set, Exceptions thrown from the various {@code Elemental} methods can name the
      * specific XML element which has a problem, so child classes are encouraged to both use this in
@@ -109,6 +111,7 @@ public class Elemental extends HasID {
         return new Integer( value );
     }
 
+    @Deprecated
     protected Integer getOptionalIntegerAttributeOrNull( String name ) {
         String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
@@ -130,17 +133,17 @@ public class Elemental extends HasID {
         String value = internalElement.getAttribute( name );
         checkAttribute(name, value);
 
-        return new Double( value );
+        return valueOf( value );
     }
 
-
+    @Deprecated
     protected Double getOptionalDoubleAttributeOrNull( String name ) {
         String value = internalElement.getAttribute( name );
         if (value.isEmpty()) {
             return null;
         }
 
-        return new Double( value );
+        return valueOf( value );
     }
 
 
@@ -150,7 +153,7 @@ public class Elemental extends HasID {
             return 0.0;
         }
 
-        return new Double( value );
+        return valueOf( value );
     }
 
     /**
@@ -204,6 +207,7 @@ public class Elemental extends HasID {
      * @param name    name of attribute.
      * @return String value of attribute - null {@code String} if attribute not set
      */
+    @Deprecated
     protected String getOptionalStringAttributeOrNull( String name ) {
         String value = internalElement.getAttribute( name );
 

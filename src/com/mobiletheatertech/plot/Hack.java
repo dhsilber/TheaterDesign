@@ -21,8 +21,8 @@ public class Hack {
             String orchestraPath = "M " + xLeft.toString() + "," + orchestraY.toString() +
                     "A 400,120 0 0 0 " + xRight.toString() + "," + orchestraY.toString();
 
-            System.out.println( apronPath );
-            System.out.println( orchestraPath );
+//            System.out.println( apronPath );
+//            System.out.println( orchestraPath );
 
             SvgElement apronEdge = draw.element("path");
             apronEdge.attribute( "stroke", "black" );

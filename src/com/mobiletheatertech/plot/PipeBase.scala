@@ -39,7 +39,7 @@ class PipeBase(element: Element) extends MinderDom(element)
   }
 
   def processPipe(element: Element): Unit = {
-    println("Making new pipe for PipeBase " + idForLocalUse)
+//    println("Making new pipe for PipeBase " + idForLocalUse)
     new Pipe(element, this)
   }
 
@@ -49,7 +49,7 @@ class PipeBase(element: Element) extends MinderDom(element)
         return
 
       case View.PLAN =>
-        println(s"Drawing PipeBase for $idForLocalUse")
+//        println(s"Drawing PipeBase for $idForLocalUse")
         val group = MinderDom.svgClassGroup(draw, PipeBase.Tag)
         draw.appendRootChild(group)
 

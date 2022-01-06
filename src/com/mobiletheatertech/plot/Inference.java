@@ -43,7 +43,6 @@ public class Inference {
             for ( String value: Dictionary.get( key ) ) {
                 System.out.print( value + ", ");
             }
-            System.out.println();
         }
     }
 }

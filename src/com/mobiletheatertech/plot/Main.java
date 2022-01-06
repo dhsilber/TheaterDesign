@@ -31,7 +31,6 @@ public class Main {
     {
         try {
             Configuration.Initialize( args );
-            System.out.println("foo");
 
             new Read();
 

@@ -34,7 +34,7 @@ class GripperTest {
 
     }
     val instance: foo = new foo( )
-    assertTrue( classOf[ HasID ].isInstance( instance ) )
+    assertTrue( classOf[ HasId ].isInstance( instance ) )
     assertTrue( classOf[ Gripper ].isInstance( instance ) )
   }
 
